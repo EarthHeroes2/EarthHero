@@ -5,6 +5,7 @@
 #include "GameFramework/PlayerController.h"
 #include <EarthHero/EHGameInstance.h>
 #include <Kismet/GameplayStatics.h>
+#include "GameFramework/PlayerState.h"
 #include <EarthHero/GameSession/LobbyGameSession.h>
 #include <EarthHero/GameMode/LobbyGameMode.h>
 
@@ -161,10 +162,13 @@ void ALobbyPlayerController::Server_SendChatMessage_Implementation(const FText& 
 {
 	UE_LOG(LogTemp, Log, TEXT("Send a chat message"));
 
+	FText PlayerName = FText::FromString(PlayerState->GetPlayerName());
+	FText ChatText = FText::Format(FText::FromString("[{0}] : {1}"), PlayerName, Text);
+
 	ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
 	if (LobbyGameMode)
 	{
-		LobbyGameMode->SendChatMessage(Text);
+		LobbyGameMode->SendChatMessage(ChatText);
 	}
 }
 
