@@ -6,12 +6,25 @@
 #include "GameFramework/PlayerState.h"
 #include "OnlineSubsystem.h"
 #include "OnlineSubsystemUtils.h"
+#include "EarthHero/Character/Shooter/EHShooter.h"
 #include "Interfaces/OnlineSessionInterface.h"
 
 ALobbyGameMode::ALobbyGameMode()
 {
 	PlayerControllerClass = ALobbyPlayerController::StaticClass();
 	GameSessionClass = ALobbyGameSession::StaticClass();
+
+	CharacterClasses.SetNum(4);
+	
+	//Warrior
+	//Mechanic
+	//shooter ë¸”ë£¨í”„ë¦°íŠ¸
+	static ConstructorHelpers::FClassFinder<AEHShooter> EHShooterAsset(TEXT("/Game/Blueprints/Character/Shooter/BP_Shooter.BP_Shooter_C"));
+	if (EHShooterAsset.Succeeded())
+	{
+		CharacterClasses[Shooter] = EHShooterClass = EHShooterAsset.Class;
+	}
+	//Archor
 }
 
 void ALobbyGameMode::BeginPlay()
@@ -23,6 +36,11 @@ void ALobbyGameMode::BeginPlay()
 	{
 		GameModeBase->bUseSeamlessTravel = true;
 	}
+
+	SpawnLocations.Add(FVector(500.0f, -150.0f, 0.0f));
+	SpawnLocations.Add(FVector(500.0f, -50.0f, 0.0f));
+	SpawnLocations.Add(FVector(500.0f, 50.0f, 0.0f));
+	SpawnLocations.Add(FVector(500.0f, 150.0f, 0.0f));
 }
 
 void ALobbyGameMode::AddPlayerReadyState(APlayerController* NewPlayer)
@@ -36,11 +54,13 @@ void ALobbyGameMode::AddPlayerReadyState(APlayerController* NewPlayer)
 		LobbyPlayerControllerArray.RemoveAt(PlayerIndex);
 		PlayerNameArray.RemoveAt(PlayerIndex);
 		PlayerReadyStateArray.RemoveAt(PlayerIndex);
+		PlayerClassArray.RemoveAt(PlayerIndex);
 	}
 
 	LobbyPlayerControllerArray.Add(LobbyNewPlayerController);
 	PlayerNameArray.Add(LobbyNewPlayerController->PlayerState->GetPlayerName());
 	PlayerReadyStateArray.Add(false);
+	PlayerClassArray.Add(Warrior); //ìž„ì‹œ
 
 	UpdatePlayerNameyListAndReadyState();
 }
@@ -63,7 +83,7 @@ void ALobbyGameMode::TogglePlayerReady(APlayerController* Player)
 	else UE_LOG(LogTemp, Error, TEXT("%s is not valid for player ready state"), LobbyPlayerController);
 }
 
-//¸ðµç Å¬¶óÀÌ¾ðÆ®¿¡°Ô ÇÃ·¹ÀÌ¾î ÀÌ¸§ ¸®½ºÆ® Àü¼Û ¹× UpdatePlayerReadyState() È£Ãâ
+//ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ UpdatePlayerReadyState() È£ï¿½ï¿½
 void ALobbyGameMode::UpdatePlayerNameyListAndReadyState()
 {
 	int32 NumberOfPlayers = LobbyPlayerControllerArray.Num();
@@ -81,11 +101,11 @@ void ALobbyGameMode::UpdatePlayerNameyListAndReadyState()
 	UpdatePlayerReadyState();
 }
 
-//¸ðµç Å¬¶óÀÌ¾ðÆ®¿¡°Ô ¹Ù²ï ·¹µð »óÅÂ ¹è¿­ Àü¼Û
+//ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ ï¿½Ù²ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½è¿­ ï¿½ï¿½ï¿½ï¿½
 void ALobbyGameMode::UpdatePlayerReadyState()
 {
 	int32 NumberOfPlayers = LobbyPlayerControllerArray.Num();
-	//ALobbyPlayerController·Î for¹®Àº ¾ÈµÇ³ªºÁ...
+	//ALobbyPlayerControllerï¿½ï¿½ forï¿½ï¿½ï¿½ï¿½ ï¿½ÈµÇ³ï¿½ï¿½ï¿½...
 
 	UE_LOG(LogTemp, Log, TEXT("Send Ready state to client. (%d players)"), NumberOfPlayers);
 
@@ -127,4 +147,70 @@ void ALobbyGameMode::SendChatMessage(const FText& Text)
 			LobbyPlayerControllerArray[i]->Client_SendChatMessage(Text);
 		}
 	}
+}
+
+//ï¿½Ø´ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ï¿½ï¿½
+void ALobbyGameMode::UpdateCharacter(ALobbyPlayerController* LobbyPlayerController, EClassType ClassType)
+{
+	int PlayerNumber = LobbyPlayerControllerArray.Find(LobbyPlayerController);
+
+	PlayerClassArray[PlayerNumber] = ClassType;
+	
+	if(!(LobbyPlayerController->LobbyCharacter))
+	{
+		UE_LOG(LogTemp, Log, TEXT("First Spawn"));
+		LobbyPlayerController->SpawnSpotIndex = GetLobbyPlayerSpot();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Log, TEXT("Respawn"));
+		LobbyPlayerController->LobbyCharacter->Destroy();
+	}
+
+	int SpawnSpotIndex = LobbyPlayerController->SpawnSpotIndex;
+	
+	//???
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = this;
+
+	switch (ClassType)
+	{
+		case Warrior:
+			break;
+		case Mechanic:
+			break;
+		case Shooter:
+			LobbyPlayerController->LobbyCharacter = GetWorld()->SpawnActor<AEHShooter>(EHShooterClass, SpawnLocations[SpawnSpotIndex], FRotator(0.0f, 180.0f, 0.0f), SpawnParams);
+			break;
+		case Archor:
+			break;
+		default:
+			break;
+	}
+	
+	if (LobbyPlayerController->LobbyCharacter)
+	{
+		UE_LOG(LogTemp, Log, TEXT("Spawned character : %s"), *SpawnLocations[SpawnSpotIndex].ToString());
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Failed to spawn character : %s"), *SpawnLocations[SpawnSpotIndex].ToString());
+	}
+}
+
+int ALobbyGameMode::GetLobbyPlayerSpot()
+{
+	int NumberOfPlayer = LobbyPlayerControllerArray.Num();
+	int i;
+	
+	for(i = 0; i < NumberOfPlayer; i++)
+	{
+		if(!(LobbyPlayerControllerArray[i]->bSpawnCharacter))
+		{
+			LobbyPlayerControllerArray[i]->bSpawnCharacter = true;
+			break;
+		}
+	}
+	
+	return i;
 }

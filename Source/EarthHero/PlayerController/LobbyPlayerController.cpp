@@ -30,7 +30,7 @@ void ALobbyPlayerController::BeginPlay()
 	{
 		UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(GetWorld()->GetGameInstance());
 
-		//ÀÏ´Ü ·Îºñ¿¡ ¿À¸é °ø°³¿©ºÎ ¼³Á¤ ¿äÃ»À» º¸³¿
+		//ï¿½Ï´ï¿½ ï¿½Îºï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã»ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		if (EHGameInstance)
 		{
 			if (EHGameInstance->IsCheckedPrivate)
@@ -56,21 +56,21 @@ void ALobbyPlayerController::ShowLobbyWidget()
 	}
 }
 
-//Å¬¶óÀÌ¾ğÆ®°¡ ÁØºñ µÇ¾úÀ½À» ¼­¹ö¿¡°Ô ¾Ë¸² +
-//Å¬¶óÀÌ¾ğÆ®°¡ ¹æÀåÀÎÁö °Ë»ç + ¹æÀåÀÌ¸é advertise »óÅÂ º¯°æ
+//Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ®ï¿½ï¿½ ï¿½Øºï¿½ ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ë¸ï¿½ +
+//Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½ + ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½ advertise ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 void ALobbyPlayerController::Server_InitSetup_Implementation(bool bAdvertise)
 {
-	//·Îºñ°ÔÀÓ¼¼¼Ç¿¡¼­ ÀÌ¹Ì ÇÃ·¹ÀÌ¾î Á¢¼ÓÀ» °¨ÁöÇÏ°í bHost¿¡ ÇÒ´çÇØÁÖ¾úÀ½
+	//ï¿½Îºï¿½ï¿½ï¿½Ó¼ï¿½ï¿½Ç¿ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ bHostï¿½ï¿½ ï¿½Ò´ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½
 	if (bHost)
 	{
-		//Å¬¶óÀÌ¾ğÆ®ÇÑÅ× ¹æÀåÀÓÀ» ¾Ë¸²
+		//Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ë¸ï¿½
 		Client_HostAssignment(true);
 
-		//±¤°í »óÅÂ º¯°æ
+		//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
 		if (LobbyGameMode)
 		{
-			//±¤°í »óÅÂ º¯°æ
+			//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			ALobbyGameSession* LobbyGameSession = Cast<ALobbyGameSession>(LobbyGameMode->GameSession);
 			if (LobbyGameSession)
 			{
@@ -86,7 +86,7 @@ void ALobbyPlayerController::Server_InitSetup_Implementation(bool bAdvertise)
 	}
 	else Client_HostAssignment(false);
 
-	//¼­¹ö¿¡¼­ ÇöÀç ·Îºñ ¼Ó ÇÃ·¹ÀÌ¾î ÀÌ¸§°ú ·¹µğ»óÅÂ¸¦ ¾÷µ¥ÀÌÆ®
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Îºï¿½ ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
 	ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
 	if (LobbyGameMode)
 	{
@@ -94,10 +94,10 @@ void ALobbyPlayerController::Server_InitSetup_Implementation(bool bAdvertise)
 	}
 }
 
-//¹æÀå ±ÇÇÑÀÌ ÀÖ´Â Áö Å¬¶óÀÌ¾ğÆ®¿¡°Ô ¾Ë¸²
+//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ ï¿½Ë¸ï¿½
 void ALobbyPlayerController::Client_HostAssignment_Implementation(bool bHostAssignment)
 {
-	bHost = bHostAssignment; //Å¬¶óÀÌ¾ğÆ®¿¡µµ ¾Ë¸®´Â ¸¸Å­, ¼­¹ö¿¡¼­ È£½ºÆ® È®ÀÎ Ç×»óÇÏ±â
+	bHost = bHostAssignment; //Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ ï¿½Ë¸ï¿½ï¿½ï¿½ ï¿½ï¿½Å­, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½Æ® È®ï¿½ï¿½ ï¿½×»ï¿½ï¿½Ï±ï¿½
 
 	ShowLobbyWidget();
 
@@ -115,7 +115,7 @@ void ALobbyPlayerController::Server_ClientReady_Implementation()
 	ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
 	if (LobbyGameMode)
 	{
-		//¹æÀåÀº °ÔÀÓ ½ÃÀÛ¹öÆ°À¸·Î Ã³¸®
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Û¹ï¿½Æ°ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
 		if (bHost)
 		{
 			if (LobbyGameMode->PressGameStartButton())
@@ -127,15 +127,15 @@ void ALobbyPlayerController::Server_ClientReady_Implementation()
 				Client_SendToDebugMessage("All players should be ready!");
 			}
 		}
-		//Å¬¶óÀÌ¾ğÆ®´Â °ÔÀÓ ·¹µğ¹öÆ°À¸·Î Ã³¸®
+		//Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Æ°ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
 		else
 		{
-			LobbyGameMode->TogglePlayerReady(this); //·Îºñ ÇÃ·¹ÀÌ¾î ÄÁÆ®·Ñ·¯¸¦ ³Ñ±âÁö¸¸ ¹Ş´Â °÷Àº ÇÃ·¹ÀÌ¾î ÄÁÆ®·Ñ·¯. Å« ¹®Á¦ ¾øÀ¸·Á³ª?
+			LobbyGameMode->TogglePlayerReady(this); //ï¿½Îºï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Æ®ï¿½Ñ·ï¿½ï¿½ï¿½ ï¿½Ñ±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ş´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Æ®ï¿½Ñ·ï¿½. Å« ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?
 		}
 	}
 }
 
-//¼­¹ö¿¡¼­ ÇÃ·¹ÀÌ¾î ÀÌ¸§ ¸®½ºÆ® ¹Ş°í UI °»½Å
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ş°ï¿½ UI ï¿½ï¿½ï¿½ï¿½
 void ALobbyPlayerController::Client_UpdatePlayerNameList_Implementation(const TArray<FString>& PlayerNameList)
 {
 	UE_LOG(LogTemp, Log, TEXT("Player name list received"));
@@ -146,7 +146,7 @@ void ALobbyPlayerController::Client_UpdatePlayerNameList_Implementation(const TA
 	}
 }
 
-//¼­¹ö¿¡¼­ ·¹µğ »óÅÂ ¹è¿­ ¹Ş°í UI °»½Å
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½è¿­ ï¿½Ş°ï¿½ UI ï¿½ï¿½ï¿½ï¿½
 void ALobbyPlayerController::Client_UpdateReadyState_Implementation(const TArray<bool>& PlayerReadyStateArray)
 {
 	UE_LOG(LogTemp, Log, TEXT("Player ready state received"));
@@ -182,7 +182,7 @@ void ALobbyPlayerController::Client_SendChatMessage_Implementation(const FText& 
 	}
 }
 
-//ÇÃ·¹ÀÌ¾î Å± (¹æÀå¸¸ °¡´É)
+//ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ Å± (ï¿½ï¿½ï¿½å¸¸ ï¿½ï¿½ï¿½ï¿½)
 void ALobbyPlayerController::Server_PlayerKick_Implementation(int PlayerNumber)
 {
 	if (bHost)
@@ -190,7 +190,7 @@ void ALobbyPlayerController::Server_PlayerKick_Implementation(int PlayerNumber)
 		ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
 		if (LobbyGameMode)
 		{
-			//ÀÌ°Å Á¤»óÀûÀÎ ¹æ¹ıÀÏ±î?
+			//ï¿½Ì°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï±ï¿½?
 			ALobbyPlayerController* TargetLobbyPlayerController = LobbyGameMode->LobbyPlayerControllerArray[PlayerNumber];
 			{
 				UE_LOG(LogTemp, Log, TEXT("Player %d ClientTravel"), PlayerNumber);
@@ -203,8 +203,22 @@ void ALobbyPlayerController::Server_PlayerKick_Implementation(int PlayerNumber)
 }
 
 
+//ì—´ê±°í˜• ë¦¬í”Œë¦¬ì¼€ì´ì…˜ì´ ì•ˆë˜ë„¤...
+void ALobbyPlayerController::Server_SetPlayerCharacter_Implementation(int ClassType)
+{
+	ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
+	if (LobbyGameMode)
+	{
+		LobbyGameMode->UpdateCharacter(this, static_cast<EClassType>(ClassType));
+	}
+}
 
-//¼­¹ö->Å¬¶ó ¸Ş½ÃÁö Àü¼Û (ÀÓ½Ã)
+
+
+
+
+
+//ï¿½ï¿½ï¿½ï¿½->Å¬ï¿½ï¿½ ï¿½Ş½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½Ó½ï¿½)
 void ALobbyPlayerController::Client_SendToDebugMessage_Implementation(const FString& Message)
 {
 	if (GEngine)

@@ -6,18 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include <Components/EditableTextBox.h>
 #include <Components/ScrollBox.h>
+#include "EarthHero/Enum/Enums.h"
 #include "LobbyWidget.generated.h"
-
-
-
-enum class EClassType : uint8
-{
-	Warrior,
-	Mechanic,
-	Shooter,
-	Archor,
-	NumberOfClass
-};
 
 UCLASS()
 class EARTHHERO_API ULobbyWidget : public UUserWidget
@@ -130,6 +120,7 @@ private:
 	int NumberOfClass = 4;
 	
 	void ChangeSelectedButton(EClassType ClassType);
+	void SetPlayerCharacter(EClassType ClassType);
 
 	UFUNCTION()
 	void ChatTextCommitted(const FText& Text, ETextCommit::Type CommitMethod);

@@ -4,16 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
-
-
 #include "Blueprint/UserWidget.h"
-#include <EarthHero/Widget/LobbyWidget.h>
-
+#include "EarthHero/Widget/LobbyWidget.h"
 #include "LobbyPlayerController.generated.h"
 
-/**
- * 
- */
+
+class AEHCharacter;
 
 UCLASS()
 class EARTHHERO_API ALobbyPlayerController : public APlayerController
@@ -23,7 +19,6 @@ class EARTHHERO_API ALobbyPlayerController : public APlayerController
 	virtual void BeginPlay();
 
 	ALobbyPlayerController();
-
 
 protected:
 	UFUNCTION(Server, Reliable)
@@ -55,15 +50,17 @@ public:
 	UFUNCTION(Server, Reliable)
 	void Server_PlayerKick(int PlayerNumber);
 
+	UFUNCTION(Server, Reliable)
+	void Server_SetPlayerCharacter(int ClassType);
+
 protected:
 	void ShowLobbyWidget();
 
 	TSubclassOf<class UUserWidget> LobbyWidgetClass;
 
 	ULobbyWidget* LobbyWidget;
-	
-	
-
-	
-
+public:
+	AEHCharacter* LobbyCharacter;
+	bool bSpawnCharacter = false;
+	int SpawnSpotIndex = 0;
 };

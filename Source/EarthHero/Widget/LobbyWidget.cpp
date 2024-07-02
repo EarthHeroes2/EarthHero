@@ -6,7 +6,7 @@
 #include "Components/TextBlock.h"
 #include <EarthHero/PlayerController/LobbyPlayerController.h>
 
-//¹ÙÀÎµù ¹× Ã³¸®°úÁ¤ °£·«ÇÏ°Ô ¸øÇÏ³ª?
+//ï¿½ï¿½ï¿½Îµï¿½ ï¿½ï¿½ Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½Ï³ï¿½?
 
 bool ULobbyWidget::Initialize()
 {
@@ -165,29 +165,45 @@ void ULobbyWidget::PlayerKick(int PlayerNumber)
 
 void ULobbyWidget::WarriorClicked()
 {
-	ChangeSelectedButton(EClassType::Warrior);
+	ChangeSelectedButton(Warrior);
 }
 void ULobbyWidget::MechanicClicked()
 {
-	ChangeSelectedButton(EClassType::Mechanic);
+	ChangeSelectedButton(Mechanic);
 }
 void ULobbyWidget::ShooterClicked()
 {
-	ChangeSelectedButton(EClassType::Shooter);
+	ChangeSelectedButton(Shooter);
 }
 void ULobbyWidget::ArchorClicked()
 {
-	ChangeSelectedButton(EClassType::Archor);
+	ChangeSelectedButton(Archor);
 }
 
 void ULobbyWidget::ChangeSelectedButton(EClassType ClassType)
 {
-	for (int i = 0; i < (int)EClassType::NumberOfClass; i++)
+	for (int i = 0; i < NumberOfClass; i++)
 	{
 		ClassBtns[i]->SetColorAndOpacity(FLinearColor(1.0f, 1.0f, 1.0f, 1.0f));
 	}
-	ClassBtns[(int)ClassType]->SetColorAndOpacity(FLinearColor(1.0f, 1.0f, 1.0f, 0.5f));
+	ClassBtns[ClassType]->SetColorAndOpacity(FLinearColor(1.0f, 1.0f, 1.0f, 0.5f));
+
+	SetPlayerCharacter(ClassType);
 }
+
+void ULobbyWidget::SetPlayerCharacter(EClassType ClassType)
+{
+	APlayerController* PlayerController = GetOwningPlayer();
+	if (PlayerController)
+	{
+		ALobbyPlayerController* LobbyPlayerController = Cast<ALobbyPlayerController>(PlayerController);
+		if (LobbyPlayerController)
+		{
+			LobbyPlayerController->Server_SetPlayerCharacter(ClassType);
+		}
+	}
+}
+
 
 void ULobbyWidget::ChatTextCommitted(const FText& Text, ETextCommit::Type CommitMethod)
 {
