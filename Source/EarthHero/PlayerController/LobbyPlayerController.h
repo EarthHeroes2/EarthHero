@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "Blueprint/UserWidget.h"
-#include <EarthHero/Widget/LobbyWidget.h>
+#include "EarthHero/Widget/LobbyWidget.h"
 #include "LobbyPlayerController.generated.h"
 
 
@@ -48,8 +48,8 @@ public:
 	UFUNCTION(Server, Reliable)
 	void Server_PlayerKick(int PlayerNumber);
 
-	//UFUNCTION(Server, Reliable)
-	//void Server_SetPlayerCharacter(EClassType ClassType);
+	UFUNCTION(Server, Reliable)
+	void Server_SetPlayerCharacter(int ClassType);
 
 protected:
 	void ShowLobbyWidget();

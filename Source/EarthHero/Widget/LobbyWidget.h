@@ -6,16 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include <Components/EditableTextBox.h>
 #include <Components/ScrollBox.h>
+#include "EarthHero/Enum/Enums.h"
 #include "LobbyWidget.generated.h"
-
-enum EClassType
-{
-	Warrior,
-	Mechanic,
-	Shooter,
-	Archor,
-	NumberOfClass
-};
 
 UCLASS()
 class EARTHHERO_API ULobbyWidget : public UUserWidget

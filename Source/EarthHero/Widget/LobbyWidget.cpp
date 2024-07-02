@@ -6,7 +6,7 @@
 #include "Components/TextBlock.h"
 #include <EarthHero/PlayerController/LobbyPlayerController.h>
 
-//¹ÙÀÎµù ¹× Ã³¸®°úÁ¤ °£·«ÇÏ°Ô ¸øÇÏ³ª?
+//ï¿½ï¿½ï¿½Îµï¿½ ï¿½ï¿½ Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½Ï³ï¿½?
 
 bool ULobbyWidget::Initialize()
 {
@@ -173,7 +173,7 @@ void ULobbyWidget::WarriorClicked()
 		ALobbyPlayerController* LobbyPlayerController = Cast<ALobbyPlayerController>(PlayerController);
 		if (LobbyPlayerController)
 		{
-			
+			LobbyPlayerController->Server_SetPlayerCharacter(Warrior);
 		}
 	}
 }
