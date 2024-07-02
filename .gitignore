@@ -16,6 +16,8 @@
 *.dylib
 *.dll
 
+*.uproject
+
 # Fortran module files
 *.mod
 
@@ -90,3 +92,4 @@ Plugins/Developer/RiderLink/Intermediate/Build/Win64/UnrealEditor/Development/Ri
 Plugins/Developer/RiderLink/Intermediate/Build/Win64/UnrealEditor/Development/RiderShaderInfo/Definitions.h
 
 /.idea/.idea.EarthHero.dir/.idea/workspace.xml
+EarthHero.uproject
