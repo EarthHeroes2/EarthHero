@@ -5,6 +5,8 @@
 
 #include "EHShooter.h"
 #include "Camera/CameraComponent.h"
+#include "EarthHero/Stat/StatComponent.h"
+#include "EarthHero/Stat/DamageType/NormalDamageType.h"
 #include "Kismet/GameplayStatics.h"
 
 UShooterCombatComponent::UShooterCombatComponent()
@@ -37,16 +39,23 @@ void UShooterCombatComponent::Server_Fire_Implementation(FVector TraceStartVecto
 {
 	FHitResult HitResult;
 	bool bHit;
+	FCollisionQueryParams collisionParams;
+	collisionParams.AddIgnoredActor(Shooter);
 	
 	UWorld* World = GetWorld();
 	if(World)
 	{
 		bHit = GetWorld()->LineTraceSingleByChannel(HitResult, TraceStartVector, TraceEndVector,
-			ECC_GameTraceChannel1);
+			ECC_GameTraceChannel1, collisionParams);
 	}
-
+	
 	if(bHit)
 	{
+		AEHCharacter *HitActor = Cast<AEHCharacter>(HitResult.GetActor());
+		if (HitActor)
+		{
+			HitActor->StatComponent->DamageTaken(10 ,UNormalDamageType::StaticClass(), HitResult, GetOwner()->GetInstigatorController(), Shooter);
+		}
 		// TODO
 		// a. If Target is an Enemy, Call the Damage Function
 

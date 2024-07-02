@@ -11,8 +11,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "TimerManager.h"  // FTimerHandle과 TimerManager를 사용하기 위해 필요
-#include "EarthHero/Player/EHPlayerController.h"
-
+#include "VectorUtil.h"
 
 UStatComponent::UStatComponent()
 {
@@ -31,38 +30,22 @@ void UStatComponent::BeginPlay()
 	InitializeStatData("Hero");
 
 	//TakeDamage를 Delecate 설정
-	if (GetOwner())
-	{
-		GetOwner()->OnTakeAnyDamage.AddDynamic(this, &UStatComponent::DamageTaken);
-	}
-
-	// //임시 초당데미지 함수
-	// if (GetOwner()->HasAuthority())
+	// if (GetOwner())
 	// {
-	// 	GetWorld()->GetTimerManager().SetTimer(PlayerStateCheckTimerHandle, this, &UStatComponent::TickDamage, 2.0f, true);
+	// 	GetOwner()->OnTakeAnyDamage.AddDynamic(this, &UStatComponent::DamageTaken);
 	// }
-	
-}
-
-//임시 초당 데미지 함수
-void UStatComponent::TickDamage()
-{
-	AActor* Owner = GetOwner();
-	if (Owner)
-	{
-		//ApplyDamage로 호출
-		UGameplayStatics::ApplyDamage(Owner, 10, nullptr, nullptr, nullptr);
-	}
 }
 
 // Called every frame
 void UStatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	//체력 재생 (1 * (1 + 체력 재생 능력치))
+	HeroStat.Health = UE::Geometry::VectorUtil::Clamp(HeroStat.Health + 1 * (1 + HeroStat.HealthRegeneration), 0.f, HeroStat.MaxHealth);
 }
 
-void UStatComponent::DamageTaken_Implementation(AActor* DamagedActor, float InDamage, const UDamageType* DamageType,
-                                                AController* Instigator, AActor* DamageCausor)
+float UStatComponent::DamageTaken(float InDamage, TSubclassOf<UDamageType> DamageTypeClass, const FHitResult & HitInfo, AController* Instigator, AEHCharacter* DamageCausor)
 {
 	//데미지 계산
 	UStatCalculationLibrary::CalNormalDamage(HeroStat, InDamage);
@@ -74,17 +57,8 @@ void UStatComponent::DamageTaken_Implementation(AActor* DamagedActor, float InDa
 		FString Message = FString::Printf(TEXT("Dead"));
 		GEngine->AddOnScreenDebugMessage(-1, 1233223.f, FColor::Green, Message);
 	}
-}
 
-bool UStatComponent::DamageTaken_Validate(AActor* DamagedActor, float InDamage, const UDamageType* DamageType,
-	AController* Instigator, AActor* DamageCausor)
-{
-	// 입력된 데미지가 0이하이면 무시한다.
-	if (InDamage <= 0.f)
-	{
-		return false;
-	}
-	return true;
+	return InDamage;
 }
 
 // GameInstance에 저장된 초기 스텟을 불러와 StatComponent의 Base스텟과 스텟을 초기화하는 함수
@@ -145,4 +119,73 @@ float UStatComponent::GetHealthPercent() const
         return HeroStat.Health / HeroStat.MaxHealth;
     }
     return 0.0f;
+}
+
+float UStatComponent::HealthRegeneration() const
+{
+	return HeroStat.HealthRegeneration;
+}
+
+float UStatComponent::GetMovementSpeed() const
+{
+	return HeroStat.MovementSpeed;
+}
+
+float UStatComponent::GetNormalDamage() const
+{
+	return HeroStat.NormalDamage;
+}
+
+float UStatComponent::GetAttackSpeed() const
+{
+	return HeroStat.AttackSpeed;
+}
+
+float UStatComponent::GetSkillDamage() const
+{
+	return HeroStat.SkillDamage;
+}
+
+float UStatComponent::GetMaxExp() const
+{
+	return HeroStat.MaxExp;
+}
+
+float UStatComponent::GetExp() const
+{
+	return HeroStat.Exp;
+}
+
+float UStatComponent::GetExpPercent() const
+{
+	if (HeroStat.MaxExp > 0)
+	{
+		return HeroStat.Exp / HeroStat.MaxExp;
+	}
+	return 0.0f;
+}
+
+float UStatComponent::GetSkillCoolTime() const
+{
+	return HeroStat.SkillCoolTime;
+}
+
+float UStatComponent::GetDashCoolTime() const
+{
+	return HeroStat.DashCoolTime;
+}
+
+float UStatComponent::GetDefensePower() const
+{
+	return HeroStat.DefensePower;
+}
+
+float UStatComponent::GetIncreasedExpGain() const
+{
+	return HeroStat.IncreasedExpGain;
+}
+
+float UStatComponent::GetJumpPower() const
+{
+	return HeroStat.JumpPower;
 }

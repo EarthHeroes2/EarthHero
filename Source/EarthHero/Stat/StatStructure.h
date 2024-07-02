@@ -18,7 +18,7 @@ struct FStatStructure : public FTableRowBase
 	float Health = 0.f;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
-	float HealthRegeneration = 1.f;			//체력 재생
+	float HealthRegeneration = 0.f;			//체력 재생
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	float MovementSpeed = 1.f;				//이동속도

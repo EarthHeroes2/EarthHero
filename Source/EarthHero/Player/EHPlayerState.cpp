@@ -2,10 +2,13 @@
 
 
 #include "EHPlayerState.h"
+
+#include "EarthHero/Stat/ShooterStatComponent.h"
 #include "EarthHero/Stat/StatComponent.h"
 
 AEHPlayerState::AEHPlayerState()
 {
 	//승언 : StatComponent 붙이기
-	StatComponent = CreateDefaultSubobject<UStatComponent>(TEXT("StatComponent"));
+	
+	StatComponent = CreateDefaultSubobject<UShooterStatComponent>(TEXT("ShooterStatComponent"));
 }
