@@ -14,12 +14,17 @@ ALobbyGameMode::ALobbyGameMode()
 	PlayerControllerClass = ALobbyPlayerController::StaticClass();
 	GameSessionClass = ALobbyGameSession::StaticClass();
 
+	CharacterClasses.SetNum(4);
+	
+	//Warrior
+	//Mechanic
 	//shooter 블루프린트
 	static ConstructorHelpers::FClassFinder<AEHShooter> EHShooterAsset(TEXT("/Game/Blueprints/Character/Shooter/BP_Shooter.BP_Shooter_C"));
 	if (EHShooterAsset.Succeeded())
 	{
-		EHShooterClass = EHShooterAsset.Class;
+		CharacterClasses[Shooter] = EHShooterClass = EHShooterAsset.Class;
 	}
+	//Archor
 }
 
 void ALobbyGameMode::BeginPlay()
@@ -55,7 +60,7 @@ void ALobbyGameMode::AddPlayerReadyState(APlayerController* NewPlayer)
 	LobbyPlayerControllerArray.Add(LobbyNewPlayerController);
 	PlayerNameArray.Add(LobbyNewPlayerController->PlayerState->GetPlayerName());
 	PlayerReadyStateArray.Add(false);
-	PlayerClassArray.Add(Warrior); //�⺻��
+	PlayerClassArray.Add(Warrior); //임시
 
 	UpdatePlayerNameyListAndReadyState();
 }
@@ -168,8 +173,21 @@ void ALobbyGameMode::UpdateCharacter(ALobbyPlayerController* LobbyPlayerControll
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = this;
 
-	LobbyPlayerController->LobbyCharacter = GetWorld()->SpawnActor<AEHShooter>(EHShooterClass, SpawnLocations[SpawnSpotIndex], FRotator(0.0f, 180.0f, 0.0f), SpawnParams);
-		
+	switch (ClassType)
+	{
+		case Warrior:
+			break;
+		case Mechanic:
+			break;
+		case Shooter:
+			LobbyPlayerController->LobbyCharacter = GetWorld()->SpawnActor<AEHShooter>(EHShooterClass, SpawnLocations[SpawnSpotIndex], FRotator(0.0f, 180.0f, 0.0f), SpawnParams);
+			break;
+		case Archor:
+			break;
+		default:
+			break;
+	}
+	
 	if (LobbyPlayerController->LobbyCharacter)
 	{
 		UE_LOG(LogTemp, Log, TEXT("Spawned character : %s"), *SpawnLocations[SpawnSpotIndex].ToString());

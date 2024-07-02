@@ -120,6 +120,7 @@ private:
 	int NumberOfClass = 4;
 	
 	void ChangeSelectedButton(EClassType ClassType);
+	void SetPlayerCharacter(EClassType ClassType);
 
 	UFUNCTION()
 	void ChatTextCommitted(const FText& Text, ETextCommit::Type CommitMethod);

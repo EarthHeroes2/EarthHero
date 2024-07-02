@@ -166,16 +166,6 @@ void ULobbyWidget::PlayerKick(int PlayerNumber)
 void ULobbyWidget::WarriorClicked()
 {
 	ChangeSelectedButton(Warrior);
-
-	APlayerController* PlayerController = GetOwningPlayer();
-	if (PlayerController)
-	{
-		ALobbyPlayerController* LobbyPlayerController = Cast<ALobbyPlayerController>(PlayerController);
-		if (LobbyPlayerController)
-		{
-			LobbyPlayerController->Server_SetPlayerCharacter(Warrior);
-		}
-	}
 }
 void ULobbyWidget::MechanicClicked()
 {
@@ -197,7 +187,23 @@ void ULobbyWidget::ChangeSelectedButton(EClassType ClassType)
 		ClassBtns[i]->SetColorAndOpacity(FLinearColor(1.0f, 1.0f, 1.0f, 1.0f));
 	}
 	ClassBtns[ClassType]->SetColorAndOpacity(FLinearColor(1.0f, 1.0f, 1.0f, 0.5f));
+
+	SetPlayerCharacter(ClassType);
 }
+
+void ULobbyWidget::SetPlayerCharacter(EClassType ClassType)
+{
+	APlayerController* PlayerController = GetOwningPlayer();
+	if (PlayerController)
+	{
+		ALobbyPlayerController* LobbyPlayerController = Cast<ALobbyPlayerController>(PlayerController);
+		if (LobbyPlayerController)
+		{
+			LobbyPlayerController->Server_SetPlayerCharacter(ClassType);
+		}
+	}
+}
+
 
 void ULobbyWidget::ChatTextCommitted(const FText& Text, ETextCommit::Type CommitMethod)
 {

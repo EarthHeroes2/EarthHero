@@ -27,9 +27,13 @@ protected:
 	TArray<FString> PlayerNameArray;
 	TArray<bool> PlayerReadyStateArray;
 	TArray<EClassType> PlayerClassArray;
+	
 
-	//AEHShooter* EHShooter;
+	TArray<TSubclassOf<ACharacter>> CharacterClasses;
+	//TSubclassOf<class AEHWarrior> EHWarriorClass;
+	//TSubclassOf<class AEHMechanic> EHMechanicClass;
 	TSubclassOf<class AEHShooter> EHShooterClass;
+	//TSubclassOf<class AEHArchor> EHArchorClass;
 
 public:
 	ALobbyGameMode();
