@@ -62,4 +62,5 @@ protected:
 public:
 	AEHCharacter* LobbyCharacter;
 	bool bSpawnCharacter = false;
+	int SpawnSpotIndex = 0;
 };

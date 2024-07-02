@@ -150,29 +150,33 @@ void ALobbyGameMode::UpdateCharacter(ALobbyPlayerController* LobbyPlayerControll
 	int PlayerNumber = LobbyPlayerControllerArray.Find(LobbyPlayerController);
 
 	PlayerClassArray[PlayerNumber] = ClassType;
-
-	//캐릭터 첫 생성이라면
+	
 	if(!(LobbyPlayerController->LobbyCharacter))
 	{
-		int SpawnSpotIndex = GetLobbyPlayerSpot();
-		
-		FActorSpawnParameters SpawnParams;
-		SpawnParams.Owner = this;
-
-		AEHShooter* NewCharacter = GetWorld()->SpawnActor<AEHShooter>(EHShooterClass, SpawnLocations[SpawnSpotIndex], FRotator(0.0f, 180.0f, 0.0f), SpawnParams);
-		//첫 소환은 슈터 고정
-		if (NewCharacter)
-		{
-			UE_LOG(LogTemp, Log, TEXT("Spawned character : %s"), *SpawnLocations[SpawnSpotIndex].ToString());
-		}
-		else
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Failed to spawn character : %s"), *SpawnLocations[SpawnSpotIndex].ToString());
-		}
+		UE_LOG(LogTemp, Log, TEXT("First Spawn"));
+		LobbyPlayerController->SpawnSpotIndex = GetLobbyPlayerSpot();
 	}
 	else
 	{
+		UE_LOG(LogTemp, Log, TEXT("Respawn"));
+		LobbyPlayerController->LobbyCharacter->Destroy();
+	}
+
+	int SpawnSpotIndex = LobbyPlayerController->SpawnSpotIndex;
+	
+	//???
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = this;
+
+	LobbyPlayerController->LobbyCharacter = GetWorld()->SpawnActor<AEHShooter>(EHShooterClass, SpawnLocations[SpawnSpotIndex], FRotator(0.0f, 180.0f, 0.0f), SpawnParams);
 		
+	if (LobbyPlayerController->LobbyCharacter)
+	{
+		UE_LOG(LogTemp, Log, TEXT("Spawned character : %s"), *SpawnLocations[SpawnSpotIndex].ToString());
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Failed to spawn character : %s"), *SpawnLocations[SpawnSpotIndex].ToString());
 	}
 }
 
