@@ -52,6 +52,9 @@ public:
 	UFUNCTION(Client, Reliable)
 	void Client_SendChatMessage(const FText& Text);
 
+	UFUNCTION(Server, Reliable)
+	void Server_PlayerKick(int PlayerNumber);
+
 protected:
 	void ShowLobbyWidget();
 

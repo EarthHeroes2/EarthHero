@@ -6,6 +6,7 @@
 #include "Components/TextBlock.h"
 #include <EarthHero/PlayerController/LobbyPlayerController.h>
 
+//바인딩 및 처리과정 간략하게 못하나?
 
 bool ULobbyWidget::Initialize()
 {
@@ -17,7 +18,9 @@ bool ULobbyWidget::Initialize()
 		ALobbyPlayerController* LobbyPlayerController = Cast<ALobbyPlayerController>(PlayerController);
 		if (LobbyPlayerController)
 		{
-			if (LobbyPlayerController->bHost)
+			bHost = LobbyPlayerController->bHost;
+
+			if (bHost)
 				ReadyButton_Tb->SetText(FText::FromString("Game Start"));
 			else
 				ReadyButton_Tb->SetText(FText::FromString("Game Ready"));
@@ -25,12 +28,32 @@ bool ULobbyWidget::Initialize()
 	}
 	Ready_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::ReadyClicked);
 
+	if (bHost)
+	{
+		Player1_Btn->OnHovered.AddDynamic(this, &ULobbyWidget::Player1Hovered);
+		Player2_Btn->OnHovered.AddDynamic(this, &ULobbyWidget::Player2Hovered);
+		Player3_Btn->OnHovered.AddDynamic(this, &ULobbyWidget::Player3Hovered);
+		Player4_Btn->OnHovered.AddDynamic(this, &ULobbyWidget::Player4Hovered);
+		Player1_Btn->OnUnhovered.AddDynamic(this, &ULobbyWidget::Player1Unhovered);
+		Player2_Btn->OnUnhovered.AddDynamic(this, &ULobbyWidget::Player2Unhovered);
+		Player3_Btn->OnUnhovered.AddDynamic(this, &ULobbyWidget::Player3Unhovered);
+		Player4_Btn->OnUnhovered.AddDynamic(this, &ULobbyWidget::Player4Unhovered);
+
+		KickButtons.Add(Kick1_Btn);
+		KickButtons.Add(Kick2_Btn);
+		KickButtons.Add(Kick3_Btn);
+		KickButtons.Add(Kick4_Btn);
+
+		Kick1_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::Kick1Clicked);
+		Kick2_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::Kick2Clicked);
+		Kick3_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::Kick3Clicked);
+		Kick4_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::Kick4Clicked);
+	}
 
 	PlayerTexts.Add(Player1_Txt);
 	PlayerTexts.Add(Player2_Txt);
 	PlayerTexts.Add(Player3_Txt);
 	PlayerTexts.Add(Player4_Txt);
-	
 
 	ClassBtns.Add(Warrior_Btn);
 	ClassBtns.Add(Mechanic_Btn);
@@ -62,6 +85,83 @@ void ULobbyWidget::ReadyClicked()
 		}
 	}
 }
+
+void ULobbyWidget::Player1Hovered()
+{
+	VisibleKickButton(1);
+}
+void ULobbyWidget::Player2Hovered()
+{
+	VisibleKickButton(2);
+}
+void ULobbyWidget::Player3Hovered()
+{
+	VisibleKickButton(3);
+}
+void ULobbyWidget::Player4Hovered()
+{
+	VisibleKickButton(4);
+}
+void ULobbyWidget::VisibleKickButton(int PlayerNumber)
+{
+	if(NumberOfPlayers >= PlayerNumber)
+		KickButtons[PlayerNumber - 1]->SetVisibility(ESlateVisibility::Visible);
+}
+
+void ULobbyWidget::Player1Unhovered()
+{
+	InvisibleKickButton(1);
+}
+void ULobbyWidget::Player2Unhovered()
+{
+	InvisibleKickButton(2);
+}
+void ULobbyWidget::Player3Unhovered()
+{
+	InvisibleKickButton(3);
+}
+void ULobbyWidget::Player4Unhovered()
+{
+	InvisibleKickButton(4);
+}
+void ULobbyWidget::InvisibleKickButton(int PlayerNumber)
+{
+	if (NumberOfPlayers >= PlayerNumber)
+		KickButtons[PlayerNumber - 1]->SetVisibility(ESlateVisibility::Collapsed);
+}
+
+
+void ULobbyWidget::Kick1Clicked()
+{
+	PlayerKick(1);
+}
+void ULobbyWidget::Kick2Clicked()
+{
+	PlayerKick(2);
+}
+void ULobbyWidget::Kick3Clicked()
+{
+	PlayerKick(3);
+}
+void ULobbyWidget::Kick4Clicked()
+{
+	PlayerKick(4);
+}
+void ULobbyWidget::PlayerKick(int PlayerNumber)
+{
+	UE_LOG(LogTemp, Log, TEXT("Player %d kick request"), PlayerNumber-1);
+
+	APlayerController* PlayerController = GetOwningPlayer();
+	if (PlayerController)
+	{
+		ALobbyPlayerController* LobbyPlayerController = Cast<ALobbyPlayerController>(PlayerController);
+		if (LobbyPlayerController)
+		{
+			LobbyPlayerController->Server_PlayerKick(PlayerNumber - 1);
+		}
+	}
+}
+
 
 void ULobbyWidget::WarriorClicked()
 {
@@ -121,7 +221,7 @@ void ULobbyWidget::ChatTextCommitted(const FText& Text, ETextCommit::Type Commit
 
 void ULobbyWidget::UpdatePlayerNameList(const TArray<FString>& PlayerNameList)
 {
-	int NumberOfPlayers = PlayerNameList.Num();
+	NumberOfPlayers = PlayerNameList.Num();
 
 	UE_LOG(LogTemp, Log, TEXT("Widget : update player name list (%d players)"), NumberOfPlayers);
 
@@ -134,7 +234,7 @@ void ULobbyWidget::UpdatePlayerNameList(const TArray<FString>& PlayerNameList)
 
 void ULobbyWidget::UpdateReadyState(const TArray<bool>& PlayerReadyStateArray)
 {
-	int NumberOfPlayers = PlayerReadyStateArray.Num();
+	NumberOfPlayers = PlayerReadyStateArray.Num();
 
 	UE_LOG(LogTemp, Log, TEXT("Widget : update player ready state (%d players)"), NumberOfPlayers);
 

@@ -182,6 +182,26 @@ void ALobbyPlayerController::Client_SendChatMessage_Implementation(const FText& 
 	}
 }
 
+//플레이어 킥 (방장만 가능)
+void ALobbyPlayerController::Server_PlayerKick_Implementation(int PlayerNumber)
+{
+	if (bHost)
+	{
+		ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
+		if (LobbyGameMode)
+		{
+			//이거 정상적인 방법일까?
+			ALobbyPlayerController* TargetLobbyPlayerController = LobbyGameMode->LobbyPlayerControllerArray[PlayerNumber];
+			{
+				UE_LOG(LogTemp, Log, TEXT("Player %d ClientTravel"), PlayerNumber);
+
+				TargetLobbyPlayerController->ClientTravel("/Game/Maps/StartupMap", ETravelType::TRAVEL_Absolute);
+			}
+
+		}
+	}
+}
+
 
 
 //서버->클라 메시지 전송 (임시)

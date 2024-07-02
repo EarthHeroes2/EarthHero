@@ -18,12 +18,14 @@ class EARTHHERO_API ALobbyGameMode : public AGameModeBase
 protected:
 	virtual void BeginPlay();
 	int ReadyCount = 0;
-	TArray<ALobbyPlayerController*> LobbyPlayerControllerArray;
 	TArray<FString> PlayerNameArray;
 	TArray<bool> PlayerReadyStateArray;
 
 public:
 	ALobbyGameMode();
+
+	TArray<ALobbyPlayerController*> LobbyPlayerControllerArray;
+
 	void TogglePlayerReady(APlayerController* Player);
 	void UpdatePlayerNameyListAndReadyState();
 	void UpdatePlayerReadyState();
