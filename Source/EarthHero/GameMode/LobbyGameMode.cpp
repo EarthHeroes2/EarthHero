@@ -6,12 +6,20 @@
 #include "GameFramework/PlayerState.h"
 #include "OnlineSubsystem.h"
 #include "OnlineSubsystemUtils.h"
+#include "EarthHero/Character/Shooter/EHShooter.h"
 #include "Interfaces/OnlineSessionInterface.h"
 
 ALobbyGameMode::ALobbyGameMode()
 {
 	PlayerControllerClass = ALobbyPlayerController::StaticClass();
 	GameSessionClass = ALobbyGameSession::StaticClass();
+
+	//shooter Î∏îÎ£®ÌîÑÎ¶∞Ìä∏
+	static ConstructorHelpers::FClassFinder<AEHShooter> EHShooterAsset(TEXT("/Game/Blueprints/Character/Shooter/BP_Shooter.BP_Shooter_C"));
+	if (EHShooterAsset.Succeeded())
+	{
+		EHShooterClass = EHShooterAsset.Class;
+	}
 }
 
 void ALobbyGameMode::BeginPlay()
@@ -23,6 +31,11 @@ void ALobbyGameMode::BeginPlay()
 	{
 		GameModeBase->bUseSeamlessTravel = true;
 	}
+
+	SpawnLocations.Add(FVector(500.0f, -150.0f, 0.0f));
+	SpawnLocations.Add(FVector(500.0f, -50.0f, 0.0f));
+	SpawnLocations.Add(FVector(500.0f, 50.0f, 0.0f));
+	SpawnLocations.Add(FVector(500.0f, 150.0f, 0.0f));
 }
 
 void ALobbyGameMode::AddPlayerReadyState(APlayerController* NewPlayer)
@@ -42,7 +55,7 @@ void ALobbyGameMode::AddPlayerReadyState(APlayerController* NewPlayer)
 	LobbyPlayerControllerArray.Add(LobbyNewPlayerController);
 	PlayerNameArray.Add(LobbyNewPlayerController->PlayerState->GetPlayerName());
 	PlayerReadyStateArray.Add(false);
-	PlayerClassArray.Add(Warrior); //±‚∫ª∞™
+	PlayerClassArray.Add(Warrior); //ÔøΩ‚∫ªÔøΩÔøΩ
 
 	UpdatePlayerNameyListAndReadyState();
 }
@@ -65,7 +78,7 @@ void ALobbyGameMode::TogglePlayerReady(APlayerController* Player)
 	else UE_LOG(LogTemp, Error, TEXT("%s is not valid for player ready state"), LobbyPlayerController);
 }
 
-//∏µÁ ≈¨∂Û¿Ãæ∆Æø°∞‘ «√∑π¿ÃæÓ ¿Ã∏ß ∏ÆΩ∫∆Æ ¿¸º€ π◊ UpdatePlayerReadyState() »£√‚
+//ÔøΩÔøΩÔøΩ ≈¨ÔøΩÔøΩÔøΩÃæÔøΩ∆ÆÔøΩÔøΩÔøΩÔøΩ ÔøΩ√∑ÔøΩÔøΩÃæÔøΩ ÔøΩÃ∏ÔøΩ ÔøΩÔøΩÔøΩÔøΩ∆Æ ÔøΩÔøΩÔøΩÔøΩ ÔøΩÔøΩ UpdatePlayerReadyState() »£ÔøΩÔøΩ
 void ALobbyGameMode::UpdatePlayerNameyListAndReadyState()
 {
 	int32 NumberOfPlayers = LobbyPlayerControllerArray.Num();
@@ -83,11 +96,11 @@ void ALobbyGameMode::UpdatePlayerNameyListAndReadyState()
 	UpdatePlayerReadyState();
 }
 
-//∏µÁ ≈¨∂Û¿Ãæ∆Æø°∞‘ πŸ≤Ô ∑πµ ªÛ≈¬ πËø≠ ¿¸º€
+//ÔøΩÔøΩÔøΩ ≈¨ÔøΩÔøΩÔøΩÃæÔøΩ∆ÆÔøΩÔøΩÔøΩÔøΩ ÔøΩŸ≤ÔøΩ ÔøΩÔøΩÔøΩÔøΩ ÔøΩÔøΩÔøΩÔøΩ ÔøΩËø≠ ÔøΩÔøΩÔøΩÔøΩ
 void ALobbyGameMode::UpdatePlayerReadyState()
 {
 	int32 NumberOfPlayers = LobbyPlayerControllerArray.Num();
-	//ALobbyPlayerController∑Œ forπÆ¿∫ æ»µ«≥™∫¡...
+	//ALobbyPlayerControllerÔøΩÔøΩ forÔøΩÔøΩÔøΩÔøΩ ÔøΩ»µ«≥ÔøΩÔøΩÔøΩ...
 
 	UE_LOG(LogTemp, Log, TEXT("Send Ready state to client. (%d players)"), NumberOfPlayers);
 
@@ -131,14 +144,51 @@ void ALobbyGameMode::SendChatMessage(const FText& Text)
 	}
 }
 
-//«ÿ¥Á «√∑π¿ÃæÓ¿« ƒ≥∏Ø≈Õ∏¶ ∫Ø∞Ê
-void ALobbyGameMode::UpdateCharacter(ALobbyPlayerController* Player, EClassType ClassType)
+//ÔøΩÿ¥ÔøΩ ÔøΩ√∑ÔøΩÔøΩÃæÔøΩÔøΩÔøΩ ƒ≥ÔøΩÔøΩÔøΩÕ∏ÔøΩ ÔøΩÔøΩÔøΩÔøΩ
+void ALobbyGameMode::UpdateCharacter(ALobbyPlayerController* LobbyPlayerController, EClassType ClassType)
 {
-	int PlayerNumber = LobbyPlayerControllerArray.Find(Player);
+	int PlayerNumber = LobbyPlayerControllerArray.Find(LobbyPlayerController);
 
 	PlayerClassArray[PlayerNumber] = ClassType;
 
-	//if(Player->Lobby)
+	//Ï∫êÎ¶≠ÌÑ∞ Ï≤´ ÏÉùÏÑ±Ïù¥ÎùºÎ©¥
+	if(!(LobbyPlayerController->LobbyCharacter))
+	{
+		int SpawnSpotIndex = GetLobbyPlayerSpot();
+		
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = this;
 
+		AEHShooter* NewCharacter = GetWorld()->SpawnActor<AEHShooter>(EHShooterClass, SpawnLocations[SpawnSpotIndex], FRotator(0.0f, 180.0f, 0.0f), SpawnParams);
+		//Ï≤´ ÏÜåÌôòÏùÄ ÏäàÌÑ∞ Í≥†Ï†ï
+		if (NewCharacter)
+		{
+			UE_LOG(LogTemp, Log, TEXT("Spawned character : %s"), *SpawnLocations[SpawnSpotIndex].ToString());
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Failed to spawn character : %s"), *SpawnLocations[SpawnSpotIndex].ToString());
+		}
+	}
+	else
+	{
+		
+	}
+}
 
+int ALobbyGameMode::GetLobbyPlayerSpot()
+{
+	int NumberOfPlayer = LobbyPlayerControllerArray.Num();
+	int i;
+	
+	for(i = 0; i < NumberOfPlayer; i++)
+	{
+		if(!(LobbyPlayerControllerArray[i]->bSpawnCharacter))
+		{
+			LobbyPlayerControllerArray[i]->bSpawnCharacter = true;
+			break;
+		}
+	}
+	
+	return i;
 }

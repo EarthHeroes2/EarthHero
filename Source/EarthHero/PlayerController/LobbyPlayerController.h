@@ -9,6 +9,8 @@
 #include "LobbyPlayerController.generated.h"
 
 
+class AEHCharacter;
+
 UCLASS()
 class EARTHHERO_API ALobbyPlayerController : public APlayerController
 {
@@ -57,5 +59,7 @@ protected:
 	TSubclassOf<class UUserWidget> LobbyWidgetClass;
 
 	ULobbyWidget* LobbyWidget;
-
+public:
+	AEHCharacter* LobbyCharacter;
+	bool bSpawnCharacter = false;
 };

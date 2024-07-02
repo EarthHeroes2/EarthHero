@@ -10,6 +10,8 @@
 /**
  * 
  */
+class AEHShooter;
+
 UCLASS()
 class EARTHHERO_API ALobbyGameMode : public AGameModeBase
 {
@@ -17,10 +19,17 @@ class EARTHHERO_API ALobbyGameMode : public AGameModeBase
 
 protected:
 	virtual void BeginPlay();
+
 	int ReadyCount = 0;
+	
+	TArray<FVector> SpawnLocations;
+	
 	TArray<FString> PlayerNameArray;
 	TArray<bool> PlayerReadyStateArray;
 	TArray<EClassType> PlayerClassArray;
+
+	//AEHShooter* EHShooter;
+	TSubclassOf<class AEHShooter> EHShooterClass;
 
 public:
 	ALobbyGameMode();
@@ -35,7 +44,6 @@ public:
 
 	void SendChatMessage(const FText& Text);
 
-	void UpdateCharacter(ALobbyPlayerController* Player, EClassType ClassType);
-
-
+	void UpdateCharacter(ALobbyPlayerController* LobbyPlayerController, EClassType ClassType);
+	int GetLobbyPlayerSpot();
 };
