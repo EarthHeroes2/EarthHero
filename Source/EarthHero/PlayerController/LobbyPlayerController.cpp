@@ -202,6 +202,20 @@ void ALobbyPlayerController::Server_PlayerKick_Implementation(int PlayerNumber)
 	}
 }
 
+/*
+void ALobbyPlayerController::Server_SetPlayerCharacter_Implementation(EClassType ClassType)
+{
+	//클래스 저장?
+	ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
+	if (LobbyGameMode)
+	{
+		LobbyGameMode->UpdateCharacter(this, ClassType);
+	}
+}*/
+
+
+
+
 
 
 //서버->클라 메시지 전송 (임시)

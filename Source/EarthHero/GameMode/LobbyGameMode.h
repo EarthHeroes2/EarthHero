@@ -20,6 +20,7 @@ protected:
 	int ReadyCount = 0;
 	TArray<FString> PlayerNameArray;
 	TArray<bool> PlayerReadyStateArray;
+	TArray<EClassType> PlayerClassArray;
 
 public:
 	ALobbyGameMode();
@@ -33,6 +34,8 @@ public:
 	bool PressGameStartButton();
 
 	void SendChatMessage(const FText& Text);
+
+	void UpdateCharacter(ALobbyPlayerController* Player, EClassType ClassType);
 
 
 };

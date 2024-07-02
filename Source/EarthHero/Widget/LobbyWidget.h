@@ -8,9 +8,7 @@
 #include <Components/ScrollBox.h>
 #include "LobbyWidget.generated.h"
 
-
-
-enum class EClassType : uint8
+enum EClassType
 {
 	Warrior,
 	Mechanic,

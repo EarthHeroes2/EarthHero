@@ -36,11 +36,13 @@ void ALobbyGameMode::AddPlayerReadyState(APlayerController* NewPlayer)
 		LobbyPlayerControllerArray.RemoveAt(PlayerIndex);
 		PlayerNameArray.RemoveAt(PlayerIndex);
 		PlayerReadyStateArray.RemoveAt(PlayerIndex);
+		PlayerClassArray.RemoveAt(PlayerIndex);
 	}
 
 	LobbyPlayerControllerArray.Add(LobbyNewPlayerController);
 	PlayerNameArray.Add(LobbyNewPlayerController->PlayerState->GetPlayerName());
 	PlayerReadyStateArray.Add(false);
+	PlayerClassArray.Add(Warrior); //기본값
 
 	UpdatePlayerNameyListAndReadyState();
 }
@@ -127,4 +129,16 @@ void ALobbyGameMode::SendChatMessage(const FText& Text)
 			LobbyPlayerControllerArray[i]->Client_SendChatMessage(Text);
 		}
 	}
+}
+
+//해당 플레이어의 캐릭터를 변경
+void ALobbyGameMode::UpdateCharacter(ALobbyPlayerController* Player, EClassType ClassType)
+{
+	int PlayerNumber = LobbyPlayerControllerArray.Find(Player);
+
+	PlayerClassArray[PlayerNumber] = ClassType;
+
+	//if(Player->Lobby)
+
+
 }
