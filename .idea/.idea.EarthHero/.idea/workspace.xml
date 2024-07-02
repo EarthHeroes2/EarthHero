@@ -78,17 +78,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4591bad7-fd9f-4860-903f-8700cd913377" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.EarthHero.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EarthHero.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Character/Shooter/BP_Shooter.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Character/Shooter/BP_Shooter.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_InGameHUD.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_InGameHUD.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/TestMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/TestMap.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EarthHero.uproject" beforeDir="false" afterPath="$PROJECT_DIR$/EarthHero.uproject" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/EHShooter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Shooter/EHShooter.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/EHShooter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Shooter/EHShooter.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/EHShooterAnimInstance.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Shooter/EHShooterAnimInstance.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/EHShooterAnimInstance.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Shooter/EHShooterAnimInstance.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_Tab.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_TabBasicStatsInfo.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_TabStatusInfo.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_TabUserInfo.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/Textures/Circle_Frame_Png.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/Textures/Circle_PNG.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/Textures/Damage_Png.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/Textures/Heal_Png.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/Textures/KillCount_Png.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/Textures/Shield_Png.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/Textures/T_Circle.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/Textures/T_CircleFrame.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/Textures/T_PlayerArrow.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/Textures/T_PlayerArrow_Sprite.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/EarthHero/Enum/Enums.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/EarthHero/Enum/Enums.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/BasicStatsWidget.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/BasicStatsWidget.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/StatusWidget.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/StatusWidget.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/TabHUDWidget.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/TabHUDWidget.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/TeamMemberWidget.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/TeamMemberWidget.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -153,6 +166,7 @@
         <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
         <option name="PASS_PARENT_ENVS" value="1" />
         <option name="USE_EXTERNAL_CONSOLE" value="0" />
+        <option name="TERMINAL_INTERACTION_BEHAVIOR" value="FORCE_CONSOLE" />
       </configuration_1>
       <configuration_2>
         <option name="CONFIGURATION" value="Shipping" />
@@ -164,6 +178,7 @@
         <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
         <option name="PASS_PARENT_ENVS" value="1" />
         <option name="USE_EXTERNAL_CONSOLE" value="0" />
+        <option name="TERMINAL_INTERACTION_BEHAVIOR" value="FORCE_CONSOLE" />
       </configuration_2>
       <configuration_3>
         <option name="CONFIGURATION" value="DebugGame" />
@@ -175,6 +190,7 @@
         <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
         <option name="PASS_PARENT_ENVS" value="1" />
         <option name="USE_EXTERNAL_CONSOLE" value="0" />
+        <option name="TERMINAL_INTERACTION_BEHAVIOR" value="FORCE_CONSOLE" />
       </configuration_3>
       <configuration_4>
         <option name="CONFIGURATION" value="Development Editor" />
@@ -186,6 +202,7 @@
         <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
         <option name="PASS_PARENT_ENVS" value="1" />
         <option name="USE_EXTERNAL_CONSOLE" value="0" />
+        <option name="TERMINAL_INTERACTION_BEHAVIOR" value="FORCE_CONSOLE" />
       </configuration_4>
       <configuration_5>
         <option name="CONFIGURATION" value="Development" />
@@ -197,8 +214,10 @@
         <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
         <option name="PASS_PARENT_ENVS" value="1" />
         <option name="USE_EXTERNAL_CONSOLE" value="0" />
+        <option name="TERMINAL_INTERACTION_BEHAVIOR" value="FORCE_CONSOLE" />
       </configuration_5>
       <option name="DEFAULT_PROJECT_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/EarthHero.vcxproj" />
+      <option name="AUTO_SELECT_PRIORITY" value="0" />
       <method v="2">
         <option name="Build" />
       </method>
