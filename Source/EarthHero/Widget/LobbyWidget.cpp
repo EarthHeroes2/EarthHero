@@ -224,7 +224,6 @@ void ULobbyWidget::InvisibleKickButton(int PlayerNumber)
 		KickButtons[PlayerNumber - 1]->SetVisibility(ESlateVisibility::Collapsed);
 }
 
-
 void ULobbyWidget::Kick1Clicked()
 {
 	PlayerKick(1);

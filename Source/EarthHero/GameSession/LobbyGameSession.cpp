@@ -496,39 +496,36 @@ void ALobbyGameSession::HandleUpdateSessionCompleted(FName EOSSessionName, bool 
 
 void ALobbyGameSession::NewHostFind()
 {
-    //�̿ϼ�
-    
-    // �ε��� 0�� �÷��̾� ��Ʈ�ѷ��� ����� (�׽�Ʈ x, �ȵǸ� ���� ������Ʈ �������)
-
-    //�ƴ���.. const TArray<FUniqueNetIdRef>& PlayerIds�� �����ϴµ�...
-    //HostPlayerId ���� �ʿ�
-
-    
-    APlayerController* NewHostPlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-    if (NewHostPlayerController)
+    ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
+    if(LobbyGameMode)
     {
-        ALobbyPlayerController* NewHostLobbyPlayerController = Cast<ALobbyPlayerController>(NewHostPlayerController);
-
-        if (NewHostLobbyPlayerController)
+        if(LobbyGameMode->LobbyPlayerControllerArray.Num() > 0)
         {
-            APlayerState* PlayerState = NewHostLobbyPlayerController->PlayerState;
-            
-            UE_LOG(LogTemp, Log, TEXT("Host Assignment..."));
+            APlayerController* NewHostPlayerController = LobbyGameMode->LobbyPlayerControllerArray[0];
+            if(NewHostPlayerController)
+            {
+                ALobbyPlayerController* NewHostLobbyPlayerController = Cast<ALobbyPlayerController>(NewHostPlayerController);
 
-            if (PlayerState && PlayerState->GetUniqueId().IsValid())
-            {
-                HostPlayerId = PlayerState->GetUniqueId(); //�׽�Ʈ x
-                HostAssignment(NewHostPlayerController);
+                if (NewHostLobbyPlayerController)
+                {
+                    APlayerState* PlayerState = NewHostLobbyPlayerController->PlayerState;
+                
+                    UE_LOG(LogTemp, Log, TEXT("Host Assignment..."));
+
+                    if (PlayerState && PlayerState->GetUniqueId().IsValid())
+                    {
+                        HostPlayerId = PlayerState->GetUniqueId();
+                        HostAssignment(NewHostPlayerController);
+                    }
+                    else
+                    {
+                        UE_LOG(LogTemp, Warning, TEXT("Failed to get unique ID"));
+                    }
+                }
             }
-            else
-            {
-                UE_LOG(LogTemp, Warning, TEXT("Failed to get unique ID"));
-            }
+            else UE_LOG(LogTemp, Warning, TEXT("player controller 0 is not vaild"));
         }
-    }
-    else
-    {
-        UE_LOG(LogTemp, Warning, TEXT("player controller 0 is not vaild"));
+        else UE_LOG(LogTemp, Warning, TEXT("no player controller"));
     }
 }
 
@@ -541,7 +538,8 @@ void ALobbyGameSession::HostAssignment(APlayerController* HostPlayer)
         if (LobbyPlayerController)
         {
             UE_LOG(LogTemp, Log, TEXT("Host Assigment : %s"), *HostPlayerId->ToString());
-            LobbyPlayerController->bHost = true;
+            
+            LobbyPlayerController->Client_HostAssignment(true);
         }
     }
 }
