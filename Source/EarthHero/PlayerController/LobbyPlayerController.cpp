@@ -116,12 +116,12 @@ void ALobbyPlayerController::Client_HostAssignment_Implementation(bool bHostAssi
 	
 }
 
-//서버에게서 방장 유무를 받음
+//기본으로 슈터 선택 (임시)
 void ALobbyPlayerController::Client_SelectDefaultCharacter_Implementation()
 {
 	if (LobbyWidget)
 	{
-		LobbyWidget->SetPlayerCharacter(Shooter);
+		LobbyWidget->ChangeSelectedButton(Shooter);
 	}
 	else UE_LOG(LogTemp, Log, TEXT("invalid LobbyWidget"));
 }

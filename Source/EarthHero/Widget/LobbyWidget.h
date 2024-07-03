@@ -13,6 +13,10 @@ UCLASS()
 class EARTHHERO_API ULobbyWidget : public UUserWidget
 {
 	GENERATED_BODY()
+
+	//ULobbyWidget(const FObjectInitializer &ObjectInitializer);
+
+	//TSubclassOf<class UUserWidget> FriendRowWidgetClass;
 	
 	virtual bool Initialize();
 public:
@@ -21,6 +25,7 @@ public:
 private:
 	int NumberOfPlayers;
 	int bHost = false;
+	EClassType SelectClass = Warrior;
 
 	UPROPERTY(meta = (BindWidget))
 	class UButton* Ready_Btn;
@@ -75,6 +80,9 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	class UEditableTextBox* Chat_Etb;
 
+	UPROPERTY(meta = (BindWidget))
+	class UScrollBox* Friend_Scr;
+
 	UFUNCTION()
 	void ReadyClicked();
 
@@ -120,20 +128,20 @@ private:
 	void ArchorClicked();
 
 	int NumberOfClass = 4;
-	
-	void ChangeSelectedButton(EClassType ClassType);
 public:
-	void SetPlayerCharacter(EClassType ClassType);
+	void ChangeSelectedButton(EClassType ClassType);
 protected:
+	void SetPlayerCharacter(EClassType ClassType);
 	UFUNCTION()
 	void ChatTextCommitted(const FText& Text, ETextCommit::Type CommitMethod);
-
-
-
-
 	
 public:
 	void UpdatePlayerNameList(const TArray<FString>& PlayerNameList);
 	void UpdateReadyState(const TArray<bool>& PlayerReadyStateArray);
 	void AddChatMessage(const FText& Text);
+
+//protected:
+	//void ReadFriendsListCompleted(int32 LocalUserNum, bool bWasSuccessful, const FString& ListName, const FString& ErrorStr);
+	//UFUNCTION()
+	//void InviteFriend(FString UserId);
 };

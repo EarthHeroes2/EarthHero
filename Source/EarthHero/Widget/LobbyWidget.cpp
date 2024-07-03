@@ -4,7 +4,22 @@
 #include "LobbyWidget.h"
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
+#include "OnlineSubsystem.h"
+#include "Interfaces/OnlineFriendsInterface.h"
 #include <EarthHero/PlayerController/LobbyPlayerController.h>
+#include "Components/Image.h"
+
+/*
+ULobbyWidget::ULobbyWidget(const FObjectInitializer &ObjectInitializer)
+	: Super(ObjectInitializer)
+{
+	//친구 초대 row 블루프린트
+	static ConstructorHelpers::FClassFinder<UUserWidget> FriendRowWidgetAsset(TEXT("UserWidget'/Game/Blueprints/Menu/WBP_Friend_Row.WBP_Friend_Row_C'"));
+	if (FriendRowWidgetAsset.Succeeded())
+	{
+		FriendRowWidgetClass = FriendRowWidgetAsset.Class;
+	}
+}*/
 
 bool ULobbyWidget::Initialize()
 {
@@ -26,9 +41,78 @@ bool ULobbyWidget::Initialize()
 	Archor_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::ArchorClicked);
 
 	Chat_Etb->OnTextCommitted.AddDynamic(this, &ULobbyWidget::ChatTextCommitted);
-	
+
+	/*
+	IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
+	if (Subsystem)
+	{
+		IOnlineFriendsPtr Friends = Subsystem->GetFriendsInterface();
+		if (Friends)
+		{
+			Friends->ReadFriendsList(
+				0,
+				TEXT(""),
+				FOnReadFriendsListComplete::CreateUObject(this, &ULobbyWidget::ReadFriendsListCompleted)
+			);
+		}
+	}*/
 	return true;
 }
+
+/*
+void ULobbyWidget::ReadFriendsListCompleted(int32 LocalUserNum, bool bWasSuccessful, const FString& ListName, const FString& ErrorStr)
+{
+	if (bWasSuccessful)
+	{
+		IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
+		if (Subsystem)
+		{
+			IOnlineFriendsPtr Friends = Subsystem->GetFriendsInterface();
+			if (Friends)
+			{
+				if (FriendRowWidgetClass)
+				{
+					//위젯 생성
+					UUserWidget* FriendRowWidget = Cast<UUserWidget>(CreateWidget(GetWorld(), FriendRowWidgetClass));
+
+					//친구 리스트 얻고
+					TArray<TSharedRef<FOnlineFriend>> FriendList;
+					Friends->GetFriendsList(LocalUserNum, ListName, FriendList);
+
+					//하나씩 추가
+					for (TSharedRef<FOnlineFriend> Friend : FriendList)
+					{
+						if (FriendRowWidget)
+						{
+							UTextBlock* FriendName_Tb = Cast<UTextBlock>(FriendRowWidget->GetWidgetFromName(TEXT("FriendName_Tb")));
+							if (FriendName_Tb)
+							{
+								FriendName_Tb->SetText(FText::FromString(Friend->GetDisplayName()));
+							}
+
+							
+                            UImage* FriendImage_Img = Cast<UImage>(FriendRowWidget->GetWidgetFromName(TEXT("FriendImage_Img")));
+                            if (FriendImage_Img)
+                            {
+                                //STEAM API 사용해야함
+                            }
+                            
+							
+                            UButton* FriendInvite_Btn = Cast<UButton>(FriendRowWidget->GetWidgetFromName(TEXT("FriendInvite_Btn")));
+                            if (FriendInvite_Btn)
+                            {
+                            }
+
+							Friend_Scr->AddChild(FriendRowWidget);
+						}
+					}
+				}
+			}
+		}
+	}
+	else UE_LOG(LogTemp, Warning, TEXT("Failed to read Firends list"));
+}*/
+
 
 void ULobbyWidget::HostAssignment(bool bHostAssignment)
 {
@@ -40,7 +124,6 @@ void ULobbyWidget::HostAssignment(bool bHostAssignment)
 		ReadyButton_Tb->SetText(FText::FromString("Game Ready"));
 	
 	Ready_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::ReadyClicked);
-
 	
 	if (bHost)
 	{
@@ -64,8 +147,6 @@ void ULobbyWidget::HostAssignment(bool bHostAssignment)
 		Kick4_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::Kick4Clicked);
 	}
 }
-
-
 
 void ULobbyWidget::ReadyClicked()
 {
@@ -183,12 +264,10 @@ void ULobbyWidget::ArchorClicked()
 
 void ULobbyWidget::ChangeSelectedButton(EClassType ClassType)
 {
-	for (int i = 0; i < NumberOfClass; i++)
-	{
-		ClassBtns[i]->SetColorAndOpacity(FLinearColor(1.0f, 1.0f, 1.0f, 1.0f));
-	}
-	ClassBtns[ClassType]->SetColorAndOpacity(FLinearColor(1.0f, 1.0f, 1.0f, 0.5f));
-
+	ClassBtns[SelectClass]->SetIsEnabled(true);
+	SelectClass = ClassType;
+	ClassBtns[SelectClass]->SetIsEnabled(false);
+	
 	SetPlayerCharacter(ClassType);
 }
 
