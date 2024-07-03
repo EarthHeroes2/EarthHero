@@ -28,9 +28,12 @@ void ALobbyPlayerController::BeginPlay()
 
 	if (!IsRunningDedicatedServer())
 	{
+		//로비 위젯 생성
+		ShowLobbyWidget();
+		
 		UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(GetWorld()->GetGameInstance());
-
-		//�ϴ� �κ� ���� �������� ���� ��û�� ����
+		
+		//비밀방 여부 서버에게 알려줌
 		if (EHGameInstance)
 		{
 			if (EHGameInstance->IsCheckedPrivate)
@@ -94,19 +97,23 @@ void ALobbyPlayerController::Server_InitSetup_Implementation(bool bAdvertise)
 }
 
 //서버에게서 방장 유무를 받음
+//함수이름 이상함
 void ALobbyPlayerController::Client_HostAssignment_Implementation(bool bHostAssignment)
 {
 	bHost = bHostAssignment; //클라이언트도 방장 유무는 알고 있지만, 서버에서 항상 확인해주기
 
-	ShowLobbyWidget();
-
+	if (LobbyWidget)
+	{
+		LobbyWidget->HostAssignment(bHostAssignment);
+	}
+	
 	if (bHost)
 	{
 		UE_LOG(LogTemp, Log, TEXT("Host Assignmented!"));
-
 		if (GEngine)
 			GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Yellow, FString::Printf(TEXT("You are host!!!!!!!!!!")));
 	}
+	
 }
 
 //서버에게서 방장 유무를 받음

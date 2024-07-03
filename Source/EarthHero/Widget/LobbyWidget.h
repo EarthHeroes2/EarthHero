@@ -15,6 +15,8 @@ class EARTHHERO_API ULobbyWidget : public UUserWidget
 	GENERATED_BODY()
 	
 	virtual bool Initialize();
+public:
+	void HostAssignment(bool bHostAssignment);
 
 private:
 	int NumberOfPlayers;

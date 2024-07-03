@@ -10,22 +10,38 @@ bool ULobbyWidget::Initialize()
 {
 	Super::Initialize();
 
-	APlayerController* PlayerController = GetOwningPlayer();
-	if (PlayerController)
-	{
-		ALobbyPlayerController* LobbyPlayerController = Cast<ALobbyPlayerController>(PlayerController);
-		if (LobbyPlayerController)
-		{
-			bHost = LobbyPlayerController->bHost;
+	PlayerTexts.Add(Player1_Txt);
+	PlayerTexts.Add(Player2_Txt);
+	PlayerTexts.Add(Player3_Txt);
+	PlayerTexts.Add(Player4_Txt);
 
-			if (bHost)
-				ReadyButton_Tb->SetText(FText::FromString("Game Start"));
-			else
-				ReadyButton_Tb->SetText(FText::FromString("Game Ready"));
-		}
-	}
+	ClassBtns.Add(Warrior_Btn);
+	ClassBtns.Add(Mechanic_Btn);
+	ClassBtns.Add(Shooter_Btn);
+	ClassBtns.Add(Archor_Btn);
+
+	Warrior_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::WarriorClicked);
+	Mechanic_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::MechanicClicked);
+	Shooter_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::ShooterClicked);
+	Archor_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::ArchorClicked);
+
+	Chat_Etb->OnTextCommitted.AddDynamic(this, &ULobbyWidget::ChatTextCommitted);
+	
+	return true;
+}
+
+void ULobbyWidget::HostAssignment(bool bHostAssignment)
+{
+	bHost = bHostAssignment;
+	
+	if (bHost)
+		ReadyButton_Tb->SetText(FText::FromString("Game Start"));
+	else
+		ReadyButton_Tb->SetText(FText::FromString("Game Ready"));
+	
 	Ready_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::ReadyClicked);
 
+	
 	if (bHost)
 	{
 		Player1_Btn->OnHovered.AddDynamic(this, &ULobbyWidget::Player1Hovered);
@@ -47,26 +63,9 @@ bool ULobbyWidget::Initialize()
 		Kick3_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::Kick3Clicked);
 		Kick4_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::Kick4Clicked);
 	}
-
-	PlayerTexts.Add(Player1_Txt);
-	PlayerTexts.Add(Player2_Txt);
-	PlayerTexts.Add(Player3_Txt);
-	PlayerTexts.Add(Player4_Txt);
-
-	ClassBtns.Add(Warrior_Btn);
-	ClassBtns.Add(Mechanic_Btn);
-	ClassBtns.Add(Shooter_Btn);
-	ClassBtns.Add(Archor_Btn);
-
-	Warrior_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::WarriorClicked);
-	Mechanic_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::MechanicClicked);
-	Shooter_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::ShooterClicked);
-	Archor_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::ArchorClicked);
-
-	Chat_Etb->OnTextCommitted.AddDynamic(this, &ULobbyWidget::ChatTextCommitted);
-	
-	return true;
 }
+
+
 
 void ULobbyWidget::ReadyClicked()
 {

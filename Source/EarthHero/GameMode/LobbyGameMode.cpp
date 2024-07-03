@@ -59,9 +59,10 @@ void ALobbyGameMode::AddPlayerInfo(ALobbyPlayerController* NewLobbyPlayerControl
 	PlayerNameArray.Add(NewLobbyPlayerController->PlayerState->GetPlayerName());
 	PlayerReadyStateArray.Add(false);
 	PlayerClassArray.Add(Shooter); //임시
-	
+
+	//정보를 등록했으니 클라이언트에게 기본 캐릭터를 골라주고
+	//이름과 레디 리스트를 보내줌
 	NewLobbyPlayerController->Client_SelectDefaultCharacter();
-	
 	UpdatePlayerNameListAndReadyState();
 }
 
