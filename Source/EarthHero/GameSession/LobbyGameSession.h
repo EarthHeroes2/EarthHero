@@ -15,7 +15,7 @@ class EARTHHERO_API ALobbyGameSession : public AGameSession
 	GENERATED_BODY()
 
 public:
-	int MaxNumberOfPlayersInSession = 2; // ���� �ִ� �ο��� (�ӽ÷�2)
+	int MaxNumberOfPlayersInSession = 4;
 
 protected:
 	int NumberOfPlayersInSession = 0;

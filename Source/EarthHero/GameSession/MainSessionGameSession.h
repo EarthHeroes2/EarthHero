@@ -15,10 +15,10 @@ class EARTHHERO_API AMainSessionGameSession : public AGameSession
 	GENERATED_BODY()
 
 protected:
-	int MaxNumberOfPlayersInSession = 1000; // ¼¼¼Ç ÃÖ´ë ÀÎ¿ø¼ö (±âº» ¼¼¼ÇÀº 1000¸í, ÀÌ¿Ü´Â 4¸í)
+	int MaxNumberOfPlayersInSession = 1000; // ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½Î¿ï¿½ï¿½ï¿½ (ï¿½âº» ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 1000ï¿½ï¿½, ï¿½Ì¿Ü´ï¿½ 4ï¿½ï¿½)
 	int NumberOfPlayersInSession = 0;
 
-	FName SessionName = "SessionName"; //ÀÓ½Ã //¹«½¼ ÀÇ¹Ì°¡ ÀÖÀ»±î
+	FName SessionName = "SessionName"; //ë¬´ìŠ¨ ì˜ë¯¸ê°€
 
 	bool bSessionExists = false;
 

@@ -537,7 +537,7 @@ void ALobbyGameSession::HostAssignment(APlayerController* HostPlayer)
         ALobbyPlayerController* LobbyPlayerController = Cast<ALobbyPlayerController>(HostPlayer);
         if (LobbyPlayerController)
         {
-            UE_LOG(LogTemp, Log, TEXT("Host Assigment : %s"), *HostPlayerId->ToString());
+            UE_LOG(LogTemp, Log, TEXT("Host Assignment : %s"), *HostPlayerId->ToString());
 
             IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
             if (Subsystem)
@@ -554,6 +554,7 @@ void ALobbyGameSession::HostAssignment(APlayerController* HostPlayer)
                         }
                         else UE_LOG(LogTemp, Log, TEXT("Current Advertise : false"));
 
+                        LobbyPlayerController->bHost = true;
                         LobbyPlayerController->Client_HostAssignment(true, false, CurrentSession->SessionSettings.bShouldAdvertise);
                     }
                     else

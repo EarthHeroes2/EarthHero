@@ -118,17 +118,23 @@ void UEHGameInstance::HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRe
                     FString PortNumber;
                     bool bKeyValueFound2 = SessionInSearchResult.Session.SessionSettings.Get("PortNumber", PortNumber);
 
-                    int32 CurrentPlayers = SessionInSearchResult.Session.SessionSettings.NumPublicConnections - SessionInSearchResult.Session.NumOpenPublicConnections;
+                    //미완성.
+                    //int32 NumberOfJoinedPlayers;
+                    //bool bKeyValueFound3 = SessionInSearchResult.Session.SessionSettings.Get("NumberOfJoinedPlayers", NumberOfJoinedPlayers);
 
                     if (bKeyValueFound1 && bKeyValueFound2)
                     {
+                        UE_LOG(LogTemp, Log, TEXT("Test session : %s, %s"), *FindSessionReason, *PortNumber);
+                        
                         if (GameName == "EH2" &&
-                                ((FindSessionReason == "JoinMainSession" && PortNumber == "7777") ||
-                                (FindSessionReason == "JoinLobby" && PortNumber != "7777" && CurrentPlayers > 0) ||
-                                (FindSessionReason == "CreateLobby" && PortNumber != "7777" && CurrentPlayers == 0))
-                           )
+                                (
+                                    (FindSessionReason == "JoinMainSession" && PortNumber == "7777") ||
+                                    (FindSessionReason == "JoinLobby" && PortNumber != "7777") ||
+                                    (FindSessionReason == "CreateLobby" && PortNumber != "7777")
+                                )
+                            )
                         {
-                            UE_LOG(LogTemp, Log, TEXT("Valid session : %s, %s, %d"), *FindSessionReason, *PortNumber, CurrentPlayers);
+                            UE_LOG(LogTemp, Log, TEXT("Valid session : %s, %s"), *FindSessionReason, *PortNumber);
 
                             if (Session->GetResolvedConnectString(SessionInSearchResult, NAME_GamePort, ConnectString))
                             {
