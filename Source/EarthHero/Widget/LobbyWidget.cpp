@@ -6,8 +6,6 @@
 #include "Components/TextBlock.h"
 #include <EarthHero/PlayerController/LobbyPlayerController.h>
 
-//���ε� �� ó������ �����ϰ� ���ϳ�?
-
 bool ULobbyWidget::Initialize()
 {
 	Super::Initialize();
@@ -67,8 +65,8 @@ bool ULobbyWidget::Initialize()
 
 	Chat_Etb->OnTextCommitted.AddDynamic(this, &ULobbyWidget::ChatTextCommitted);
 
-	ShooterClicked();
-
+	//ShooterClicked();//임시로 슈터 자동 선택
+	
 	return true;
 }
 
@@ -106,6 +104,8 @@ void ULobbyWidget::Player4Hovered()
 }
 void ULobbyWidget::VisibleKickButton(int PlayerNumber)
 {
+	UE_LOG(LogTemp, Error, TEXT(" %d  %d "), NumberOfPlayers, PlayerNumber);
+	
 	if(NumberOfPlayers >= PlayerNumber)
 		KickButtons[PlayerNumber - 1]->SetVisibility(ESlateVisibility::Visible);
 }
@@ -128,6 +128,8 @@ void ULobbyWidget::Player4Unhovered()
 }
 void ULobbyWidget::InvisibleKickButton(int PlayerNumber)
 {
+	UE_LOG(LogTemp, Error, TEXT(" %d  %d "), NumberOfPlayers, PlayerNumber);
+	
 	if (NumberOfPlayers >= PlayerNumber)
 		KickButtons[PlayerNumber - 1]->SetVisibility(ESlateVisibility::Collapsed);
 }

@@ -43,7 +43,7 @@ void ALobbyGameMode::BeginPlay()
 	SpawnLocations.Add(FVector(500.0f, 150.0f, 0.0f));
 }
 
-void ALobbyGameMode::AddPlayerReadyState(APlayerController* NewPlayer)
+void ALobbyGameMode::AddPlayerInfo(APlayerController* NewPlayer)
 {
 	ALobbyPlayerController* LobbyNewPlayerController = Cast<ALobbyPlayerController>(NewPlayer);
 
