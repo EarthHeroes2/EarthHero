@@ -538,8 +538,31 @@ void ALobbyGameSession::HostAssignment(APlayerController* HostPlayer)
         if (LobbyPlayerController)
         {
             UE_LOG(LogTemp, Log, TEXT("Host Assigment : %s"), *HostPlayerId->ToString());
+
+            IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
+            if (Subsystem)
+            {
+                IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
+                if (Session.IsValid())
+                {
+                    FNamedOnlineSession* CurrentSession = Session->GetNamedSession(SessionName);
+                    if (CurrentSession)
+                    {
+                        if(CurrentSession->SessionSettings.bShouldAdvertise)
+                        {
+                            UE_LOG(LogTemp, Log, TEXT("Current Advertise : true"));
+                        }
+                        else UE_LOG(LogTemp, Log, TEXT("Current Advertise : false"));
+
+                        LobbyPlayerController->Client_HostAssignment(true, false, CurrentSession->SessionSettings.bShouldAdvertise);
+                    }
+                    else
+                    {
+                        UE_LOG(LogTemp, Warning, TEXT("Failed to get advertise state"));
+                    }
+                }
+            }
             
-            LobbyPlayerController->Client_HostAssignment(true);
         }
     }
 }

@@ -83,10 +83,10 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	UHorizontalBox* Private_Hb;
-
+public:
 	UPROPERTY(meta = (BindWidget))
 	class UCheckBox* Private_Cb;
-	
+private:
 	UPROPERTY(meta = (BindWidget))
 	class UButton* Exit_Btn;
 

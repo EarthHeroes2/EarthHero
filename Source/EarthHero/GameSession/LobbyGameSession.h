@@ -15,18 +15,18 @@ class EARTHHERO_API ALobbyGameSession : public AGameSession
 	GENERATED_BODY()
 
 public:
-	int MaxNumberOfPlayersInSession = 2; // ¼¼¼Ç ÃÖ´ë ÀÎ¿ø¼ö (ÀÓ½Ã·Î2)
+	int MaxNumberOfPlayersInSession = 2; // ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½Î¿ï¿½ï¿½ï¿½ (ï¿½Ó½Ã·ï¿½2)
 
 protected:
 	int NumberOfPlayersInSession = 0;
 
-	FName SessionName = "SessionName"; //ÀÓ½Ã //¹«½¼ ÀÇ¹Ì°¡ ÀÖÀ»±î
+	FName SessionName = "SessionName"; //ë¬´ìŠ¨ì˜ë¯¸ì¼ê¹Œ
 
 	FUniqueNetIdRepl HostPlayerId;
 	APlayerController* NewPlayerPlayerController;
 
-	const FString MainSessionMap = TEXT("/Game/Maps/StartupMap"); //ÀÓ½Ã
-	const FString InGameMap = TEXT("/Game/Maps/TestMap"); //ÀÓ½Ã
+	const FString MainSessionMap = TEXT("/Game/Maps/StartupMap"); //ï¿½Ó½ï¿½
+	const FString InGameMap = TEXT("/Game/Maps/TestMap"); //ï¿½Ó½ï¿½
 
 	bool bSessionExists = false;
 
@@ -58,7 +58,7 @@ public:
 protected:
 	void HandleStartSessionCompleted(FName SessionName, bool bWasSuccessful);
 
-	void ChangeMap(); //Å×½ºÆ®¿ë
+	void ChangeMap(); //ï¿½×½ï¿½Æ®ï¿½ï¿½
 
 	void EndSession();
 	void HandleEndSessionCompleted(FName SessionName, bool bWasSuccessful);

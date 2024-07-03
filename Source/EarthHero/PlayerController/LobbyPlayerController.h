@@ -28,7 +28,7 @@ public:
 	bool bHost = false;
 
 	UFUNCTION(Client, Reliable)
-	void Client_HostAssignment(bool bHostAssignment);
+	void Client_HostAssignment(bool bHostAssignment, bool bInitSetUp, bool bAdvertise = false);
 
 	UFUNCTION(Server, Reliable)
 	void Server_ClientReady();
