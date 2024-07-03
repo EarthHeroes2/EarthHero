@@ -7,7 +7,10 @@
 #include "OnlineSubsystem.h"
 #include "Interfaces/OnlineFriendsInterface.h"
 #include <EarthHero/PlayerController/LobbyPlayerController.h>
+
+#include "Components/CheckBox.h"
 #include "Components/Image.h"
+#include "EarthHero/EHGameInstance.h"
 
 /*
 ULobbyWidget::ULobbyWidget(const FObjectInitializer &ObjectInitializer)
@@ -41,6 +44,17 @@ bool ULobbyWidget::Initialize()
 	Archor_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::ArchorClicked);
 
 	Chat_Etb->OnTextCommitted.AddDynamic(this, &ULobbyWidget::ChatTextCommitted);
+
+	Private_Cb->OnCheckStateChanged.AddDynamic(this, &ULobbyWidget::ChangePrivateState);
+
+	Exit_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::ExitClicked);
+
+	UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(GetWorld()->GetGameInstance());
+	if (EHGameInstance)
+	{
+		if (EHGameInstance->IsCheckedPrivate) Private_Cb->SetCheckedState(ECheckBoxState::Checked);
+		else Private_Cb->SetCheckedState(ECheckBoxState::Unchecked);
+	}
 
 	/*
 	IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
@@ -145,6 +159,8 @@ void ULobbyWidget::HostAssignment(bool bHostAssignment)
 		Kick2_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::Kick2Clicked);
 		Kick3_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::Kick3Clicked);
 		Kick4_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::Kick4Clicked);
+
+		Private_Hb->SetVisibility(ESlateVisibility::Visible);
 	}
 }
 
@@ -182,8 +198,6 @@ void ULobbyWidget::Player4Hovered()
 }
 void ULobbyWidget::VisibleKickButton(int PlayerNumber)
 {
-	UE_LOG(LogTemp, Error, TEXT(" %d  %d "), NumberOfPlayers, PlayerNumber);
-	
 	if(NumberOfPlayers >= PlayerNumber)
 		KickButtons[PlayerNumber - 1]->SetVisibility(ESlateVisibility::Visible);
 }
@@ -206,8 +220,6 @@ void ULobbyWidget::Player4Unhovered()
 }
 void ULobbyWidget::InvisibleKickButton(int PlayerNumber)
 {
-	UE_LOG(LogTemp, Error, TEXT(" %d  %d "), NumberOfPlayers, PlayerNumber);
-	
 	if (NumberOfPlayers >= PlayerNumber)
 		KickButtons[PlayerNumber - 1]->SetVisibility(ESlateVisibility::Collapsed);
 }
@@ -260,6 +272,17 @@ void ULobbyWidget::ShooterClicked()
 void ULobbyWidget::ArchorClicked()
 {
 	ChangeSelectedButton(Archor);
+}
+
+void ULobbyWidget::ChangePrivateState(bool bPrivate)
+{
+	APlayerController* PlayerController = GetOwningPlayer();
+	if (PlayerController)
+	{
+		ALobbyPlayerController* LobbyPlayerController = Cast<ALobbyPlayerController>(PlayerController);
+		if (LobbyPlayerController)
+			LobbyPlayerController->Server_ChangeAdvertiseState(!bPrivate);
+	}
 }
 
 void ULobbyWidget::ChangeSelectedButton(EClassType ClassType)
@@ -358,5 +381,16 @@ void ULobbyWidget::AddChatMessage(const FText& Text)
 			Chat_Scr->AddChild(TextBlock);
 			Chat_Scr->ScrollToEnd();
 		}
+	}
+}
+
+
+void ULobbyWidget::ExitClicked()
+{
+	UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(GetWorld()->GetGameInstance());
+	
+	if (EHGameInstance)
+	{
+		EHGameInstance->LeaveSession("JoinMainSession");
 	}
 }

@@ -57,8 +57,7 @@ void UEHGameInstance::Init()
 {
     Super::Init();
     LoadSettings();
-
-    // Find sessions if not running on a dedicated server
+    
     if (!IsRunningDedicatedServer())
     {
         FindSessions("JoinMainSession");
@@ -145,13 +144,13 @@ void UEHGameInstance::HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRe
                     }
                 }
 
-                //¸¸¾à Ã£Àº ·Îºñ°¡ ¾ø´Ù¸é
+                //ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½Îºï¿½ ï¿½ï¿½ï¿½Ù¸ï¿½
                 if (!bIsFind && GEngine)
                 {
                     if (FindSessionReason == "JoinMainSession")
                     {
                         GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Yellow, FString::Printf(TEXT("EH2 server connection failed")));
-                        //ÀçÁ¢¼Ó? ´ë±â¿­?
+                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½? ï¿½ï¿½â¿­?
                     }
                     else if (FindSessionReason == "JoinLobby")
                     {
@@ -239,7 +238,7 @@ void UEHGameInstance::HandleJoinSessionCompleted(FName SessionName, EOnJoinSessi
     }
 }
 
-void UEHGameInstance::LeaveMainSession(FString Reason)
+void UEHGameInstance::LeaveSession(FString Reason)
 {
     IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
     if (Subsystem)
@@ -252,16 +251,12 @@ void UEHGameInstance::LeaveMainSession(FString Reason)
 
             LeaveSessionReason = Reason;
 
-            UE_LOG(LogTemp, Log, TEXT("Leave main session"));
+            UE_LOG(LogTemp, Log, TEXT("Leave session"));
 
             if (!Session->DestroySession(JoinedSessionName))
             {
                 UE_LOG(LogTemp, Warning, TEXT("Failed to DestroySession : %s"), *JoinedSessionName.ToString());
             }
-        }
-        else
-        {
-            UE_LOG(LogTemp, Warning, TEXT("Leave session is not valid"));
         }
     }
 }
@@ -274,6 +269,7 @@ void UEHGameInstance::DestroySessionComplete(FName SessionName, bool bWasSuccess
         IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
         if (Session.IsValid())
         {
+            //ì¼ë‹¨ ì„±ê³µì´ë“  ì‹¤íŒ¨ë“  ì„¸ì…˜ ì°¾ê³  ë“¤ì–´ê°
             if (bWasSuccessful)
             {
                 FindSessions(LeaveSessionReason);
@@ -281,6 +277,7 @@ void UEHGameInstance::DestroySessionComplete(FName SessionName, bool bWasSuccess
             else
             {
                 UE_LOG(LogTemp, Warning, TEXT("Failed to destroy session"));
+                FindSessions(LeaveSessionReason);
             }
 
             Session->ClearOnDestroySessionCompleteDelegate_Handle(DestroySessionCompleteDelegatesHandle);

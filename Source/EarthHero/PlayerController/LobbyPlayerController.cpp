@@ -104,7 +104,7 @@ void ALobbyPlayerController::Client_HostAssignment_Implementation(bool bHostAssi
 
 	if (LobbyWidget)
 	{
-		LobbyWidget->HostAssignment(bHostAssignment);
+		LobbyWidget->HostAssignment(bHost);
 	}
 	
 	if (bHost)
@@ -114,6 +114,30 @@ void ALobbyPlayerController::Client_HostAssignment_Implementation(bool bHostAssi
 			GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Yellow, FString::Printf(TEXT("You are host!!!!!!!!!!")));
 	}
 	
+}
+
+void ALobbyPlayerController::Server_ChangeAdvertiseState_Implementation(bool bAdvertise)
+{
+	ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
+	
+	//방장이라면 비공개방 설정도 적용
+	if (bHost)
+	{
+		if (LobbyGameMode)
+		{
+			ALobbyGameSession* LobbyGameSession = Cast<ALobbyGameSession>(LobbyGameMode->GameSession);
+			if (LobbyGameSession)
+			{
+				if (bAdvertise)
+				{
+					UE_LOG(LogTemp, Log, TEXT("Change advertise state : on"));
+				}
+				else UE_LOG(LogTemp, Log, TEXT("Change advertise state : off"));
+
+				LobbyGameSession->ChangeAdvertiseState(bAdvertise);
+			}
+		}
+	}
 }
 
 //기본으로 슈터 선택 (임시)

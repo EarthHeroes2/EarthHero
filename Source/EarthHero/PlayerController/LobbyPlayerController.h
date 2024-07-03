@@ -56,6 +56,9 @@ public:
 	UFUNCTION(Client, Reliable)
 	void Client_SelectDefaultCharacter();
 
+	UFUNCTION(Server, Reliable)
+	void Server_ChangeAdvertiseState(bool bAdvertise);
+
 protected:
 	void ShowLobbyWidget();
 

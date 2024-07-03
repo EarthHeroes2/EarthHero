@@ -154,16 +154,16 @@ void UMainMenuWidget::OnStartSession(bool bWasSuccessful)
 
 void UMainMenuWidget::Play_BtnClicked()
 {
-	//ÀÎ¿ø 0¸í ·Îºñ·Î Âü°¡
+	//ï¿½Î¿ï¿½ 0ï¿½ï¿½ ï¿½Îºï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	UE_LOG(LogTemp, Log, TEXT("Create Lobby Clicked"));
 	UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(GetWorld()->GetGameInstance());
 	if (EHGameInstance)
 	{
 		EHGameInstance->IsCheckedPrivate = Private_Cb->IsChecked();
-		EHGameInstance->LeaveMainSession("CreateLobby");
+		EHGameInstance->LeaveSession("CreateLobby");
 	}
 
-	/* ÀÌÀü ²¨
+	/* ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 	Play_Btn->SetIsEnabled(false);
 	if (MultiplayerSessionsSubsystem)
 	{
@@ -173,17 +173,17 @@ void UMainMenuWidget::Play_BtnClicked()
 
 void UMainMenuWidget::Join_BtnClicked()
 {
-	//·£´ý public ·Îºñ Âü°¡
+	//ï¿½ï¿½ï¿½ï¿½ public ï¿½Îºï¿½ ï¿½ï¿½ï¿½ï¿½
 	UE_LOG(LogTemp, Log, TEXT("Join Lobby Clicked"));
 	UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(GetWorld()->GetGameInstance());
 	if (EHGameInstance)
 	{
-		//EHGameInstance->IsCheckedPrivate = true; //Å×½ºÆ®¿ëÀ¸·Î ³ÀµÐ°ÅÀÓ
-		//·Îºñ Âü°¡ Àü ¼¼¼Ç ¶°³ª±â. (ÀÌ¸§ º¯°æ ¿¹Á¤)
-		EHGameInstance->LeaveMainSession("JoinLobby");
+		//EHGameInstance->IsCheckedPrivate = true; //ï¿½×½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ð°ï¿½ï¿½ï¿½
+		//ï¿½Îºï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½. (ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
+		EHGameInstance->LeaveSession("JoinLobby");
 	}
 
-	/* ÀÌÀü ²¨
+	/* ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 	Join_Btn->SetIsEnabled(false);
 	if (MultiplayerSessionsSubsystem)
 	{

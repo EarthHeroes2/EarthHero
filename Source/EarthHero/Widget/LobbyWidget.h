@@ -6,6 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include <Components/EditableTextBox.h>
 #include <Components/ScrollBox.h>
+
+#include "Components/HorizontalBox.h"
 #include "EarthHero/Enum/Enums.h"
 #include "LobbyWidget.generated.h"
 
@@ -15,7 +17,6 @@ class EARTHHERO_API ULobbyWidget : public UUserWidget
 	GENERATED_BODY()
 
 	//ULobbyWidget(const FObjectInitializer &ObjectInitializer);
-
 	//TSubclassOf<class UUserWidget> FriendRowWidgetClass;
 	
 	virtual bool Initialize();
@@ -81,7 +82,17 @@ private:
 	class UEditableTextBox* Chat_Etb;
 
 	UPROPERTY(meta = (BindWidget))
-	class UScrollBox* Friend_Scr;
+	UHorizontalBox* Private_Hb;
+
+	UPROPERTY(meta = (BindWidget))
+	class UCheckBox* Private_Cb;
+	
+	UPROPERTY(meta = (BindWidget))
+	class UButton* Exit_Btn;
+
+	
+	//UPROPERTY(meta = (BindWidget))
+	//class UScrollBox* Friend_Scr;
 
 	UFUNCTION()
 	void ReadyClicked();
@@ -127,6 +138,16 @@ private:
 	UFUNCTION()
 	void ArchorClicked();
 
+
+	UFUNCTION()
+	void ChangePrivateState(bool bChecked);
+	
+	UFUNCTION()
+	void ExitClicked();
+
+
+	
+
 	int NumberOfClass = 4;
 public:
 	void ChangeSelectedButton(EClassType ClassType);
@@ -139,8 +160,9 @@ public:
 	void UpdatePlayerNameList(const TArray<FString>& PlayerNameList);
 	void UpdateReadyState(const TArray<bool>& PlayerReadyStateArray);
 	void AddChatMessage(const FText& Text);
+	
 
-//protected:
+	//protected:
 	//void ReadFriendsListCompleted(int32 LocalUserNum, bool bWasSuccessful, const FString& ListName, const FString& ErrorStr);
 	//UFUNCTION()
 	//void InviteFriend(FString UserId);

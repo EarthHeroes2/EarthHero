@@ -112,7 +112,7 @@ protected:
 	FDelegateHandle JoinSessionDelegateHandle;
 
 public:
-	void LeaveMainSession(FString Reason);
+	void LeaveSession(FString Reason);
 
 protected:
 	void DestroySessionComplete(FName SessionName, bool bWasSuccessful);
