@@ -43,7 +43,7 @@ public:
 	void TogglePlayerReady(APlayerController* Player);
 	void UpdatePlayerNameListAndReadyState();
 	void UpdatePlayerReadyState();
-	void AddPlayerInfo(APlayerController* Player);
+	void AddPlayerInfo(ALobbyPlayerController* NewLobbyPlayerController);
 	bool PressGameStartButton();
 
 	void SendChatMessage(const FText& Text);

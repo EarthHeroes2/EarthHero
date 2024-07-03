@@ -43,11 +43,9 @@ void ALobbyGameMode::BeginPlay()
 	SpawnLocations.Add(FVector(500.0f, 150.0f, 0.0f));
 }
 
-void ALobbyGameMode::AddPlayerInfo(APlayerController* NewPlayer)
+void ALobbyGameMode::AddPlayerInfo(ALobbyPlayerController* NewLobbyPlayerController)
 {
-	ALobbyPlayerController* LobbyNewPlayerController = Cast<ALobbyPlayerController>(NewPlayer);
-
-	int32 PlayerIndex = LobbyPlayerControllerArray.IndexOfByKey(LobbyNewPlayerController);
+	int32 PlayerIndex = LobbyPlayerControllerArray.IndexOfByKey(NewLobbyPlayerController);
 
 	if (PlayerIndex != INDEX_NONE)
 	{
@@ -57,11 +55,13 @@ void ALobbyGameMode::AddPlayerInfo(APlayerController* NewPlayer)
 		PlayerClassArray.RemoveAt(PlayerIndex);
 	}
 
-	LobbyPlayerControllerArray.Add(LobbyNewPlayerController);
-	PlayerNameArray.Add(LobbyNewPlayerController->PlayerState->GetPlayerName());
+	LobbyPlayerControllerArray.Add(NewLobbyPlayerController);
+	PlayerNameArray.Add(NewLobbyPlayerController->PlayerState->GetPlayerName());
 	PlayerReadyStateArray.Add(false);
 	PlayerClassArray.Add(Shooter); //임시
-
+	
+	NewLobbyPlayerController->Client_SelectDefaultCharacter();
+	
 	UpdatePlayerNameListAndReadyState();
 }
 

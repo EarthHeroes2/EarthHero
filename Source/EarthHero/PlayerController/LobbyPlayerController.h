@@ -53,6 +53,9 @@ public:
 	UFUNCTION(Server, Reliable)
 	void Server_SetPlayerCharacter(int ClassType);
 
+	UFUNCTION(Client, Reliable)
+	void Client_SelectDefaultCharacter();
+
 protected:
 	void ShowLobbyWidget();
 

@@ -64,8 +64,6 @@ bool ULobbyWidget::Initialize()
 	Archor_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::ArchorClicked);
 
 	Chat_Etb->OnTextCommitted.AddDynamic(this, &ULobbyWidget::ChatTextCommitted);
-
-	//ShooterClicked();//임시로 슈터 자동 선택
 	
 	return true;
 }
@@ -209,7 +207,6 @@ void ULobbyWidget::SetPlayerCharacter(EClassType ClassType)
 		}
 	}
 }
-
 
 void ULobbyWidget::ChatTextCommitted(const FText& Text, ETextCommit::Type CommitMethod)
 {

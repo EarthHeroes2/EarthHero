@@ -109,6 +109,16 @@ void ALobbyPlayerController::Client_HostAssignment_Implementation(bool bHostAssi
 	}
 }
 
+//서버에게서 방장 유무를 받음
+void ALobbyPlayerController::Client_SelectDefaultCharacter_Implementation()
+{
+	if (LobbyWidget)
+	{
+		LobbyWidget->SetPlayerCharacter(Shooter);
+	}
+	else UE_LOG(LogTemp, Log, TEXT("invalid LobbyWidget"));
+}
+
 void ALobbyPlayerController::Server_ClientReady_Implementation()
 {
 	ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
