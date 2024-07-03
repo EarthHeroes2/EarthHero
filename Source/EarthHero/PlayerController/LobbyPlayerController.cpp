@@ -56,21 +56,23 @@ void ALobbyPlayerController::ShowLobbyWidget()
 	}
 }
 
-//Ŭ���̾�Ʈ�� �غ� �Ǿ����� �������� �˸� +
-//Ŭ���̾�Ʈ�� �������� �˻� + �����̸� advertise ���� ����
+//클라이언트가 서버에게 준비됨을 알리며 실행되는 함수
 void ALobbyPlayerController::Server_InitSetup_Implementation(bool bAdvertise)
 {
-	//�κ���Ӽ��ǿ��� �̹� �÷��̾� ������ �����ϰ� bHost�� �Ҵ����־���
+	//게임모드에 플레이어 정보 등록
+	ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
+	if (LobbyGameMode)
+	{
+		LobbyGameMode->AddPlayerReadyState(this);
+	}
+
+	//방장이라면 비공개방 설정도 적용
 	if (bHost)
 	{
-		//Ŭ���̾�Ʈ���� �������� �˸�
-		Client_HostAssignment(true);
-
-		//���� ���� ����
-		ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
+		Client_HostAssignment(true); //클라이언트에게 방장 유무를 알림
+		
 		if (LobbyGameMode)
 		{
-			//���� ���� ����
 			ALobbyGameSession* LobbyGameSession = Cast<ALobbyGameSession>(LobbyGameMode->GameSession);
 			if (LobbyGameSession)
 			{
@@ -85,16 +87,9 @@ void ALobbyPlayerController::Server_InitSetup_Implementation(bool bAdvertise)
 		}
 	}
 	else Client_HostAssignment(false);
-
-	//�������� ���� �κ� �� �÷��̾� �̸��� ������¸� ������Ʈ
-	ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
-	if (LobbyGameMode)
-	{
-		LobbyGameMode->AddPlayerReadyState(this);
-	}
 }
 
-//���� ������ �ִ� �� Ŭ���̾�Ʈ���� �˸�
+//서버에게서 방장 유무를 받음
 void ALobbyPlayerController::Client_HostAssignment_Implementation(bool bHostAssignment)
 {
 	bHost = bHostAssignment; //Ŭ���̾�Ʈ���� �˸��� ��ŭ, �������� ȣ��Ʈ Ȯ�� �׻��ϱ�

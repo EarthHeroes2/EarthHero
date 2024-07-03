@@ -16,10 +16,10 @@ void ALobbyGameSession::BeginPlay()
 {
     Super::BeginPlay();
 
-    //dedicated ¼­¹öÀÏ ¶§¸¸ ¼¼¼Ç »ı¼º
+    //dedicated ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     if (IsRunningDedicatedServer() && !bSessionExists)
     {
-        //Æ÷Æ® ¹øÈ£¸¦ key°ªÀ¸·Î »ç¿ëÇÔ
+        //ï¿½ï¿½Æ® ï¿½ï¿½È£ï¿½ï¿½ keyï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
         FString PortNumber;
         UWorld* World = GetWorld();
         if (World)
@@ -56,26 +56,26 @@ void ALobbyGameSession::CreateSession(FString PortNumber)
                     &ThisClass::HandleCreateSessionCompleted));
 
             TSharedRef<FOnlineSessionSettings> SessionSettings = MakeShared<FOnlineSessionSettings>();
-            SessionSettings->bIsDedicated = true; // Dedicated ¼­¹ö ¼³Á¤
-            SessionSettings->bIsLANMatch = false; // LAN ¼¼¼ÇÀÌ ¾Æ´Ô
-            SessionSettings->NumPublicConnections = MaxNumberOfPlayersInSession; // ÃÖ´ë Á¢¼Ó ÀÎ¿ø ¼³Á¤
-            SessionSettings->NumPrivateConnections = 0; // ºñ°ø°³ Á¢¼Ó ÀÎ¿ø ¼³Á¤
-            SessionSettings->bShouldAdvertise = true; // ¼¼¼Ç ±¤°í
-            SessionSettings->bUsesPresence = false; // Presence¸¦ »ç¿ëÇÏÁö ¾ÊÀ½
-            SessionSettings->bUseLobbiesIfAvailable = false; // ·Îºñ »ç¿ë ¾ÈÇÔ
+            SessionSettings->bIsDedicated = true; // Dedicated ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+            SessionSettings->bIsLANMatch = false; // LAN ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ´ï¿½
+            SessionSettings->NumPublicConnections = MaxNumberOfPlayersInSession; // ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Î¿ï¿½ ï¿½ï¿½ï¿½ï¿½
+            SessionSettings->NumPrivateConnections = 0; // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Î¿ï¿½ ï¿½ï¿½ï¿½ï¿½
+            SessionSettings->bShouldAdvertise = true; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+            SessionSettings->bUsesPresence = false; // Presenceï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+            SessionSettings->bUseLobbiesIfAvailable = false; // ï¿½Îºï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-            SessionSettings->bAllowInvites = true; // ÃÊ´ë Çã¿ë
-            SessionSettings->bAllowJoinInProgress = true; // ÁøÇà ÁßÀÎ ¼¼¼Ç¿¡ Âü°¡ ¾ÈµÊ
-            //SessionSettings->bUsesStats = false; // ½ºÅÈ »ç¿ë ¿©ºÎ 
-            //SessionSettings->bAntiCheatProtected = true; // ¾ÈÆ¼ Ä¡Æ® º¸È£ ¿©ºÎ
+            SessionSettings->bAllowInvites = true; // ï¿½Ê´ï¿½ ï¿½ï¿½ï¿½
+            SessionSettings->bAllowJoinInProgress = true; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ç¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Èµï¿½
+            //SessionSettings->bUsesStats = false; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 
+            //SessionSettings->bAntiCheatProtected = true; // ï¿½ï¿½Æ¼ Ä¡Æ® ï¿½ï¿½È£ ï¿½ï¿½ï¿½ï¿½
 
-            // ¼¼¼Ç °Ë»öÀ» À§ÇÑ »ç¿ëÀÚ ÁöÁ¤ ¼Ó¼º Ãß°¡
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ó¼ï¿½ ï¿½ß°ï¿½
             SessionSettings->Set("GameName", FString("EH2"), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
             SessionSettings->Set("PortNumber", PortNumber, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 
             UE_LOG(LogTemp, Log, TEXT("Creating lobby..."));
 
-            // ¼¼¼Ç »ı¼º ½Ãµµ
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ãµï¿½
             if (!Session->CreateSession(0, SessionName, *SessionSettings))
             {
                 UE_LOG(LogTemp, Warning, TEXT("Failed to create lobby!"));
@@ -108,7 +108,7 @@ void ALobbyGameSession::HandleCreateSessionCompleted(FName EOSSessionName, bool 
     }
 }
 
-//¼­¹ö¿¡¼­ ·Î±×ÀÎÇÏ´Â °ÍÀ» ¹æÁö (AGameModeBase::InitGame()¿¡¼­ ºÒ¸²)
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (AGameModeBase::InitGame()ï¿½ï¿½ï¿½ï¿½ ï¿½Ò¸ï¿½)
 bool ALobbyGameSession::ProcessAutoLogin()
 {
     return true;
@@ -134,7 +134,7 @@ void ALobbyGameSession::RegisterPlayer(APlayerController* NewPlayer, const FUniq
                         this,
                         &ThisClass::HandleRegisterPlayerCompleted));
 
-                //¼¼¼Ç¿¡ ÇÃ·¹ÀÌ¾î µî·Ï
+                //ï¿½ï¿½ï¿½Ç¿ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½
                 if (!Session->RegisterPlayer(SessionName, *UniqueId, false))
                 {
                     UE_LOG(LogTemp, Warning, TEXT("Failed to Register Player!"));
@@ -146,8 +146,8 @@ void ALobbyGameSession::RegisterPlayer(APlayerController* NewPlayer, const FUniq
     }
 }
 
-//ÇÃ·¹ÀÌ¾î µî·Ï °á°ú
-//PlayerIds´Â ¿Â¶óÀÎ ¼­ºñ½º¿¡ ¿¬°áµÈ ¸ğµç ÇÃ·¹ÀÌ¾î id¸¦ ÀÇ¹Ì
+//ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+//PlayerIdsï¿½ï¿½ ï¿½Â¶ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ñ½º¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ idï¿½ï¿½ ï¿½Ç¹ï¿½
 void ALobbyGameSession::HandleRegisterPlayerCompleted(FName EOSSessionName, const TArray<FUniqueNetIdRef>& PlayerIds, bool bWasSuccesful)
 {
     IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
@@ -156,29 +156,20 @@ void ALobbyGameSession::HandleRegisterPlayerCompleted(FName EOSSessionName, cons
         IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
         if (Session.IsValid())
         {
-            if (bWasSuccesful) //¼º°ø
+            if (bWasSuccesful) //ï¿½ï¿½ï¿½ï¿½
             {
                 UE_LOG(LogTemp, Log, TEXT("Player registered in Lobby!"));
-                NumberOfPlayersInSession++; //ÇÃ·¹ÀÌ¾î ¼ö ¼¼¾îÁÜ
+                NumberOfPlayersInSession++; //ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-                //Ã¹ÇÃ·¹ÀÌ¾î = ¹æÀå
+                //ì²«í”Œë ˆì´ì–´ = ë°©ì¥
                 if (NumberOfPlayersInSession == 1)
                 {
-                    //Ã¹ ¹øÂ° ÇÃ·¹ÀÌ¾î°¡ ¹æÀå
-                    HostPlayerId = PlayerIds[0]; //ÀÌ°Å ÇÃ·¹ÀÌ¾î ÄÁÆ®·Ñ·¯ ÀúÀåÀ¸·Î º¯°æ ÇÊ¿ä
+                    HostPlayerId = PlayerIds[0]; //ì´ê±° í”Œë ˆì´ì–´ ì»¨íŠ¸ë¡¤ëŸ¬ ì €ì¥ìœ¼ë¡œ ë³€ê²½ í•„ìš”
                     UE_LOG(LogTemp, Log, TEXT("Host Assigment..."), *HostPlayerId->ToString());
 
-                    //Å¬¶óÀÌ¾ğÆ®¿¡°Ô ¹æÀå ±ÇÇÑÀ» ºÎ¿©
+                    //í´ë¼ì´ì–¸íŠ¸ì—ê²Œ ë°©ì¥ ê¶Œí•œì„ ë¶€ì—¬
                     HostAssignment(NewPlayerPlayerController);
                 }
-
-                /*
-                // playerreadystate¿¡ »õ·Î¿î ÇÃ·¹ÀÌ¾î ·¹µğ »óÅÂ false Ãß°¡
-                ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
-                if (LobbyGameMode)
-                {
-                    LobbyGameMode->AddPlayerReadyState(NewPlayerPlayerController);
-                }*/
             }
             else UE_LOG(LogTemp, Warning, TEXT("Failed to register player! (From Callback)"));
 
@@ -189,7 +180,7 @@ void ALobbyGameSession::HandleRegisterPlayerCompleted(FName EOSSessionName, cons
     }
 }
 
-//¼¼¼Ç¿¡ ÇÃ·¹ÀÌ¾î ÀüºÎ ´Ù Â÷¸é È£ÃâµÊ
+//ï¿½ï¿½ï¿½Ç¿ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½ï¿½
 void ALobbyGameSession::StartSession()
 {
     IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
@@ -203,7 +194,7 @@ void ALobbyGameSession::StartSession()
                     this,
                     &ThisClass::HandleStartSessionCompleted));
 
-            //¼¼¼Ç ½ÃÀÛ ½Ãµµ
+            //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ãµï¿½
             if (!Session->StartSession(SessionName))
             {
                 UE_LOG(LogTemp, Warning, TEXT("Failed to start lobby!"));
@@ -239,11 +230,11 @@ void ALobbyGameSession::HandleStartSessionCompleted(FName EOSSessionName, bool b
 
 void ALobbyGameSession::ChangeMap()
 {
-    // ¸Ê ÀüÈ¯ //¹º°¡ ¿À·ù³ª³×
+    // ï¿½ï¿½ ï¿½ï¿½È¯ //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     GetWorld()->ServerTravel(InGameMap, true);
 }
 
-//NotifyLogout¿¡¼­ È£ÃâµÊ
+//NotifyLogoutï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½ï¿½
 void ALobbyGameSession::UnregisterPlayer(const APlayerController* ExitingPlayer)
 {
     Super::UnregisterPlayer(ExitingPlayer);
@@ -265,7 +256,7 @@ void ALobbyGameSession::UnregisterPlayer(const APlayerController* ExitingPlayer)
                             this,
                             &ThisClass::HandleUnregisterPlayerCompleted));
 
-                    // ¼¼¼Ç¿¡¼­ ÇÃ·¹ÀÌ¾î Á¦°Å
+                    // ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½
                     if (ExitingPlayer && !Session->UnregisterPlayer(SessionName, *ExitingPlayer->PlayerState->UniqueId))
                     {
                         UE_LOG(LogTemp, Warning, TEXT("Failed to Unregister Player!"));
@@ -284,7 +275,7 @@ void ALobbyGameSession::UnregisterPlayer(const APlayerController* ExitingPlayer)
     }
 }
 
-//PlayerIds´Â ¿Â¶óÀÎ ¼­ºê¿¡¼­ ³ª°£ ÇÃ·¹ÀÌ¾î idµé
+//PlayerIdsï¿½ï¿½ ï¿½Â¶ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ê¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ idï¿½ï¿½
 void ALobbyGameSession::HandleUnregisterPlayerCompleted(FName EOSSessionName, const TArray<FUniqueNetIdRef>& PlayerIds, bool bWasSuccesful)
 {
     IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
@@ -297,7 +288,7 @@ void ALobbyGameSession::HandleUnregisterPlayerCompleted(FName EOSSessionName, co
             {
                 UE_LOG(LogTemp, Log, TEXT("Player unregistered in Lobby!"));
 
-                // ¹æÀåÀÌ ³ª°¬´ÂÁö È®ÀÎ
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
                 for (const FUniqueNetIdRef& PlayerId : PlayerIds)
                 {
                     if (HostPlayerId == PlayerId)
@@ -320,17 +311,17 @@ void ALobbyGameSession::HandleUnregisterPlayerCompleted(FName EOSSessionName, co
     }
 }
 
-//ÇÃ·¹ÀÌ¾î°¡ ¼­¹ö ¼¼¼ÇÀ» ¶°³¯ ¶§ ÀÚµ¿À¸·Î È£ÃâµÊ
+//ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½ï¿½
 void ALobbyGameSession::NotifyLogout(const APlayerController* ExitingPlayer)
 {
-    Super::NotifyLogout(ExitingPlayer); //UnregisterPlayer¸¦ È£ÃâÇÔ
+    Super::NotifyLogout(ExitingPlayer); //UnregisterPlayerï¿½ï¿½ È£ï¿½ï¿½ï¿½ï¿½
 
 
     if (IsRunningDedicatedServer())
     {
-        NumberOfPlayersInSession--; //ÇöÀç ÇÃ·¹ÀÌ¾î ¼ö --
+        NumberOfPlayersInSession--; //ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ --
 
-        //¼¼¼Ç¿¡ ¾Æ¹«µµ ¾ø´Ù¸é ¼¼¼Ç Á¾·á
+        //ï¿½ï¿½ï¿½Ç¿ï¿½ ï¿½Æ¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ù¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (NumberOfPlayersInSession == 0)
         {
             EndSession();
@@ -351,7 +342,7 @@ void ALobbyGameSession::EndSession()
                     this,
                     &ThisClass::HandleEndSessionCompleted));
 
-            //¼¼¼Ç Á¾·á ½Ãµµ
+            //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ãµï¿½
             if (!Session->EndSession(SessionName))
             {
                 UE_LOG(LogTemp, Warning, TEXT("Failed to end session!"));
@@ -385,17 +376,17 @@ void ALobbyGameSession::HandleEndSessionCompleted(FName EOSSessionName, bool bWa
     }
 }
 
-//¼¼¼Ç ÆÄ±« ½Ã ¼­¹ö ¹× Å¬¶óÀÌ¾ğÆ® µÑ ´Ù È£ÃâµÊ
+//ï¿½ï¿½ï¿½ï¿½ ï¿½Ä±ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ® ï¿½ï¿½ ï¿½ï¿½ È£ï¿½ï¿½ï¿½
 void ALobbyGameSession::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
     Super::EndPlay(EndPlayReason);
     DestroySession();
 }
 
-// ¸ğµç ÇÃ·¹ÀÌ¾î°¡ Àü¿ë ¼­¹ö¸¦ ¶°³¯ ¶§ È£ÃâµÊ
+// ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ È£ï¿½ï¿½ï¿½
 void ALobbyGameSession::DestroySession()
 {
-    // ¼¼¼ÇÀ» ÆÄ±«ÇÏ¿© ¹é¿£µå¿¡¼­ Á¦°Å
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ä±ï¿½ï¿½Ï¿ï¿½ ï¿½é¿£ï¿½å¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
     if (Subsystem)
     {
@@ -407,7 +398,7 @@ void ALobbyGameSession::DestroySession()
                     this,
                     &ThisClass::HandleDestroySessionCompleted));
 
-            //¼¼¼Ç Á¦°Å ½Ãµµ
+            //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ãµï¿½
             if (!Session->DestroySession(SessionName))
             {
                 UE_LOG(LogTemp, Warning, TEXT("Failed to destroy lobby."));
@@ -450,11 +441,11 @@ void ALobbyGameSession::ChangeAdvertiseState(bool bAdvertise)
         IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
         if (Session.IsValid())
         {
-            // ¼¼¼Ç ¼³Á¤ °¡Á®¿À±â
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             FOnlineSessionSettings* SessionSettings = Session->GetSessionSettings(SessionName);
             if (SessionSettings)
             {
-                // ±¤°í »óÅÂ º¯°æ
+                // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 SessionSettings->bShouldAdvertise = bAdvertise;
 
                 UpdateSessionDelegateHandle =
@@ -463,7 +454,7 @@ void ALobbyGameSession::ChangeAdvertiseState(bool bAdvertise)
                         &ALobbyGameSession::HandleUpdateSessionCompleted));
 
 
-                // ¼¼¼Ç ¾÷µ¥ÀÌÆ® ½Ãµµ
+                // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ãµï¿½
                 if (!Session->UpdateSession(SessionName, *SessionSettings, true))
                 {
                     UE_LOG(LogTemp, Warning, TEXT("Failed to update Lobby"));
@@ -505,12 +496,12 @@ void ALobbyGameSession::HandleUpdateSessionCompleted(FName EOSSessionName, bool 
 
 void ALobbyGameSession::NewHostFind()
 {
-    //¹Ì¿Ï¼º
+    //ï¿½Ì¿Ï¼ï¿½
     
-    // ÀÎµ¦½º 0ÀÇ ÇÃ·¹ÀÌ¾î ÄÁÆ®·Ñ·¯¸¦ »ç¿ëÇÔ (Å×½ºÆ® x, ¾ÈµÇ¸é °ÔÀÓ ½ºÅ×ÀÌÆ® »ç¿ëÇÏÀÚ)
+    // ï¿½Îµï¿½ï¿½ï¿½ 0ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Æ®ï¿½Ñ·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½×½ï¿½Æ® x, ï¿½ÈµÇ¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
 
-    //¾Æ´ÏÁö.. const TArray<FUniqueNetIdRef>& PlayerIds¸¦ ¾ò¾î¾ßÇÏ´Âµ¥...
-    //HostPlayerId °»½Å ÇÊ¿ä
+    //ï¿½Æ´ï¿½ï¿½ï¿½.. const TArray<FUniqueNetIdRef>& PlayerIdsï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´Âµï¿½...
+    //HostPlayerId ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½
 
     
     APlayerController* NewHostPlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
@@ -526,7 +517,7 @@ void ALobbyGameSession::NewHostFind()
 
             if (PlayerState && PlayerState->GetUniqueId().IsValid())
             {
-                HostPlayerId = PlayerState->GetUniqueId(); //Å×½ºÆ® x
+                HostPlayerId = PlayerState->GetUniqueId(); //ï¿½×½ï¿½Æ® x
                 HostAssignment(NewHostPlayerController);
             }
             else
@@ -541,7 +532,7 @@ void ALobbyGameSession::NewHostFind()
     }
 }
 
-//Å¬¶óÀÌ¾ğÆ®°¡ µé¾î¿Ô´Âµ¥ Ã¹¹øÂ° ÇÃ·¹ÀÌ¾î¶ó¸é host ºÎ¿© 
+//Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½Ô´Âµï¿½ Ã¹ï¿½ï¿½Â° ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ host ï¿½Î¿ï¿½ 
 void ALobbyGameSession::HostAssignment(APlayerController* HostPlayer)
 {
     if (HostPlayer)

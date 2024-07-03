@@ -41,7 +41,7 @@ public:
 	TArray<ALobbyPlayerController*> LobbyPlayerControllerArray;
 
 	void TogglePlayerReady(APlayerController* Player);
-	void UpdatePlayerNameyListAndReadyState();
+	void UpdatePlayerNameListAndReadyState();
 	void UpdatePlayerReadyState();
 	void AddPlayerReadyState(APlayerController* Player);
 	bool PressGameStartButton();

@@ -67,6 +67,8 @@ bool ULobbyWidget::Initialize()
 
 	Chat_Etb->OnTextCommitted.AddDynamic(this, &ULobbyWidget::ChatTextCommitted);
 
+	ShooterClicked();
+
 	return true;
 }
 
@@ -199,6 +201,8 @@ void ULobbyWidget::SetPlayerCharacter(EClassType ClassType)
 		ALobbyPlayerController* LobbyPlayerController = Cast<ALobbyPlayerController>(PlayerController);
 		if (LobbyPlayerController)
 		{
+			UE_LOG(LogTemp, Log, TEXT("Request set character class : %d"), ClassType);
+			
 			LobbyPlayerController->Server_SetPlayerCharacter(ClassType);
 		}
 	}

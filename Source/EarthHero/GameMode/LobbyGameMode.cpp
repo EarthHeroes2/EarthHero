@@ -60,9 +60,9 @@ void ALobbyGameMode::AddPlayerReadyState(APlayerController* NewPlayer)
 	LobbyPlayerControllerArray.Add(LobbyNewPlayerController);
 	PlayerNameArray.Add(LobbyNewPlayerController->PlayerState->GetPlayerName());
 	PlayerReadyStateArray.Add(false);
-	PlayerClassArray.Add(Warrior); //임시
+	PlayerClassArray.Add(Shooter); //임시
 
-	UpdatePlayerNameyListAndReadyState();
+	UpdatePlayerNameListAndReadyState();
 }
 
 void ALobbyGameMode::TogglePlayerReady(APlayerController* Player)
@@ -84,7 +84,7 @@ void ALobbyGameMode::TogglePlayerReady(APlayerController* Player)
 }
 
 //��� Ŭ���̾�Ʈ���� �÷��̾� �̸� ����Ʈ ���� �� UpdatePlayerReadyState() ȣ��
-void ALobbyGameMode::UpdatePlayerNameyListAndReadyState()
+void ALobbyGameMode::UpdatePlayerNameListAndReadyState()
 {
 	int32 NumberOfPlayers = LobbyPlayerControllerArray.Num();
 
@@ -154,6 +154,8 @@ void ALobbyGameMode::UpdateCharacter(ALobbyPlayerController* LobbyPlayerControll
 {
 	int PlayerNumber = LobbyPlayerControllerArray.Find(LobbyPlayerController);
 
+	UE_LOG(LogTemp, Log, TEXT("Player %d : Update Character"), PlayerNumber);
+
 	PlayerClassArray[PlayerNumber] = ClassType;
 	
 	if(!(LobbyPlayerController->LobbyCharacter))
@@ -169,7 +171,6 @@ void ALobbyGameMode::UpdateCharacter(ALobbyPlayerController* LobbyPlayerControll
 
 	int SpawnSpotIndex = LobbyPlayerController->SpawnSpotIndex;
 	
-	//???
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = this;
 
