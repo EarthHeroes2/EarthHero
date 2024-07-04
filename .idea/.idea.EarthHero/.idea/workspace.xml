@@ -78,12 +78,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4591bad7-fd9f-4860-903f-8700cd913377" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/GameMode/LobbyGameMode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/GameMode/LobbyGameMode.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/GameMode/LobbyGameMode.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/GameMode/LobbyGameMode.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/PlayerController/LobbyPlayerController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/PlayerController/LobbyPlayerController.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/PlayerController/LobbyPlayerController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/PlayerController/LobbyPlayerController.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Widget/LobbyWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Widget/LobbyWidget.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Widget/LobbyWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Widget/LobbyWidget.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/EHGameInstance.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/EHGameInstance.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/GameSession/LobbyGameSession.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/GameSession/LobbyGameSession.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -240,7 +237,19 @@
       <workItem from="1719770657074" duration="420000" />
       <workItem from="1719919554016" duration="11527000" />
       <workItem from="1719933714641" duration="394000" />
-      <workItem from="1719978025486" duration="8375000" />
+      <workItem from="1719978025486" duration="19638000" />
+      <workItem from="1720003443726" duration="2595000" />
+      <workItem from="1720006222552" duration="3567000" />
+      <workItem from="1720009951065" duration="1710000" />
+      <workItem from="1720011814684" duration="848000" />
+      <workItem from="1720013751638" duration="1756000" />
+      <workItem from="1720060302385" duration="1879000" />
+      <workItem from="1720067549888" duration="1311000" />
+      <workItem from="1720069289721" duration="934000" />
+      <workItem from="1720070529582" duration="1314000" />
+      <workItem from="1720072468014" duration="1107000" />
+      <workItem from="1720075226915" duration="549000" />
+      <workItem from="1720075835441" duration="340000" />
     </task>
     <servers />
   </component>

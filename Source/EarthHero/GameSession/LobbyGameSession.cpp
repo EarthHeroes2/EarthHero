@@ -19,7 +19,6 @@ void ALobbyGameSession::BeginPlay()
     //dedicated 서버에서만 실행
     if (IsRunningDedicatedServer() && !bSessionExists)
     {
-        //로비의 포트는 7778~
         FString PortNumber;
         UWorld* World = GetWorld();
         if (World)
@@ -28,15 +27,8 @@ void ALobbyGameSession::BeginPlay()
         }
         if (!PortNumber.IsEmpty())
         {
-            if (!PortNumber.Equals("7777"))
-            {
-                UE_LOG(LogTemp, Log, TEXT("Lobby port : %s"), *PortNumber);
-                CreateSession(PortNumber);
-            }
-            else
-            {
-                UE_LOG(LogTemp, Error, TEXT("Lobby is not 7777 port"));
-            }
+            UE_LOG(LogTemp, Log, TEXT("Lobby port : %s"), *PortNumber);
+            CreateSession(PortNumber);
         }
         else UE_LOG(LogTemp, Error, TEXT("Port number error"));
     }
@@ -61,21 +53,19 @@ void ALobbyGameSession::CreateSession(FString PortNumber)
             SessionSettings->NumPublicConnections = MaxNumberOfPlayersInSession;
             SessionSettings->NumPrivateConnections = 0;
             SessionSettings->bShouldAdvertise = true; // ���� ����
-            SessionSettings->bUsesPresence = false; // Presence�� ������� ����
-            SessionSettings->bUseLobbiesIfAvailable = false; // �κ� ��� ����
+            SessionSettings->bUsesPresence = false; // 무조건 false여야 함
+            SessionSettings->bUseLobbiesIfAvailable = false; // 무조건 false여야 함
 
-            SessionSettings->bAllowInvites = true; // �ʴ� ���
-            SessionSettings->bAllowJoinInProgress = true; // ���� ���� ���ǿ� ���� �ȵ�
+            SessionSettings->bAllowInvites = true;
+            SessionSettings->bAllowJoinInProgress = false; // 시작 후 참가 불가
             //SessionSettings->bUsesStats = false; // ���� ��� ���� 
             //SessionSettings->bAntiCheatProtected = true; // ��Ƽ ġƮ ��ȣ ����
-
-            // ���� �˻��� ���� ����� ���� �Ӽ� �߰�
+            
             SessionSettings->Set("GameName", FString("EH2"), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
             SessionSettings->Set("PortNumber", PortNumber, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 
             UE_LOG(LogTemp, Log, TEXT("Creating lobby..."));
-
-            // ���� ���� �õ�
+            
             if (!Session->CreateSession(0, SessionName, *SessionSettings))
             {
                 UE_LOG(LogTemp, Warning, TEXT("Failed to create lobby!"));

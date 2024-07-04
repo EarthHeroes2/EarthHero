@@ -123,9 +123,8 @@ void UEHGameInstance::HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRe
                         
                         if (GameName == "EH2" &&
                                 (
-                                    (FindSessionReason == "JoinMainSession" && PortNumber == "7777") ||
-                                    (FindSessionReason == "JoinLobby" && PortNumber != "7777") ||
-                                    (FindSessionReason == "CreateLobby" && PortNumber != "7777")
+                                    (FindSessionReason == "JoinLobby") ||
+                                    (FindSessionReason == "CreateLobby")
                                 )
                             )
                         {
