@@ -24,6 +24,7 @@ public:
 	void HostAssignment(bool bHostAssignment);
 
 private:
+	int MaxNumberOfPlayers = 4; //원래 로비 게임 세션에도 있지만... 어차피 4명 고정게임이라 
 	int NumberOfPlayers;
 	int bHost = false;
 	EClassType SelectClass = Warrior;

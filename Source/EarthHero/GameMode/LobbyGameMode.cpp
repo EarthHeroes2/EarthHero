@@ -80,11 +80,14 @@ void ALobbyGameMode::RemovePlayerInfo(const ALobbyPlayerController* ExitingLobby
 
 		if (PlayerIndex != INDEX_NONE)
 		{
+			UE_LOG(LogTemp, Log, TEXT("Remove player %d information"), PlayerIndex);
 			LobbyPlayerControllerArray.RemoveAt(PlayerIndex);
 			PlayerNameArray.RemoveAt(PlayerIndex);
 			PlayerReadyStateArray.RemoveAt(PlayerIndex);
 			PlayerClassArray.RemoveAt(PlayerIndex);
 		}
+		else UE_LOG(LogTemp, Error, TEXT("Failed to find player information to remove"));
+
 		//이름과 레디 리스트 갱신
 		UpdatePlayerNameListAndReadyState();
 	}
@@ -110,7 +113,7 @@ void ALobbyGameMode::TogglePlayerReady(APlayerController* Player)
 	else UE_LOG(LogTemp, Error, TEXT("%s is not valid for player ready state"), LobbyPlayerController);
 }
 
-//��� Ŭ���̾�Ʈ���� �÷��̾� �̸� ����Ʈ ���� �� UpdatePlayerReadyState() ȣ��
+//이름 리스트 갱신. UpdatePlayerReadyState()도 호출함
 void ALobbyGameMode::UpdatePlayerNameListAndReadyState()
 {
 	int32 NumberOfPlayers = LobbyPlayerControllerArray.Num();
@@ -228,7 +231,7 @@ void ALobbyGameMode::UpdateCharacter(ALobbyPlayerController* LobbyPlayerControll
 	}
 }
 
-int ALobbyGameMode::GetLobbyPlayerSpot()
+int ALobbyGameMode::GetLobbyPlayerSpot() //이상한데
 {
 	int NumberOfPlayer = LobbyPlayerControllerArray.Num();
 	int i;

@@ -241,6 +241,8 @@ void ALobbyGameSession::UnregisterPlayer(const APlayerController* ExitingPlayer)
                 ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
                 if(LobbyGameMode)
                 {
+                    UE_LOG(LogTemp, Log, TEXT("Remove exit player information..."));
+                    
                     const ALobbyPlayerController* ExitingLobbyPlayerController = Cast<ALobbyPlayerController>(ExitingPlayer);
                     LobbyGameMode->RemovePlayerInfo(ExitingLobbyPlayerController);
                 }

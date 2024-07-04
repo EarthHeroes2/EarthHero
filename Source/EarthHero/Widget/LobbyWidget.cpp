@@ -263,27 +263,38 @@ void ULobbyWidget::ChatTextCommitted(const FText& Text, ETextCommit::Type Commit
 
 void ULobbyWidget::UpdatePlayerNameList(const TArray<FString>& PlayerNameList)
 {
+	int i;
+	
 	NumberOfPlayers = PlayerNameList.Num();
 
 	UE_LOG(LogTemp, Log, TEXT("Widget : update player name list (%d players)"), NumberOfPlayers);
 
-	for (int i = 0; i < NumberOfPlayers; i++)
+	for (i = 0; i < NumberOfPlayers; i++)
 	{
-		UE_LOG(LogTemp, Log, TEXT("Player %d name : %s"), i, *PlayerNameList[i]);
 		PlayerTexts[i]->SetText(FText::FromString(PlayerNameList[i]));
+	}
+	for (; i < MaxNumberOfPlayers; i++)
+	{
+		PlayerTexts[i]->SetText(FText::GetEmpty());
 	}
 }
 
 void ULobbyWidget::UpdateReadyState(const TArray<bool>& PlayerReadyStateArray)
 {
+	int i;
+	
 	NumberOfPlayers = PlayerReadyStateArray.Num();
 
 	UE_LOG(LogTemp, Log, TEXT("Widget : update player ready state (%d players)"), NumberOfPlayers);
 
-	for(int i = 0; i < NumberOfPlayers; i++)
+	for(i = 0; i < NumberOfPlayers; i++)
 	{
 		if(PlayerReadyStateArray[i]) PlayerTexts[i]->SetColorAndOpacity(FLinearColor::Red);
 		else PlayerTexts[i]->SetColorAndOpacity(FLinearColor::Black);
+	}
+	for (; i < MaxNumberOfPlayers; i++)
+	{
+		PlayerTexts[i]->SetColorAndOpacity(FLinearColor::Black);
 	}
 }
 

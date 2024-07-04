@@ -179,7 +179,7 @@ void ALobbyPlayerController::Server_ClientReadyButtonClicked_Implementation()
 	}
 }
 
-//�������� �÷��̾� �̸� ����Ʈ �ް� UI ����
+//서버로 부터 이름 리스트를 받음
 void ALobbyPlayerController::Client_UpdatePlayerNameList_Implementation(const TArray<FString>& PlayerNameList)
 {
 	UE_LOG(LogTemp, Log, TEXT("Player name list received"));
