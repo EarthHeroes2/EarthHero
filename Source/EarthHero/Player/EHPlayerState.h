@@ -7,6 +7,7 @@
 #include "EarthHero/Stat/WarriorStatComponent.h"
 #include "EarthHero/Stat/ShooterStatComponent.h"
 #include "EarthHero/Stat/ArcherStatComponent.h"
+#include "EarthHero/Enum/Enums.h"
 #include "GameFramework/PlayerState.h"
 #include "EHPlayerState.generated.h"
 
@@ -21,6 +22,8 @@ class EARTHHERO_API AEHPlayerState : public APlayerState
 public:
 	AEHPlayerState();
 	
+	virtual void CopyProperties(APlayerState* PlayerState) override;
+
 	//승언: 임시 컴포넌트 추가, 각 히어로 별 컴포넌트로 대체 예정
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
 	UWarriorStatComponent* WarriorStatComponent;
@@ -33,4 +36,5 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
 	UArcherStatComponent* ArcherStatComponent;
+	EClassType PlayerClass;
 };

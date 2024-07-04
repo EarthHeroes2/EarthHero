@@ -1,1 +1,1 @@
-"언리얼 5.1 소스 빌드 절대 주소" "EarthHero.uproject 절대 주소" Lobby -server -log -Port=7778 -QueryPort=27016
+"언리얼 5.1 소스 빌드 절대 주소" "EarthHero.uproject 절대 주소" StartupMap -server -log -Port=7777 -QueryPort=27015

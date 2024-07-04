@@ -12,18 +12,6 @@
 #include "Components/Image.h"
 #include "EarthHero/EHGameInstance.h"
 
-/*
-ULobbyWidget::ULobbyWidget(const FObjectInitializer &ObjectInitializer)
-	: Super(ObjectInitializer)
-{
-	//친구 초대 row 블루프린트
-	static ConstructorHelpers::FClassFinder<UUserWidget> FriendRowWidgetAsset(TEXT("UserWidget'/Game/Blueprints/Menu/WBP_Friend_Row.WBP_Friend_Row_C'"));
-	if (FriendRowWidgetAsset.Succeeded())
-	{
-		FriendRowWidgetClass = FriendRowWidgetAsset.Class;
-	}
-}*/
-
 bool ULobbyWidget::Initialize()
 {
 	Super::Initialize();
@@ -55,78 +43,9 @@ bool ULobbyWidget::Initialize()
 		if (EHGameInstance->IsCheckedPrivate) Private_Cb->SetCheckedState(ECheckBoxState::Checked);
 		else Private_Cb->SetCheckedState(ECheckBoxState::Unchecked);
 	}
-
-	/*
-	IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
-	if (Subsystem)
-	{
-		IOnlineFriendsPtr Friends = Subsystem->GetFriendsInterface();
-		if (Friends)
-		{
-			Friends->ReadFriendsList(
-				0,
-				TEXT(""),
-				FOnReadFriendsListComplete::CreateUObject(this, &ULobbyWidget::ReadFriendsListCompleted)
-			);
-		}
-	}*/
+	
 	return true;
 }
-
-/*
-void ULobbyWidget::ReadFriendsListCompleted(int32 LocalUserNum, bool bWasSuccessful, const FString& ListName, const FString& ErrorStr)
-{
-	if (bWasSuccessful)
-	{
-		IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
-		if (Subsystem)
-		{
-			IOnlineFriendsPtr Friends = Subsystem->GetFriendsInterface();
-			if (Friends)
-			{
-				if (FriendRowWidgetClass)
-				{
-					//위젯 생성
-					UUserWidget* FriendRowWidget = Cast<UUserWidget>(CreateWidget(GetWorld(), FriendRowWidgetClass));
-
-					//친구 리스트 얻고
-					TArray<TSharedRef<FOnlineFriend>> FriendList;
-					Friends->GetFriendsList(LocalUserNum, ListName, FriendList);
-
-					//하나씩 추가
-					for (TSharedRef<FOnlineFriend> Friend : FriendList)
-					{
-						if (FriendRowWidget)
-						{
-							UTextBlock* FriendName_Tb = Cast<UTextBlock>(FriendRowWidget->GetWidgetFromName(TEXT("FriendName_Tb")));
-							if (FriendName_Tb)
-							{
-								FriendName_Tb->SetText(FText::FromString(Friend->GetDisplayName()));
-							}
-
-							
-                            UImage* FriendImage_Img = Cast<UImage>(FriendRowWidget->GetWidgetFromName(TEXT("FriendImage_Img")));
-                            if (FriendImage_Img)
-                            {
-                                //STEAM API 사용해야함
-                            }
-                            
-							
-                            UButton* FriendInvite_Btn = Cast<UButton>(FriendRowWidget->GetWidgetFromName(TEXT("FriendInvite_Btn")));
-                            if (FriendInvite_Btn)
-                            {
-                            }
-
-							Friend_Scr->AddChild(FriendRowWidget);
-						}
-					}
-				}
-			}
-		}
-	}
-	else UE_LOG(LogTemp, Warning, TEXT("Failed to read Firends list"));
-}*/
-
 
 void ULobbyWidget::HostAssignment(bool bHostAssignment)
 {
@@ -168,6 +87,9 @@ void ULobbyWidget::ReadyClicked()
 {
 	UE_LOG(LogTemp, Log, TEXT("Ready Button Clicked"));
 
+	//방장이 아니면 레디 버튼으로 작동. 클래스 버튼 작동 on/off
+	if(!bHost) Class_Hb->SetIsEnabled(!(Class_Hb->GetIsEnabled()));
+
 	APlayerController* PlayerController = GetOwningPlayer();
 	if (PlayerController)
 	{
@@ -175,7 +97,8 @@ void ULobbyWidget::ReadyClicked()
 
 		if (LobbyPlayerController)
 		{
-			LobbyPlayerController->Server_ClientReady();
+			//토글 형태로 작동함
+			LobbyPlayerController->Server_ClientReadyButtonClicked();
 		}
 	}
 }
@@ -386,10 +309,12 @@ void ULobbyWidget::AddChatMessage(const FText& Text)
 
 void ULobbyWidget::ExitClicked()
 {
-	UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(GetWorld()->GetGameInstance());
+	//세션 제거도 필요한가?
 	
-	if (EHGameInstance)
+	APlayerController* PlayerController = GetOwningPlayer();
+	if (PlayerController)
 	{
-		EHGameInstance->LeaveSession("JoinMainSession");
+		//이것을 이용하여 바로 나감
+		PlayerController->ClientTravel("/Game/Maps/StartupMap", ETravelType::TRAVEL_Absolute);
 	}
 }

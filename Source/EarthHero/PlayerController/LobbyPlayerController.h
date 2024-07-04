@@ -31,7 +31,7 @@ public:
 	void Client_HostAssignment(bool bHostAssignment, bool bInitSetUp, bool bAdvertise = false);
 
 	UFUNCTION(Server, Reliable)
-	void Server_ClientReady();
+	void Server_ClientReadyButtonClicked();
 
 	UFUNCTION(Client, Reliable)
 	void Client_UpdatePlayerNameList(const TArray<FString>& PlayerNameList);

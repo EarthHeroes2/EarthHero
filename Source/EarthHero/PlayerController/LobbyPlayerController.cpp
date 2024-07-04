@@ -10,6 +10,7 @@
 #include <EarthHero/GameMode/LobbyGameMode.h>
 
 #include "Components/CheckBox.h"
+#include "EarthHero/Player/EHPlayerState.h"
 
 
 ALobbyPlayerController::ALobbyPlayerController()
@@ -79,12 +80,6 @@ void ALobbyPlayerController::Server_InitSetup_Implementation(bool bAdvertise)
 			ALobbyGameSession* LobbyGameSession = Cast<ALobbyGameSession>(LobbyGameMode->GameSession);
 			if (LobbyGameSession)
 			{
-				if (bAdvertise)
-				{
-					UE_LOG(LogTemp, Log, TEXT("Change advertise state : on"));
-				}
-				else UE_LOG(LogTemp, Log, TEXT("Change advertise state : off"));
-
 				LobbyGameSession->ChangeAdvertiseState(bAdvertise);
 			}
 		}
@@ -159,12 +154,12 @@ void ALobbyPlayerController::Client_SelectDefaultCharacter_Implementation()
 	else UE_LOG(LogTemp, Log, TEXT("invalid LobbyWidget"));
 }
 
-void ALobbyPlayerController::Server_ClientReady_Implementation()
+void ALobbyPlayerController::Server_ClientReadyButtonClicked_Implementation()
 {
 	ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
 	if (LobbyGameMode)
 	{
-		//������ ���� ���۹�ư���� ó��
+		//호스트 용
 		if (bHost)
 		{
 			if (LobbyGameMode->PressGameStartButton())
@@ -176,10 +171,10 @@ void ALobbyPlayerController::Server_ClientReady_Implementation()
 				Client_SendToDebugMessage("All players should be ready!");
 			}
 		}
-		//Ŭ���̾�Ʈ�� ���� �����ư���� ó��
+		// 일반 플레이어 용
 		else
 		{
-			LobbyGameMode->TogglePlayerReady(this); //�κ� �÷��̾� ��Ʈ�ѷ��� �ѱ����� �޴� ���� �÷��̾� ��Ʈ�ѷ�. ū ���� ��������?
+			LobbyGameMode->TogglePlayerReady(this);
 		}
 	}
 }
@@ -233,7 +228,7 @@ void ALobbyPlayerController::Client_SendChatMessage_Implementation(const FText& 
 	}
 }
 
-//�÷��̾� ű (���常 ����)
+//서버에게 kick할 플레이어 번호를 넘겨줌
 void ALobbyPlayerController::Server_PlayerKick_Implementation(int PlayerNumber)
 {
 	if (bHost)
@@ -241,14 +236,13 @@ void ALobbyPlayerController::Server_PlayerKick_Implementation(int PlayerNumber)
 		ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
 		if (LobbyGameMode)
 		{
-			//�̰� �������� ����ϱ�?
+			//킥할 플레이어에게 ClientTravel를 하도록 강요함
 			ALobbyPlayerController* TargetLobbyPlayerController = LobbyGameMode->LobbyPlayerControllerArray[PlayerNumber];
 			{
 				UE_LOG(LogTemp, Log, TEXT("Player %d ClientTravel"), PlayerNumber);
 
 				TargetLobbyPlayerController->ClientTravel("/Game/Maps/StartupMap", ETravelType::TRAVEL_Absolute);
 			}
-
 		}
 	}
 }
@@ -257,10 +251,19 @@ void ALobbyPlayerController::Server_PlayerKick_Implementation(int PlayerNumber)
 //열거형 리플리케이션이 안되네...
 void ALobbyPlayerController::Server_SetPlayerCharacter_Implementation(int ClassType)
 {
+	EClassType PlayerClass = static_cast<EClassType>(ClassType);
+	
+	//서버에서 선택한 클래스 캐릭터 자신의 위치에 생성
 	ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
 	if (LobbyGameMode)
 	{
-		LobbyGameMode->UpdateCharacter(this, static_cast<EClassType>(ClassType));
+		LobbyGameMode->UpdateCharacter(this, PlayerClass);
+	}
+
+	AEHPlayerState* EHPlayerState = Cast<AEHPlayerState>(PlayerState);
+	if (EHPlayerState)
+	{
+		EHPlayerState->PlayerClass = PlayerClass;
 	}
 }
 
