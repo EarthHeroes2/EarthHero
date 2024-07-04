@@ -287,7 +287,10 @@ void ULobbyWidget::UpdateReadyState(const TArray<bool>& PlayerReadyStateArray)
 
 	UE_LOG(LogTemp, Log, TEXT("Widget : update player ready state (%d players)"), NumberOfPlayers);
 
-	for(i = 0; i < NumberOfPlayers; i++)
+	//방장은 첫 칸. 방장은 초록색 (임시)
+	PlayerTexts[0]->SetColorAndOpacity(FLinearColor::Green);
+	
+	for(i = 1; i < NumberOfPlayers; i++)
 	{
 		if(PlayerReadyStateArray[i]) PlayerTexts[i]->SetColorAndOpacity(FLinearColor::Red);
 		else PlayerTexts[i]->SetColorAndOpacity(FLinearColor::Black);
