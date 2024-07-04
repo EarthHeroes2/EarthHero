@@ -118,13 +118,13 @@ void UEHGameInstance::HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRe
                     FString PortNumber;
                     bool bKeyValueFound2 = SessionInSearchResult.Session.SessionSettings.Get("PortNumber", PortNumber);
 
-                    //미완성.
+                    //NumOpenPublicConnections가 업데이트 안되서 대체
                     //int32 NumberOfJoinedPlayers;
                     //bool bKeyValueFound3 = SessionInSearchResult.Session.SessionSettings.Get("NumberOfJoinedPlayers", NumberOfJoinedPlayers);
 
                     if (bKeyValueFound1 && bKeyValueFound2)
                     {
-                        UE_LOG(LogTemp, Log, TEXT("Test session : %s, %s"), *FindSessionReason, *PortNumber);
+                        UE_LOG(LogTemp, Log, TEXT("Test session : %s, %s, %d, %d"), *FindSessionReason, *PortNumber, SessionInSearchResult.Session.SessionSettings.NumPublicConnections, SessionInSearchResult.Session.NumOpenPublicConnections);
                         
                         if (GameName == "EH2" &&
                                 (

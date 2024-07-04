@@ -446,20 +446,25 @@ void ALobbyGameSession::ChangeAdvertiseState(bool bAdvertise)
         IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
         if (Session.IsValid())
         {
-            // ���� ���� ��������
+            //기존 세션 정보 받아오고
             FOnlineSessionSettings* SessionSettings = Session->GetSessionSettings(SessionName);
             if (SessionSettings)
             {
-                // ���� ���� ����
+                //광고 여부 재설정
                 SessionSettings->bShouldAdvertise = bAdvertise;
+
+                if (bAdvertise)
+                {
+                    UE_LOG(LogTemp, Log, TEXT("Change advertise state : on"));
+                }
+                else UE_LOG(LogTemp, Log, TEXT("Change advertise state : off"));
 
                 UpdateSessionDelegateHandle =
                     Session->AddOnUpdateSessionCompleteDelegate_Handle(FOnUpdateSessionCompleteDelegate::CreateUObject(
                         this,
                         &ALobbyGameSession::HandleUpdateSessionCompleted));
 
-
-                // ���� ������Ʈ �õ�
+                // 세션 정보 업데이트
                 if (!Session->UpdateSession(SessionName, *SessionSettings, true))
                 {
                     UE_LOG(LogTemp, Warning, TEXT("Failed to update Lobby"));

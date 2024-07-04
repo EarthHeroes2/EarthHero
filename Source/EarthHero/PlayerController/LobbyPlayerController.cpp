@@ -79,12 +79,6 @@ void ALobbyPlayerController::Server_InitSetup_Implementation(bool bAdvertise)
 			ALobbyGameSession* LobbyGameSession = Cast<ALobbyGameSession>(LobbyGameMode->GameSession);
 			if (LobbyGameSession)
 			{
-				if (bAdvertise)
-				{
-					UE_LOG(LogTemp, Log, TEXT("Change advertise state : on"));
-				}
-				else UE_LOG(LogTemp, Log, TEXT("Change advertise state : off"));
-
 				LobbyGameSession->ChangeAdvertiseState(bAdvertise);
 			}
 		}
