@@ -102,7 +102,7 @@ void AEHCharacter::BeginPlay()
     {
         BossZone = Cast<ABP_BossZone>(FoundActors[0]);
     }
-
+    
     Initialize();
 }
 
@@ -112,11 +112,11 @@ void AEHCharacter::PossessedBy(AController* NewController)
     Super::PossessedBy(NewController);
     
     // 승언 : EHPlayerState에서 StatComponent의 참조 가져오기
-    AEHPlayerState* MyPlayerState =  Cast<AEHPlayerState>(NewController->PlayerState);
+    AEHPlayerState* MyPlayerState =  Cast<AEHPlayerState>(NewController->PlayerState);  
     if (MyPlayerState)
     {
         UE_LOG(LogTemp, Error, TEXT("EHCharacter.cpp: PlayerState Set Success"));
-        StatComponent = MyPlayerState->StatComponent;
+        StatComponent = MyPlayerState->ShooterStatComponent;
     }
     else
     {

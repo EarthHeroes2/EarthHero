@@ -51,7 +51,6 @@ private:
 
 	void InitializeHUD();
 	FTimerHandle PlayerStateCheckTimerHandle;
-	//승언 끝
 	
 	TObjectPtr<ACharacter> ControlledCharacter;
 

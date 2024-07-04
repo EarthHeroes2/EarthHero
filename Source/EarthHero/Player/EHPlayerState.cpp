@@ -8,7 +8,5 @@
 
 AEHPlayerState::AEHPlayerState()
 {
-	//승언 : StatComponent 붙이기
-	
-	StatComponent = CreateDefaultSubobject<UShooterStatComponent>(TEXT("ShooterStatComponent"));
 }
+

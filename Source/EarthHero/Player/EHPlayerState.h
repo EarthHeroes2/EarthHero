@@ -3,6 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "EarthHero/Stat/MechanicStatComponent.h"
+#include "EarthHero/Stat/WarriorStatComponent.h"
+#include "EarthHero/Stat/ShooterStatComponent.h"
+#include "EarthHero/Stat/ArcherStatComponent.h"
 #include "GameFramework/PlayerState.h"
 #include "EHPlayerState.generated.h"
 
@@ -19,6 +23,14 @@ public:
 	
 	//승언: 임시 컴포넌트 추가, 각 히어로 별 컴포넌트로 대체 예정
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
-	class UStatComponent* StatComponent;
+	UWarriorStatComponent* WarriorStatComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
+	UMechanicStatComponent* MechanicStatComponent;
 	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
+	UShooterStatComponent* ShooterStatComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
+	UArcherStatComponent* ArcherStatComponent;
 };

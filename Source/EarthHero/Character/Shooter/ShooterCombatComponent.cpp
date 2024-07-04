@@ -5,6 +5,7 @@
 
 #include "EHShooter.h"
 #include "Camera/CameraComponent.h"
+#include "EarthHero/Stat/ShooterStatComponent.h"
 #include "EarthHero/Stat/StatComponent.h"
 #include "EarthHero/Stat/DamageType/NormalDamageType.h"
 #include "Kismet/GameplayStatics.h"
@@ -54,7 +55,16 @@ void UShooterCombatComponent::Server_Fire_Implementation(FVector TraceStartVecto
 		AEHCharacter *HitActor = Cast<AEHCharacter>(HitResult.GetActor());
 		if (HitActor)
 		{
-			HitActor->StatComponent->DamageTaken(10 ,UNormalDamageType::StaticClass(), HitResult, GetOwner()->GetInstigatorController(), Shooter);
+			//HitActor->StatComponent->DamageTaken(10 ,UNormalDamageType::StaticClass(), HitResult, GetOwner()->GetInstigatorController(), Shooter);
+			UShooterStatComponent *TempComponent =  Cast<UShooterStatComponent>(Shooter->StatComponent);
+			if (TempComponent)
+			{
+				TempComponent->ShooterDamage(HitActor, HitResult, UNormalDamageType::StaticClass(), Shooter);
+			}
+			else
+			{
+				UE_LOG(LogTemp, Error, TEXT("EHShooterCombatComponent.cpp: Fail to Cast ShooterStatComponent"));
+			}
 		}
 		// TODO
 		// a. If Target is an Enemy, Call the Damage Function

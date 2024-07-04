@@ -51,7 +51,7 @@ void AEHPlayerController::ClientPossess_Implementation()
 void AEHPlayerController::InitializeHUD()
 {
 	AEHPlayerState* MyPlayerState = Cast<AEHPlayerState>(PlayerState);
-	if (MyPlayerState && MyPlayerState->StatComponent)
+	if (MyPlayerState && MyPlayerState->ShooterStatComponent)
 	{
 		GetWorldTimerManager().ClearTimer(PlayerStateCheckTimerHandle); // 타이머 해제
 
@@ -59,7 +59,7 @@ void AEHPlayerController::InitializeHUD()
 		HUD = Cast<UInGameHUD>(CreateWidget(this, InGameHUD));
 		if (HUD)
 		{
-			HUD->InitializePlayerState(MyPlayerState->StatComponent);
+			HUD->InitializePlayerState(MyPlayerState->ShooterStatComponent);
 			HUD->AddToViewport();
 		}
 	}
