@@ -305,10 +305,12 @@ void ULobbyWidget::AddChatMessage(const FText& Text)
 
 void ULobbyWidget::ExitClicked()
 {
-	UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(GetWorld()->GetGameInstance());
+	//세션 제거도 필요한가?
 	
-	if (EHGameInstance)
+	APlayerController* PlayerController = GetOwningPlayer();
+	if (PlayerController)
 	{
-		EHGameInstance->LeaveSession("JoinMainSession");
+		//이것을 이용하여 바로 나감
+		PlayerController->ClientTravel("/Game/Maps/StartupMap", ETravelType::TRAVEL_Absolute);
 	}
 }

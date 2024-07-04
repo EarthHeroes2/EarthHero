@@ -57,11 +57,6 @@ void UEHGameInstance::Init()
 {
     Super::Init();
     LoadSettings();
-    
-    if (!IsRunningDedicatedServer())
-    {
-        FindSessions("JoinMainSession");
-    }
 }
 
 void UEHGameInstance::FindSessions(FString Reason)

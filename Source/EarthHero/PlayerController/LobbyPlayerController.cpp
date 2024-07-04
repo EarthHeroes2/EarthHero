@@ -227,7 +227,7 @@ void ALobbyPlayerController::Client_SendChatMessage_Implementation(const FText& 
 	}
 }
 
-//�÷��̾� ű (���常 ����)
+//서버에게 kick할 플레이어 번호를 넘겨줌
 void ALobbyPlayerController::Server_PlayerKick_Implementation(int PlayerNumber)
 {
 	if (bHost)
@@ -235,14 +235,13 @@ void ALobbyPlayerController::Server_PlayerKick_Implementation(int PlayerNumber)
 		ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
 		if (LobbyGameMode)
 		{
-			//�̰� �������� ����ϱ�?
+			//킥할 플레이어에게 ClientTravel를 하도록 강요함
 			ALobbyPlayerController* TargetLobbyPlayerController = LobbyGameMode->LobbyPlayerControllerArray[PlayerNumber];
 			{
 				UE_LOG(LogTemp, Log, TEXT("Player %d ClientTravel"), PlayerNumber);
 
 				TargetLobbyPlayerController->ClientTravel("/Game/Maps/StartupMap", ETravelType::TRAVEL_Absolute);
 			}
-
 		}
 	}
 }
