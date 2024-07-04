@@ -112,23 +112,33 @@ void UEHGameInstance::HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRe
 
                     FString PortNumber;
                     bool bKeyValueFound2 = SessionInSearchResult.Session.SessionSettings.Get("PortNumber", PortNumber);
+                    
+                    int32 NumberOfJoinedPlayers;
+                    bool bKeyValueFound3 = SessionInSearchResult.Session.SessionSettings.Get("NumberOfJoinedPlayers", NumberOfJoinedPlayers);
 
-                    //NumOpenPublicConnections가 업데이트 안되서 대체
-                    //int32 NumberOfJoinedPlayers;
-                    //bool bKeyValueFound3 = SessionInSearchResult.Session.SessionSettings.Get("NumberOfJoinedPlayers", NumberOfJoinedPlayers);
+                    bool bAdvertise;
+                    bool bKeyValueFound4 = SessionInSearchResult.Session.SessionSettings.Get("Advertise", bAdvertise);
 
-                    if (bKeyValueFound1 && bKeyValueFound2)
+                    if (bKeyValueFound1 && bKeyValueFound2 && bKeyValueFound3 && bKeyValueFound4)
                     {
-                        UE_LOG(LogTemp, Log, TEXT("Test session : %s, %s, %d, %d"), *FindSessionReason, *PortNumber, SessionInSearchResult.Session.SessionSettings.NumPublicConnections, SessionInSearchResult.Session.NumOpenPublicConnections);
+                        if(bAdvertise)
+                        {
+                            UE_LOG(LogTemp, Log, TEXT("Test session : %s, %s, %d, true"), *FindSessionReason, *PortNumber, NumberOfJoinedPlayers);
+                        }
+                        else UE_LOG(LogTemp, Log, TEXT("Test session : %s, %s, %d, false"), *FindSessionReason, *PortNumber, NumberOfJoinedPlayers);
                         
                         if (GameName == "EH2" &&
                                 (
-                                    (FindSessionReason == "JoinLobby") ||
-                                    (FindSessionReason == "CreateLobby")
+                                    (FindSessionReason == "JoinLobby" && NumberOfJoinedPlayers > 0 && bAdvertise) ||
+                                    (FindSessionReason == "CreateLobby" && NumberOfJoinedPlayers == 0)
                                 )
                             )
                         {
-                            UE_LOG(LogTemp, Log, TEXT("Valid session : %s, %s"), *FindSessionReason, *PortNumber);
+                            if(bAdvertise)
+                            {
+                                UE_LOG(LogTemp, Log, TEXT("Valid session : %s, %s, %d, true"), *FindSessionReason, *PortNumber, NumberOfJoinedPlayers);
+                            }
+                            else UE_LOG(LogTemp, Log, TEXT("Valid session : %s, %s, %d, false"), *FindSessionReason, *PortNumber, NumberOfJoinedPlayers);
 
                             if (Session->GetResolvedConnectString(SessionInSearchResult, NAME_GamePort, ConnectString))
                             {
@@ -144,15 +154,10 @@ void UEHGameInstance::HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRe
                     }
                 }
 
-                //���� ã�� �κ� ���ٸ�
+                //들어갈 로비를 찾지 못함
                 if (!bIsFind && GEngine)
                 {
-                    if (FindSessionReason == "JoinMainSession")
-                    {
-                        GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Yellow, FString::Printf(TEXT("EH2 server connection failed")));
-                        //������? ��⿭?
-                    }
-                    else if (FindSessionReason == "JoinLobby")
+                    if (FindSessionReason == "JoinLobby")
                     {
                         GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Yellow, FString::Printf(TEXT("No lobby to participate")));
                     }
