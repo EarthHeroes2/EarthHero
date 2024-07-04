@@ -65,6 +65,10 @@ private:
 
 
 
+
+	UPROPERTY(meta = (BindWidget))
+	UHorizontalBox* Class_Hb;
+	
 	TArray<UButton*> ClassBtns;
 	UPROPERTY(meta = (BindWidget))
 	UButton* Warrior_Btn;

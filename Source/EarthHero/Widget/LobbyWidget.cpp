@@ -87,6 +87,9 @@ void ULobbyWidget::ReadyClicked()
 {
 	UE_LOG(LogTemp, Log, TEXT("Ready Button Clicked"));
 
+	//방장이 아니면 레디 버튼으로 작동. 클래스 버튼 작동 on/off
+	if(!bHost) Class_Hb->SetIsEnabled(!(Class_Hb->GetIsEnabled()));
+
 	APlayerController* PlayerController = GetOwningPlayer();
 	if (PlayerController)
 	{
@@ -94,7 +97,8 @@ void ULobbyWidget::ReadyClicked()
 
 		if (LobbyPlayerController)
 		{
-			LobbyPlayerController->Server_ClientReady();
+			//토글 형태로 작동함
+			LobbyPlayerController->Server_ClientReadyButtonClicked();
 		}
 	}
 }

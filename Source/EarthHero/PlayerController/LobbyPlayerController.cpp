@@ -153,12 +153,12 @@ void ALobbyPlayerController::Client_SelectDefaultCharacter_Implementation()
 	else UE_LOG(LogTemp, Log, TEXT("invalid LobbyWidget"));
 }
 
-void ALobbyPlayerController::Server_ClientReady_Implementation()
+void ALobbyPlayerController::Server_ClientReadyButtonClicked_Implementation()
 {
 	ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
 	if (LobbyGameMode)
 	{
-		//������ ���� ���۹�ư���� ó��
+		//호스트 용
 		if (bHost)
 		{
 			if (LobbyGameMode->PressGameStartButton())
@@ -170,10 +170,10 @@ void ALobbyPlayerController::Server_ClientReady_Implementation()
 				Client_SendToDebugMessage("All players should be ready!");
 			}
 		}
-		//Ŭ���̾�Ʈ�� ���� �����ư���� ó��
+		// 일반 플레이어 용
 		else
 		{
-			LobbyGameMode->TogglePlayerReady(this); //�κ� �÷��̾� ��Ʈ�ѷ��� �ѱ����� �޴� ���� �÷��̾� ��Ʈ�ѷ�. ū ���� ��������?
+			LobbyGameMode->TogglePlayerReady(this);
 		}
 	}
 }

@@ -58,6 +58,7 @@ void ALobbyGameSession::CreateSession(FString PortNumber)
 
             SessionSettings->bAllowInvites = true;
             SessionSettings->bAllowJoinInProgress = false; // 시작 후 참가 불가
+
             //SessionSettings->bUsesStats = false; // ���� ��� ���� 
             //SessionSettings->bAntiCheatProtected = true; // ��Ƽ ġƮ ��ȣ ����
             
