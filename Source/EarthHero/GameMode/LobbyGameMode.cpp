@@ -43,6 +43,11 @@ void ALobbyGameMode::BeginPlay()
 	SpawnLocations.Add(FVector(500.0f, -50.0f, 0.0f));
 	SpawnLocations.Add(FVector(500.0f, 50.0f, 0.0f));
 	SpawnLocations.Add(FVector(500.0f, 150.0f, 0.0f));
+
+	for(int i = 0; i < 4; i++) //임시
+	{
+		bSpotUsedArray.Add(false);
+	}
 }
 
 void ALobbyGameMode::AddPlayerInfo(ALobbyPlayerController* NewLobbyPlayerController)
@@ -57,12 +62,14 @@ void ALobbyGameMode::AddPlayerInfo(ALobbyPlayerController* NewLobbyPlayerControl
 			PlayerNameArray.RemoveAt(PlayerIndex);
 			PlayerReadyStateArray.RemoveAt(PlayerIndex);
 			PlayerClassArray.RemoveAt(PlayerIndex);
+			PlayerSpotArray.RemoveAt(PlayerIndex);
 		}
-
+		
 		LobbyPlayerControllerArray.Add(NewLobbyPlayerController);
 		PlayerNameArray.Add(NewLobbyPlayerController->PlayerState->GetPlayerName());
 		PlayerReadyStateArray.Add(false);
 		PlayerClassArray.Add(Shooter); //임시
+		PlayerSpotArray.Add(FindLobbyPlayerSpot(NewLobbyPlayerController));
 
 		//정보를 등록했으니 클라이언트에게 기본 캐릭터를 골라주고
 		//이름과 레디 리스트를 보내줌
@@ -81,10 +88,16 @@ void ALobbyGameMode::RemovePlayerInfo(const ALobbyPlayerController* ExitingLobby
 		if (PlayerIndex != INDEX_NONE)
 		{
 			UE_LOG(LogTemp, Log, TEXT("Remove player %d information"), PlayerIndex);
+
+			bSpotUsedArray[PlayerSpotArray[PlayerIndex]] = false;
+			
+			ExitingLobbyPlayerController->LobbyCharacter->Destroy();
+			
 			LobbyPlayerControllerArray.RemoveAt(PlayerIndex);
 			PlayerNameArray.RemoveAt(PlayerIndex);
 			PlayerReadyStateArray.RemoveAt(PlayerIndex);
 			PlayerClassArray.RemoveAt(PlayerIndex);
+			PlayerSpotArray.RemoveAt(PlayerIndex);
 		}
 		else UE_LOG(LogTemp, Error, TEXT("Failed to find player information to remove"));
 
@@ -192,15 +205,14 @@ void ALobbyGameMode::UpdateCharacter(ALobbyPlayerController* LobbyPlayerControll
 	if(!(LobbyPlayerController->LobbyCharacter))
 	{
 		UE_LOG(LogTemp, Log, TEXT("First Spawn"));
-		LobbyPlayerController->SpawnSpotIndex = GetLobbyPlayerSpot();
 	}
 	else //아니라면 기존 캐릭터 제거
 	{
 		UE_LOG(LogTemp, Log, TEXT("Respawn"));
 		LobbyPlayerController->LobbyCharacter->Destroy();
 	}
-
-	int SpawnSpotIndex = LobbyPlayerController->SpawnSpotIndex;
+	
+	int SpawnSpotIndex = PlayerSpotArray[PlayerNumber];
 	
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = this;
@@ -231,19 +243,21 @@ void ALobbyGameMode::UpdateCharacter(ALobbyPlayerController* LobbyPlayerControll
 	}
 }
 
-int ALobbyGameMode::GetLobbyPlayerSpot() //이상한데
+int ALobbyGameMode::FindLobbyPlayerSpot(ALobbyPlayerController* NewLobbyPlayerController)
 {
-	int NumberOfPlayer = LobbyPlayerControllerArray.Num();
-	int i;
-	
-	for(i = 0; i < NumberOfPlayer; i++)
+	ALobbyGameSession* LobbyGameSession = Cast<ALobbyGameSession>(GameSession);
+	if (LobbyGameSession)
 	{
-		if(!(LobbyPlayerControllerArray[i]->bSpawnCharacter))
+		int MaxNumberOfPlayers = LobbyGameSession->MaxNumberOfPlayersInSession;
+		
+		for(int i = 0; i < MaxNumberOfPlayers; i++)
 		{
-			LobbyPlayerControllerArray[i]->bSpawnCharacter = true;
-			break;
+			if(!bSpotUsedArray[i])
+			{
+				bSpotUsedArray[i] = true;
+				return i;
+			}
 		}
 	}
-	
-	return i;
+	return 0;
 }
