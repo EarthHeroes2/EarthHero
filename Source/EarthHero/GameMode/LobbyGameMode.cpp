@@ -45,31 +45,55 @@ void ALobbyGameMode::BeginPlay()
 
 void ALobbyGameMode::AddPlayerInfo(ALobbyPlayerController* NewLobbyPlayerController)
 {
-	int32 PlayerIndex = LobbyPlayerControllerArray.IndexOfByKey(NewLobbyPlayerController);
-
-	if (PlayerIndex != INDEX_NONE)
+	if(NewLobbyPlayerController)
 	{
-		LobbyPlayerControllerArray.RemoveAt(PlayerIndex);
-		PlayerNameArray.RemoveAt(PlayerIndex);
-		PlayerReadyStateArray.RemoveAt(PlayerIndex);
-		PlayerClassArray.RemoveAt(PlayerIndex);
+		int32 PlayerIndex = LobbyPlayerControllerArray.IndexOfByKey(NewLobbyPlayerController);
+
+		if (PlayerIndex != INDEX_NONE)
+		{
+			LobbyPlayerControllerArray.RemoveAt(PlayerIndex);
+			PlayerNameArray.RemoveAt(PlayerIndex);
+			PlayerReadyStateArray.RemoveAt(PlayerIndex);
+			PlayerClassArray.RemoveAt(PlayerIndex);
+		}
+
+		LobbyPlayerControllerArray.Add(NewLobbyPlayerController);
+		PlayerNameArray.Add(NewLobbyPlayerController->PlayerState->GetPlayerName());
+		PlayerReadyStateArray.Add(false);
+		PlayerClassArray.Add(Shooter); //임시
+
+		//정보를 등록했으니 클라이언트에게 기본 캐릭터를 골라주고
+		//이름과 레디 리스트를 보내줌
+		NewLobbyPlayerController->Client_SelectDefaultCharacter();
+		UpdatePlayerNameListAndReadyState();
 	}
+	else UE_LOG(LogTemp, Error, TEXT("Invaild ExitingLobbyPlayerController"));
+}
 
-	LobbyPlayerControllerArray.Add(NewLobbyPlayerController);
-	PlayerNameArray.Add(NewLobbyPlayerController->PlayerState->GetPlayerName());
-	PlayerReadyStateArray.Add(false);
-	PlayerClassArray.Add(Shooter); //임시
+void ALobbyGameMode::RemovePlayerInfo(const ALobbyPlayerController* ExitingLobbyPlayerController)
+{
+	if(ExitingLobbyPlayerController)
+	{
+		int32 PlayerIndex = LobbyPlayerControllerArray.IndexOfByKey(ExitingLobbyPlayerController);
 
-	//정보를 등록했으니 클라이언트에게 기본 캐릭터를 골라주고
-	//이름과 레디 리스트를 보내줌
-	NewLobbyPlayerController->Client_SelectDefaultCharacter();
-	UpdatePlayerNameListAndReadyState();
+		if (PlayerIndex != INDEX_NONE)
+		{
+			LobbyPlayerControllerArray.RemoveAt(PlayerIndex);
+			PlayerNameArray.RemoveAt(PlayerIndex);
+			PlayerReadyStateArray.RemoveAt(PlayerIndex);
+			PlayerClassArray.RemoveAt(PlayerIndex);
+		}
+		//이름과 레디 리스트 갱신
+		UpdatePlayerNameListAndReadyState();
+	}
+	else UE_LOG(LogTemp, Error, TEXT("Invaild NewLobbyPlayerController"));
 }
 
 void ALobbyGameMode::TogglePlayerReady(APlayerController* Player)
 {
 	ALobbyPlayerController* LobbyPlayerController = Cast<ALobbyPlayerController>(Player);
 
+	
 	int32 PlayerIndex = LobbyPlayerControllerArray.IndexOfByKey(LobbyPlayerController);
 
 	if (PlayerIndex != INDEX_NONE)

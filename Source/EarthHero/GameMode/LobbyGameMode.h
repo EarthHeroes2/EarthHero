@@ -44,6 +44,7 @@ public:
 	void UpdatePlayerNameListAndReadyState();
 	void UpdatePlayerReadyState();
 	void AddPlayerInfo(ALobbyPlayerController* NewLobbyPlayerController);
+	void RemovePlayerInfo(const ALobbyPlayerController* ExitingLobbyPlayerController);
 	bool PressGameStartButton();
 
 	void SendChatMessage(const FText& Text);

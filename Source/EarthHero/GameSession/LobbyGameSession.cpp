@@ -16,10 +16,10 @@ void ALobbyGameSession::BeginPlay()
 {
     Super::BeginPlay();
 
-    //dedicated ������ ���� ���� ����
+    //dedicated 서버에서만 실행
     if (IsRunningDedicatedServer() && !bSessionExists)
     {
-        //��Ʈ ��ȣ�� key������ �����
+        //로비의 포트는 7778~
         FString PortNumber;
         UWorld* World = GetWorld();
         if (World)
@@ -56,10 +56,10 @@ void ALobbyGameSession::CreateSession(FString PortNumber)
                     &ThisClass::HandleCreateSessionCompleted));
 
             TSharedRef<FOnlineSessionSettings> SessionSettings = MakeShared<FOnlineSessionSettings>();
-            SessionSettings->bIsDedicated = true; // Dedicated ���� ����
-            SessionSettings->bIsLANMatch = false; // LAN ������ �ƴ�
-            SessionSettings->NumPublicConnections = MaxNumberOfPlayersInSession; // �ִ� ���� �ο� ����
-            SessionSettings->NumPrivateConnections = 0; // ����� ���� �ο� ����
+            SessionSettings->bIsDedicated = true;
+            SessionSettings->bIsLANMatch = false;
+            SessionSettings->NumPublicConnections = MaxNumberOfPlayersInSession;
+            SessionSettings->NumPrivateConnections = 0;
             SessionSettings->bShouldAdvertise = true; // ���� ����
             SessionSettings->bUsesPresence = false; // Presence�� ������� ����
             SessionSettings->bUseLobbiesIfAvailable = false; // �κ� ��� ����
@@ -100,8 +100,7 @@ void ALobbyGameSession::HandleCreateSessionCompleted(FName EOSSessionName, bool 
                 UE_LOG(LogTemp, Log, TEXT("Lobby: %s Created!"), *EOSSessionName.ToString());
             }
             else UE_LOG(LogTemp, Warning, TEXT("Failed to create lobby!"));
-
-            // Clear our handle and reset the delegate. 
+            
             Session->ClearOnCreateSessionCompleteDelegate_Handle(CreateSessionDelegateHandle);
             CreateSessionDelegateHandle.Reset();
         }
@@ -230,11 +229,11 @@ void ALobbyGameSession::HandleStartSessionCompleted(FName EOSSessionName, bool b
 
 void ALobbyGameSession::ChangeMap()
 {
-    // �� ��ȯ //���� ��������
+    // 임시
     GetWorld()->ServerTravel(InGameMap, true);
 }
 
-//NotifyLogout���� ȣ���
+//NotifyLogout에서 불림
 void ALobbyGameSession::UnregisterPlayer(const APlayerController* ExitingPlayer)
 {
     Super::UnregisterPlayer(ExitingPlayer);
@@ -244,11 +243,18 @@ void ALobbyGameSession::UnregisterPlayer(const APlayerController* ExitingPlayer)
         IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
         if (Subsystem)
         {
-            //IOnlineIdentityPtr Identity = Subsystem->GetIdentityInterface();
             IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
             if (Session.IsValid())
             {
-                // If the player leaves ungracefully this could be null
+                // 게임모드의 관리 리스트에서 제거
+                ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
+                if(LobbyGameMode)
+                {
+                    const ALobbyPlayerController* ExitingLobbyPlayerController = Cast<ALobbyPlayerController>(ExitingPlayer);
+                    LobbyGameMode->RemovePlayerInfo(ExitingLobbyPlayerController);
+                }
+                
+                // 비정상적으로 플레이어가 떠나면 null일 수 있음
                 if (ExitingPlayer->PlayerState)
                 {
                     UnregisterPlayerDelegateHandle =
@@ -314,14 +320,13 @@ void ALobbyGameSession::HandleUnregisterPlayerCompleted(FName EOSSessionName, co
 //�÷��̾ ���� ������ ���� �� �ڵ����� ȣ���
 void ALobbyGameSession::NotifyLogout(const APlayerController* ExitingPlayer)
 {
-    Super::NotifyLogout(ExitingPlayer); //UnregisterPlayer�� ȣ����
-
+    Super::NotifyLogout(ExitingPlayer); //UnregisterPlayer를 호출함
 
     if (IsRunningDedicatedServer())
     {
-        NumberOfPlayersInSession--; //���� �÷��̾� �� --
-
-        //���ǿ� �ƹ��� ���ٸ� ���� ����
+        NumberOfPlayersInSession--;
+        
+        //사람이 아무도 없으면 초기화 해줘야함 (수정필요) //테스트
         if (NumberOfPlayersInSession == 0)
         {
             EndSession();
