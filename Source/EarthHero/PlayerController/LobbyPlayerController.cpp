@@ -10,6 +10,7 @@
 #include <EarthHero/GameMode/LobbyGameMode.h>
 
 #include "Components/CheckBox.h"
+#include "EarthHero/Player/EHPlayerState.h"
 
 
 ALobbyPlayerController::ALobbyPlayerController()
@@ -250,10 +251,19 @@ void ALobbyPlayerController::Server_PlayerKick_Implementation(int PlayerNumber)
 //열거형 리플리케이션이 안되네...
 void ALobbyPlayerController::Server_SetPlayerCharacter_Implementation(int ClassType)
 {
+	EClassType PlayerClass = static_cast<EClassType>(ClassType);
+	
+	//서버에서 선택한 클래스 캐릭터 자신의 위치에 생성
 	ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
 	if (LobbyGameMode)
 	{
-		LobbyGameMode->UpdateCharacter(this, static_cast<EClassType>(ClassType));
+		LobbyGameMode->UpdateCharacter(this, PlayerClass);
+	}
+
+	AEHPlayerState* EHPlayerState = Cast<AEHPlayerState>(PlayerState);
+	if (EHPlayerState)
+	{
+		EHPlayerState->PlayerClass = PlayerClass;
 	}
 }
 

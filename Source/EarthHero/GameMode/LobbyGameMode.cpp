@@ -7,12 +7,14 @@
 #include "OnlineSubsystem.h"
 #include "OnlineSubsystemUtils.h"
 #include "EarthHero/Character/Shooter/EHShooter.h"
+#include "EarthHero/Player/EHPlayerState.h"
 #include "Interfaces/OnlineSessionInterface.h"
 
 ALobbyGameMode::ALobbyGameMode()
 {
 	PlayerControllerClass = ALobbyPlayerController::StaticClass();
 	GameSessionClass = ALobbyGameSession::StaticClass();
+	PlayerStateClass = AEHPlayerState::StaticClass();
 
 	CharacterClasses.SetNum(4);
 	
@@ -174,7 +176,7 @@ void ALobbyGameMode::SendChatMessage(const FText& Text)
 	}
 }
 
-//�ش� �÷��̾��� ĳ���͸� ����
+//플레이어 캐릭터(클래스) 선택 업데이트
 void ALobbyGameMode::UpdateCharacter(ALobbyPlayerController* LobbyPlayerController, EClassType ClassType)
 {
 	int PlayerNumber = LobbyPlayerControllerArray.Find(LobbyPlayerController);
@@ -182,13 +184,14 @@ void ALobbyGameMode::UpdateCharacter(ALobbyPlayerController* LobbyPlayerControll
 	UE_LOG(LogTemp, Log, TEXT("Player %d : Update Character"), PlayerNumber);
 
 	PlayerClassArray[PlayerNumber] = ClassType;
-	
+
+	//첫 생성이면 스폰 장소 찾기
 	if(!(LobbyPlayerController->LobbyCharacter))
 	{
 		UE_LOG(LogTemp, Log, TEXT("First Spawn"));
 		LobbyPlayerController->SpawnSpotIndex = GetLobbyPlayerSpot();
 	}
-	else
+	else //아니라면 기존 캐릭터 제거
 	{
 		UE_LOG(LogTemp, Log, TEXT("Respawn"));
 		LobbyPlayerController->LobbyCharacter->Destroy();
@@ -199,6 +202,7 @@ void ALobbyGameMode::UpdateCharacter(ALobbyPlayerController* LobbyPlayerControll
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = this;
 
+	//해당 자리에 캐릭터 생성
 	switch (ClassType)
 	{
 		case Warrior:
