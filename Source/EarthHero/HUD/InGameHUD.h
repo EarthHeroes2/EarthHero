@@ -15,6 +15,9 @@ class EARTHHERO_API UInGameHUD : public UUserWidget
 public:
 	UPROPERTY(meta = (BindWidget))
 	class UProgressBar *HealthBar;
+	
+	UPROPERTY(meta = (BindWidget))
+	class UProgressBar *ExpBar;
 
 	void InitializePlayerState(class UStatComponent *StatComponent);
 

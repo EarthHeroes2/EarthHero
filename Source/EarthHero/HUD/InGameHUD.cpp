@@ -5,7 +5,6 @@
 
 #include "EarthHero/Stat/StatComponent.h"
 #include "Components/ProgressBar.h"
-#include "EarthHero/Player/EHPlayerState.h"
 
 void UInGameHUD::InitializePlayerState(UStatComponent *StatComponent)
 {

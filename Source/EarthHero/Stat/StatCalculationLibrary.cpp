@@ -63,3 +63,22 @@ float UStatCalculationLibrary::CalShooterNormalDamage(FStatStructure& HeroStat, 
 	}
 	return resultDamage;
 }
+
+bool UStatCalculationLibrary::AddExp(FStatStructure& HeroStat, int32 ExpMount)
+{
+	float resultExp = HeroStat.Exp + ExpMount;
+	if (resultExp >= HeroStat.MaxExp)
+	{
+		while (resultExp >= HeroStat.MaxExp)
+		{
+			resultExp = resultExp - HeroStat.MaxExp;
+			HeroStat.Level += 1;
+			HeroStat.MaxExp = HeroStat.RequiresExp[HeroStat.Level];
+		}
+		
+		HeroStat.Exp = resultExp;
+		return true;
+	}
+	HeroStat.Exp = resultExp;
+	return false;
+}

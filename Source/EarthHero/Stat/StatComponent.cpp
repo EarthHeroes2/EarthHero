@@ -12,12 +12,19 @@
 #include "GameFramework/Actor.h"
 #include "TimerManager.h"  // FTimerHandle과 TimerManager를 사용하기 위해 필요
 #include "VectorUtil.h"
+#include "Components/ProgressBar.h"
+#include "EarthHero/HUD/InGameHUD.h"
 
 UStatComponent::UStatComponent()
 {
 
 	PrimaryComponentTick.bCanEverTick = false;
 	SetIsReplicatedByDefault(true);  // 컴포넌트가 네트워크에서 복제될 수 있도록 설정
+}
+
+void UStatComponent::SetInGameHUD(UInGameHUD* ControllerInGameHUD)
+{
+	InGameHUD = ControllerInGameHUD;
 }
 
 
@@ -31,12 +38,6 @@ void UStatComponent::BeginPlay()
 	{
 		InitializeStatData("Hero");
 	}
-
-	//TakeDamage를 Delecate 설정
-	// if (GetOwner())
-	// {
-	// 	GetOwner()->OnTakeAnyDamage.AddDynamic(this, &UStatComponent::DamageTaken);
-	// }
 }
 
 // Called every frame
@@ -64,6 +65,24 @@ float UStatComponent::DamageTaken(float InDamage, TSubclassOf<UDamageType> Damag
 	return InDamage;
 }
 
+//경험치 획득 시
+void UStatComponent::UpdateExp(float ExpMount)
+{
+	bool isLevelUp = UStatCalculationLibrary::AddExp(HeroStat, ExpMount);
+	UpdateExpUI(GetExpPercent(), HeroStat.Level, isLevelUp);
+}
+
+void UStatComponent::UpdateExpUI_Implementation(float ExpPercent, int32 Level, bool IsLevelUp)
+{
+	//UI 갱신
+	InGameHUD->ExpBar->SetPercent(ExpPercent);
+	if (IsLevelUp)
+	{
+		//레벨 갱신 및 히어로 업그레이드 호출
+		UE_LOG(LogClass, Warning, TEXT("Level Up!! Level is %d"), Level);
+	}
+}
+
 // GameInstance에 저장된 초기 스텟을 불러와 StatComponent의 Base스텟과 스텟을 초기화하는 함수
 void UStatComponent::InitializeStatData_Implementation(FName HeroName)
 {
@@ -79,6 +98,7 @@ void UStatComponent::InitializeStatData_Implementation(FName HeroName)
 	{
 		BaseHeroStat = *TempStat;
 		BaseHeroStat.Health = BaseHeroStat.MaxHealth;
+		BaseHeroStat.MaxExp = BaseHeroStat.RequiresExp[BaseHeroStat.Level];
 		HeroStat = BaseHeroStat;
 	}
 	else
@@ -163,9 +183,15 @@ float UStatComponent::GetExpPercent() const
 {
 	if (HeroStat.MaxExp > 0)
 	{
+		UE_LOG(LogClass, Warning, TEXT("ExpPercent is %f"), HeroStat.Exp / HeroStat.MaxExp);
 		return HeroStat.Exp / HeroStat.MaxExp;
 	}
 	return 0.0f;
+}
+
+float UStatComponent::GetLevel() const
+{
+	return HeroStat.Level;
 }
 
 float UStatComponent::GetSkillCoolTime() const

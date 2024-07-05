@@ -11,6 +11,9 @@ struct FStatStructure : public FTableRowBase
 {
 	GENERATED_BODY()
 
+	UPROPERTY(EditAnywhere, Category="Stats")
+	float RequiresExp[10] = {0, 20, 50, 120, 300, 750, 1800, 3600, 6000, 10000};
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	float MaxHealth = 100.f;				//최대 체력
 
@@ -37,6 +40,9 @@ struct FStatStructure : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	float Exp = 0.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+	int32 Level = 1;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	float SkillCoolTime = 0.f;				//공격 스킬 쿨타임 감소

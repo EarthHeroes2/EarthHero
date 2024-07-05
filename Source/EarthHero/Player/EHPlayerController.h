@@ -19,6 +19,9 @@ public:
 	AEHPlayerController();
 	virtual void Tick(float DeltaSeconds) override;
 
+	UPROPERTY()
+	class UInGameHUD *HUD;
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
@@ -46,8 +49,6 @@ private:
 	//승언 : InGameHUD를 컨트롤러에 추가
 	UPROPERTY(EditAnywhere, Category = "HUD")
 	TSubclassOf<class UUserWidget> InGameHUD;
-	UPROPERTY()
-	class UInGameHUD *HUD;
 
 	void InitializeHUD();
 	FTimerHandle PlayerStateCheckTimerHandle;

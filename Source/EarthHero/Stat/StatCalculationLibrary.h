@@ -15,4 +15,7 @@ public:
 
 	UFUNCTION()
 	static float CalShooterNormalDamage(FStatStructure &HeroStat, const FHitResult & HitInfo, int32 SH_HeadShot);
+
+	UFUNCTION()
+	static bool AddExp(FStatStructure &HeroStat, int32 ExpMount);
 };

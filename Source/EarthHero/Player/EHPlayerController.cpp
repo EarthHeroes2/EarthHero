@@ -60,6 +60,7 @@ void AEHPlayerController::InitializeHUD()
 		{
 			HUD->InitializePlayerState(MyPlayerState->GetStatComponent());
 			HUD->AddToViewport();
+			MyPlayerState->GetStatComponent()->SetInGameHUD(HUD);
 		}
 	}
 }

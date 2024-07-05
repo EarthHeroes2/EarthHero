@@ -10,12 +10,21 @@ class EARTHHERO_API UStatComponent : public UActorComponent
 
 public:	
 	UStatComponent();
+
+	void SetInGameHUD(class UInGameHUD *ControllerInGameHUD);
 	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	//데미지 처리 함수
 	float DamageTaken(float InDamage, TSubclassOf<UDamageType> DamageTypeClass, const FHitResult & HitInfo, AController *Instigator, class AEHCharacter *DamageCausor);
+
+	//경험치 처리 함수
+	UFUNCTION(BlueprintCallable)
+	void UpdateExp(float ExpMount);
+
+	UFUNCTION(Client, Reliable)
+	void UpdateExpUI(float ExpPercent, int32 Level, bool IsLevelUp);
 
 	//스텟 반환 함수
 	UFUNCTION(BlueprintPure, Category = "Stat")
@@ -52,6 +61,9 @@ public:
 	float GetExpPercent() const;
 
 	UFUNCTION(BlueprintPure, Category = "Stat")
+	float GetLevel() const;
+
+	UFUNCTION(BlueprintPure, Category = "Stat")
 	float GetSkillCoolTime() const;
 
 	UFUNCTION(BlueprintPure, Category = "Stat")
@@ -84,5 +96,8 @@ private:
 	void InitializeStatData(FName HeroName);
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	UPROPERTY()
+	class UInGameHUD *InGameHUD;
 
 };
