@@ -7,6 +7,7 @@
 #include "../EHGameInstance.h"
 #include "OnlineSessionSettings.h"
 #include "OnlineSubsystem.h"
+#include "Components/Border.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 
@@ -69,6 +70,11 @@ bool UMainMenuWidget::Initialize()
 	if (Exit_Btn)
 	{
 		Exit_Btn->OnClicked.AddDynamic(this, &ThisClass::Exit_BtnClicked);
+	}
+
+	if(LobbyList_Btn)
+	{
+		LobbyList_Btn->OnClicked.AddDynamic(this, &ThisClass::LobbyListBtnClicked);
 	}
 
 	return true;
@@ -225,4 +231,29 @@ void UMainMenuWidget::NativeDestruct()
 	MenuTearDown();
 
 	Super::NativeDestruct();
+}
+
+
+
+
+
+
+void UMainMenuWidget::LobbyListBtnClicked()
+{
+	if(LobbyList_Bd)
+	{
+		if(LobbyList_Bd->GetVisibility() == ESlateVisibility::Collapsed)
+		{
+			LobbyList_Bd->SetVisibility(ESlateVisibility::Visible);
+
+			UpdateLobbyList();
+		}
+		else
+			LobbyList_Bd->SetVisibility(ESlateVisibility::Collapsed);
+	}
+}
+
+void UMainMenuWidget::UpdateLobbyList()
+{
+	
 }
