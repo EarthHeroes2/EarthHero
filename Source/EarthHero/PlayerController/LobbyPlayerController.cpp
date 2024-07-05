@@ -44,7 +44,7 @@ void ALobbyPlayerController::BeginPlay()
 				UE_LOG(LogTemp, Log, TEXT("Lobby mode request private? : true"));
 			}
 			else UE_LOG(LogTemp, Log, TEXT("Lobby mode request private? : false"));
-			Server_InitSetup(EHGameInstance->IsCheckedPrivate);
+			Server_InitSetup(!(EHGameInstance->IsCheckedPrivate));
 		}
 	}
 }
