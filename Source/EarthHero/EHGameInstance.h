@@ -87,13 +87,11 @@ public:
 protected:
 	FName JoinedSessionName;
 	FString LeaveSessionReason, FindSessionReason;
-
+public:
 	void FindSessions(FString Reason);
-
+protected:
 	// Callback function. This function will run when the session is found.
 	void HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRef<FOnlineSessionSearch> Search);
-
-	//Delegate to bind callback event for when sessions are found.
 	FDelegateHandle FindSessionsDelegateHandle;
 
 	// This is the connection string for the client to connect to the dedicated server.

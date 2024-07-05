@@ -1,5 +1,7 @@
 #include "EHGameInstance.h"
 
+#include <steam/isteammatchmaking.h>
+
 #include "AudioDevice.h"
 #include "Engine/DataTable.h"
 #include "UObject/ConstructorHelpers.h"
@@ -105,7 +107,7 @@ void UEHGameInstance::HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRe
 
                 bool bIsFind = false;
 
-                for (auto SessionInSearchResult : Search->SearchResults)
+                for (FOnlineSessionSearchResult SessionInSearchResult : Search->SearchResults)
                 {
                     FString GameName;
                     bool bKeyValueFound1 = SessionInSearchResult.Session.SessionSettings.Get("GameName", GameName);
@@ -153,7 +155,7 @@ void UEHGameInstance::HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRe
                         }
                     }
                 }
-
+                
                 //들어갈 로비를 찾지 못함
                 if (!bIsFind && GEngine)
                 {
@@ -165,7 +167,6 @@ void UEHGameInstance::HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRe
                     {
                         GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Yellow, FString::Printf(TEXT("Unable to create lobby (server full)")));
                     }
-
                 }
             }
             else

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Interfaces/OnlineSessionInterface.h"
+#include "OnlineSessionSettings.h"
 #include "MainMenuWidget.generated.h"
 
 
@@ -17,6 +18,10 @@ UCLASS()
 class EARTHHERO_API UMainMenuWidget : public UUserWidget
 {
 	GENERATED_BODY()
+
+	UMainMenuWidget(const FObjectInitializer &ObjectInitializer);
+	TSubclassOf<UUserWidget> LobbyRowWidgetClass;
+	
 public:
 	UFUNCTION(BlueprintCallable)
 	void MenuSetup(int32 NumberOfPublicConnections = 4, FString TypeOfMatch = FString(TEXT("FreeForAll")), FString LobbyPath = FString(TEXT("/Game/ThirdPersonCPP/Maps/Lobby")));
@@ -87,4 +92,11 @@ private:
 	UFUNCTION()
 	void LobbyListBtnClicked();
 	void UpdateLobbyList();
+	void FindLobbys();
+
+	void HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRef<FOnlineSessionSearch> Search);
+	FDelegateHandle FindSessionsDelegateHandle;
+
+
+	TArray<FOnlineSessionSearchResult> LobbyList;
 };
