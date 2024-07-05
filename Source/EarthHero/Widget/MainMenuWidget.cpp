@@ -4,13 +4,27 @@
 #include "Components/Button.h"
 #include "Components/CheckBox.h"
 //#include "MultiplayerSessionsSubsystem.h"
+#include "LobbyRowWidget.h"
 #include "../EHGameInstance.h"
 #include "OnlineSessionSettings.h"
 #include "OnlineSubsystem.h"
+#include "Components/Border.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 
+
+UMainMenuWidget::UMainMenuWidget(const FObjectInitializer &ObjectInitializer)
+	: Super(ObjectInitializer)
+{
+	//친구 초대 row 블루프린트
+	static ConstructorHelpers::FClassFinder<UUserWidget> LobbyRowWidgetAsset(TEXT("UserWidget'/Game/Blueprints/Menu/WBP_Lobby_Row.WBP_Lobby_Row_C'"));
+	if (LobbyRowWidgetAsset.Succeeded())
+	{
+		LobbyRowWidgetClass = LobbyRowWidgetAsset.Class;
+	}
+}
+	
 void UMainMenuWidget::MenuSetup(int32 NumberOfPublicConnections, FString TypeOfMatch, FString LobbyPath)
 {
 	/*
@@ -69,6 +83,11 @@ bool UMainMenuWidget::Initialize()
 	if (Exit_Btn)
 	{
 		Exit_Btn->OnClicked.AddDynamic(this, &ThisClass::Exit_BtnClicked);
+	}
+
+	if(LobbyList_Btn)
+	{
+		LobbyList_Btn->OnClicked.AddDynamic(this, &ThisClass::LobbyListBtnClicked);
 	}
 
 	return true;
@@ -225,4 +244,117 @@ void UMainMenuWidget::NativeDestruct()
 	MenuTearDown();
 
 	Super::NativeDestruct();
+}
+
+
+
+void UMainMenuWidget::LobbyListBtnClicked()
+{
+	if(LobbyList_Bd)
+	{
+		if(LobbyList_Bd->GetVisibility() == ESlateVisibility::Collapsed)
+		{
+			LobbyList_Bd->SetVisibility(ESlateVisibility::Visible);
+
+			UpdateLobbyList();
+		}
+		else
+			LobbyList_Bd->SetVisibility(ESlateVisibility::Collapsed);
+	}
+}
+
+void UMainMenuWidget::UpdateLobbyList()
+{
+	LobbyList.Empty();
+	
+	FindLobbys();
+	
+	//위젯 생성
+	//ULobbyRowWidget* FriendRowWidget = Cast<ULobbyRowWidget>(CreateWidget(GetWorld(), LobbyRowWidgetClass));
+}
+
+
+void UMainMenuWidget::FindLobbys()
+{
+    IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
+    if (Subsystem)
+    {
+        IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
+        if (Session.IsValid())
+        {
+            TSharedRef<FOnlineSessionSearch> Search = MakeShared<FOnlineSessionSearch>();
+
+            Search->QuerySettings.SearchParams.Empty();
+            Search->MaxSearchResults = 1000;
+            Search->bIsLanQuery = false;
+        	
+            FindSessionsDelegateHandle =
+                Session->AddOnFindSessionsCompleteDelegate_Handle(FOnFindSessionsCompleteDelegate::CreateUObject(
+                    this,
+                    &ThisClass::HandleFindSessionsCompleted,
+                    Search));
+
+            UE_LOG(LogTemp, Log, TEXT("Finding Lobby"));
+
+            if (!Session->FindSessions(0, Search))
+            {
+                UE_LOG(LogTemp, Warning, TEXT("Find lobby failed"));
+            }
+        }
+    }
+}
+
+void UMainMenuWidget::HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRef<FOnlineSessionSearch> Search)
+{
+    IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
+    if (Subsystem)
+    {
+        IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
+        if (Session.IsValid())
+        {
+            if (bWasSuccessful)
+            {
+                UE_LOG(LogTemp, Log, TEXT("Found lobby : %d"), Search->SearchResults.Num());
+
+                bool bIsFind = false;
+
+                for (FOnlineSessionSearchResult SessionInSearchResult : Search->SearchResults)
+                {
+                    FString GameName;
+                    bool bKeyValueFound1 = SessionInSearchResult.Session.SessionSettings.Get("GameName", GameName);
+
+                    FString PortNumber;
+                    bool bKeyValueFound2 = SessionInSearchResult.Session.SessionSettings.Get("PortNumber", PortNumber);
+                    
+                    int32 NumberOfJoinedPlayers;
+                    bool bKeyValueFound3 = SessionInSearchResult.Session.SessionSettings.Get("NumberOfJoinedPlayers", NumberOfJoinedPlayers);
+
+                    bool bAdvertise;
+                    bool bKeyValueFound4 = SessionInSearchResult.Session.SessionSettings.Get("Advertise", bAdvertise);
+
+                    if (bKeyValueFound1 && bKeyValueFound2 && bKeyValueFound3 && bKeyValueFound4)
+                    {
+                        if (GameName == "EH2" && bAdvertise)
+                        {
+                        	UE_LOG(LogTemp, Log, TEXT("Valid lobby : %s, %d"), *PortNumber, NumberOfJoinedPlayers);
+
+                        	//리스트 추가
+                        	LobbyList.Add(SessionInSearchResult);
+                        }
+                    }
+                }
+                //들어갈 로비를 찾지 못함
+                if (!bIsFind && GEngine) GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Yellow, FString::Printf(TEXT("No lobby")));
+            }
+            else
+            {
+                UE_LOG(LogTemp, Warning, TEXT("Find lobbys failed."));
+                if(GEngine)
+                    GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Yellow, FString::Printf(TEXT("Find lobbys failed!")));
+            }
+
+            Session->ClearOnFindSessionsCompleteDelegate_Handle(FindSessionsDelegateHandle);
+            FindSessionsDelegateHandle.Reset();
+        }
+    }
 }

@@ -20,7 +20,6 @@ ULobbyWidget::ULobbyWidget(const FObjectInitializer &ObjectInitializer)
 	: Super(ObjectInitializer)
 {
 	//친구 초대 row 블루프린트
-	
 	static ConstructorHelpers::FClassFinder<UUserWidget> FriendRowWidgetAsset(TEXT("UserWidget'/Game/Blueprints/Menu/WBP_Friend_Row.WBP_Friend_Row_C'"));
 	if (FriendRowWidgetAsset.Succeeded())
 	{
@@ -98,42 +97,6 @@ void ULobbyWidget::ReadFriendsListCompleted(int32 LocalUserNum, bool bWasSuccess
 					UE_LOG(LogTemp, Log, TEXT("Friend List : %d"), FriendList.Num());
 					
 					//하나씩 살피며
-					for (TSharedRef<FOnlineFriend> Friend : FriendList)
-					{
-						CSteamID FriendSteamId(*(uint64*)Friend->GetUserId()->GetBytes());
-
-						bool bFriendOnline = SteamFriends()->GetFriendPersonaState(FriendSteamId) == k_EPersonaStateOnline;
-						
-						int FriendRowIndex = FriendSteamIds.IndexOfByKey(FriendSteamId);
-						
-						//이미 관리 중인 친구라면
-						if(FriendRowIndex != INDEX_NONE)
-						{
-							//해당 위젯 정보 업데이트
-							if (FriendRowWidgets[FriendRowIndex])
-							{
-								FriendRowWidgets[FriendRowIndex]->UpdateFriendInfo(Friend, bFriendOnline);
-							}
-						}
-						//새로운 친구라면
-						else
-						{
-							FriendSteamIds.Add(FriendSteamId);
-							
-							//위젯 생성
-							UFriendRowWidget* FriendRowWidget = Cast<UFriendRowWidget>(CreateWidget(GetWorld(), FriendRowWidgetClass));
-							FriendRowWidgets.Add(FriendRowWidget);
-						
-							if (FriendRowWidget)
-							{
-								//위젯에 친구 정보 넘김
-								FriendRowWidget->UpdateFriendInfo(Friend, bFriendOnline);
-						
-								Friend_Scr->AddChild(FriendRowWidget);
-							}
-						}
-					}
-
 					for (TSharedRef<FOnlineFriend> Friend : FriendList)
 					{
 						CSteamID FriendSteamId(*(uint64*)Friend->GetUserId()->GetBytes());
