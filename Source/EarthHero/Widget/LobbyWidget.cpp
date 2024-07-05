@@ -8,9 +8,22 @@
 #include "Interfaces/OnlineFriendsInterface.h"
 #include <EarthHero/PlayerController/LobbyPlayerController.h>
 
+#include "FriendRowWidget.h"
 #include "Components/CheckBox.h"
 #include "Components/Image.h"
 #include "EarthHero/EHGameInstance.h"
+
+ULobbyWidget::ULobbyWidget(const FObjectInitializer &ObjectInitializer)
+	: Super(ObjectInitializer)
+{
+	//친구 초대 row 블루프린트
+	
+	static ConstructorHelpers::FClassFinder<UUserWidget> FriendRowWidgetAsset(TEXT("UserWidget'/Game/Blueprints/Menu/WBP_Friend_Row.WBP_Friend_Row_C'"));
+	if (FriendRowWidgetAsset.Succeeded())
+	{
+		FriendRowWidgetClass = FriendRowWidgetAsset.Class;
+	}
+}
 
 bool ULobbyWidget::Initialize()
 {
@@ -43,8 +56,63 @@ bool ULobbyWidget::Initialize()
 		if (EHGameInstance->IsCheckedPrivate) Private_Cb->SetCheckedState(ECheckBoxState::Checked);
 		else Private_Cb->SetCheckedState(ECheckBoxState::Unchecked);
 	}
+
+	//친구 불러오기
+	
+	IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
+	if (Subsystem)
+	{
+		IOnlineFriendsPtr Friends = Subsystem->GetFriendsInterface();
+		if (Friends)
+		{
+			Friends->ReadFriendsList(
+				0,
+				TEXT(""),
+				FOnReadFriendsListComplete::CreateUObject(this, &ULobbyWidget::ReadFriendsListCompleted)
+			);
+		}
+	}
 	
 	return true;
+}
+
+void ULobbyWidget::ReadFriendsListCompleted(int32 LocalUserNum, bool bWasSuccessful, const FString& ListName, const FString& ErrorStr)
+{
+	if (bWasSuccessful)
+	{
+		IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
+		if (Subsystem)
+		{
+			IOnlineFriendsPtr Friends = Subsystem->GetFriendsInterface();
+			if (Friends)
+			{
+				if (FriendRowWidgetClass)
+				{
+					//친구 리스트 얻고
+					TArray<TSharedRef<FOnlineFriend>> FriendList;
+					Friends->GetFriendsList(LocalUserNum, ListName, FriendList);
+
+					UE_LOG(LogTemp, Log, TEXT("Friend List : %d"), FriendList.Num());
+					
+					//하나씩 추가
+					for (TSharedRef<FOnlineFriend> Friend : FriendList)
+					{
+						//위젯 생성
+						UFriendRowWidget* FriendRowWidget = Cast<UFriendRowWidget>(CreateWidget(GetWorld(), FriendRowWidgetClass));
+						
+						if (FriendRowWidget)
+						{
+							//위젯에 친구 정보 넘김
+							FriendRowWidget->SetFriendInfo(Friend);
+						
+							Friend_Scr->AddChild(FriendRowWidget);
+						}
+					}
+				}
+			}
+		}
+	}
+	else UE_LOG(LogTemp, Warning, TEXT("Failed to read Firends list"));
 }
 
 void ULobbyWidget::HostAssignment(bool bHostAssignment)

@@ -59,8 +59,8 @@ void ALobbyGameSession::CreateSession(FString PortNumber)
             SessionSettings->bAllowInvites = true;
             SessionSettings->bAllowJoinInProgress = false; // 시작 후 참가 불가
 
-            //SessionSettings->bUsesStats = false; // ���� ��� ���� 
-            //SessionSettings->bAntiCheatProtected = true; // ��Ƽ ġƮ ��ȣ ����
+            //SessionSettings->bUsesStats = false; // 업적관련?
+            //SessionSettings->bAntiCheatProtected = true; // 지원하나?
             
             SessionSettings->Set("GameName", FString("EH2"), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
             SessionSettings->Set("PortNumber", PortNumber, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);

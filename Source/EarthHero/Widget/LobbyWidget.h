@@ -16,8 +16,8 @@ class EARTHHERO_API ULobbyWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
-	//ULobbyWidget(const FObjectInitializer &ObjectInitializer);
-	//TSubclassOf<class UUserWidget> FriendRowWidgetClass;
+	ULobbyWidget(const FObjectInitializer &ObjectInitializer);
+	TSubclassOf<class UUserWidget> FriendRowWidgetClass;
 	
 	virtual bool Initialize();
 public:
@@ -64,9 +64,7 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	UButton* Kick4_Btn;
 
-
-
-
+	
 	UPROPERTY(meta = (BindWidget))
 	UHorizontalBox* Class_Hb;
 	
@@ -96,8 +94,8 @@ private:
 	class UButton* Exit_Btn;
 
 	
-	//UPROPERTY(meta = (BindWidget))
-	//class UScrollBox* Friend_Scr;
+	UPROPERTY(meta = (BindWidget))
+	class UScrollBox* Friend_Scr;
 
 	UFUNCTION()
 	void ReadyClicked();
@@ -167,8 +165,8 @@ public:
 	void AddChatMessage(const FText& Text);
 	
 
-	//protected:
-	//void ReadFriendsListCompleted(int32 LocalUserNum, bool bWasSuccessful, const FString& ListName, const FString& ErrorStr);
+	protected:
+	void ReadFriendsListCompleted(int32 LocalUserNum, bool bWasSuccessful, const FString& ListName, const FString& ErrorStr);
 	//UFUNCTION()
-	//void InviteFriend(FString UserId);
+	//void InviteFriend(UUserWidget* FriendRow);
 };
