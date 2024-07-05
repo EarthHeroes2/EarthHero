@@ -6,10 +6,13 @@
 #include "Blueprint/UserWidget.h"
 #include <Components/EditableTextBox.h>
 #include <Components/ScrollBox.h>
+#include <steam/steamclientpublic.h>
 
 #include "Components/HorizontalBox.h"
 #include "EarthHero/Enum/Enums.h"
 #include "LobbyWidget.generated.h"
+
+class UFriendRowWidget;
 
 UCLASS()
 class EARTHHERO_API ULobbyWidget : public UUserWidget
@@ -167,6 +170,10 @@ public:
 
 	protected:
 	void ReadFriendsListCompleted(int32 LocalUserNum, bool bWasSuccessful, const FString& ListName, const FString& ErrorStr);
-	//UFUNCTION()
-	//void InviteFriend(UUserWidget* FriendRow);
+
+	
+	TArray<CSteamID> FriendSteamIds;
+	TArray<UFriendRowWidget*> FriendRowWidgets;
+
+	
 };

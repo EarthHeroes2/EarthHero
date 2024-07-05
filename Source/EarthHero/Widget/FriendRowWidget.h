@@ -18,7 +18,7 @@ class EARTHHERO_API UFriendRowWidget : public UUserWidget
 	virtual bool Initialize();
 
 public:
-	void SetFriendInfo(TSharedRef<FOnlineFriend> Friend);
+	void UpdateFriendInfo(TSharedRef<FOnlineFriend> Friend, bool bOnline);
 
 private:
 	TSharedPtr<FOnlineFriend> FriendInfo;

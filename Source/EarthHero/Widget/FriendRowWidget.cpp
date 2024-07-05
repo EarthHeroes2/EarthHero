@@ -13,16 +13,22 @@
 bool UFriendRowWidget::Initialize()
 {
 	Super::Initialize();
+
+	//너무빨리 버튼을 생성해주나?
+	FriendInvite_Btn->OnClicked.AddDynamic(this, &UFriendRowWidget::InviteClicked);
 	
 	return true;
 }
 
-void UFriendRowWidget::SetFriendInfo(TSharedRef<FOnlineFriend> Friend)
+void UFriendRowWidget::UpdateFriendInfo(TSharedRef<FOnlineFriend> Friend, bool bOnline)
 {
 	FriendInfo = Friend;
+
+	//친구 온라인 여부에 따라 위젯 활성화
+	if(bOnline) this->SetIsEnabled(true);
+	else this->SetIsEnabled(false);
 	
 	FriendName_Tb->SetText(FText::FromString(FriendInfo->GetDisplayName()));
-	FriendInvite_Btn->OnClicked.AddDynamic(this, &UFriendRowWidget::InviteClicked);
 }
 
 void UFriendRowWidget::InviteClicked()
