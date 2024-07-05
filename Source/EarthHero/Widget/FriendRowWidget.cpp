@@ -39,7 +39,7 @@ void UFriendRowWidget::InviteClicked()
 			{
 				TArray<TSharedRef<const FUniqueNetId>> FriendsToInvite;
 				FriendsToInvite.Add(FriendNetId.ToSharedRef());
-				Sessions->SendSessionInviteToFriend(0, NAME_GameSession, *FriendNetId);
+				Sessions->SendSessionInviteToFriend(0, "MainSession", *FriendNetId);
 			}
 		}
 	}
