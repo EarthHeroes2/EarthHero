@@ -20,7 +20,7 @@ bool UFriendRowWidget::Initialize()
 void UFriendRowWidget::SetFriendInfo(TSharedRef<FOnlineFriend> Friend)
 {
 	FriendInfo = Friend;
-	//FriendImage_Img //STEAM API 사용해야함
+	
 	FriendName_Tb->SetText(FText::FromString(FriendInfo->GetDisplayName()));
 	FriendInvite_Btn->OnClicked.AddDynamic(this, &UFriendRowWidget::InviteClicked);
 }
@@ -33,7 +33,6 @@ void UFriendRowWidget::InviteClicked()
 		IOnlineSessionPtr Sessions = Subsystem->GetSessionInterface();
 		if (Sessions.IsValid())
 		{
-			
 			FUniqueNetIdPtr FriendNetId = Subsystem->GetIdentityInterface()->CreateUniquePlayerId(FriendInfo->GetUserId()->ToString());
 			if (FriendNetId.IsValid())
 			{

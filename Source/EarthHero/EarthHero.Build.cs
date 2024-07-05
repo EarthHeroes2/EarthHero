@@ -22,7 +22,8 @@ public class EarthHero : ModuleRules
                 "UMG",
                 "Slate",
                 "SlateCore",
-                "Paper2D"
+                "Paper2D",
+                "Steamworks"
             }
         );
 

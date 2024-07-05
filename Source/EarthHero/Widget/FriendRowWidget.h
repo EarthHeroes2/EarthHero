@@ -19,6 +19,7 @@ class EARTHHERO_API UFriendRowWidget : public UUserWidget
 
 public:
 	void SetFriendInfo(TSharedRef<FOnlineFriend> Friend);
+
 private:
 	TSharedPtr<FOnlineFriend> FriendInfo;
 
@@ -27,10 +28,7 @@ private:
 	
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* FriendName_Tb;
-
-	UPROPERTY(meta = (BindWidget))
-	class UImage* FriendImage_Img;
-
+	
 	UPROPERTY(meta = (BindWidget))
 	class UButton* FriendInvite_Btn;
 

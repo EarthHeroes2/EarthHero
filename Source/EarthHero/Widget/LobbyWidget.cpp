@@ -13,6 +13,9 @@
 #include "Components/Image.h"
 #include "EarthHero/EHGameInstance.h"
 
+#include "OnlineSubsystemSteam.h"
+#include "steam/steam_api.h"
+
 ULobbyWidget::ULobbyWidget(const FObjectInitializer &ObjectInitializer)
 	: Super(ObjectInitializer)
 {
@@ -97,15 +100,23 @@ void ULobbyWidget::ReadFriendsListCompleted(int32 LocalUserNum, bool bWasSuccess
 					//하나씩 추가
 					for (TSharedRef<FOnlineFriend> Friend : FriendList)
 					{
-						//위젯 생성
-						UFriendRowWidget* FriendRowWidget = Cast<UFriendRowWidget>(CreateWidget(GetWorld(), FriendRowWidgetClass));
+						CSteamID FriendSteamId(*(uint64*)Friend->GetUserId()->GetBytes());
 						
-						if (FriendRowWidget)
+						bool bIsFriendOnline = SteamFriends()->GetFriendPersonaState(FriendSteamId) == k_EPersonaStateOnline;
+
+						//온라인인 친구만..
+						if(bIsFriendOnline)
 						{
-							//위젯에 친구 정보 넘김
-							FriendRowWidget->SetFriendInfo(Friend);
+							//위젯 생성
+							UFriendRowWidget* FriendRowWidget = Cast<UFriendRowWidget>(CreateWidget(GetWorld(), FriendRowWidgetClass));
 						
-							Friend_Scr->AddChild(FriendRowWidget);
+							if (FriendRowWidget)
+							{
+								//위젯에 친구 정보 넘김
+								FriendRowWidget->SetFriendInfo(Friend);
+						
+								Friend_Scr->AddChild(FriendRowWidget);
+							}
 						}
 					}
 				}
