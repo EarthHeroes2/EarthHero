@@ -31,7 +31,8 @@ private:
 	virtual void InitializeStatData_Implementation(FName HeroName) override;
 
 	/*슈터용 스텟*/
-
+	class AEHShooter *Shooter;
+	
 	//헤드샷 피해
 	float SH_HeadShot = 1.f;
 	//장탄 수

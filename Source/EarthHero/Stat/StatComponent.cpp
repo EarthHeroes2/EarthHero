@@ -27,7 +27,10 @@ void UStatComponent::BeginPlay()
 	Super::BeginPlay();
 	
 	//스텟 초기화(서버->클라이언트)
-	InitializeStatData("Hero");
+	if (GetOwner()->HasAuthority())
+	{
+		InitializeStatData("Hero");
+	}
 
 	//TakeDamage를 Delecate 설정
 	// if (GetOwner())

@@ -6,25 +6,33 @@
 #include "EHShooter.h"
 #include "Camera/CameraComponent.h"
 #include "EarthHero/Stat/ShooterStatComponent.h"
-#include "EarthHero/Stat/StatComponent.h"
 #include "EarthHero/Stat/DamageType/NormalDamageType.h"
 #include "Kismet/GameplayStatics.h"
 
 UShooterCombatComponent::UShooterCombatComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
+}
 
+void UShooterCombatComponent::BeginPlay()
+{
+	Super::BeginPlay();
+	Shooter = Cast<AEHShooter>(GetOwner());
 }
 
 void UShooterCombatComponent::Fire()
 {
-	if(!Shooter) return;
-	
+	if (!Shooter) return;
 	if(bCanFire)
 	{
 		bCanFire = false;
-		
-		FRotator CameraRotation = Shooter->GetController()->GetControlRotation();
+
+		if (!GetOwner()->GetInstigatorController())
+		{
+			UE_LOG(LogClass, Warning, TEXT("No Shooters Controller"));
+			return;
+		}
+		FRotator CameraRotation = Shooter->GetInstigatorController()->GetControlRotation();
 		FVector StartLocation = Shooter->GetFPSCamera()->GetComponentLocation();
 		FVector EndLocation = StartLocation + (CameraRotation.Vector() * 15000.f);
 		FVector MuzzleLocation = Shooter->GetEquippedWeapon()->GetSocketLocation(FName("FireSocket"));
@@ -53,18 +61,19 @@ void UShooterCombatComponent::Server_Fire_Implementation(FVector TraceStartVecto
 	if(bHit)
 	{
 		AEHCharacter *HitActor = Cast<AEHCharacter>(HitResult.GetActor());
-		if (HitActor)
+		if (!Shooter)
 		{
-			//HitActor->StatComponent->DamageTaken(10 ,UNormalDamageType::StaticClass(), HitResult, GetOwner()->GetInstigatorController(), Shooter);
-			UShooterStatComponent *TempComponent =  Cast<UShooterStatComponent>(Shooter->StatComponent);
-			if (TempComponent)
-			{
-				TempComponent->ShooterDamage(HitActor, HitResult, UNormalDamageType::StaticClass(), Shooter);
-			}
-			else
-			{
-				UE_LOG(LogTemp, Error, TEXT("EHShooterCombatComponent.cpp: Fail to Cast ShooterStatComponent"));
-			}
+			UE_LOG(LogClass, Warning, TEXT("ShooterCombatComponent::Fire() : No Shooter"));
+			return;
+		}
+		if (Shooter && !Shooter->ShooterStatComponent)
+		{
+			UE_LOG(LogClass, Warning, TEXT("ShooterCombatComponent::Fire() : No ShooterStatComponent"));
+			return;
+		}
+		if (HitActor && Shooter && Shooter->ShooterStatComponent)
+		{
+			Shooter->ShooterStatComponent->ShooterDamage(HitActor, HitResult, UNormalDamageType::StaticClass(), Shooter);
 		}
 		// TODO
 		// a. If Target is an Enemy, Call the Damage Function

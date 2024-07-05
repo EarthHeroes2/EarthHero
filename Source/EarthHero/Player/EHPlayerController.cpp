@@ -38,7 +38,6 @@ void AEHPlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
 	
-	//승언 : InGameHUD를 Viewport에 추가
 	ClientPossess();
 }
 
@@ -51,7 +50,7 @@ void AEHPlayerController::ClientPossess_Implementation()
 void AEHPlayerController::InitializeHUD()
 {
 	AEHPlayerState* MyPlayerState = Cast<AEHPlayerState>(PlayerState);
-	if (MyPlayerState && MyPlayerState->ShooterStatComponent)
+	if (MyPlayerState && MyPlayerState->GetStatComponent())
 	{
 		GetWorldTimerManager().ClearTimer(PlayerStateCheckTimerHandle); // 타이머 해제
 
@@ -59,7 +58,7 @@ void AEHPlayerController::InitializeHUD()
 		HUD = Cast<UInGameHUD>(CreateWidget(this, InGameHUD));
 		if (HUD)
 		{
-			HUD->InitializePlayerState(MyPlayerState->ShooterStatComponent);
+			HUD->InitializePlayerState(MyPlayerState->GetStatComponent());
 			HUD->AddToViewport();
 		}
 	}
