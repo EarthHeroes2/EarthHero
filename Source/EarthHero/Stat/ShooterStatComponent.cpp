@@ -3,9 +3,8 @@
 
 #include "ShooterStatComponent.h"
 #include "StatCalculationLibrary.h"
-#include "DamageType/NormalDamageType.h"
 #include "EarthHero/Character/EHCharacter.h"
-#include "Kismet/GameplayStatics.h"
+#include "EarthHero/Character/Shooter/EHShooter.h"
 
 //슈터 생성자
 UShooterStatComponent::UShooterStatComponent()
@@ -21,6 +20,7 @@ void UShooterStatComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 void UShooterStatComponent::BeginPlay()
 {
 	Super::BeginPlay();
+	Shooter = Cast<AEHShooter>(GetOwner());
 }
 
 //슈터 데미지 받는 함수(오버라이드)

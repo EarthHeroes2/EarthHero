@@ -13,6 +13,7 @@ class EARTHHERO_API AEHShooter : public AEHCharacter
 	GENERATED_BODY()
 
 	friend class UShooterCombatComponent;
+	friend class UShooterStatComponent;
 	
 public:
 	AEHShooter();
@@ -23,8 +24,16 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void PostInitializeComponents() override;
 
+	virtual void PossessedBy(AController* NewController) override;
+
 	UPROPERTY(VisibleAnywhere, Category = "Combat")
 	UShooterCombatComponent* CombatComponent;
+
+	UPROPERTY(VisibleAnywhere, Category = "Combat")
+	UShooterStatComponent* ShooterStatComponent;
+
+	UPROPERTY()
+	AController *PlayerController;
 	
 private:
 	
@@ -35,6 +44,5 @@ private:
 
 	FTimerHandle ShootTimerHandle;
 	bool bCanFire = true;
-
 
 };

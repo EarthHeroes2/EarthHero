@@ -7,6 +7,6 @@ enum EClassType
 	Warrior,
 	Mechanic,
 	Shooter,
-	Archor,
+	Archer,
 	NumberOfClass
 };

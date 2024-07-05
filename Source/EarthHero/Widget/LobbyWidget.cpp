@@ -193,7 +193,7 @@ void ULobbyWidget::ShooterClicked()
 }
 void ULobbyWidget::ArchorClicked()
 {
-	ChangeSelectedButton(Archor);
+	ChangeSelectedButton(Archer);
 }
 
 void ULobbyWidget::ChangePrivateState(bool bPrivate)

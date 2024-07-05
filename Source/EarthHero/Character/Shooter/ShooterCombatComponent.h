@@ -26,9 +26,12 @@ protected:
 	UFUNCTION(NetMulticast, Reliable)
 	void NetMulticast_Fire(FVector HitLocation, FVector MuzzleVector);
 
+	virtual void BeginPlay() override;
+	
 	void ResetFire();
 
 private:
+	UPROPERTY()
 	AEHShooter* Shooter;
 
 	FTimerHandle ShootTimerHandle;

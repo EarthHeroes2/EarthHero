@@ -115,14 +115,18 @@ void AEHCharacter::PossessedBy(AController* NewController)
     AEHPlayerState* MyPlayerState =  Cast<AEHPlayerState>(NewController->PlayerState);  
     if (MyPlayerState)
     {
-        UE_LOG(LogTemp, Error, TEXT("EHCharacter.cpp: PlayerState Set Success"));
-        StatComponent = MyPlayerState->ShooterStatComponent;
+        StatComponent = MyPlayerState->GetStatComponent();
+        if (StatComponent)
+        {
+            UE_LOG(LogTemp, Error, TEXT("EHCharacter.cpp: PlayerState Set Success"));
+        }
     }
     else
     {
         UE_LOG(LogTemp, Error, TEXT("EHCharacter.cpp: Fail to Get PlayerState"));
     }
 }
+
 
 void AEHCharacter::Initialize()
 {

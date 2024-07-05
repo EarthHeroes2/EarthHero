@@ -212,7 +212,7 @@ void ALobbyGameMode::UpdateCharacter(ALobbyPlayerController* LobbyPlayerControll
 		case Shooter:
 			LobbyPlayerController->LobbyCharacter = GetWorld()->SpawnActor<AEHShooter>(EHShooterClass, SpawnLocations[SpawnSpotIndex], FRotator(0.0f, 180.0f, 0.0f), SpawnParams);
 			break;
-		case Archor:
+		case Archer:
 			break;
 		default:
 			break;
