@@ -6,24 +6,28 @@
 #include "Blueprint/UserWidget.h"
 #include <Components/EditableTextBox.h>
 #include <Components/ScrollBox.h>
+#include <steam/steamclientpublic.h>
 
 #include "Components/HorizontalBox.h"
 #include "EarthHero/Enum/Enums.h"
 #include "LobbyWidget.generated.h"
+
+class UFriendRowWidget;
 
 UCLASS()
 class EARTHHERO_API ULobbyWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
-	//ULobbyWidget(const FObjectInitializer &ObjectInitializer);
-	//TSubclassOf<class UUserWidget> FriendRowWidgetClass;
+	ULobbyWidget(const FObjectInitializer &ObjectInitializer);
+	TSubclassOf<class UUserWidget> FriendRowWidgetClass;
 	
 	virtual bool Initialize();
 public:
 	void HostAssignment(bool bHostAssignment);
 
 private:
+	int MaxNumberOfPlayers = 4; //원래 로비 게임 세션에도 있지만... 어차피 4명 고정게임이라 
 	int NumberOfPlayers;
 	int bHost = false;
 	EClassType SelectClass = Warrior;
@@ -63,9 +67,7 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	UButton* Kick4_Btn;
 
-
-
-
+	
 	UPROPERTY(meta = (BindWidget))
 	UHorizontalBox* Class_Hb;
 	
@@ -95,8 +97,8 @@ private:
 	class UButton* Exit_Btn;
 
 	
-	//UPROPERTY(meta = (BindWidget))
-	//class UScrollBox* Friend_Scr;
+	UPROPERTY(meta = (BindWidget))
+	class UScrollBox* Friend_Scr;
 
 	UFUNCTION()
 	void ReadyClicked();
@@ -166,8 +168,12 @@ public:
 	void AddChatMessage(const FText& Text);
 	
 
-	//protected:
-	//void ReadFriendsListCompleted(int32 LocalUserNum, bool bWasSuccessful, const FString& ListName, const FString& ErrorStr);
-	//UFUNCTION()
-	//void InviteFriend(FString UserId);
+	protected:
+	void ReadFriendsListCompleted(int32 LocalUserNum, bool bWasSuccessful, const FString& ListName, const FString& ErrorStr);
+
+	
+	TArray<CSteamID> FriendSteamIds;
+	TArray<UFriendRowWidget*> FriendRowWidgets;
+
+	
 };

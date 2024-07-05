@@ -52,18 +52,20 @@ void ALobbyGameSession::CreateSession(FString PortNumber)
             SessionSettings->bIsLANMatch = false;
             SessionSettings->NumPublicConnections = MaxNumberOfPlayersInSession;
             SessionSettings->NumPrivateConnections = 0;
-            SessionSettings->bShouldAdvertise = true; // ���� ����
+            SessionSettings->bShouldAdvertise = true; //일단 무조건 public
             SessionSettings->bUsesPresence = false; // 무조건 false여야 함
             SessionSettings->bUseLobbiesIfAvailable = false; // 무조건 false여야 함
 
             SessionSettings->bAllowInvites = true;
             SessionSettings->bAllowJoinInProgress = false; // 시작 후 참가 불가
 
-            //SessionSettings->bUsesStats = false; // ���� ��� ���� 
-            //SessionSettings->bAntiCheatProtected = true; // ��Ƽ ġƮ ��ȣ ����
+            //SessionSettings->bUsesStats = false; // 업적관련?
+            //SessionSettings->bAntiCheatProtected = true; // 지원하나?
             
             SessionSettings->Set("GameName", FString("EH2"), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
             SessionSettings->Set("PortNumber", PortNumber, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+            SessionSettings->Set("NumberOfJoinedPlayers", 0, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+            SessionSettings->Set("Advertise", true, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 
             UE_LOG(LogTemp, Log, TEXT("Creating lobby..."));
             
@@ -146,10 +148,14 @@ void ALobbyGameSession::HandleRegisterPlayerCompleted(FName EOSSessionName, cons
         IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
         if (Session.IsValid())
         {
-            if (bWasSuccesful) //����
+            if (bWasSuccesful)
             {
                 UE_LOG(LogTemp, Log, TEXT("Player registered in Lobby!"));
-                NumberOfPlayersInSession++; //�÷��̾� �� ������
+
+                NumberOfPlayersInSession++;
+
+                //세션 정보에 참가한 사람 수 업데이트
+                UpdateNumberOfJoinedPlayers();
 
                 //첫플레이어 = 방장
                 if (NumberOfPlayersInSession == 1)
@@ -241,6 +247,8 @@ void ALobbyGameSession::UnregisterPlayer(const APlayerController* ExitingPlayer)
                 ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
                 if(LobbyGameMode)
                 {
+                    UE_LOG(LogTemp, Log, TEXT("Remove exit player information..."));
+                    
                     const ALobbyPlayerController* ExitingLobbyPlayerController = Cast<ALobbyPlayerController>(ExitingPlayer);
                     LobbyGameMode->RemovePlayerInfo(ExitingLobbyPlayerController);
                 }
@@ -254,7 +262,7 @@ void ALobbyGameSession::UnregisterPlayer(const APlayerController* ExitingPlayer)
                             &ThisClass::HandleUnregisterPlayerCompleted));
 
                     // ���ǿ��� �÷��̾� ����
-                    if (ExitingPlayer && !Session->UnregisterPlayer(SessionName, *ExitingPlayer->PlayerState->UniqueId))
+                    if (!Session->UnregisterPlayer(SessionName, *ExitingPlayer->PlayerState->UniqueId))
                     {
                         UE_LOG(LogTemp, Warning, TEXT("Failed to Unregister Player!"));
                         Session->ClearOnUnregisterPlayersCompleteDelegate_Handle(UnregisterPlayerDelegateHandle);
@@ -285,7 +293,7 @@ void ALobbyGameSession::HandleUnregisterPlayerCompleted(FName EOSSessionName, co
             {
                 UE_LOG(LogTemp, Log, TEXT("Player unregistered in Lobby!"));
 
-                // ������ �������� Ȯ��
+                // 방장이 나갔다면 새로운 방장을 찾음
                 for (const FUniqueNetIdRef& PlayerId : PlayerIds)
                 {
                     if (HostPlayerId == PlayerId)
@@ -316,8 +324,11 @@ void ALobbyGameSession::NotifyLogout(const APlayerController* ExitingPlayer)
     if (IsRunningDedicatedServer())
     {
         NumberOfPlayersInSession--;
+
+        //나간 사람 수 세션 정보 업데이트
+        UpdateNumberOfJoinedPlayers();
         
-        //사람이 아무도 없으면 초기화 해줘야함 (수정필요) //테스트
+        //사람이 아무도 없으면 초기화 해줘야함 (수정필요) //테스트!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         if (NumberOfPlayersInSession == 0)
         {
             EndSession();
@@ -442,13 +453,50 @@ void ALobbyGameSession::ChangeAdvertiseState(bool bAdvertise)
             if (SessionSettings)
             {
                 //광고 여부 재설정
-                SessionSettings->bShouldAdvertise = bAdvertise;
+                SessionSettings->Set("Advertise", bAdvertise, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 
                 if (bAdvertise)
                 {
                     UE_LOG(LogTemp, Log, TEXT("Change advertise state : on"));
                 }
                 else UE_LOG(LogTemp, Log, TEXT("Change advertise state : off"));
+
+                UpdateSessionDelegateHandle =
+                    Session->AddOnUpdateSessionCompleteDelegate_Handle(FOnUpdateSessionCompleteDelegate::CreateUObject(
+                        this,
+                        &ALobbyGameSession::HandleUpdateSessionCompleted));
+
+                // 세션 정보 업데이트
+                if (!Session->UpdateSession(SessionName, *SessionSettings, true))
+                {
+                    UE_LOG(LogTemp, Warning, TEXT("Failed to update Lobby"));
+                    Session->ClearOnUpdateSessionCompleteDelegate_Handle(UpdateSessionDelegateHandle);
+                    UpdateSessionDelegateHandle.Reset();
+                }
+            }
+            else
+            {
+                UE_LOG(LogTemp, Warning, TEXT("No session settings found for session: %s"), *SessionName.ToString());
+            }
+        }
+    }
+}
+
+void ALobbyGameSession::UpdateNumberOfJoinedPlayers()
+{
+    IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
+    if (Subsystem)
+    {
+        IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
+        if (Session.IsValid())
+        {
+            //기존 세션 정보 받아오고
+            FOnlineSessionSettings* SessionSettings = Session->GetSessionSettings(SessionName);
+            if (SessionSettings)
+            {
+                SessionSettings->Set("NumberOfJoinedPlayers", NumberOfPlayersInSession, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+                
+                UE_LOG(LogTemp, Log, TEXT("Update Number Of Joined Players : %d"), NumberOfPlayersInSession);
 
                 UpdateSessionDelegateHandle =
                     Session->AddOnUpdateSessionCompleteDelegate_Handle(FOnUpdateSessionCompleteDelegate::CreateUObject(
@@ -530,7 +578,7 @@ void ALobbyGameSession::NewHostFind()
     }
 }
 
-//Ŭ���̾�Ʈ�� ���Դµ� ù��° �÷��̾��� host �ο� 
+//한 클라이언트에게 방장 할당
 void ALobbyGameSession::HostAssignment(APlayerController* HostPlayer)
 {
     if (HostPlayer)
@@ -546,17 +594,22 @@ void ALobbyGameSession::HostAssignment(APlayerController* HostPlayer)
                 IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
                 if (Session.IsValid())
                 {
-                    FNamedOnlineSession* CurrentSession = Session->GetNamedSession(SessionName);
-                    if (CurrentSession)
+                    FOnlineSessionSettings* SessionSettings = Session->GetSessionSettings(SessionName);
+                    if (SessionSettings)
                     {
-                        if(CurrentSession->SessionSettings.bShouldAdvertise)
+                        FOnlineSessionSetting* AdvertiseState = SessionSettings->Settings.Find("Advertise");
+                        if(AdvertiseState)
                         {
-                            UE_LOG(LogTemp, Log, TEXT("Current Advertise : true"));
-                        }
-                        else UE_LOG(LogTemp, Log, TEXT("Current Advertise : false"));
+                            bool bAdvertise = AdvertiseState->Data.ToString().ToBool();
+                            if(bAdvertise)
+                            {
+                                UE_LOG(LogTemp, Log, TEXT("Current Advertise : true"));
+                            }
+                            else UE_LOG(LogTemp, Log, TEXT("Current Advertise : false"));
 
-                        LobbyPlayerController->bHost = true;
-                        LobbyPlayerController->Client_HostAssignment(true, false, CurrentSession->SessionSettings.bShouldAdvertise);
+                            LobbyPlayerController->bHost = true;
+                            LobbyPlayerController->Client_HostAssignment(true, false, bAdvertise);
+                        }
                     }
                     else
                     {

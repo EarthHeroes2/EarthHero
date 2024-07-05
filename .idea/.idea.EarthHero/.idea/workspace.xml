@@ -79,12 +79,9 @@
   <component name="ChangeListManager">
     <list default="true" id="4591bad7-fd9f-4860-903f-8700cd913377" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Menu/WBP_Friend_Row.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Menu/WBP_Lobby.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Menu/WBP_Lobby.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Menu/WBP_LobbySettings.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/GameMode/LobbyGameMode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/GameMode/LobbyGameMode.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/EarthHero/GameSession/LobbyGameSession.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/GameSession/LobbyGameSession.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/EarthHero/PlayerController/LobbyPlayerController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/PlayerController/LobbyPlayerController.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/PlayerController/LobbyPlayerController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/PlayerController/LobbyPlayerController.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/EarthHero/Widget/LobbyWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Widget/LobbyWidget.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/EarthHero/Widget/LobbyWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Widget/LobbyWidget.h" afterDir="false" />
     </list>
@@ -97,9 +94,13 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/EarthHero/Stat/ShooterStatComponent.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/EarthHero/Stat/ShooterStatComponent.h" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/EarthHero/Stat/StatComponent.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/EarthHero/Stat/StatComponent.h" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
@@ -255,7 +256,12 @@
       <workItem from="1720070529582" duration="1314000" />
       <workItem from="1720072468014" duration="1107000" />
       <workItem from="1720075226915" duration="549000" />
-      <workItem from="1720075835441" duration="1387000" />
+      <workItem from="1720075835441" duration="5707000" />
+      <workItem from="1720085538199" duration="536000" />
+      <workItem from="1720086113310" duration="9949000" />
+      <workItem from="1720096698783" duration="1052000" />
+      <workItem from="1720098502266" duration="1407000" />
+      <workItem from="1720100082128" duration="1718000" />
     </task>
     <servers />
   </component>

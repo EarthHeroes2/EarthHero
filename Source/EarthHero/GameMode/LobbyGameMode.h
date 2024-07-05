@@ -27,6 +27,9 @@ protected:
 	TArray<FString> PlayerNameArray;
 	TArray<bool> PlayerReadyStateArray;
 	TArray<EClassType> PlayerClassArray;
+	TArray<int> PlayerSpotArray;
+	
+	TArray<bool> bSpotUsedArray;
 	
 
 	TArray<TSubclassOf<ACharacter>> CharacterClasses;
@@ -50,5 +53,5 @@ public:
 	void SendChatMessage(const FText& Text);
 
 	void UpdateCharacter(ALobbyPlayerController* LobbyPlayerController, EClassType ClassType);
-	int GetLobbyPlayerSpot();
+	int FindLobbyPlayerSpot(ALobbyPlayerController* NewLobbyPlayerController);
 };

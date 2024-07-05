@@ -39,6 +39,7 @@ protected:
 public:
 	void CreateSession(FString PortNumber);
 	void ChangeAdvertiseState(bool bAdvertise);
+	void UpdateNumberOfJoinedPlayers();
 
 protected:
 	void HandleCreateSessionCompleted(FName InSessionName, bool bWasSuccessful);

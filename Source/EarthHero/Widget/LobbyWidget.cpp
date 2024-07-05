@@ -8,9 +8,25 @@
 #include "Interfaces/OnlineFriendsInterface.h"
 #include <EarthHero/PlayerController/LobbyPlayerController.h>
 
+#include "FriendRowWidget.h"
 #include "Components/CheckBox.h"
 #include "Components/Image.h"
 #include "EarthHero/EHGameInstance.h"
+
+#include "OnlineSubsystemSteam.h"
+#include "steam/steam_api.h"
+
+ULobbyWidget::ULobbyWidget(const FObjectInitializer &ObjectInitializer)
+	: Super(ObjectInitializer)
+{
+	//친구 초대 row 블루프린트
+	
+	static ConstructorHelpers::FClassFinder<UUserWidget> FriendRowWidgetAsset(TEXT("UserWidget'/Game/Blueprints/Menu/WBP_Friend_Row.WBP_Friend_Row_C'"));
+	if (FriendRowWidgetAsset.Succeeded())
+	{
+		FriendRowWidgetClass = FriendRowWidgetAsset.Class;
+	}
+}
 
 bool ULobbyWidget::Initialize()
 {
@@ -43,8 +59,121 @@ bool ULobbyWidget::Initialize()
 		if (EHGameInstance->IsCheckedPrivate) Private_Cb->SetCheckedState(ECheckBoxState::Checked);
 		else Private_Cb->SetCheckedState(ECheckBoxState::Unchecked);
 	}
+
+	//친구 불러오기
+	
+	IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
+	if (Subsystem)
+	{
+		IOnlineFriendsPtr Friends = Subsystem->GetFriendsInterface();
+		if (Friends)
+		{
+			Friends->ReadFriendsList(
+				0,
+				TEXT(""),
+				FOnReadFriendsListComplete::CreateUObject(this, &ULobbyWidget::ReadFriendsListCompleted)
+			);
+		}
+	}
 	
 	return true;
+}
+
+void ULobbyWidget::ReadFriendsListCompleted(int32 LocalUserNum, bool bWasSuccessful, const FString& ListName, const FString& ErrorStr)
+{
+	if (bWasSuccessful)
+	{
+		IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
+		if (Subsystem)
+		{
+			IOnlineFriendsPtr Friends = Subsystem->GetFriendsInterface();
+			if (Friends)
+			{
+				if (FriendRowWidgetClass)
+				{
+					//친구 리스트 얻고
+					TArray<TSharedRef<FOnlineFriend>> FriendList;
+					Friends->GetFriendsList(LocalUserNum, ListName, FriendList);
+
+					UE_LOG(LogTemp, Log, TEXT("Friend List : %d"), FriendList.Num());
+					
+					//하나씩 살피며
+					for (TSharedRef<FOnlineFriend> Friend : FriendList)
+					{
+						CSteamID FriendSteamId(*(uint64*)Friend->GetUserId()->GetBytes());
+
+						bool bFriendOnline = SteamFriends()->GetFriendPersonaState(FriendSteamId) == k_EPersonaStateOnline;
+						
+						int FriendRowIndex = FriendSteamIds.IndexOfByKey(FriendSteamId);
+						
+						//이미 관리 중인 친구라면
+						if(FriendRowIndex != INDEX_NONE)
+						{
+							//해당 위젯 정보 업데이트
+							if (FriendRowWidgets[FriendRowIndex])
+							{
+								FriendRowWidgets[FriendRowIndex]->UpdateFriendInfo(Friend, bFriendOnline);
+							}
+						}
+						//새로운 친구라면
+						else
+						{
+							FriendSteamIds.Add(FriendSteamId);
+							
+							//위젯 생성
+							UFriendRowWidget* FriendRowWidget = Cast<UFriendRowWidget>(CreateWidget(GetWorld(), FriendRowWidgetClass));
+							FriendRowWidgets.Add(FriendRowWidget);
+						
+							if (FriendRowWidget)
+							{
+								//위젯에 친구 정보 넘김
+								FriendRowWidget->UpdateFriendInfo(Friend, bFriendOnline);
+						
+								Friend_Scr->AddChild(FriendRowWidget);
+							}
+						}
+					}
+
+					for (TSharedRef<FOnlineFriend> Friend : FriendList)
+					{
+						CSteamID FriendSteamId(*(uint64*)Friend->GetUserId()->GetBytes());
+
+						bool bFriendOnline = SteamFriends()->GetFriendPersonaState(FriendSteamId) == k_EPersonaStateOnline;
+						
+						int FriendRowIndex = FriendSteamIds.IndexOfByKey(FriendSteamId);
+						
+						//이미 관리 중인 친구라면
+						if(FriendRowIndex != INDEX_NONE)
+						{
+							//해당 위젯 정보 업데이트
+							if (FriendRowWidgets[FriendRowIndex])
+							{
+								FriendRowWidgets[FriendRowIndex]->UpdateFriendInfo(Friend, bFriendOnline);
+							}
+						}
+						//새로운 친구라면
+						else
+						{
+							FriendSteamIds.Add(FriendSteamId);
+							
+							//위젯 생성
+							UFriendRowWidget* FriendRowWidget = Cast<UFriendRowWidget>(CreateWidget(GetWorld(), FriendRowWidgetClass));
+							FriendRowWidgets.Add(FriendRowWidget);
+						
+							if (FriendRowWidget)
+							{
+								//위젯에 친구 정보 넘김
+								FriendRowWidget->UpdateFriendInfo(Friend, bFriendOnline);
+						
+								Friend_Scr->AddChild(FriendRowWidget);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	else UE_LOG(LogTemp, Warning, TEXT("Failed to read Firends list"));
 }
 
 void ULobbyWidget::HostAssignment(bool bHostAssignment)
@@ -263,27 +392,41 @@ void ULobbyWidget::ChatTextCommitted(const FText& Text, ETextCommit::Type Commit
 
 void ULobbyWidget::UpdatePlayerNameList(const TArray<FString>& PlayerNameList)
 {
+	int i;
+	
 	NumberOfPlayers = PlayerNameList.Num();
 
 	UE_LOG(LogTemp, Log, TEXT("Widget : update player name list (%d players)"), NumberOfPlayers);
 
-	for (int i = 0; i < NumberOfPlayers; i++)
+	for (i = 0; i < NumberOfPlayers; i++)
 	{
-		UE_LOG(LogTemp, Log, TEXT("Player %d name : %s"), i, *PlayerNameList[i]);
 		PlayerTexts[i]->SetText(FText::FromString(PlayerNameList[i]));
+	}
+	for (; i < MaxNumberOfPlayers; i++)
+	{
+		PlayerTexts[i]->SetText(FText::GetEmpty());
 	}
 }
 
 void ULobbyWidget::UpdateReadyState(const TArray<bool>& PlayerReadyStateArray)
 {
+	int i;
+	
 	NumberOfPlayers = PlayerReadyStateArray.Num();
 
 	UE_LOG(LogTemp, Log, TEXT("Widget : update player ready state (%d players)"), NumberOfPlayers);
 
-	for(int i = 0; i < NumberOfPlayers; i++)
+	//방장은 첫 칸. 방장은 초록색 (임시)
+	PlayerTexts[0]->SetColorAndOpacity(FLinearColor::Green);
+	
+	for(i = 1; i < NumberOfPlayers; i++)
 	{
 		if(PlayerReadyStateArray[i]) PlayerTexts[i]->SetColorAndOpacity(FLinearColor::Red);
 		else PlayerTexts[i]->SetColorAndOpacity(FLinearColor::Black);
+	}
+	for (; i < MaxNumberOfPlayers; i++)
+	{
+		PlayerTexts[i]->SetColorAndOpacity(FLinearColor::Black);
 	}
 }
 
