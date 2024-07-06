@@ -327,6 +327,14 @@ void UMainMenuWidget::UpdateLobbyList(TArray<FOnlineSessionSearchResult> FindLob
 	FindLobby_Btn->SetIsEnabled(true);
 }
 
+//메인메뉴 모든 버튼의 enalbed 설정
+void UMainMenuWidget::SetButtonsEnabled(bool bEnabled)
+{
+	for(UButton* Button : ButtonArray)
+	{
+		if(Button) Button->SetIsEnabled(bEnabled);
+	}
+}
 
 void UMainMenuWidget::FindLobbys(FString Reason)
 {
@@ -353,14 +361,12 @@ void UMainMenuWidget::FindLobbys(FString Reason)
 			UE_LOG(LogTemp, Log, TEXT("Finding Lobby"));
 
 			//로비 리스트 버튼 및 새로 고침 버튼 막음
-			LobbyList_Btn->SetIsEnabled(false);
-			FindLobby_Btn->SetIsEnabled(false); 
+			SetButtonsEnabled(false);
 
 			if (!Session->FindSessions(0, Search))
 			{
 				UE_LOG(LogTemp, Warning, TEXT("Find lobby failed"));
-				LobbyList_Btn->SetIsEnabled(true);
-				FindLobby_Btn->SetIsEnabled(true);
+				SetButtonsEnabled(true);
 			}
 		}
 	}
@@ -449,14 +455,14 @@ void UMainMenuWidget::HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRe
             		{
             			GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Yellow, FString::Printf(TEXT("No lobby")));
             		}
+            		SetButtonsEnabled(true);
             	}
             	
             	if(FindSessionReason == "FindLobby") UpdateLobbyList(FindLobbyList);
             }
             else
             {
-            	LobbyList_Btn->SetIsEnabled(true);
-            	FindLobby_Btn->SetIsEnabled(true);
+            	SetButtonsEnabled(true);
             	
                 UE_LOG(LogTemp, Warning, TEXT("Find lobbys failed."));
                 if(GEngine)
@@ -487,6 +493,7 @@ void UMainMenuWidget::JoinSession()
             if (!Session->JoinSession(0, "MainSession", *SessionToJoin))
             {
                 UE_LOG(LogTemp, Warning, TEXT("Join session failed"));
+            	SetButtonsEnabled(true);
             }
         }
     }
@@ -529,6 +536,8 @@ void UMainMenuWidget::HandleJoinSessionCompleted(FName SessionName, EOnJoinSessi
             JoinSessionDelegateHandle.Reset();
         }
     }
+
+	SetButtonsEnabled(true);
 }
 
 
@@ -541,6 +550,8 @@ void UMainMenuWidget::LeaveSession(FString Reason)
 		IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
 		if (Session.IsValid())
 		{
+			SetButtonsEnabled(false);
+			
 			DestroySessionCompleteDelegatesHandle =
 				Session->OnDestroySessionCompleteDelegates.AddUObject(this, &ThisClass::DestroySessionComplete);
 

@@ -101,6 +101,7 @@ private:
 	UFUNCTION()
 	void FindLobbyBtnClicked();
 	void UpdateLobbyList(TArray<FOnlineSessionSearchResult> FindLobbyList);
+	void SetButtonsEnabled(bool bEnabled);
 	void FindLobbys(FString Reason);
 	void HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRef<FOnlineSessionSearch> Search);
 	void JoinSession();
