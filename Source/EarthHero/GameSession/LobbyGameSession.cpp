@@ -212,8 +212,7 @@ void ALobbyGameSession::HandleStartSessionCompleted(FName EOSSessionName, bool b
             {
                 UE_LOG(LogTemp, Log, TEXT("Lobby Started!"));
 
-                FTimerHandle UnusedHandle;
-                GetWorldTimerManager().SetTimer(UnusedHandle, this, &ALobbyGameSession::ChangeMap, 5.0f, false);
+                ChangeMap();
             }
             else UE_LOG(LogTemp, Warning, TEXT("Failed to start lobby!! (From Callback)"));
 
