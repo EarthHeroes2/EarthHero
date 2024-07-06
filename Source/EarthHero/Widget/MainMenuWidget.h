@@ -113,7 +113,9 @@ private:
 	void SetButtonsEnabled(bool bEnabled);
 	void FindLobbys(FString Reason);
 	void HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRef<FOnlineSessionSearch> Search);
+public:
 	void JoinSession();
+private:
 	void HandleJoinSessionCompleted(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
 	void LeaveSession(FString Reason);
 	void DestroySessionComplete(FName SessionName, bool bWasSuccessful);
@@ -133,9 +135,12 @@ private:
 protected:
 	FName JoinedSessionName;
 	FString LeaveSessionReason, FindSessionReason;
-	
+
+public:
 	FString ConnectString;
 	FOnlineSessionSearchResult* SessionToJoin;
+	
+protected:
 	FDelegateHandle FindSessionsDelegateHandle;
 	FDelegateHandle JoinSessionDelegateHandle;
 	FDelegateHandle DestroySessionCompleteDelegatesHandle;

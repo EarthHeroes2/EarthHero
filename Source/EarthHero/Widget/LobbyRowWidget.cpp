@@ -2,9 +2,14 @@
 
 
 #include "LobbyRowWidget.h"
+
+#include "MainMenuWidget.h"
 #include "OnlineSessionSettings.h"
+#include "Interfaces/OnlineSessionInterface.h"
+#include "OnlineSubsystem.h"
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
+
 
 
 bool ULobbyRowWidget::Initialize()
@@ -19,22 +24,50 @@ bool ULobbyRowWidget::Initialize()
 
 void ULobbyRowWidget::UpdateLobbyInfo(FOnlineSessionSearchResult Lobby)
 {
+	LobbyInfo = Lobby;
+	
 	int NumberOfJoinedPlayers;
 
-	FText MaxNumberOfPlayers = FText::AsNumber(Lobby.Session.SessionSettings.NumPublicConnections);
-	bool bKeyValueFound = Lobby.Session.SessionSettings.Get("NumberOfJoinedPlayers", NumberOfJoinedPlayers);
+	FText MaxNumberOfPlayers = FText::AsNumber(LobbyInfo.Session.SessionSettings.NumPublicConnections);
+	bool bKeyValueFound = LobbyInfo.Session.SessionSettings.Get("NumberOfJoinedPlayers", NumberOfJoinedPlayers);
 	
 	if(bKeyValueFound)
 		PlayerCount_Tb->SetText(FText::Format(FText::FromString("{0}/{1}"), FText::AsNumber(NumberOfJoinedPlayers), MaxNumberOfPlayers));
 
-	LobbyName_Tb->SetText(FText::FromString(Lobby.GetSessionIdStr())); //임시
+	LobbyName_Tb->SetText(FText::FromString(LobbyInfo.GetSessionIdStr())); //임시
 	
-	Ping_Tb->SetText(FText::Format(FText::FromString("{0}ms"), Lobby.PingInMs));
+	Ping_Tb->SetText(FText::Format(FText::FromString("{0}ms"), LobbyInfo.PingInMs));
 }
 
 void ULobbyRowWidget::JoinClicked()
 {
-	
+	IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
+	if (Subsystem)
+	{
+		IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
+		if (Session.IsValid())
+		{
+			FString ConnectString;
+			
+			if (Session->GetResolvedConnectString(LobbyInfo, NAME_GamePort, ConnectString))
+			{
+				FOnlineSessionSearchResult* SessionToJoin = &LobbyInfo;
+				if (SessionToJoin)
+				{
+					if (MainMenuWidget)
+					{
+						MainMenuWidget->ConnectString = ConnectString;
+						MainMenuWidget->SessionToJoin = SessionToJoin;
+						MainMenuWidget->JoinSession();
+					}
+					else
+					{
+						UE_LOG(LogTemp, Error, TEXT("ParentWidget(MainMenuWidget) is not valid"));
+					}
+				}
+			}
+		}
+	}
 }
 
 

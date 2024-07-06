@@ -3,10 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "OnlineSessionSettings.h"
 #include "Blueprint/UserWidget.h"
 #include "LobbyRowWidget.generated.h"
 
 
+class UMainMenuWidget;
 class UButton;
 class UTextBlock;
 /**
@@ -21,6 +23,7 @@ class EARTHHERO_API ULobbyRowWidget : public UUserWidget
 
 public:
 	void UpdateLobbyInfo(FOnlineSessionSearchResult Lobby);
+	UMainMenuWidget* MainMenuWidget;
 
 private:
 
@@ -38,5 +41,7 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* Ping_Tb;
+
+	FOnlineSessionSearchResult LobbyInfo;
 	
 };

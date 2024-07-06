@@ -328,6 +328,7 @@ void UMainMenuWidget::UpdateLobbyList(TArray<FOnlineSessionSearchResult> FindLob
 				LobbyIdList.Add(FindLobby.GetSessionIdStr());
 				LobbyRowList.Add(LobbyRowWidget);
 				
+				LobbyRowWidget->MainMenuWidget = this;
 				LobbyRowWidget->UpdateLobbyInfo(FindLobby);
 			}
 			LobbyList_Vb->AddChild(LobbyRowWidget);
@@ -350,8 +351,7 @@ void UMainMenuWidget::UpdateLobbyList(TArray<FOnlineSessionSearchResult> FindLob
 		else i++;
 	}
 	
-	LobbyList_Btn->SetIsEnabled(true);
-	FindLobby_Btn->SetIsEnabled(true);
+	SetButtonsEnabled(true);
 }
 
 //메인메뉴 모든 버튼의 enalbed 설정
