@@ -87,7 +87,6 @@ void AEHPlayerState::CopyProperties(APlayerState* PlayerState)
 			break;
 	}
 	
-	//작동이 안됨 확인해야 함
 	LoadHeroUpgradeDatatable();
 }
 

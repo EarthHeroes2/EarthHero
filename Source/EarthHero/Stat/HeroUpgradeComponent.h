@@ -16,11 +16,19 @@ class EARTHHERO_API UHeroUpgradeComponent : public UActorComponent
 public:	
 	UHeroUpgradeComponent();
 	
-	// 업그레이드 배열
+	// 업그레이드 배열 목록
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Upgrade")
 	TArray<FHeroUpgradeStructure> HeroUpgrades;
 
+	UFUNCTION()
+	void PushRandomHeroUpgrade();
+
 protected:
 	virtual void BeginPlay() override;
+
+private:
+	// 랜덤 업그레이드를 저장할 배열
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Upgrade", meta = (AllowPrivateAccess = "true"))
+	TArray<FHeroUpgradeStructure> RandomUpgrades;
 		
 };

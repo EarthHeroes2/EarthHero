@@ -118,6 +118,10 @@ void UStatComponent::UpdateExp(float ExpMount)
 {
 	bool isLevelUp = UStatCalculationLibrary::AddExp(HeroStat, ExpMount);
 	UpdateExpUI(GetExpPercent(), HeroStat.Level, isLevelUp);
+	if (isLevelUp)
+	{
+		
+	}
 }
 
 
@@ -132,8 +136,8 @@ void UStatComponent::UpdateExpUI_Implementation(float ExpPercent, int32 Level, b
 	InGameHUD->ExpBar->SetPercent(ExpPercent);
 	if (IsLevelUp)
 	{
-		//레벨 갱신 및 히어로 업그레이드 호출
-		UE_LOG(LogClass, Warning, TEXT("Level Up!! Level is %d"), Level);
+		//레벨 갱신
+		//UE_LOG(LogClass, Warning, TEXT("Level Up!! Level is %d"), Level);
 		InGameHUD->Level_Num->SetText(FText::FromString(FString::Printf(TEXT("%d"), Level)));
 	}
 }
@@ -200,7 +204,7 @@ float UStatComponent::GetExpPercent() const
 {
 	if (HeroStat.MaxExp > 0)
 	{
-		UE_LOG(LogClass, Warning, TEXT("ExpPercent is %f"), HeroStat.Exp / HeroStat.MaxExp);
+		//UE_LOG(LogClass, Warning, TEXT("ExpPercent is %f"), HeroStat.Exp / HeroStat.MaxExp);
 		return HeroStat.Exp / HeroStat.MaxExp;
 	}
 	return 0.0f;

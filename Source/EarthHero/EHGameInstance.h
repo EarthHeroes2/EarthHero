@@ -22,6 +22,7 @@ protected:
 	UEHGameInstance();
 
 private:
+	UPROPERTY()
 	class UDataTable* CharacterStatDataTable = nullptr;
 
 public:
