@@ -79,11 +79,8 @@
   <component name="ChangeListManager">
     <list default="true" id="4591bad7-fd9f-4860-903f-8700cd913377" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/GameMode/LobbyGameMode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/GameMode/LobbyGameMode.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/GameSession/LobbyGameSession.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/GameSession/LobbyGameSession.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/PlayerController/LobbyPlayerController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/PlayerController/LobbyPlayerController.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Widget/LobbyWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Widget/LobbyWidget.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Widget/LobbyWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Widget/LobbyWidget.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Menu/WBP_Lobby_Row.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Menu/WBP_Lobby_Row.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Widget/LobbyRowWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Widget/LobbyRowWidget.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,6 +91,8 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/EarthHero/Stat/ShooterStatComponent.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/EarthHero/Stat/ShooterStatComponent.h" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/EarthHero/Stat/StatComponent.cpp" root0="FORCE_HIGHLIGHTING" />
@@ -262,6 +261,20 @@
       <workItem from="1720096698783" duration="1052000" />
       <workItem from="1720098502266" duration="1407000" />
       <workItem from="1720100082128" duration="1718000" />
+      <workItem from="1720101895337" duration="2571000" />
+      <workItem from="1720106565902" duration="3754000" />
+      <workItem from="1720110892690" duration="625000" />
+      <workItem from="1720154646911" duration="318000" />
+      <workItem from="1720155295953" duration="2491000" />
+      <workItem from="1720158043077" duration="10730000" />
+      <workItem from="1720171414863" duration="3035000" />
+      <workItem from="1720177427116" duration="2434000" />
+      <workItem from="1720179965224" duration="6167000" />
+      <workItem from="1720186844174" duration="3368000" />
+      <workItem from="1720191203357" duration="3041000" />
+      <workItem from="1720234016616" duration="2508000" />
+      <workItem from="1720236628652" duration="1159000" />
+      <workItem from="1720244489662" duration="2888000" />
     </task>
     <servers />
   </component>
