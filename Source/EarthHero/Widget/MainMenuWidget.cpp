@@ -90,6 +90,10 @@ bool UMainMenuWidget::Initialize()
 	{
 		LobbyList_Btn->OnClicked.AddDynamic(this, &ThisClass::LobbyListBtnClicked);
 	}
+	if(FindLobby_Btn)
+	{
+		FindLobby_Btn->OnClicked.AddDynamic(this, &ThisClass::FindLobbyBtnClicked);
+	}
 
 	return true;
 }
@@ -257,17 +261,15 @@ void UMainMenuWidget::LobbyListBtnClicked()
 		{
 			LobbyList_Bd->SetVisibility(ESlateVisibility::Visible);
 
-			GetLobbyList();
+			FindLobbys();
 		}
 		else
 			LobbyList_Bd->SetVisibility(ESlateVisibility::Collapsed);
 	}
 }
 
-void UMainMenuWidget::GetLobbyList()
+void UMainMenuWidget::FindLobbyBtnClicked()
 {
-	LobbyList.Empty();
-	
 	FindLobbys();
 }
 
@@ -314,6 +316,8 @@ void UMainMenuWidget::HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRe
             {
                 UE_LOG(LogTemp, Log, TEXT("Found lobby : %d"), Search->SearchResults.Num());
 
+            	TArray<FOnlineSessionSearchResult> FindLobbyList;
+
                 bool bIsFind = false;
 
                 for (FOnlineSessionSearchResult SessionInSearchResult : Search->SearchResults)
@@ -339,14 +343,14 @@ void UMainMenuWidget::HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRe
                         	bIsFind = true;
 
                         	//리스트 추가
-                        	LobbyList.Add(SessionInSearchResult);
+                        	FindLobbyList.Add(SessionInSearchResult);
                         }
                     }
                 }
                 //들어갈 로비를 찾지 못함
                 if (!bIsFind && GEngine) GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Yellow, FString::Printf(TEXT("No lobby")));
 
-            	UpdateLobbyList();
+            	UpdateLobbyList(FindLobbyList);
             }
             else
             {
@@ -361,19 +365,51 @@ void UMainMenuWidget::HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRe
     }
 }
 
-void UMainMenuWidget::UpdateLobbyList()
+void UMainMenuWidget::UpdateLobbyList(TArray<FOnlineSessionSearchResult> FindLobbyList)
 {
-	for (FOnlineSessionSearchResult Lobby : LobbyList)
+	TArray<FString> FindLobbyIdList;
+	
+	for (FOnlineSessionSearchResult FindLobby : FindLobbyList)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Lobby!!!!!!!!!!!!!!!"));
-		ULobbyRowWidget* LobbyRowWidget = Cast<ULobbyRowWidget>(CreateWidget(GetWorld(), LobbyRowWidgetClass));
-		if(LobbyRowWidget)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Create row!!!!!!!!!!!!!!!"));
-			LobbyRowWidget->UpdateLobbyInfo(Lobby);
-		}
+		FString LobbyId = FindLobby.GetSessionIdStr();
+		
+		FindLobbyIdList.Add(LobbyId);
+		
+		int LobbyIndex = LobbyIdList.IndexOfByKey(LobbyId);
 
-		LobbyList_Vb->AddChild(LobbyRowWidget);
+		//이미 존재하는 정보라면 업데이트만
+		if(LobbyIndex != INDEX_NONE)
+		{
+			LobbyRowList[LobbyIndex]->UpdateLobbyInfo(FindLobby);
+		}
+		else //아니라면 새로 추가
+		{
+			ULobbyRowWidget* LobbyRowWidget = Cast<ULobbyRowWidget>(CreateWidget(GetWorld(), LobbyRowWidgetClass));
+			if(LobbyRowWidget)
+			{
+				LobbyIdList.Add(FindLobby.GetSessionIdStr());
+				LobbyRowList.Add(LobbyRowWidget);
+				
+				LobbyRowWidget->UpdateLobbyInfo(FindLobby);
+			}
+			LobbyList_Vb->AddChild(LobbyRowWidget);
+		}
+	}
+
+	//기존 정보를 살펴봄
+	int i = 0;
+	for (FString LobbyId : LobbyIdList)
+	{
+		int FindLobbyIndex = FindLobbyIdList.IndexOfByKey(LobbyId);
+
+		//새정보에 기존 정보가 존재하지 않으면 삭제
+		if(FindLobbyIndex == INDEX_NONE)
+		{
+			LobbyIdList.RemoveAt(i);
+			LobbyRowList.RemoveAt(i);
+			//명시적 제거 없나?
+		}
+		else i++;
 	}
 	
 }

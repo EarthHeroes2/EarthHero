@@ -9,6 +9,7 @@
 #include "MainMenuWidget.generated.h"
 
 
+class ULobbyRowWidget;
 class UBorder;
 class UVerticalBox;
 /**
@@ -89,15 +90,19 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	UBorder* LobbyList_Bd;
 
+	UPROPERTY(meta = (BindWidget))
+	UButton* FindLobby_Btn;
+
 	UFUNCTION()
 	void LobbyListBtnClicked();
-	void GetLobbyList();
-	void UpdateLobbyList();
+	UFUNCTION()
+	void FindLobbyBtnClicked();
+	void UpdateLobbyList(TArray<FOnlineSessionSearchResult> FindLobbyList);
 	void FindLobbys();
 
 	void HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRef<FOnlineSessionSearch> Search);
 	FDelegateHandle FindSessionsDelegateHandle;
 
-
-	TArray<FOnlineSessionSearchResult> LobbyList;
+	TArray<FString> LobbyIdList;
+	TArray<ULobbyRowWidget*> LobbyRowList;
 };
