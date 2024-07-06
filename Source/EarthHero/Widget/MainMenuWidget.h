@@ -91,6 +91,7 @@ private:
 
 	UFUNCTION()
 	void LobbyListBtnClicked();
+	void GetLobbyList();
 	void UpdateLobbyList();
 	void FindLobbys();
 

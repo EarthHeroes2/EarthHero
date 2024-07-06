@@ -2,8 +2,9 @@
 
 
 #include "LobbyRowWidget.h"
-
+#include "OnlineSessionSettings.h"
 #include "Components/Button.h"
+#include "Components/TextBlock.h"
 
 
 bool ULobbyRowWidget::Initialize()
@@ -16,9 +17,17 @@ bool ULobbyRowWidget::Initialize()
 	return true;
 }
 
-void ULobbyRowWidget::UpdateLobbyInfo()
+void ULobbyRowWidget::UpdateLobbyInfo(FOnlineSessionSearchResult Lobby)
 {
-	
+	FString NumberOfJoinedPlayers;
+	bool bKeyValueFound = Lobby.Session.SessionSettings.Get("NumberOfJoinedPlayers", NumberOfJoinedPlayers);
+
+	if(bKeyValueFound)
+	{
+		PlayerCount_Tb->SetText(FText::FromString(NumberOfJoinedPlayers));
+	}
+	LobbyName_Tb->SetText(FText::FromString(Lobby.GetSessionIdStr()));
+	Ping_Tb->SetText(FText::AsNumber(Lobby.PingInMs));
 }
 
 void ULobbyRowWidget::JoinClicked()
