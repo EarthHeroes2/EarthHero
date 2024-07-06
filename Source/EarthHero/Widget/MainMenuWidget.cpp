@@ -13,7 +13,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "OnlineSubsystemUtils.h"
-
+#include "Components/ScrollBox.h"
 
 
 UMainMenuWidget::UMainMenuWidget(const FObjectInitializer &ObjectInitializer)
@@ -96,7 +96,6 @@ bool UMainMenuWidget::Initialize()
 		Options_Btn->OnClicked.AddDynamic(this, &ThisClass::OptionsBtnClicked);
 		ButtonArray.Add(Options_Btn);
 	}
-
 	
 	if (Exit_Btn)
 	{
@@ -330,8 +329,9 @@ void UMainMenuWidget::UpdateLobbyList(TArray<FOnlineSessionSearchResult> FindLob
 				
 				LobbyRowWidget->MainMenuWidget = this;
 				LobbyRowWidget->UpdateLobbyInfo(FindLobby);
+				
+				LobbyList_Scr->AddChild(LobbyRowWidget);
 			}
-			LobbyList_Vb->AddChild(LobbyRowWidget);
 		}
 	}
 
@@ -361,6 +361,7 @@ void UMainMenuWidget::SetButtonsEnabled(bool bEnabled)
 	{
 		if(Button) Button->SetIsEnabled(bEnabled);
 	}
+	LobbyList_Scr->SetIsEnabled(bEnabled);
 }
 
 void UMainMenuWidget::FindLobbys(FString Reason)
@@ -603,15 +604,22 @@ void UMainMenuWidget::DestroySessionComplete(FName SessionName, bool bWasSuccess
 		IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
 		if (Session.IsValid())
 		{
-			//일단 성공이든 실패든 세션 찾고 들어감
-			if (bWasSuccessful)
+			if(LeaveSessionReason != "JoinSelectedLobby")
 			{
-				FindLobbys(LeaveSessionReason);
+				//일단 성공이든 실패든 세션 찾고 들어감
+				if (bWasSuccessful)
+				{
+					FindLobbys(LeaveSessionReason);
+				}
+				else
+				{
+					UE_LOG(LogTemp, Warning, TEXT("Failed to destroy session"));
+					FindLobbys(LeaveSessionReason);
+				}
 			}
 			else
 			{
-				UE_LOG(LogTemp, Warning, TEXT("Failed to destroy session"));
-				FindLobbys(LeaveSessionReason);
+				JoinSession();
 			}
 
 			Session->ClearOnDestroySessionCompleteDelegate_Handle(DestroySessionCompleteDelegatesHandle);

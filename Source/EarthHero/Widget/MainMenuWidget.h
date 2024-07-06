@@ -9,6 +9,7 @@
 #include "MainMenuWidget.generated.h"
 
 
+class UScrollBox;
 class ULobbyRowWidget;
 class UBorder;
 class UVerticalBox;
@@ -97,7 +98,7 @@ private:
 	UButton* LobbyList_Btn;
 
 	UPROPERTY(meta = (BindWidget))
-	UVerticalBox* LobbyList_Vb;
+	UScrollBox* LobbyList_Scr;
 
 	UPROPERTY(meta = (BindWidget))
 	UBorder* LobbyList_Bd;
@@ -113,11 +114,11 @@ private:
 	void SetButtonsEnabled(bool bEnabled);
 	void FindLobbys(FString Reason);
 	void HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRef<FOnlineSessionSearch> Search);
-public:
 	void JoinSession();
-private:
 	void HandleJoinSessionCompleted(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
+public:
 	void LeaveSession(FString Reason);
+private:
 	void DestroySessionComplete(FName SessionName, bool bWasSuccessful);
 	
 

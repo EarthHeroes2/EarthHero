@@ -15,8 +15,7 @@
 bool ULobbyRowWidget::Initialize()
 {
 	Super::Initialize();
-
-	//너무빨리 버튼을 생성해주나?
+	
 	LobbyJoin_Btn->OnClicked.AddDynamic(this, &ULobbyRowWidget::JoinClicked);
 	
 	return true;
@@ -58,7 +57,8 @@ void ULobbyRowWidget::JoinClicked()
 					{
 						MainMenuWidget->ConnectString = ConnectString;
 						MainMenuWidget->SessionToJoin = SessionToJoin;
-						MainMenuWidget->JoinSession();
+
+						MainMenuWidget->LeaveSession("JoinSelectedLobby");
 					}
 					else
 					{
