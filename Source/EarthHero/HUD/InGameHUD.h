@@ -19,6 +19,9 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	class UProgressBar *ExpBar;
 
+	UPROPERTY(meta = (BindWidget))
+	class UTextBlock *Level_Num;
+
 	void InitializePlayerState(class UStatComponent *StatComponent);
 
 protected:

@@ -58,6 +58,7 @@ void AEHPlayerController::InitializeHUD()
 		HUD = Cast<UInGameHUD>(CreateWidget(this, InGameHUD));
 		if (HUD)
 		{
+			//MyPlayerState(리플리케이트)->StatComponent->HUD로 전달
 			HUD->InitializePlayerState(MyPlayerState->GetStatComponent());
 			HUD->AddToViewport();
 			MyPlayerState->GetStatComponent()->SetInGameHUD(HUD);
