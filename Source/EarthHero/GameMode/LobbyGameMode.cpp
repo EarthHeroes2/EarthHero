@@ -166,7 +166,7 @@ bool ALobbyGameMode::PressGameStartButton()
 	ALobbyGameSession* LobbyGameSession = Cast<ALobbyGameSession>(GameSession);
 	if (LobbyGameSession)
 	{
-		if (ReadyCount == (LobbyGameSession->MaxNumberOfPlayersInSession - 1))
+		//if (ReadyCount == (LobbyGameSession->MaxNumberOfPlayersInSession - 1)) //임시로 4명 아니라도 실행되게 함!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		{
 			UE_LOG(LogTemp, Log, TEXT("Lobby Start!"));
 			LobbyGameSession->StartSession();
