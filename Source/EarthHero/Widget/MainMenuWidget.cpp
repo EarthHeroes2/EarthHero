@@ -397,17 +397,17 @@ void UMainMenuWidget::UpdateLobbyList(TArray<FOnlineSessionSearchResult> FindLob
 	}
 
 	//기존 정보를 살펴봄
-	int i = 0;
-	for (FString LobbyId : LobbyIdList)
+	for (int i = 0; i < LobbyIdList.Num(); )
 	{
-		int FindLobbyIndex = FindLobbyIdList.IndexOfByKey(LobbyId);
+		int FindLobbyIndex = FindLobbyIdList.IndexOfByKey(LobbyIdList[i]);
 
 		//새정보에 기존 정보가 존재하지 않으면 삭제
 		if(FindLobbyIndex == INDEX_NONE)
 		{
+			LobbyRowList[i]->RemoveFromParent();
+			
 			LobbyIdList.RemoveAt(i);
 			LobbyRowList.RemoveAt(i);
-			//명시적 제거 없나?
 		}
 		else i++;
 	}
