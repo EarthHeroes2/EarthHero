@@ -24,7 +24,10 @@ class EARTHHERO_API UMainMenuWidget : public UUserWidget
 	GENERATED_BODY()
 
 	UMainMenuWidget(const FObjectInitializer &ObjectInitializer);
+	TSubclassOf<UUserWidget> OptionsWidgetClass;
 	TSubclassOf<UUserWidget> LobbyRowWidgetClass;
+
+	UUserWidget* OptionsWidget;
 	
 public:
 	UFUNCTION(BlueprintCallable)
@@ -56,6 +59,9 @@ private:
 	UButton* Join_Btn;
 
 	UPROPERTY(meta = (BindWidget))
+	UButton* Options_Btn;
+
+	UPROPERTY(meta = (BindWidget))
 	UButton* Exit_Btn;
 
 	UPROPERTY(meta = (BindWidget))
@@ -66,6 +72,9 @@ private:
 
 	UFUNCTION()
 	void Join_BtnClicked();
+	
+	UFUNCTION()
+	void OptionsBtnClicked();
 
 	UFUNCTION()
 	void Exit_BtnClicked();

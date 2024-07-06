@@ -21,6 +21,13 @@
 UMainMenuWidget::UMainMenuWidget(const FObjectInitializer &ObjectInitializer)
 	: Super(ObjectInitializer)
 {
+	//옵션 블루프린트
+	static ConstructorHelpers::FClassFinder<UUserWidget> OptionsWidgetAsset(TEXT("UserWidget'/Game/Blueprints/Menu/WBP_Options.WBP_Options_C'"));
+	if (OptionsWidgetAsset.Succeeded())
+	{
+		OptionsWidgetClass = OptionsWidgetAsset.Class;
+	}
+	
 	//친구 초대 row 블루프린트
 	static ConstructorHelpers::FClassFinder<UUserWidget> LobbyRowWidgetAsset(TEXT("UserWidget'/Game/Blueprints/Menu/WBP_Lobby_Row.WBP_Lobby_Row_C'"));
 	if (LobbyRowWidgetAsset.Succeeded())
@@ -86,6 +93,13 @@ bool UMainMenuWidget::Initialize()
 		Join_Btn->OnClicked.AddDynamic(this, &ThisClass::Join_BtnClicked);
 		ButtonArray.Add(Join_Btn);
 	}
+	if (Options_Btn)
+	{
+		Options_Btn->OnClicked.AddDynamic(this, &ThisClass::OptionsBtnClicked);
+		ButtonArray.Add(Options_Btn);
+	}
+
+	
 	if (Exit_Btn)
 	{
 		Exit_Btn->OnClicked.AddDynamic(this, &ThisClass::Exit_BtnClicked);
@@ -216,6 +230,21 @@ void UMainMenuWidget::Join_BtnClicked()
 	{
 		MultiplayerSessionsSubsystem->FindSessions(10000);
 	}*/
+}
+
+//임시로 지우고 생성하는 방식으로 만듬
+void UMainMenuWidget::OptionsBtnClicked()
+{
+	if(OptionsWidget)
+	{
+		OptionsWidget->RemoveFromParent();
+		OptionsWidget = nullptr;
+	}
+	else
+	{
+		OptionsWidget = Cast<UUserWidget>(CreateWidget(GetWorld(), OptionsWidgetClass));
+		OptionsWidget->AddToViewport();
+	}
 }
 
 void UMainMenuWidget::Exit_BtnClicked()
