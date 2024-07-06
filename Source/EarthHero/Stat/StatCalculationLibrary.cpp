@@ -2,7 +2,7 @@
 
 #include "StatCalculationLibrary.h"
 
-#include "StatStructure.h"
+#include "Structure/StatStructure.h"
 
 void UStatCalculationLibrary::CalNormalDamage(FStatStructure& HeroStat, float inDamage)
 {

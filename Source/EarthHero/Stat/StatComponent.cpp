@@ -13,6 +13,7 @@
 #include "TimerManager.h"  // FTimerHandle과 TimerManager를 사용하기 위해 필요
 #include "VectorUtil.h"
 #include "Components/ProgressBar.h"
+#include "Components/TextBlock.h"
 #include "EarthHero/HUD/InGameHUD.h"
 
 UStatComponent::UStatComponent()
@@ -40,7 +41,7 @@ void UStatComponent::BeginPlay()
 	}
 }
 
-// Called every frame
+
 void UStatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
@@ -49,6 +50,15 @@ void UStatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	HeroStat.Health = UE::Geometry::VectorUtil::Clamp(HeroStat.Health + 1 * (1 + HeroStat.HealthRegeneration), 0.f, HeroStat.MaxHealth);
 }
 
+
+/*데미지 받는 함수
+ * float InDamage : 받은 데미지
+ * TSubclassOf<UDamageType> DamageTypeClass : 받은 데미지 타입(Stat/DamageType 디렉토리에 정의)
+ * const FHitResult & HitInfo : 데미지 받은 액터의 HitResult
+ * AController* Instigator : 데미지를 준 액터의 컨트롤러
+ * AEHCharacter* DamageCausor : 데미지를 준 AEHCharacter
+ * 주의 : 이 함수는 StatComponent 내부에서 호출되도록 설계됨, 외부에서 호출하도록 설계할려면 @이승언 에게 알려주세요
+ */
 float UStatComponent::DamageTaken(float InDamage, TSubclassOf<UDamageType> DamageTypeClass, const FHitResult & HitInfo, AController* Instigator, AEHCharacter* DamageCausor)
 {
 	//데미지 계산
@@ -65,25 +75,11 @@ float UStatComponent::DamageTaken(float InDamage, TSubclassOf<UDamageType> Damag
 	return InDamage;
 }
 
-//경험치 획득 시
-void UStatComponent::UpdateExp(float ExpMount)
-{
-	bool isLevelUp = UStatCalculationLibrary::AddExp(HeroStat, ExpMount);
-	UpdateExpUI(GetExpPercent(), HeroStat.Level, isLevelUp);
-}
 
-void UStatComponent::UpdateExpUI_Implementation(float ExpPercent, int32 Level, bool IsLevelUp)
-{
-	//UI 갱신
-	InGameHUD->ExpBar->SetPercent(ExpPercent);
-	if (IsLevelUp)
-	{
-		//레벨 갱신 및 히어로 업그레이드 호출
-		UE_LOG(LogClass, Warning, TEXT("Level Up!! Level is %d"), Level);
-	}
-}
 
-// GameInstance에 저장된 초기 스텟을 불러와 StatComponent의 Base스텟과 스텟을 초기화하는 함수
+/* GameInstance에 저장된 초기 스텟을 불러와 StatComponent의 Base스텟과 스텟을 초기화하는 함수
+ * FName HeroName : DataTable에서 가져올 RowName = 현재 Hero로 고정
+*/
 void UStatComponent::InitializeStatData_Implementation(FName HeroName)
 {
 	UEHGameInstance* ABGameInstance = Cast<UEHGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
@@ -111,20 +107,41 @@ void UStatComponent::InitializeStatData_Implementation(FName HeroName)
 
 bool UStatComponent::InitializeStatData_Validate(FName HeroName)
 {
-	// 여기에 서버에서의 유효성 검사를 수행합니다.
-	// 예: 호출한 클라이언트의 권한 확인 등.
-	return true; // 유효성 검사가 성공하면 true를 반환합니다.
+	return true;
 }
 
-void UStatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+
+/*경험치 획득 시 외부에서 호출하는 함수 (서버에서 호출해야 함)
+ *float ExpMount : 얻은 경험치
+*/
+void UStatComponent::UpdateExp(float ExpMount)
 {
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	// HeroStat 속성을 복제 목록에 추가, 모든 클라이언트에게 복사
-	DOREPLIFETIME(UStatComponent, HeroStat);
-	DOREPLIFETIME(UStatComponent, BaseHeroStat);
+	bool isLevelUp = UStatCalculationLibrary::AddExp(HeroStat, ExpMount);
+	UpdateExpUI(GetExpPercent(), HeroStat.Level, isLevelUp);
 }
 
+
+/* 경험치 획득 시  UI를 갱신하는 함수 (소유 클라이언트 호출)
+ *float ExpPercent : 경험치 Percentage
+ *int32 Level : 레벨
+ *bool IsLevelUp : 레벨업을 했으면 true, 아니면 false
+ */
+void UStatComponent::UpdateExpUI_Implementation(float ExpPercent, int32 Level, bool IsLevelUp)
+{
+	//UI 갱신
+	InGameHUD->ExpBar->SetPercent(ExpPercent);
+	if (IsLevelUp)
+	{
+		//레벨 갱신 및 히어로 업그레이드 호출
+		UE_LOG(LogClass, Warning, TEXT("Level Up!! Level is %d"), Level);
+		InGameHUD->Level_Num->SetText(FText::FromString(FString::Printf(TEXT("%d"), Level)));
+	}
+}
+
+
+
+/********************************************
+ *스텟 가져오는 함수*/
 float UStatComponent::GetHealth() const
 {
 	return HeroStat.Health;
@@ -217,4 +234,16 @@ float UStatComponent::GetIncreasedExpGain() const
 float UStatComponent::GetJumpPower() const
 {
 	return HeroStat.JumpPower;
+}
+
+/*****************************************/
+
+/*서버에서 클라이언트로 복사할 변수들*/
+void UStatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	// HeroStat 속성을 복제 목록에 추가, 모든 클라이언트에게 복사
+	DOREPLIFETIME(UStatComponent, HeroStat);
+	DOREPLIFETIME(UStatComponent, BaseHeroStat);
 }

@@ -6,13 +6,12 @@
 #include "EarthHero/Character/EHCharacter.h"
 #include "EarthHero/Character/Shooter/EHShooter.h"
 
-//슈터 생성자
 UShooterStatComponent::UShooterStatComponent()
 {
 }
 
 void UShooterStatComponent::TickComponent(float DeltaTime, ELevelTick TickType,
-	FActorComponentTickFunction* ThisTickFunction)
+                                          FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
@@ -23,8 +22,6 @@ void UShooterStatComponent::BeginPlay()
 	Shooter = Cast<AEHShooter>(GetOwner());
 }
 
-//슈터 데미지 받는 함수(오버라이드)
-
 
 //슈터 스텟 초기화 함수(오버라이드)
 void UShooterStatComponent::InitializeStatData_Implementation(FName HeroName)
@@ -32,9 +29,9 @@ void UShooterStatComponent::InitializeStatData_Implementation(FName HeroName)
 	Super::InitializeStatData_Implementation(HeroName);
 }
 
-  //////////////
-//*슈터 용 함수*//
 ////////////////
+//*슈터 용 함수*//
+///////////////
 
 //슈터 일반 데미지
 void UShooterStatComponent::ShooterDamage_Implementation(AActor* DamagedActor, const FHitResult& HitInfo,

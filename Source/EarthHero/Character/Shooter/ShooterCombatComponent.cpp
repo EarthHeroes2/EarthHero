@@ -47,7 +47,7 @@ void UShooterCombatComponent::Server_Fire_Implementation(FVector TraceStartVecto
 														 FVector MuzzleVector)
 {
 	FHitResult HitResult;
-	bool bHit;
+	bool bHit = false;
 	FCollisionQueryParams collisionParams;
 	collisionParams.AddIgnoredActor(Shooter);
 	
