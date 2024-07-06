@@ -90,6 +90,8 @@ void ULobbyWidget::ReadFriendsListCompleted(int32 LocalUserNum, bool bWasSuccess
 			{
 				if (FriendRowWidgetClass)
 				{
+					TArray<CSteamID> FindFriendSteamIds;
+					
 					//친구 리스트 얻고
 					TArray<TSharedRef<FOnlineFriend>> FriendList;
 					Friends->GetFriendsList(LocalUserNum, ListName, FriendList);
@@ -100,6 +102,8 @@ void ULobbyWidget::ReadFriendsListCompleted(int32 LocalUserNum, bool bWasSuccess
 					for (TSharedRef<FOnlineFriend> Friend : FriendList)
 					{
 						CSteamID FriendSteamId(*(uint64*)Friend->GetUserId()->GetBytes());
+						
+						FindFriendSteamIds.Add(FriendSteamId);
 
 						bool bFriendOnline = SteamFriends()->GetFriendPersonaState(FriendSteamId) == k_EPersonaStateOnline;
 						
@@ -109,10 +113,7 @@ void ULobbyWidget::ReadFriendsListCompleted(int32 LocalUserNum, bool bWasSuccess
 						if(FriendRowIndex != INDEX_NONE)
 						{
 							//해당 위젯 정보 업데이트
-							if (FriendRowWidgets[FriendRowIndex])
-							{
-								FriendRowWidgets[FriendRowIndex]->UpdateFriendInfo(Friend, bFriendOnline);
-							}
+							if (FriendRowWidgets[FriendRowIndex]) FriendRowWidgets[FriendRowIndex]->UpdateFriendInfo(Friend, bFriendOnline);
 						}
 						//새로운 친구라면
 						else
@@ -131,6 +132,21 @@ void ULobbyWidget::ReadFriendsListCompleted(int32 LocalUserNum, bool bWasSuccess
 								Friend_Scr->AddChild(FriendRowWidget);
 							}
 						}
+					}
+
+					for (int i = 0; i < FriendSteamIds.Num(); )
+					{
+						int FindLobbyIndex = FindFriendSteamIds.IndexOfByKey(FriendSteamIds[i]);
+
+						//새정보에 기존 정보가 존재하지 않으면 삭제
+						if(FindLobbyIndex == INDEX_NONE)
+						{
+							FriendRowWidgets[i]->RemoveFromParent();
+			
+							FriendSteamIds.RemoveAt(i);
+							FriendRowWidgets.RemoveAt(i);
+						}
+						else i++;
 					}
 				}
 			}

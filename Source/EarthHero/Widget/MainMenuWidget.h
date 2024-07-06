@@ -9,8 +9,12 @@
 #include "MainMenuWidget.generated.h"
 
 
+class ULobbyRowWidget;
 class UBorder;
 class UVerticalBox;
+
+class FOnlineSessionSearch;
+class FOnlineSessionSearchResult;
 /**
  * 
  */
@@ -89,14 +93,43 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	UBorder* LobbyList_Bd;
 
+	UPROPERTY(meta = (BindWidget))
+	UButton* FindLobby_Btn;
+
 	UFUNCTION()
 	void LobbyListBtnClicked();
-	void UpdateLobbyList();
-	void FindLobbys();
-
+	UFUNCTION()
+	void FindLobbyBtnClicked();
+	void UpdateLobbyList(TArray<FOnlineSessionSearchResult> FindLobbyList);
+	void SetButtonsEnabled(bool bEnabled);
+	void FindLobbys(FString Reason);
 	void HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRef<FOnlineSessionSearch> Search);
+	void JoinSession();
+	void HandleJoinSessionCompleted(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
+	void LeaveSession(FString Reason);
+	void DestroySessionComplete(FName SessionName, bool bWasSuccessful);
+	
+
+	TArray<FString> LobbyIdList;
+	TArray<ULobbyRowWidget*> LobbyRowList;
+
+
+
+
+	//주요 버튼들 저장
+	TArray<UButton*> ButtonArray;
+
+
+
+protected:
+	FName JoinedSessionName;
+	FString LeaveSessionReason, FindSessionReason;
+	
+	FString ConnectString;
+	FOnlineSessionSearchResult* SessionToJoin;
 	FDelegateHandle FindSessionsDelegateHandle;
-
-
-	TArray<FOnlineSessionSearchResult> LobbyList;
+	FDelegateHandle JoinSessionDelegateHandle;
+	FDelegateHandle DestroySessionCompleteDelegatesHandle;
+	
+	
 };

@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "LobbyRowWidget.generated.h"
 
+
 class UButton;
 class UTextBlock;
 /**
@@ -19,7 +20,7 @@ class EARTHHERO_API ULobbyRowWidget : public UUserWidget
 	virtual bool Initialize();
 
 public:
-	void UpdateLobbyInfo();
+	void UpdateLobbyInfo(FOnlineSessionSearchResult Lobby);
 
 private:
 

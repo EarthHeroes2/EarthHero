@@ -9,8 +9,12 @@
 #include "OnlineSessionSettings.h"
 #include "OnlineSubsystem.h"
 #include "Components/Border.h"
+#include "Components/VerticalBox.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "OnlineSubsystem.h"
+#include "OnlineSubsystemUtils.h"
+#include "Interfaces/OnlineIdentityInterface.h"
 
 
 
@@ -75,20 +79,30 @@ bool UMainMenuWidget::Initialize()
 	if (Play_Btn)
 	{
 		Play_Btn->OnClicked.AddDynamic(this, &ThisClass::Play_BtnClicked);
+		ButtonArray.Add(Play_Btn);
 	}
 	if (Join_Btn)
 	{
 		Join_Btn->OnClicked.AddDynamic(this, &ThisClass::Join_BtnClicked);
+		ButtonArray.Add(Join_Btn);
 	}
 	if (Exit_Btn)
 	{
 		Exit_Btn->OnClicked.AddDynamic(this, &ThisClass::Exit_BtnClicked);
+		ButtonArray.Add(Exit_Btn);
 	}
 
 	if(LobbyList_Btn)
 	{
 		LobbyList_Btn->OnClicked.AddDynamic(this, &ThisClass::LobbyListBtnClicked);
+		ButtonArray.Add(LobbyList_Btn);
 	}
+	if(FindLobby_Btn)
+	{
+		FindLobby_Btn->OnClicked.AddDynamic(this, &ThisClass::FindLobbyBtnClicked);
+		ButtonArray.Add(FindLobby_Btn);
+	}
+	
 
 	return true;
 }
@@ -173,16 +187,17 @@ void UMainMenuWidget::OnStartSession(bool bWasSuccessful)
 
 void UMainMenuWidget::Play_BtnClicked()
 {
-	//�ο� 0�� �κ�� ����
 	UE_LOG(LogTemp, Log, TEXT("Create Lobby Clicked"));
 	UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(GetWorld()->GetGameInstance());
 	if (EHGameInstance)
 	{
+		//인스턴스에 private 여부 잠시 저장
 		EHGameInstance->IsCheckedPrivate = Private_Cb->IsChecked();
-		EHGameInstance->LeaveSession("CreateLobby");
 	}
 
-	/* ���� ��
+	LeaveSession("CreateLobby");
+
+	/* 이전꺼
 	Play_Btn->SetIsEnabled(false);
 	if (MultiplayerSessionsSubsystem)
 	{
@@ -192,17 +207,10 @@ void UMainMenuWidget::Play_BtnClicked()
 
 void UMainMenuWidget::Join_BtnClicked()
 {
-	//���� public �κ� ����
 	UE_LOG(LogTemp, Log, TEXT("Join Lobby Clicked"));
-	UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(GetWorld()->GetGameInstance());
-	if (EHGameInstance)
-	{
-		//EHGameInstance->IsCheckedPrivate = true; //�׽�Ʈ������ ���а���
-		//�κ� ���� �� ���� ������. (�̸� ���� ����)
-		EHGameInstance->LeaveSession("JoinLobby");
-	}
+	LeaveSession("JoinLobby");
 
-	/* ���� ��
+	/* 이전꺼
 	Join_Btn->SetIsEnabled(false);
 	if (MultiplayerSessionsSubsystem)
 	{
@@ -256,52 +264,112 @@ void UMainMenuWidget::LobbyListBtnClicked()
 		{
 			LobbyList_Bd->SetVisibility(ESlateVisibility::Visible);
 
-			UpdateLobbyList();
+			FindLobbys("FindLobby");
 		}
 		else
 			LobbyList_Bd->SetVisibility(ESlateVisibility::Collapsed);
 	}
 }
 
-void UMainMenuWidget::UpdateLobbyList()
+void UMainMenuWidget::FindLobbyBtnClicked()
 {
-	LobbyList.Empty();
-	
-	FindLobbys();
-	
-	//위젯 생성
-	//ULobbyRowWidget* FriendRowWidget = Cast<ULobbyRowWidget>(CreateWidget(GetWorld(), LobbyRowWidgetClass));
+	FindLobbys("FindLobby");
 }
 
-
-void UMainMenuWidget::FindLobbys()
+void UMainMenuWidget::UpdateLobbyList(TArray<FOnlineSessionSearchResult> FindLobbyList)
 {
-    IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
-    if (Subsystem)
-    {
-        IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
-        if (Session.IsValid())
-        {
-            TSharedRef<FOnlineSessionSearch> Search = MakeShared<FOnlineSessionSearch>();
+	TArray<FString> FindLobbyIdList;
+	
+	for (FOnlineSessionSearchResult FindLobby : FindLobbyList)
+	{
+		FString LobbyId = FindLobby.GetSessionIdStr();
+		
+		FindLobbyIdList.Add(LobbyId);
+		
+		int LobbyIndex = LobbyIdList.IndexOfByKey(LobbyId);
 
-            Search->QuerySettings.SearchParams.Empty();
-            Search->MaxSearchResults = 1000;
-            Search->bIsLanQuery = false;
-        	
-            FindSessionsDelegateHandle =
-                Session->AddOnFindSessionsCompleteDelegate_Handle(FOnFindSessionsCompleteDelegate::CreateUObject(
-                    this,
-                    &ThisClass::HandleFindSessionsCompleted,
-                    Search));
+		//이미 존재하는 정보라면 업데이트만
+		if(LobbyIndex != INDEX_NONE)
+		{
+			LobbyRowList[LobbyIndex]->UpdateLobbyInfo(FindLobby);
+		}
+		else //아니라면 새로 추가
+		{
+			ULobbyRowWidget* LobbyRowWidget = Cast<ULobbyRowWidget>(CreateWidget(GetWorld(), LobbyRowWidgetClass));
+			if(LobbyRowWidget)
+			{
+				LobbyIdList.Add(FindLobby.GetSessionIdStr());
+				LobbyRowList.Add(LobbyRowWidget);
+				
+				LobbyRowWidget->UpdateLobbyInfo(FindLobby);
+			}
+			LobbyList_Vb->AddChild(LobbyRowWidget);
+		}
+	}
 
-            UE_LOG(LogTemp, Log, TEXT("Finding Lobby"));
+	//기존 정보를 살펴봄
+	for (int i = 0; i < LobbyIdList.Num(); )
+	{
+		int FindLobbyIndex = FindLobbyIdList.IndexOfByKey(LobbyIdList[i]);
 
-            if (!Session->FindSessions(0, Search))
-            {
-                UE_LOG(LogTemp, Warning, TEXT("Find lobby failed"));
-            }
-        }
-    }
+		//새정보에 기존 정보가 존재하지 않으면 삭제
+		if(FindLobbyIndex == INDEX_NONE)
+		{
+			LobbyRowList[i]->RemoveFromParent();
+			
+			LobbyIdList.RemoveAt(i);
+			LobbyRowList.RemoveAt(i);
+		}
+		else i++;
+	}
+	
+	LobbyList_Btn->SetIsEnabled(true);
+	FindLobby_Btn->SetIsEnabled(true);
+}
+
+//메인메뉴 모든 버튼의 enalbed 설정
+void UMainMenuWidget::SetButtonsEnabled(bool bEnabled)
+{
+	for(UButton* Button : ButtonArray)
+	{
+		if(Button) Button->SetIsEnabled(bEnabled);
+	}
+}
+
+void UMainMenuWidget::FindLobbys(FString Reason)
+{
+	IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
+	if (Subsystem)
+	{
+		IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
+		if (Session.IsValid())
+		{
+			TSharedRef<FOnlineSessionSearch> Search = MakeShared<FOnlineSessionSearch>();
+
+			Search->QuerySettings.SearchParams.Empty();
+			Search->MaxSearchResults = 1000;
+			Search->bIsLanQuery = false;
+
+			FindSessionReason = Reason;
+
+			FindSessionsDelegateHandle =
+				Session->AddOnFindSessionsCompleteDelegate_Handle(FOnFindSessionsCompleteDelegate::CreateUObject(
+					this,
+					&ThisClass::HandleFindSessionsCompleted,
+					Search));
+
+			UE_LOG(LogTemp, Log, TEXT("Finding Lobby"));
+
+			//로비 리스트 버튼 및 새로 고침 버튼 막음
+			SetButtonsEnabled(false);
+
+			if (!Session->FindSessions(0, Search))
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Find lobby failed"));
+				SetButtonsEnabled(true);
+			}
+		}
+	}
 }
 
 void UMainMenuWidget::HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRef<FOnlineSessionSearch> Search)
@@ -315,6 +383,8 @@ void UMainMenuWidget::HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRe
             if (bWasSuccessful)
             {
                 UE_LOG(LogTemp, Log, TEXT("Found lobby : %d"), Search->SearchResults.Num());
+
+            	TArray<FOnlineSessionSearchResult> FindLobbyList;
 
                 bool bIsFind = false;
 
@@ -334,20 +404,66 @@ void UMainMenuWidget::HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRe
 
                     if (bKeyValueFound1 && bKeyValueFound2 && bKeyValueFound3 && bKeyValueFound4)
                     {
-                        if (GameName == "EH2" && bAdvertise)
-                        {
-                        	UE_LOG(LogTemp, Log, TEXT("Valid lobby : %s, %d"), *PortNumber, NumberOfJoinedPlayers);
+                    	if (GameName == "EH2" &&
+								(
+									(FindSessionReason == "JoinLobby" && NumberOfJoinedPlayers > 0 && bAdvertise) ||
+									(FindSessionReason == "CreateLobby" && NumberOfJoinedPlayers == 0) ||
+									(FindSessionReason == "FindLobby" && bAdvertise) //임시로 공개방만 찾음
+								)
+							)
+                    	{
+                    		if(bAdvertise)
+                    		{
+                    			UE_LOG(LogTemp, Log, TEXT("Valid session : %s, %s, %d, true"), *FindSessionReason, *PortNumber, NumberOfJoinedPlayers);
+                    		}
+                    		else UE_LOG(LogTemp, Log, TEXT("Valid session : %s, %s, %d, false"), *FindSessionReason, *PortNumber, NumberOfJoinedPlayers);
+                    		
+                        	if(FindSessionReason == "FindLobby")
+                        	{
+                        		bIsFind = true;
+                        		FindLobbyList.Add(SessionInSearchResult); //찾은 로비를 리스트에 추가
+                        	}
+	                        else
+	                        {
+	                        	if (Session->GetResolvedConnectString(SessionInSearchResult, NAME_GamePort, ConnectString))
+	                        	{
+	                        		SessionToJoin = &SessionInSearchResult;
+	                        		if (SessionToJoin)
+	                        		{
+	                        			bIsFind = true;
+	                        			JoinSession();
+	                        			break;
+	                        		}
+	                        	}
+	                        }
 
-                        	//리스트 추가
-                        	LobbyList.Add(SessionInSearchResult);
                         }
                     }
                 }
                 //들어갈 로비를 찾지 못함
-                if (!bIsFind && GEngine) GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Yellow, FString::Printf(TEXT("No lobby")));
+            	if (!bIsFind && GEngine)
+            	{
+            		if (FindSessionReason == "JoinLobby")
+            		{
+            			GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Yellow, FString::Printf(TEXT("No lobby to participate")));
+            		}
+            		else if (FindSessionReason == "CreateLobby")
+            		{
+            			GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Yellow, FString::Printf(TEXT("Unable to create lobby (server full)")));
+            		}
+            		else if(FindSessionReason == "FindLobby")
+            		{
+            			GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Yellow, FString::Printf(TEXT("No lobby")));
+            		}
+            		SetButtonsEnabled(true);
+            	}
+            	
+            	if(FindSessionReason == "FindLobby") UpdateLobbyList(FindLobbyList);
             }
             else
             {
+            	SetButtonsEnabled(true);
+            	
                 UE_LOG(LogTemp, Warning, TEXT("Find lobbys failed."));
                 if(GEngine)
                     GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Yellow, FString::Printf(TEXT("Find lobbys failed!")));
@@ -357,4 +473,122 @@ void UMainMenuWidget::HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRe
             FindSessionsDelegateHandle.Reset();
         }
     }
+}
+
+void UMainMenuWidget::JoinSession()
+{
+    IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
+    if (Subsystem)
+    {
+        IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
+        if (Session.IsValid())
+        {
+            JoinSessionDelegateHandle =
+                Session->AddOnJoinSessionCompleteDelegate_Handle(FOnJoinSessionCompleteDelegate::CreateUObject(
+                    this,
+                    &ThisClass::HandleJoinSessionCompleted));
+
+            UE_LOG(LogTemp, Log, TEXT("Joining session."));
+
+            if (!Session->JoinSession(0, "MainSession", *SessionToJoin))
+            {
+                UE_LOG(LogTemp, Warning, TEXT("Join session failed"));
+            	SetButtonsEnabled(true);
+            }
+        }
+    }
+}
+
+void UMainMenuWidget::HandleJoinSessionCompleted(FName SessionName, EOnJoinSessionCompleteResult::Type Result)
+{
+    IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
+    if (Subsystem)
+    {
+        IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
+        if (Session.IsValid())
+        {
+            if (Result == EOnJoinSessionCompleteResult::Success)
+            {
+                UE_LOG(LogTemp, Log, TEXT("Joined session."));
+                if (GEngine)
+                {
+                    if (!Session->GetResolvedConnectString(SessionName, ConnectString))
+                    {
+                        UE_LOG(LogTemp, Error, TEXT("Could not get connect string."));
+                        return;
+                    }
+
+                    if (GEngine)
+                        GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Yellow, FString::Printf(TEXT("Connect String : %s"), *ConnectString));
+
+                    JoinedSessionName = SessionName;
+
+                    FURL DedicatedServerURL(nullptr, *ConnectString, TRAVEL_Absolute);
+                    FString DedicatedServerJoinError;
+                    auto DedicatedServerJoinStatus = GEngine->Browse(GEngine->GetWorldContextFromWorldChecked(GetWorld()), DedicatedServerURL, DedicatedServerJoinError);
+                    if (DedicatedServerJoinStatus == EBrowseReturnVal::Failure)
+                    {
+                        UE_LOG(LogTemp, Error, TEXT("Failed to browse for dedicated server. Error is: %s"), *DedicatedServerJoinError);
+                    }
+                }
+            }
+            Session->ClearOnJoinSessionCompleteDelegate_Handle(JoinSessionDelegateHandle);
+            JoinSessionDelegateHandle.Reset();
+        }
+    }
+
+	SetButtonsEnabled(true);
+}
+
+
+//혹시 모를 세션 제거
+void UMainMenuWidget::LeaveSession(FString Reason)
+{
+	IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
+	if (Subsystem)
+	{
+		IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
+		if (Session.IsValid())
+		{
+			SetButtonsEnabled(false);
+			
+			DestroySessionCompleteDelegatesHandle =
+				Session->OnDestroySessionCompleteDelegates.AddUObject(this, &ThisClass::DestroySessionComplete);
+
+			LeaveSessionReason = Reason;
+
+			UE_LOG(LogTemp, Log, TEXT("Leave session"));
+
+			if (!Session->DestroySession(JoinedSessionName))
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Failed to DestroySession : %s"), *JoinedSessionName.ToString());
+			}
+		}
+	}
+}
+
+//제거 후 로비를 목적에 맞게 찾고 목적을 수행
+void UMainMenuWidget::DestroySessionComplete(FName SessionName, bool bWasSuccessful)
+{
+	IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
+	if (Subsystem)
+	{
+		IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
+		if (Session.IsValid())
+		{
+			//일단 성공이든 실패든 세션 찾고 들어감
+			if (bWasSuccessful)
+			{
+				FindLobbys(LeaveSessionReason);
+			}
+			else
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Failed to destroy session"));
+				FindLobbys(LeaveSessionReason);
+			}
+
+			Session->ClearOnDestroySessionCompleteDelegate_Handle(DestroySessionCompleteDelegatesHandle);
+			DestroySessionCompleteDelegatesHandle.Reset();
+		}
+	}
 }
