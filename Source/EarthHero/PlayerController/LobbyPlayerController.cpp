@@ -289,7 +289,6 @@ void ALobbyPlayerController::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	if (LobbyWidget)
 	{
 		LobbyWidget->RemoveFromParent();
-
 		bShowMouseCursor = false;
 		
 		FInputModeGameOnly InputMode;

@@ -31,6 +31,9 @@ void AEHPlayerController::BeginPlay()
 	{
 		Subsystem->AddMappingContext(HeroContext, 0);
 	}
+
+	//FInputModeGameOnly InputMode;
+	//SetInputMode(InputMode);
 }
 
 //승언 : 컨트롤러가 빙의했을 때
