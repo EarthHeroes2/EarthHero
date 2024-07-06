@@ -12,9 +12,7 @@
 #include "Components/VerticalBox.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
-#include "OnlineSubsystem.h"
 #include "OnlineSubsystemUtils.h"
-#include "Interfaces/OnlineIdentityInterface.h"
 
 
 

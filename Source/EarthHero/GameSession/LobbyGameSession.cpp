@@ -7,7 +7,6 @@
 #include "Interfaces/OnlineSessionInterface.h"
 #include "OnlineSessionSettings.h"
 #include <EarthHero/PlayerController/LobbyPlayerController.h>
-#include <Kismet/GameplayStatics.h>
 #include <EarthHero/GameMode/LobbyGameMode.h>
 
 
@@ -161,7 +160,7 @@ void ALobbyGameSession::HandleRegisterPlayerCompleted(FName EOSSessionName, cons
                 if (NumberOfPlayersInSession == 1)
                 {
                     HostPlayerId = PlayerIds[0]; //이거 플레이어 컨트롤러 저장으로 변경 필요
-                    UE_LOG(LogTemp, Log, TEXT("Host Assigment..."), *HostPlayerId->ToString());
+                    UE_LOG(LogTemp, Log, TEXT("Host Assigment..."));
 
                     //클라이언트에게 방장 권한을 부여
                     HostAssignment(NewPlayerPlayerController);
@@ -262,7 +261,7 @@ void ALobbyGameSession::UnregisterPlayer(const APlayerController* ExitingPlayer)
                             &ThisClass::HandleUnregisterPlayerCompleted));
 
                     // ���ǿ��� �÷��̾� ����
-                    if (!Session->UnregisterPlayer(SessionName, *ExitingPlayer->PlayerState->UniqueId))
+                    if (!Session->UnregisterPlayer(SessionName, *ExitingPlayer->PlayerState->GetUniqueId()))
                     {
                         UE_LOG(LogTemp, Warning, TEXT("Failed to Unregister Player!"));
                         Session->ClearOnUnregisterPlayersCompleteDelegate_Handle(UnregisterPlayerDelegateHandle);

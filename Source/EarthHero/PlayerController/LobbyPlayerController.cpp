@@ -4,7 +4,6 @@
 #include "LobbyPlayerController.h"
 #include "GameFramework/PlayerController.h"
 #include <EarthHero/EHGameInstance.h>
-#include <Kismet/GameplayStatics.h>
 #include "GameFramework/PlayerState.h"
 #include <EarthHero/GameSession/LobbyGameSession.h>
 #include <EarthHero/GameMode/LobbyGameMode.h>

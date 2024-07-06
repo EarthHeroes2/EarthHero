@@ -13,7 +13,6 @@
 #include "Components/Image.h"
 #include "EarthHero/EHGameInstance.h"
 
-#include "OnlineSubsystemSteam.h"
 #include "steam/steam_api.h"
 
 ULobbyWidget::ULobbyWidget(const FObjectInitializer &ObjectInitializer)

@@ -4,11 +4,8 @@
 #include "LobbyGameMode.h"
 #include <EarthHero/GameSession/LobbyGameSession.h>
 #include "GameFramework/PlayerState.h"
-#include "OnlineSubsystem.h"
-#include "OnlineSubsystemUtils.h"
 #include "EarthHero/Character/Shooter/EHShooter.h"
 #include "EarthHero/Player/EHPlayerState.h"
-#include "Interfaces/OnlineSessionInterface.h"
 
 ALobbyGameMode::ALobbyGameMode()
 {
@@ -123,7 +120,7 @@ void ALobbyGameMode::TogglePlayerReady(APlayerController* Player)
 
 		UpdatePlayerReadyState();
 	}
-	else UE_LOG(LogTemp, Error, TEXT("%s is not valid for player ready state"), LobbyPlayerController);
+	else UE_LOG(LogTemp, Error, TEXT("%s is not valid for player ready state"), *LobbyPlayerController->GetName());
 }
 
 //이름 리스트 갱신. UpdatePlayerReadyState()도 호출함

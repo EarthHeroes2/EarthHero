@@ -4,7 +4,6 @@
 #include "EndGameMode.h"
 
 #include "OnlineSubsystem.h"
-#include "OnlineSubsystemSteam.h"
 #include "Interfaces/OnlineSharedCloudInterface.h"
 #include "EarthHero/Player/EHPlayerState.h"
 

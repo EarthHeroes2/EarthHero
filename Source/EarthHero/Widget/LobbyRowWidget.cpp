@@ -2,9 +2,6 @@
 
 
 #include "LobbyRowWidget.h"
-
-#include <string>
-
 #include "OnlineSessionSettings.h"
 #include "Components/Button.h"
 #include "Components/TextBlock.h"

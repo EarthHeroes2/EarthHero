@@ -2,15 +2,14 @@
 
 
 #include "LobbyGameState.h"
-#include "Net/UnrealNetwork.h"
 
 /*
-//?? ¾Ë¾Æº¸±â
+//?? ï¿½Ë¾Æºï¿½ï¿½ï¿½
 void ALobbyGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
-    // ºÎ¸ð Å¬·¡½ºÀÇ GetLifetimeReplicatedProps È£Ãâ
+    // ï¿½Î¸ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ GetLifetimeReplicatedProps È£ï¿½ï¿½
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-    // PlayerReadyState º¯¼ö¸¦ º¹Á¦ ´ë»óÀ¸·Î ÁöÁ¤
+    // PlayerReadyState ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     DOREPLIFETIME(ALobbyGameState, PlayerReadyState);
 }*/
