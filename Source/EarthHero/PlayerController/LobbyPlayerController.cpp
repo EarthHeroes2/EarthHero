@@ -53,6 +53,7 @@ void ALobbyPlayerController::ShowLobbyWidget()
 	if (LobbyWidgetClass)
 	{
 		LobbyWidget = Cast<ULobbyWidget>(CreateWidget(GetWorld(), LobbyWidgetClass));
+		
 		if (LobbyWidget)
 		{
 			LobbyWidget->AddToViewport();
@@ -276,4 +277,23 @@ void ALobbyPlayerController::Client_SendToDebugMessage_Implementation(const FStr
 {
 	if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Yellow, Message);
+}
+
+
+
+
+
+
+void ALobbyPlayerController::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	if (LobbyWidget)
+	{
+		LobbyWidget->RemoveFromParent();
+
+		bShowMouseCursor = false;
+		
+		FInputModeGameOnly InputMode;
+		SetInputMode(InputMode);
+	}
+	Super::EndPlay(EndPlayReason);
 }

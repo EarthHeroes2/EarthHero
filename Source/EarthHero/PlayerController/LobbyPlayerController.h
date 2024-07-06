@@ -61,6 +61,8 @@ public:
 
 protected:
 	void ShowLobbyWidget();
+	
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason);
 
 	TSubclassOf<class UUserWidget> LobbyWidgetClass;
 
