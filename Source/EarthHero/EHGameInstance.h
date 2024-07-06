@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
-#include "Stat/StatStructure.h"
+#include "Stat/Structure/StatStructure.h"
 #include "EHGameInstance.generated.h"
 
 
