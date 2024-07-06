@@ -24,16 +24,18 @@ void AEHPlayerController::Tick(float DeltaSeconds)
 void AEHPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	check(HeroContext);
-	
-	if(UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
-	{
-		Subsystem->AddMappingContext(HeroContext, 0);
-	}
 
-	//FInputModeGameOnly InputMode;
-	//SetInputMode(InputMode);
+	if(!IsRunningDedicatedServer())
+	{
+		check(HeroContext);
+
+		/*
+		if(UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
+		{
+			Subsystem->AddMappingContext(HeroContext, 0);
+		}*/
+		
+	}
 }
 
 //승언 : 컨트롤러가 빙의했을 때
@@ -46,6 +48,11 @@ void AEHPlayerController::OnPossess(APawn* InPawn)
 
 void AEHPlayerController::ClientPossess_Implementation()
 {
+	if(UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
+	{
+		Subsystem->AddMappingContext(HeroContext, 0);
+	}
+	
 	//Client가 PlayerState를 전달받는 게 느리기 때문에 받을 때까지 반복 호출한다.
 	GetWorldTimerManager().SetTimer(PlayerStateCheckTimerHandle, this, &AEHPlayerController::InitializeHUD, 0.1f, true);
 }
@@ -73,8 +80,13 @@ void AEHPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
+
+	UE_LOG(LogTemp, Log, TEXT("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"));
+	
 	// PlayerController에 존재하는 InputComponent를 EnhancedInputComponent로 변환한다. 실패시 Error
 	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
+
+	UE_LOG(LogTemp, Log, TEXT("????????????????????????????????????????????"));
 
 	// Jumping
 	EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ThisClass::Jump);
@@ -87,6 +99,10 @@ void AEHPlayerController::SetupInputComponent()
 
 	// Shoot
 	EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Triggered, this, &ThisClass::Shoot);
+
+
+	FInputModeGameOnly InputMode;
+	SetInputMode(InputMode);
 }
 
 void AEHPlayerController::Jump()
