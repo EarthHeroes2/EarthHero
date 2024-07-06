@@ -76,24 +76,30 @@ bool UMainMenuWidget::Initialize()
 	if (Play_Btn)
 	{
 		Play_Btn->OnClicked.AddDynamic(this, &ThisClass::Play_BtnClicked);
+		ButtonArray.Add(Play_Btn);
 	}
 	if (Join_Btn)
 	{
 		Join_Btn->OnClicked.AddDynamic(this, &ThisClass::Join_BtnClicked);
+		ButtonArray.Add(Join_Btn);
 	}
 	if (Exit_Btn)
 	{
 		Exit_Btn->OnClicked.AddDynamic(this, &ThisClass::Exit_BtnClicked);
+		ButtonArray.Add(Exit_Btn);
 	}
 
 	if(LobbyList_Btn)
 	{
 		LobbyList_Btn->OnClicked.AddDynamic(this, &ThisClass::LobbyListBtnClicked);
+		ButtonArray.Add(LobbyList_Btn);
 	}
 	if(FindLobby_Btn)
 	{
 		FindLobby_Btn->OnClicked.AddDynamic(this, &ThisClass::FindLobbyBtnClicked);
+		ButtonArray.Add(FindLobby_Btn);
 	}
+	
 
 	return true;
 }
@@ -296,9 +302,15 @@ void UMainMenuWidget::FindLobbys()
 
             UE_LOG(LogTemp, Log, TEXT("Finding Lobby"));
 
+        	//로비 리스트 버튼 및 새로 고침 버튼 막음
+        	LobbyList_Btn->SetIsEnabled(false);
+        	FindLobby_Btn->SetIsEnabled(false); 
+        	
             if (!Session->FindSessions(0, Search))
             {
                 UE_LOG(LogTemp, Warning, TEXT("Find lobby failed"));
+            	LobbyList_Btn->SetIsEnabled(true);
+            	FindLobby_Btn->SetIsEnabled(true);
             }
         }
     }
@@ -354,6 +366,9 @@ void UMainMenuWidget::HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRe
             }
             else
             {
+            	LobbyList_Btn->SetIsEnabled(true);
+            	FindLobby_Btn->SetIsEnabled(true);
+            	
                 UE_LOG(LogTemp, Warning, TEXT("Find lobbys failed."));
                 if(GEngine)
                     GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Yellow, FString::Printf(TEXT("Find lobbys failed!")));
@@ -412,4 +427,6 @@ void UMainMenuWidget::UpdateLobbyList(TArray<FOnlineSessionSearchResult> FindLob
 		else i++;
 	}
 	
+	LobbyList_Btn->SetIsEnabled(true);
+	FindLobby_Btn->SetIsEnabled(true);
 }

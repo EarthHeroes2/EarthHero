@@ -105,4 +105,10 @@ private:
 
 	TArray<FString> LobbyIdList;
 	TArray<ULobbyRowWidget*> LobbyRowList;
+
+
+
+
+	//주요 버튼들 저장
+	TArray<UButton*> ButtonArray;
 };
