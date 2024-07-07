@@ -20,9 +20,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Upgrade")
 	TArray<FHeroUpgradeStructure> HeroUpgrades;
 
-	UFUNCTION()
+	UFUNCTION(Server, Reliable)
 	void PushRandomHeroUpgrade();
 
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 protected:
 	virtual void BeginPlay() override;

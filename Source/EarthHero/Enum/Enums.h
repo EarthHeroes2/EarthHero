@@ -11,8 +11,7 @@ enum EClassType
 	NumberOfClass
 };
 
-UENUM(BlueprintType)
-enum class EHeroUpgrade : uint8
+enum EHeroUpgrade
 {
 	Pb_NormalAttackDamage,
 	Pb_NormalAttackSpeed,

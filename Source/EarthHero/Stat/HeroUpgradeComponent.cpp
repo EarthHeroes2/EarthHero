@@ -2,13 +2,24 @@
 
 #include "HeroUpgradeComponent.h"
 
+#include "Net/UnrealNetwork.h"
+
 UHeroUpgradeComponent::UHeroUpgradeComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
 
-void UHeroUpgradeComponent::PushRandomHeroUpgrade()
+// Called when the game starts
+void UHeroUpgradeComponent::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// ...
+	
+}
+
+void UHeroUpgradeComponent::PushRandomHeroUpgrade_Implementation()
 {
 	RandomUpgrades.Empty();
 	
@@ -37,12 +48,11 @@ void UHeroUpgradeComponent::PushRandomHeroUpgrade()
 	}
 }
 
-// Called when the game starts
-void UHeroUpgradeComponent::BeginPlay()
+void UHeroUpgradeComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
-	Super::BeginPlay();
-
-	// ...
-	
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	// DOREPLIFETIME(UHeroUpgradeComponent, HeroUpgrades);
+	// DOREPLIFETIME(UHeroUpgradeComponent, RandomUpgrades);
 }
+
 

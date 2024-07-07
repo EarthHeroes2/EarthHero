@@ -257,7 +257,9 @@ void UStatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	// HeroStat 속성을 복제 목록에 추가, 모든 클라이언트에게 복사
+	//복제 목록에 추가, 소유 클라이언트에게 복사
 	DOREPLIFETIME(UStatComponent, HeroStat);
 	DOREPLIFETIME(UStatComponent, BaseHeroStat);
+	DOREPLIFETIME(UStatComponent, InGameHUD);
+	DOREPLIFETIME(UStatComponent, HeroUpgradeComponent);
 }

@@ -5,7 +5,9 @@
 
 #include "EarthHero/Stat/ShooterStatComponent.h"
 #include "EarthHero/Stat/StatComponent.h"
+#include "EarthHero/Enum/Enums.h"
 #include "EarthHero/Stat/Structure/HeroUpgrageStructure.h"
+#include "Net/UnrealNetwork.h"
 
 AEHPlayerState::AEHPlayerState()
 {
@@ -23,25 +25,24 @@ AEHPlayerState::AEHPlayerState()
 	static ConstructorHelpers::FObjectFinder<UDataTable> MechanicDataTable(TEXT("/Game/Data/HeroUpgrade/DT_MechanicHeroUpgrade.DT_MechanicHeroUpgrade"));
 	if (WarriorDataTable.Succeeded())
 	{
-		MechanicHeroUpgradeDataTable = WarriorDataTable.Object;
+		MechanicHeroUpgradeDataTable = MechanicDataTable.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UDataTable> ShooterDataTable(TEXT("/Game/Data/HeroUpgrade/DT_ShooterHeroUpgrade.DT_ShooterHeroUpgrade"));
 	if (WarriorDataTable.Succeeded())
 	{
-		ShooterHeroUpgradeDataTable = WarriorDataTable.Object;
+		ShooterHeroUpgradeDataTable = ShooterDataTable.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UDataTable> ArcherDataTable(TEXT("/Game/Data/HeroUpgrade/DT_ArcherHeroUpgrade.DT_ArcherHeroUpgrade"));
 	if (WarriorDataTable.Succeeded())
 	{
-		ArcherHeroUpgradeDataTable = WarriorDataTable.Object;
+		ArcherHeroUpgradeDataTable = ArcherDataTable.Object;
 	}
 	
 	//히어로 업그레이드 컴포넌트
 	HeroUpgradeComponent = CreateDefaultSubobject<UHeroUpgradeComponent>(TEXT("HeroUpgradeComponent"));
 
-	//테스트를 위해 임시 카피 프로퍼티 호출
-	// PlayerClass = Shooter;
-	// CopyProperties(this);
+	//리플리케이트 가능하게 설정
+	bReplicates = true;
 }
 
 //현재 플레이어 스테이트에서 새로 생기는 플레이어 스테이트로 정보 복사
@@ -63,12 +64,16 @@ void AEHPlayerState::CopyProperties(APlayerState* PlayerState)
 void AEHPlayerState::BeginPlay()
 {
 	Super::BeginPlay();
-	
 
-	if (IsRunningDedicatedServer())
-	{
-		GetWorldTimerManager().SetTimer(SetStatComponentTimerHandle, this, &AEHPlayerState::SetStatComponent, 0.1f, true);
-	}
+	//테스트를 위해 임시 카피 프로퍼티 호출
+	// if (HasAuthority())
+	// {
+	// 	UE_LOG(LogTemp, Log, TEXT("This instance is dedicated. (is the server)"));
+	// 	PlayerClass = Shooter;
+	// 	CopyProperties(this);
+	// }
+	
+	GetWorldTimerManager().SetTimer(SetStatComponentTimerHandle, this, &AEHPlayerState::SetStatComponent, 0.1f, true);
 }
 
 void AEHPlayerState::SetStatComponent()
@@ -81,6 +86,7 @@ void AEHPlayerState::SetStatComponent()
 		switch (PlayerClass)
 		{
 		case Warrior:
+			UE_LOG(LogTemp, Error, TEXT("EHPlayerState: Possesed Character is Warrior"));
 			DestroyComponent(MechanicStatComponent);
 			DestroyComponent(ShooterStatComponent);
 			DestroyComponent(ArcherStatComponent);
@@ -90,6 +96,7 @@ void AEHPlayerState::SetStatComponent()
 			break;
 		
 		case Mechanic:
+			UE_LOG(LogTemp, Error, TEXT("EHPlayerState: Possesed Character is Mechanic"));
 			DestroyComponent(WarriorStatComponent);
 			DestroyComponent(ShooterStatComponent);
 			DestroyComponent(ArcherStatComponent);
@@ -99,6 +106,7 @@ void AEHPlayerState::SetStatComponent()
 			break;
 		
 		case Shooter:
+			UE_LOG(LogTemp, Error, TEXT("EHPlayerState: Possesed Character is Shooter"));
 			DestroyComponent(MechanicStatComponent);
 			DestroyComponent(WarriorStatComponent);
 			DestroyComponent(ArcherStatComponent);
@@ -108,6 +116,7 @@ void AEHPlayerState::SetStatComponent()
 			break;
 		
 		case Archer:
+			UE_LOG(LogTemp, Error, TEXT("EHPlayerState: Possesed Character is Archer"));
 			DestroyComponent(MechanicStatComponent);
 			DestroyComponent(WarriorStatComponent);
 			DestroyComponent(ShooterStatComponent);
@@ -115,12 +124,17 @@ void AEHPlayerState::SetStatComponent()
 
 			ArcherStatComponent->SetHeroUpgradeStComp(HeroUpgradeComponent);
 			break;
+			
 		default:
 			UE_LOG(LogTemp, Error, TEXT("Invalid Player Class"));
 			return;
 		}
 	
 		LoadHeroUpgradeDatatable();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("EHPlayerState: failed CopyProperties"));
 	}
 }
 
@@ -152,33 +166,38 @@ void AEHPlayerState::DestroyComponent(UStatComponent* Target)
 
 void AEHPlayerState::LoadHeroUpgradeDatatable()
 {
-	if (HeroUpgradeDataTable)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("HeroUpgradeDatatable successfully loaded"));
-		TArray<FHeroUpgradeStructure*> AllUpgrades;
-		HeroUpgradeDataTable->GetAllRows(TEXT(""), AllUpgrades);
+	TArray<FHeroUpgradeStructure*> AllUpgrades;
+	HeroUpgradeDataTable->GetAllRows(TEXT(""), AllUpgrades);
 
-		HeroUpgradeComponent->HeroUpgrades.Empty();
-		for (FHeroUpgradeStructure* Upgrade : AllUpgrades)
+	HeroUpgradeComponent->HeroUpgrades.Empty();
+	for (FHeroUpgradeStructure* Upgrade : AllUpgrades)
+	{
+		if (Upgrade)
 		{
-			if (Upgrade)
-			{
-				HeroUpgradeComponent->HeroUpgrades.Add(*Upgrade);
-			}
-		}
-		
-		// 로그 출력
-		for (const FHeroUpgradeStructure& Upgrade : HeroUpgradeComponent->HeroUpgrades)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Upgrade Name: %s, Explanation: %s, Level: %d"),
-				*Upgrade.UpgradeName.ToString(),
-				*Upgrade.Explanation.ToString(),
-				Upgrade.UpgradeLevel);
+			HeroUpgradeComponent->HeroUpgrades.Add(*Upgrade);
 		}
 	}
-	else
+	
+	// 로그 출력
+	for (const FHeroUpgradeStructure& Upgrade : HeroUpgradeComponent->HeroUpgrades)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("HeroUpgradeDataTable is not valid"));
+		UE_LOG(LogTemp, Warning, TEXT("Upgrade Name: %s, Explanation: %s, Level: %d"),
+			*Upgrade.UpgradeName.ToString(),
+			*Upgrade.Explanation.ToString(),
+			Upgrade.UpgradeLevel);
 	}
 }
 
+
+void AEHPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	
+	DOREPLIFETIME(AEHPlayerState, ShooterStatComponent);
+	DOREPLIFETIME(AEHPlayerState, ArcherStatComponent);
+	DOREPLIFETIME(AEHPlayerState, WarriorStatComponent);
+	DOREPLIFETIME(AEHPlayerState, MechanicStatComponent);
+	DOREPLIFETIME(AEHPlayerState, HeroUpgradeComponent);
+	DOREPLIFETIME(AEHPlayerState, PlayerClass);
+	DOREPLIFETIME(AEHPlayerState, IsCopyPropertiesEnd);
+}

@@ -22,7 +22,7 @@ struct FHeroUpgradeStructure : public FTableRowBase
 	int32 UpgradeLevel = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HeroUpgrade")
-	EHeroUpgrade HeroUpgradeType;
+	int HeroUpgradeType;
 
 	// == 연산자 오버로드
 	bool operator==(const FHeroUpgradeStructure& Other) const

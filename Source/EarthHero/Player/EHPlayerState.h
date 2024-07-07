@@ -25,25 +25,28 @@ public:
 	
 	virtual void CopyProperties(APlayerState* PlayerState) override;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category = "Component")
 	UWarriorStatComponent* WarriorStatComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category = "Component")
 	UMechanicStatComponent* MechanicStatComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category = "Component")
 	UShooterStatComponent* ShooterStatComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category = "Component")
 	UArcherStatComponent* ArcherStatComponent;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category = "Component")
 	UHeroUpgradeComponent* HeroUpgradeComponent;
 
 	UFUNCTION(BlueprintCallable, Category = "Component")
 	UStatComponent *GetStatComponent();
-	
-	EClassType PlayerClass;
+
+	UPROPERTY(Replicated)
+	int PlayerClass;
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 protected:
 	virtual void BeginPlay() override;
@@ -73,6 +76,6 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Upgrade", meta = (AllowPrivateAccess = "true"))
 	UDataTable* ArcherHeroUpgradeDataTable;
 
-	UPROPERTY()
+	UPROPERTY(Replicated)
 	bool IsCopyPropertiesEnd = false;
 };
