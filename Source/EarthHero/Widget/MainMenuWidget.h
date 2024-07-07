@@ -93,6 +93,14 @@ private:
 
 
 
+	UPROPERTY(meta = (BindWidget))
+	UBorder* LobbySetting_Bd;
+	
+	UPROPERTY(meta = (BindWidget))
+	UButton* CreateLobbyOK_Btn;
+
+	UPROPERTY(meta = (BindWidget))
+	UButton* CreateLobbyCancle_Btn;
 
 
 	

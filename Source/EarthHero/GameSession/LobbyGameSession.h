@@ -39,6 +39,7 @@ protected:
 public:
 	void CreateSession(FString PortNumber);
 	void ChangeAdvertiseState(bool bAdvertise);
+	void ChangeLobbyName(FString LobbyName);
 	void UpdateNumberOfJoinedPlayers();
 
 protected:
