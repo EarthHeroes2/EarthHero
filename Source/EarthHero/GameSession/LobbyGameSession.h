@@ -20,7 +20,7 @@ public:
 protected:
 	int NumberOfPlayersInSession = 0;
 
-	FName SessionName = "SessionName"; //무슨의미일까
+	FName SessionName = "NAME_GameSession"; //무슨의미일까
 
 	FUniqueNetIdRepl HostPlayerId;
 	APlayerController* NewPlayerPlayerController;

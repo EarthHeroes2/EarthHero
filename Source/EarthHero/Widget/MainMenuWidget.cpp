@@ -13,6 +13,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "OnlineSubsystemUtils.h"
+#include "Components/EditableTextBox.h"
 #include "Components/ScrollBox.h"
 
 
@@ -105,12 +106,12 @@ bool UMainMenuWidget::Initialize()
 
 	if(CreateLobbyOK_Btn)
 	{
-		CreateLobbyOK_Btn->OnClicked.AddDynamic(this, &ThisClass::CreateLobbyOKBtnClicked());
+		CreateLobbyOK_Btn->OnClicked.AddDynamic(this, &ThisClass::CreateLobbyOKBtnClicked);
 		ButtonArray.Add(CreateLobbyOK_Btn);
 	}
 	if(CreateLobbyCancle_Btn)
 	{
-		CreateLobbyCancle_Btn->OnClicked.AddDynamic(this, &ThisClass::CreateLobbyCancleBtnClicked());
+		CreateLobbyCancle_Btn->OnClicked.AddDynamic(this, &ThisClass::CreateLobbyCancleBtnClicked);
 		ButtonArray.Add(CreateLobbyCancle_Btn);
 	}
 
@@ -215,8 +216,6 @@ void UMainMenuWidget::Play_BtnClicked()
 		if(LobbySetting_Bd->GetVisibility() == ESlateVisibility::Collapsed)
 		{
 			LobbySetting_Bd->SetVisibility(ESlateVisibility::Visible);
-
-			FindLobbys("FindLobby");
 		}
 		else
 			LobbySetting_Bd->SetVisibility(ESlateVisibility::Collapsed);
@@ -264,7 +263,7 @@ void UMainMenuWidget::CreateLobbyOKBtnClicked()
 	if (EHGameInstance)
 	{
 		//인스턴스에 private 여부 잠시 저장
-		EHGameInstance->LobbyName = LobbyName_Tb.GetText();
+		EHGameInstance->LobbyName = LobbyName_Etb->GetText().ToString();
 		EHGameInstance->IsCheckedPrivate = Private_Cb->IsChecked();
 	}
 

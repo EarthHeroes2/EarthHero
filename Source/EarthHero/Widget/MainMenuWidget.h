@@ -9,6 +9,7 @@
 #include "MainMenuWidget.generated.h"
 
 
+class UEditableTextBox;
 class UScrollBox;
 class ULobbyRowWidget;
 class UBorder;
@@ -82,6 +83,12 @@ private:
 	UFUNCTION()
 	void Exit_BtnClicked();
 
+	UFUNCTION()
+	void CreateLobbyOKBtnClicked();
+
+	UFUNCTION()
+	void CreateLobbyCancleBtnClicked();
+
 	void MenuTearDown();
 
 	// The subsystem designed to handle all online session functionality
@@ -95,6 +102,9 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	UBorder* LobbySetting_Bd;
+
+	UPROPERTY(meta = (BindWidget))
+	UEditableTextBox* LobbyName_Etb;
 	
 	UPROPERTY(meta = (BindWidget))
 	UButton* CreateLobbyOK_Btn;
@@ -136,8 +146,7 @@ private:
 	TArray<ULobbyRowWidget*> LobbyRowList;
 
 
-
-
+	
 	//주요 버튼들 저장
 	TArray<UButton*> ButtonArray;
 

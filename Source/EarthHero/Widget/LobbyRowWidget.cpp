@@ -35,7 +35,7 @@ void ULobbyRowWidget::UpdateLobbyInfo(FOnlineSessionSearchResult Lobby)
 	int NumberOfJoinedPlayers;
 
 	FText MaxNumberOfPlayers = FText::AsNumber(LobbyInfo.Session.SessionSettings.NumPublicConnections);
-	bool bKeyValueFound = LobbyInfo.Session.SessionSettings.Get("NumberOfJoinedPlayers", NumberOfJoinedPlayers);
+	bKeyValueFound = LobbyInfo.Session.SessionSettings.Get("NumberOfJoinedPlayers", NumberOfJoinedPlayers);
 	
 	if(bKeyValueFound)
 		PlayerCount_Tb->SetText(FText::Format(FText::FromString("{0}/{1}"), FText::AsNumber(NumberOfJoinedPlayers), MaxNumberOfPlayers));

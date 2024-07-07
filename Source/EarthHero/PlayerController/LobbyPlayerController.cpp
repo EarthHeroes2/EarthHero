@@ -44,7 +44,7 @@ void ALobbyPlayerController::BeginPlay()
 			}
 			else UE_LOG(LogTemp, Log, TEXT("Lobby mode request private? : false"));
 
-			UE_LOG(LogTemp, Log, TEXT("request Lobby Name: %s"), EHGameInstance->LobbyName);
+			UE_LOG(LogTemp, Log, TEXT("request Lobby Name: %s"), *EHGameInstance->LobbyName);
 			
 			Server_InitSetup(!(EHGameInstance->IsCheckedPrivate), EHGameInstance->LobbyName);
 
@@ -71,7 +71,7 @@ void ALobbyPlayerController::ShowLobbyWidget()
 }
 
 //클라이언트가 서버에게 준비됨을 알리며 실행되는 함수
-void ALobbyPlayerController::Server_InitSetup_Implementation(bool bAdvertise, FString LobbyName)
+void ALobbyPlayerController::Server_InitSetup_Implementation(bool bAdvertise, const FString& LobbyName)
 {
 	ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
 	
