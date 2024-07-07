@@ -65,6 +65,7 @@ void ALobbyGameSession::CreateSession(FString PortNumber)
             SessionSettings->Set("PortNumber", PortNumber, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
             SessionSettings->Set("NumberOfJoinedPlayers", 0, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
             SessionSettings->Set("Advertise", true, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+            SessionSettings->Set("LobbyName", FString("AAAAAAAAA"), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 
             UE_LOG(LogTemp, Log, TEXT("Creating lobby..."));
             

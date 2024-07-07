@@ -79,8 +79,7 @@
   <component name="ChangeListManager">
     <list default="true" id="4591bad7-fd9f-4860-903f-8700cd913377" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Menu/WBP_Lobby_Row.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Menu/WBP_Lobby_Row.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Widget/LobbyRowWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Widget/LobbyRowWidget.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -121,7 +120,7 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;ServerTest&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;PlayFabTest&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -274,7 +273,13 @@
       <workItem from="1720191203357" duration="3041000" />
       <workItem from="1720234016616" duration="2508000" />
       <workItem from="1720236628652" duration="1159000" />
-      <workItem from="1720244489662" duration="2888000" />
+      <workItem from="1720244489662" duration="10214000" />
+      <workItem from="1720257907484" duration="4627000" />
+      <workItem from="1720262719514" duration="6661000" />
+      <workItem from="1720269644128" duration="3385000" />
+      <workItem from="1720273822535" duration="3549000" />
+      <workItem from="1720331632765" duration="8528000" />
+      <workItem from="1720349078932" duration="836000" />
     </task>
     <servers />
   </component>

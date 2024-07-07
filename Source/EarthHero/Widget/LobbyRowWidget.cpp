@@ -25,6 +25,13 @@ void ULobbyRowWidget::UpdateLobbyInfo(FOnlineSessionSearchResult Lobby)
 {
 	LobbyInfo = Lobby;
 	
+	FString LobbyName;
+	bool bKeyValueFound = LobbyInfo.Session.SessionSettings.Get("LobbyName", LobbyName);
+
+	if(bKeyValueFound) LobbyName_Tb->SetText(FText::FromString(LobbyName));
+	else LobbyName_Tb->SetText(FText::FromString("Earth Hero"));
+
+	
 	int NumberOfJoinedPlayers;
 
 	FText MaxNumberOfPlayers = FText::AsNumber(LobbyInfo.Session.SessionSettings.NumPublicConnections);
@@ -33,7 +40,6 @@ void ULobbyRowWidget::UpdateLobbyInfo(FOnlineSessionSearchResult Lobby)
 	if(bKeyValueFound)
 		PlayerCount_Tb->SetText(FText::Format(FText::FromString("{0}/{1}"), FText::AsNumber(NumberOfJoinedPlayers), MaxNumberOfPlayers));
 
-	LobbyName_Tb->SetText(FText::FromString(LobbyInfo.GetSessionIdStr())); //임시
 	
 	Ping_Tb->SetText(FText::Format(FText::FromString("{0}ms"), LobbyInfo.PingInMs));
 }

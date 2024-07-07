@@ -430,7 +430,10 @@ void UMainMenuWidget::HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRe
                     bool bAdvertise;
                     bool bKeyValueFound4 = SessionInSearchResult.Session.SessionSettings.Get("Advertise", bAdvertise);
 
-                    if (bKeyValueFound1 && bKeyValueFound2 && bKeyValueFound3 && bKeyValueFound4)
+                	FString LobbyName;
+                	bool bKeyValueFound5 = SessionInSearchResult.Session.SessionSettings.Get("LobbyName", LobbyName);
+
+                    if (bKeyValueFound1 && bKeyValueFound2 && bKeyValueFound3 && bKeyValueFound4 && bKeyValueFound5)
                     {
                     	if (GameName == "EH2" &&
 								(
