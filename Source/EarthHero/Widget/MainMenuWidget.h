@@ -53,6 +53,8 @@ protected:
 
 private:
 
+	const FName JoinSessionName = "SessionName";
+
 	UPROPERTY(meta = (BindWidget))
 	class UButton* Play_Btn;
 
@@ -134,7 +136,6 @@ private:
 
 
 protected:
-	FName JoinedSessionName;
 	FString LeaveSessionReason, FindSessionReason;
 
 public:
