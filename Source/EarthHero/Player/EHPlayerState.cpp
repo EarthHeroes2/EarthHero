@@ -40,8 +40,8 @@ AEHPlayerState::AEHPlayerState()
 	HeroUpgradeComponent = CreateDefaultSubobject<UHeroUpgradeComponent>(TEXT("HeroUpgradeComponent"));
 
 	//테스트를 위해 임시 카피 프로퍼티 호출
-	PlayerClass = Shooter;
-	CopyProperties(this);
+	// PlayerClass = Shooter;
+	// CopyProperties(this);
 }
 
 //현재 플레이어 스테이트에서 새로 생기는 플레이어 스테이트로 정보 복사
