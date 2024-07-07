@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "EarthHero/EHComponents/CombatComponent.h"
 #include "ShooterCombatComponent.generated.h"
 
 
 class AEHShooter;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class EARTHHERO_API UShooterCombatComponent : public UActorComponent
+class EARTHHERO_API UShooterCombatComponent : public UCombatComponent
 {
 	GENERATED_BODY()
 
@@ -18,6 +19,8 @@ public:
 	UShooterCombatComponent();
 
 	void Fire();
+
+	void GrenadeFire();
 	
 protected:
 	UFUNCTION(Server, Reliable)
@@ -29,6 +32,12 @@ protected:
 	virtual void BeginPlay() override;
 	
 	void ResetFire();
+
+	UFUNCTION(Server, Reliable)
+	void Server_GrenadeFire();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void NetMulticast_GrenadeFire();
 
 private:
 	UPROPERTY()

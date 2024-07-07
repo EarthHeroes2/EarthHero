@@ -20,7 +20,7 @@ public:
 protected:
 	int NumberOfPlayersInSession = 0;
 
-	FName SessionName = "SessionName"; //무슨의미일까
+	FName SessionName = "NAME_GameSession"; //무슨의미일까
 
 	FUniqueNetIdRepl HostPlayerId;
 	APlayerController* NewPlayerPlayerController;
@@ -39,6 +39,7 @@ protected:
 public:
 	void CreateSession(FString PortNumber);
 	void ChangeAdvertiseState(bool bAdvertise);
+	void ChangeLobbyName(FString LobbyName);
 	void UpdateNumberOfJoinedPlayers();
 
 protected:

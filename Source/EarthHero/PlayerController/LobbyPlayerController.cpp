@@ -35,7 +35,7 @@ void ALobbyPlayerController::BeginPlay()
 		
 		UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(GetWorld()->GetGameInstance());
 		
-		//비밀방 여부 서버에게 알려줌
+		//비밀방 여부 서버에게 알려줌 (최대한 빨리)
 		if (EHGameInstance)
 		{
 			if (EHGameInstance->IsCheckedPrivate)
@@ -43,7 +43,12 @@ void ALobbyPlayerController::BeginPlay()
 				UE_LOG(LogTemp, Log, TEXT("Lobby mode request private? : true"));
 			}
 			else UE_LOG(LogTemp, Log, TEXT("Lobby mode request private? : false"));
-			Server_InitSetup(!(EHGameInstance->IsCheckedPrivate));
+
+			UE_LOG(LogTemp, Log, TEXT("request Lobby Name: %s"), *EHGameInstance->LobbyName);
+			
+			Server_InitSetup(!(EHGameInstance->IsCheckedPrivate), EHGameInstance->LobbyName);
+
+			
 		}
 	}
 }
@@ -66,7 +71,7 @@ void ALobbyPlayerController::ShowLobbyWidget()
 }
 
 //클라이언트가 서버에게 준비됨을 알리며 실행되는 함수
-void ALobbyPlayerController::Server_InitSetup_Implementation(bool bAdvertise)
+void ALobbyPlayerController::Server_InitSetup_Implementation(bool bAdvertise, const FString& LobbyName)
 {
 	ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
 	
@@ -81,6 +86,7 @@ void ALobbyPlayerController::Server_InitSetup_Implementation(bool bAdvertise)
 			if (LobbyGameSession)
 			{
 				LobbyGameSession->ChangeAdvertiseState(bAdvertise);
+				LobbyGameSession->ChangeLobbyName(LobbyName);
 			}
 		}
 	}

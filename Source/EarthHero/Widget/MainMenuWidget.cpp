@@ -13,6 +13,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "OnlineSubsystemUtils.h"
+#include "Components/EditableTextBox.h"
 #include "Components/ScrollBox.h"
 
 
@@ -103,6 +104,17 @@ bool UMainMenuWidget::Initialize()
 		ButtonArray.Add(Exit_Btn);
 	}
 
+	if(CreateLobbyOK_Btn)
+	{
+		CreateLobbyOK_Btn->OnClicked.AddDynamic(this, &ThisClass::CreateLobbyOKBtnClicked);
+		ButtonArray.Add(CreateLobbyOK_Btn);
+	}
+	if(CreateLobbyCancle_Btn)
+	{
+		CreateLobbyCancle_Btn->OnClicked.AddDynamic(this, &ThisClass::CreateLobbyCancleBtnClicked);
+		ButtonArray.Add(CreateLobbyCancle_Btn);
+	}
+
 	if(LobbyList_Btn)
 	{
 		LobbyList_Btn->OnClicked.AddDynamic(this, &ThisClass::LobbyListBtnClicked);
@@ -113,7 +125,6 @@ bool UMainMenuWidget::Initialize()
 		FindLobby_Btn->OnClicked.AddDynamic(this, &ThisClass::FindLobbyBtnClicked);
 		ButtonArray.Add(FindLobby_Btn);
 	}
-	
 
 	return true;
 }
@@ -199,34 +210,22 @@ void UMainMenuWidget::OnStartSession(bool bWasSuccessful)
 void UMainMenuWidget::Play_BtnClicked()
 {
 	UE_LOG(LogTemp, Log, TEXT("Create Lobby Clicked"));
-	UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(GetWorld()->GetGameInstance());
-	if (EHGameInstance)
+	
+	if(LobbySetting_Bd)
 	{
-		//인스턴스에 private 여부 잠시 저장
-		EHGameInstance->IsCheckedPrivate = Private_Cb->IsChecked();
+		if(LobbySetting_Bd->GetVisibility() == ESlateVisibility::Collapsed)
+		{
+			LobbySetting_Bd->SetVisibility(ESlateVisibility::Visible);
+		}
+		else
+			LobbySetting_Bd->SetVisibility(ESlateVisibility::Collapsed);
 	}
-
-	LeaveSession("CreateLobby");
-
-	/* 이전꺼
-	Play_Btn->SetIsEnabled(false);
-	if (MultiplayerSessionsSubsystem)
-	{
-		MultiplayerSessionsSubsystem->CreateSession(NumPublicConnections, MatchType);
-	}*/
 }
 
 void UMainMenuWidget::Join_BtnClicked()
 {
 	UE_LOG(LogTemp, Log, TEXT("Join Lobby Clicked"));
 	LeaveSession("JoinLobby");
-
-	/* 이전꺼
-	Join_Btn->SetIsEnabled(false);
-	if (MultiplayerSessionsSubsystem)
-	{
-		MultiplayerSessionsSubsystem->FindSessions(10000);
-	}*/
 }
 
 //임시로 지우고 생성하는 방식으로 만듬
@@ -256,6 +255,39 @@ void UMainMenuWidget::Exit_BtnClicked()
 		UKismetSystemLibrary::QuitGame(GetWorld(), PlayerController, EQuitPreference::Quit, false);
 	}
 }
+
+
+void UMainMenuWidget::CreateLobbyOKBtnClicked()
+{
+	UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(GetWorld()->GetGameInstance());
+	if (EHGameInstance)
+	{
+		//인스턴스에 private 여부 잠시 저장
+		EHGameInstance->LobbyName = LobbyName_Etb->GetText().ToString();
+		EHGameInstance->IsCheckedPrivate = Private_Cb->IsChecked();
+	}
+
+	LeaveSession("CreateLobby");
+}
+void UMainMenuWidget::CreateLobbyCancleBtnClicked()
+{
+	LobbySetting_Bd->SetVisibility(ESlateVisibility::Collapsed);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 void UMainMenuWidget::MenuTearDown()
 {
@@ -430,7 +462,10 @@ void UMainMenuWidget::HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRe
                     bool bAdvertise;
                     bool bKeyValueFound4 = SessionInSearchResult.Session.SessionSettings.Get("Advertise", bAdvertise);
 
-                    if (bKeyValueFound1 && bKeyValueFound2 && bKeyValueFound3 && bKeyValueFound4)
+                	FString LobbyName;
+                	bool bKeyValueFound5 = SessionInSearchResult.Session.SessionSettings.Get("LobbyName", LobbyName);
+
+                    if (bKeyValueFound1 && bKeyValueFound2 && bKeyValueFound3 && bKeyValueFound4 && bKeyValueFound5)
                     {
                     	if (GameName == "EH2" &&
 								(
