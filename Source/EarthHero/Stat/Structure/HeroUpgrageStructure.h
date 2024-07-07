@@ -23,4 +23,13 @@ struct FHeroUpgradeStructure : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HeroUpgrade")
 	EHeroUpgrade HeroUpgradeType;
+
+	// == 연산자 오버로드
+	bool operator==(const FHeroUpgradeStructure& Other) const
+	{
+		return UpgradeName.EqualTo(Other.UpgradeName) && 
+			   Explanation.EqualTo(Other.Explanation) && 
+			   UpgradeLevel == Other.UpgradeLevel && 
+			   HeroUpgradeType == Other.HeroUpgradeType;
+	}
 };

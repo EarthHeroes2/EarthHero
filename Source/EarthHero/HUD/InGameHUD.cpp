@@ -8,6 +8,10 @@
 
 void UInGameHUD::InitializePlayerState(UStatComponent *StatComponent)
 {
+	if (!StatComponent)
+	{
+		UE_LOG(LogClass, Warning, TEXT("InGameHUD: ERROR!! StatComponent is NULL"));
+	}
 	StatComponentRef = StatComponent;
 }
 

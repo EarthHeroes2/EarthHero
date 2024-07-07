@@ -23,6 +23,7 @@ public:
 	UFUNCTION()
 	void PushRandomHeroUpgrade();
 
+
 protected:
 	virtual void BeginPlay() override;
 

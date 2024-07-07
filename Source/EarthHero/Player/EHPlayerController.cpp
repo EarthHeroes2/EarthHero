@@ -68,10 +68,29 @@ void AEHPlayerController::InitializeHUD()
 		HUD = Cast<UInGameHUD>(CreateWidget(this, InGameHUD));
 		if (HUD)
 		{
+			if (HasAuthority())
+			{
+				UE_LOG(LogClass, Warning, TEXT("EHPlayerController(SERVER): HUD Cast Success!!"));
+			}
+			else
+			{
+				UE_LOG(LogClass, Warning, TEXT("EHPlayerController(Client): HUD Cast Success!!"));
+			}
 			//MyPlayerState(리플리케이트)->StatComponent->HUD로 전달
 			HUD->InitializePlayerState(MyPlayerState->GetStatComponent());
 			HUD->AddToViewport();
 			MyPlayerState->GetStatComponent()->SetInGameHUD(HUD);
+		}
+		else
+		{
+			if (HasAuthority())
+			{
+				UE_LOG(LogClass, Warning, TEXT("EHPlayerController(SERVER): HUD Cast Failed"));
+			}
+			else
+			{
+				UE_LOG(LogClass, Warning, TEXT("EHPlayerController(Client): HUD Cast Failed"));
+			}
 		}
 	}
 }
@@ -80,13 +99,9 @@ void AEHPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
-
-	UE_LOG(LogTemp, Log, TEXT("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"));
 	
 	// PlayerController에 존재하는 InputComponent를 EnhancedInputComponent로 변환한다. 실패시 Error
 	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
-
-	UE_LOG(LogTemp, Log, TEXT("????????????????????????????????????????????"));
 
 	// Jumping
 	EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ThisClass::Jump);

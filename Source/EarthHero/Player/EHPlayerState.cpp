@@ -40,8 +40,8 @@ AEHPlayerState::AEHPlayerState()
 	HeroUpgradeComponent = CreateDefaultSubobject<UHeroUpgradeComponent>(TEXT("HeroUpgradeComponent"));
 
 	//테스트를 위해 임시 카피 프로퍼티 호출
-	// PlayerClass = Shooter;
-	// CopyProperties(this);
+	PlayerClass = Shooter;
+	CopyProperties(this);
 }
 
 //현재 플레이어 스테이트에서 새로 생기는 플레이어 스테이트로 정보 복사
@@ -63,6 +63,8 @@ void AEHPlayerState::CopyProperties(APlayerState* PlayerState)
 			DestroyComponent(ShooterStatComponent);
 			DestroyComponent(ArcherStatComponent);
 			HeroUpgradeDataTable = WarriorHeroUpgradeDataTable;
+
+			WarriorStatComponent->SetHeroUpgradeStComp(HeroUpgradeComponent);
 			break;
 		
 		case Mechanic:
@@ -70,6 +72,8 @@ void AEHPlayerState::CopyProperties(APlayerState* PlayerState)
 			DestroyComponent(ShooterStatComponent);
 			DestroyComponent(ArcherStatComponent);
 			HeroUpgradeDataTable = MechanicHeroUpgradeDataTable;
+
+			MechanicStatComponent->SetHeroUpgradeStComp(HeroUpgradeComponent);
 			break;
 		
 		case Shooter:
@@ -77,6 +81,8 @@ void AEHPlayerState::CopyProperties(APlayerState* PlayerState)
 			DestroyComponent(WarriorStatComponent);
 			DestroyComponent(ArcherStatComponent);
 			HeroUpgradeDataTable = ShooterHeroUpgradeDataTable;
+
+			ShooterStatComponent->SetHeroUpgradeStComp(HeroUpgradeComponent);
 			break;
 		
 		case Archer:
@@ -84,6 +90,8 @@ void AEHPlayerState::CopyProperties(APlayerState* PlayerState)
 			DestroyComponent(WarriorStatComponent);
 			DestroyComponent(ShooterStatComponent);
 			HeroUpgradeDataTable = ArcherHeroUpgradeDataTable;
+
+			ArcherStatComponent->SetHeroUpgradeStComp(HeroUpgradeComponent);
 			break;
 	}
 	
@@ -118,7 +126,6 @@ void AEHPlayerState::DestroyComponent(UStatComponent* Target)
 
 void AEHPlayerState::LoadHeroUpgradeDatatable()
 {
-
 	if (HeroUpgradeDataTable)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("HeroUpgradeDatatable successfully loaded"));
@@ -133,7 +140,7 @@ void AEHPlayerState::LoadHeroUpgradeDatatable()
 				HeroUpgradeComponent->HeroUpgrades.Add(*Upgrade);
 			}
 		}
-
+		
 		// 로그 출력
 		for (const FHeroUpgradeStructure& Upgrade : HeroUpgradeComponent->HeroUpgrades)
 		{

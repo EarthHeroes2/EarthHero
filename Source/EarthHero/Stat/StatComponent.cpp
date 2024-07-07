@@ -9,6 +9,7 @@
 #include "Components/ActorComponent.h"
 
 #include "CoreMinimal.h"
+#include "HeroUpgradeComponent.h"
 #include "GameFramework/Actor.h"
 #include "TimerManager.h"  // FTimerHandle과 TimerManager를 사용하기 위해 필요
 #include "VectorUtil.h"
@@ -25,6 +26,10 @@ UStatComponent::UStatComponent()
 
 void UStatComponent::SetInGameHUD(UInGameHUD* ControllerInGameHUD)
 {
+	if (!ControllerInGameHUD)
+	{
+		UE_LOG(LogClass, Warning, TEXT("StatComponent: ERROR!! InGameHUD is NULL"));
+	}
 	InGameHUD = ControllerInGameHUD;
 }
 
@@ -120,7 +125,8 @@ void UStatComponent::UpdateExp(float ExpMount)
 	UpdateExpUI(GetExpPercent(), HeroStat.Level, isLevelUp);
 	if (isLevelUp)
 	{
-		
+		UE_LOG(LogTemp, Warning, TEXT("LevelUp.. PushRandomUpgrade Activate"));
+		HeroUpgradeComponent->PushRandomHeroUpgrade();
 	}
 }
 
@@ -143,6 +149,10 @@ void UStatComponent::UpdateExpUI_Implementation(float ExpPercent, int32 Level, b
 }
 
 
+void UStatComponent::SetHeroUpgradeStComp(UHeroUpgradeComponent* NewComponent)
+{
+	HeroUpgradeComponent = NewComponent;
+}
 
 /********************************************
  *스텟 가져오는 함수*/

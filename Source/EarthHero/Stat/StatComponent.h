@@ -27,6 +27,10 @@ public:
 	UFUNCTION(Client, Reliable)
 	void UpdateExpUI(float ExpPercent, int32 Level, bool IsLevelUp);
 
+	//HeroUpgradeComponent 설정 함수
+	void SetHeroUpgradeStComp(class UHeroUpgradeComponent *NewComponent);
+
+
 	//스텟 반환 함수
 	UFUNCTION(BlueprintPure, Category = "Stat")
 	float GetHealth() const;
@@ -100,5 +104,8 @@ private:
 
 	UPROPERTY()
 	class UInGameHUD *InGameHUD;
+
+	UPROPERTY()
+	class UHeroUpgradeComponent *HeroUpgradeComponent;
 
 };
