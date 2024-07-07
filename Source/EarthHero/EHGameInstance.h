@@ -26,6 +26,7 @@ private:
 	class UDataTable* CharacterStatDataTable = nullptr;
 
 public:
+	FString LobbyName;
 	bool IsCheckedPrivate = false;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
