@@ -46,12 +46,17 @@ public:
 	EClassType PlayerClass;
 
 protected:
-
+	virtual void BeginPlay() override;
 
 private:
 	static void DestroyComponent(UStatComponent *Target);
 
 	void LoadHeroUpgradeDatatable();
+	
+	FTimerHandle SetStatComponentTimerHandle;
+
+	UFUNCTION()
+	void SetStatComponent();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Upgrade", meta = (AllowPrivateAccess = "true"))
 	UDataTable* HeroUpgradeDataTable;
@@ -67,4 +72,7 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Upgrade", meta = (AllowPrivateAccess = "true"))
 	UDataTable* ArcherHeroUpgradeDataTable;
+
+	UPROPERTY()
+	bool IsCopyPropertiesEnd = false;
 };

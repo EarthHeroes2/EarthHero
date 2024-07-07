@@ -48,6 +48,8 @@ AEHPlayerState::AEHPlayerState()
 void AEHPlayerState::CopyProperties(APlayerState* PlayerState)
 {
 	Super::CopyProperties(PlayerState);
+
+	UE_LOG(LogTemp, Error, TEXT("Copy Properties Activated"));
 	
 	AEHPlayerState* EHPlayerState = Cast<AEHPlayerState>(PlayerState);
 	if (EHPlayerState)
@@ -55,9 +57,29 @@ void AEHPlayerState::CopyProperties(APlayerState* PlayerState)
 		EHPlayerState->PlayerClass = PlayerClass;
 	}
 
-	//직업을 확인하고 나머지 StatComponent를 비활성화
-	switch (PlayerClass)
+	EHPlayerState->IsCopyPropertiesEnd = true;
+}
+
+void AEHPlayerState::BeginPlay()
+{
+	Super::BeginPlay();
+	
+
+	if (IsRunningDedicatedServer())
 	{
+		GetWorldTimerManager().SetTimer(SetStatComponentTimerHandle, this, &AEHPlayerState::SetStatComponent, 0.1f, true);
+	}
+}
+
+void AEHPlayerState::SetStatComponent()
+{
+	if (IsCopyPropertiesEnd)
+	{
+		GetWorldTimerManager().ClearTimer(SetStatComponentTimerHandle);
+		
+		//직업을 확인하고 나머지 StatComponent를 비활성화
+		switch (PlayerClass)
+		{
 		case Warrior:
 			DestroyComponent(MechanicStatComponent);
 			DestroyComponent(ShooterStatComponent);
@@ -93,9 +115,13 @@ void AEHPlayerState::CopyProperties(APlayerState* PlayerState)
 
 			ArcherStatComponent->SetHeroUpgradeStComp(HeroUpgradeComponent);
 			break;
-	}
+		default:
+			UE_LOG(LogTemp, Error, TEXT("Invalid Player Class"));
+			return;
+		}
 	
-	LoadHeroUpgradeDatatable();
+		LoadHeroUpgradeDatatable();
+	}
 }
 
 UStatComponent* AEHPlayerState::GetStatComponent()
@@ -155,3 +181,4 @@ void AEHPlayerState::LoadHeroUpgradeDatatable()
 		UE_LOG(LogTemp, Warning, TEXT("HeroUpgradeDataTable is not valid"));
 	}
 }
+
