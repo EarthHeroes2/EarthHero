@@ -518,7 +518,7 @@ void UMainMenuWidget::JoinSession()
 
             UE_LOG(LogTemp, Log, TEXT("Joining session."));
 
-            if (!Session->JoinSession(0, "MainSession", *SessionToJoin))
+            if (!Session->JoinSession(0, JoinSessionName, *SessionToJoin))
             {
                 UE_LOG(LogTemp, Warning, TEXT("Join session failed"));
             	SetButtonsEnabled(true);
@@ -540,16 +540,14 @@ void UMainMenuWidget::HandleJoinSessionCompleted(FName SessionName, EOnJoinSessi
                 UE_LOG(LogTemp, Log, TEXT("Joined session."));
                 if (GEngine)
                 {
-                    if (!Session->GetResolvedConnectString(SessionName, ConnectString))
+                    if (!Session->GetResolvedConnectString(JoinSessionName, ConnectString))
                     {
                         UE_LOG(LogTemp, Error, TEXT("Could not get connect string."));
+                    	SetButtonsEnabled(true);
                         return;
                     }
-
-                    if (GEngine)
-                        GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Yellow, FString::Printf(TEXT("Connect String : %s"), *ConnectString));
-
-                    JoinedSessionName = SessionName;
+                	
+                	GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Yellow, FString::Printf(TEXT("Connect String : %s"), *ConnectString));
 
                     FURL DedicatedServerURL(nullptr, *ConnectString, TRAVEL_Absolute);
                     FString DedicatedServerJoinError;
@@ -557,6 +555,7 @@ void UMainMenuWidget::HandleJoinSessionCompleted(FName SessionName, EOnJoinSessi
                     if (DedicatedServerJoinStatus == EBrowseReturnVal::Failure)
                     {
                         UE_LOG(LogTemp, Error, TEXT("Failed to browse for dedicated server. Error is: %s"), *DedicatedServerJoinError);
+                    	SetButtonsEnabled(true);
                     }
                 }
             }
@@ -564,8 +563,6 @@ void UMainMenuWidget::HandleJoinSessionCompleted(FName SessionName, EOnJoinSessi
             JoinSessionDelegateHandle.Reset();
         }
     }
-
-	SetButtonsEnabled(true);
 }
 
 
@@ -587,9 +584,9 @@ void UMainMenuWidget::LeaveSession(FString Reason)
 
 			UE_LOG(LogTemp, Log, TEXT("Leave session"));
 
-			if (!Session->DestroySession(JoinedSessionName))
+			if (!Session->DestroySession(JoinSessionName))
 			{
-				UE_LOG(LogTemp, Warning, TEXT("Failed to DestroySession : %s"), *JoinedSessionName.ToString());
+				UE_LOG(LogTemp, Warning, TEXT("Failed to DestroySession : %s"), *JoinSessionName.ToString());
 			}
 		}
 	}
