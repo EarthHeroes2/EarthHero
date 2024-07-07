@@ -43,8 +43,30 @@ void UShooterCombatComponent::Fire()
 	}
 }
 
+void UShooterCombatComponent::GrenadeFire()
+{
+	// TODO
+	// 액터 생성
+	// 액터 프로젝타일 설정
+	// 액터 던지기
+
+	UWorld* World = GetWorld();
+	if(World)
+	{
+		
+	}
+}
+
+void UShooterCombatComponent::NetMulticast_GrenadeFire_Implementation()
+{
+}
+
+void UShooterCombatComponent::Server_GrenadeFire_Implementation()
+{
+}
+
 void UShooterCombatComponent::Server_Fire_Implementation(FVector TraceStartVector, FVector TraceEndVector,
-														 FVector MuzzleVector)
+                                                         FVector MuzzleVector)
 {
 	FHitResult HitResult;
 	bool bHit = false;
@@ -113,6 +135,3 @@ void UShooterCombatComponent::ResetFire()
 {
 	bCanFire = true;
 }
-
-
-
