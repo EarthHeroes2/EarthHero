@@ -87,10 +87,22 @@
   <component name="ChangeListManager">
     <list default="true" id="0cbbd613-fc41-47be-bbe4-1434fbbd246c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.EarthHero.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EarthHero.dir/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Input/IMC_EHContext.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Input/IMC_EHContext.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Player/BP_EHPlayerController.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Player/BP_EHPlayerController.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Weapons/BP_Grenade.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Weapons/BP_Grenade.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/StartupMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/StartupMap.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Maps/TestMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/TestMap.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EarthHero.uproject" beforeDir="false" afterPath="$PROJECT_DIR$/EarthHero.uproject" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/EHCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/EHCharacter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/EHCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/EHCharacter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/Shooter/EHShooter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Shooter/EHShooter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/Shooter/EHShooter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Shooter/EHShooter.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/Shooter/ShooterCombatComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Shooter/ShooterCombatComponent.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/Shooter/ShooterCombatComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Shooter/ShooterCombatComponent.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerController.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerController.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerState.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerState.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Weapon/Grenade.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Weapon/Grenade.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Weapon/Grenade.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Weapon/Grenade.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

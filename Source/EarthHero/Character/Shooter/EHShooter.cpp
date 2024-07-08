@@ -46,6 +46,12 @@ void AEHShooter::Shoot()
 	CombatComponent->Fire();
 }
 
+void AEHShooter::Skill()
+{
+	Super::Skill();
+	CombatComponent->GrenadeFire();
+}
+
 void AEHShooter::BeginPlay()
 {
 	Super::BeginPlay();

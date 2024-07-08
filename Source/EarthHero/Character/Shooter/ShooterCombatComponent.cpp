@@ -7,6 +7,8 @@
 #include "Camera/CameraComponent.h"
 #include "EarthHero/Stat/ShooterStatComponent.h"
 #include "EarthHero/Stat/DamageType/NormalDamageType.h"
+#include "EarthHero/Weapon/Grenade.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 UShooterCombatComponent::UShooterCombatComponent()
@@ -45,25 +47,43 @@ void UShooterCombatComponent::Fire()
 
 void UShooterCombatComponent::GrenadeFire()
 {
-	// TODO
-	// 액터 생성
-	// 액터 프로젝타일 설정
-	// 액터 던지기
-
-	UWorld* World = GetWorld();
-	if(World)
+	if(Shooter)
 	{
-		
+		Server_GrenadeFire();
 	}
+}
+
+
+void UShooterCombatComponent::Server_GrenadeFire_Implementation()
+{
+	NetMulticast_GrenadeFire();
 }
 
 void UShooterCombatComponent::NetMulticast_GrenadeFire_Implementation()
 {
+	UWorld* World = GetWorld();
+	UObject* GrenadeBPObject = StaticLoadObject(UObject::StaticClass(), nullptr, TEXT("/Game/Blueprints/Weapons/BP_Grenade.BP_Grenade"));
+	UBlueprint* GrenadeBP = Cast<UBlueprint>(GrenadeBPObject);
+	TSubclassOf<UObject> GrenadeBPClass = (UClass*)GrenadeBP->GeneratedClass;
+	
+	if(World && GrenadeBPClass)
+	{
+		if(Shooter && Shooter->GetEquippedWeapon() && Shooter->GetController())
+		{
+			FVector SpawnLocation = Shooter->GetEquippedWeapon()->GetSocketLocation(FName("FireSocket"));
+			FRotator SpawnRotation = Shooter->GetController()->GetControlRotation();
+			SpawnRotation += FRotator(3.f,0.f,0.f);
+			AActor* SpawnGrenade = World->SpawnActor<AActor>(GrenadeBPClass, SpawnLocation, SpawnRotation);
+			AGrenade* Grenade = Cast<AGrenade>(SpawnGrenade);
+			if(Grenade)
+			{
+				Grenade->GetProjectileMovementComponent()->InitialSpeed = 4000.f;
+			}
+		}
+	}
+
 }
 
-void UShooterCombatComponent::Server_GrenadeFire_Implementation()
-{
-}
 
 void UShooterCombatComponent::Server_Fire_Implementation(FVector TraceStartVector, FVector TraceEndVector,
                                                          FVector MuzzleVector)

@@ -206,3 +206,7 @@ void AEHCharacter::SetIsInForceField(bool bInForceField)
 void AEHCharacter::Shoot()
 {
 }
+
+void AEHCharacter::Skill()
+{
+}

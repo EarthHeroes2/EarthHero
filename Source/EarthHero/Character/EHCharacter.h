@@ -18,15 +18,15 @@ class EARTHHERO_API AEHCharacter : public AEHCharacterBase
 
     /** Minimap spring arm */
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-    class USpringArmComponent* MinimapSpringArm;
+    USpringArmComponent* MinimapSpringArm;
 
     /** Minimap Scene Capture Component */
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-    class USceneCaptureComponent2D* MinimapCaptureComponent;
+    USceneCaptureComponent2D* MinimapCaptureComponent;
 
     /** Minimap render target */
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-    class UTextureRenderTarget2D* MinimapRenderTarget;
+    UTextureRenderTarget2D* MinimapRenderTarget;
 
     /** Minimap widget class */
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = UI, meta = (AllowPrivateAccess = "true"))
@@ -45,7 +45,9 @@ public:
 
     bool IsInForceField() const;
     void SetIsInForceField(bool bInForceField);
+    
     virtual void Shoot();
+    virtual void Skill();
 
     //승언 :StatComponent 참조
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
