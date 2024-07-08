@@ -276,9 +276,9 @@ void UMainMenuWidget::CreateLobbyOKBtnClicked()
 	{
 		FTimerHandle Handle;
 
-		if(GEngine) GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Yellow, FString::Printf(TEXT("wait.... 10s")));
+		if(GEngine) GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Yellow, FString::Printf(TEXT("wait.... 15s")));
 		
-		GetWorld()->GetTimerManager().SetTimer(Handle, this, &ThisClass::CreateLobbyWait, 10.0f, false);
+		GetWorld()->GetTimerManager().SetTimer(Handle, this, &ThisClass::CreateLobbyWait, 15.0f, false);
 	}
 	else UE_LOG(LogTemp, Error, TEXT("Failed to get lobby port number"));
 }
