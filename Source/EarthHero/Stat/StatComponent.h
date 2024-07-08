@@ -102,10 +102,10 @@ private:
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	UPROPERTY(Replicated)
+	UPROPERTY()
 	class UInGameHUD *InGameHUD;
 
-	UPROPERTY(Replicated)
+	UPROPERTY()
 	class UHeroUpgradeComponent *HeroUpgradeComponent;
 
 };

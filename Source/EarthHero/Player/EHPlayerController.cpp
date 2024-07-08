@@ -68,14 +68,6 @@ void AEHPlayerController::InitializeHUD()
 		HUD = Cast<UInGameHUD>(CreateWidget(this, InGameHUD));
 		if (HUD)
 		{
-			if (HasAuthority())
-			{
-				UE_LOG(LogClass, Warning, TEXT("EHPlayerController(SERVER): HUD Cast Success!!"));
-			}
-			else
-			{
-				UE_LOG(LogClass, Warning, TEXT("EHPlayerController(Client): HUD Cast Success!!"));
-			}
 			//MyPlayerState(리플리케이트)->StatComponent->HUD로 전달
 			HUD->InitializePlayerState(MyPlayerState->GetStatComponent());
 			HUD->AddToViewport();
@@ -83,14 +75,7 @@ void AEHPlayerController::InitializeHUD()
 		}
 		else
 		{
-			if (HasAuthority())
-			{
-				UE_LOG(LogClass, Warning, TEXT("EHPlayerController(SERVER): HUD Cast Failed"));
-			}
-			else
-			{
-				UE_LOG(LogClass, Warning, TEXT("EHPlayerController(Client): HUD Cast Failed"));
-			}
+			UE_LOG(LogClass, Warning, TEXT("EHPlayerController(Client): HUD Cast Failed"));
 		}
 	}
 }

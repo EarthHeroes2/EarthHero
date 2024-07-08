@@ -40,10 +40,7 @@ void UStatComponent::BeginPlay()
 	Super::BeginPlay();
 	
 	//스텟 초기화(서버->클라이언트)
-	if (GetOwner()->HasAuthority())
-	{
-		InitializeStatData("Hero");
-	}
+	InitializeStatData("Hero");
 }
 
 
@@ -260,6 +257,4 @@ void UStatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 	//복제 목록에 추가, 소유 클라이언트에게 복사
 	DOREPLIFETIME(UStatComponent, HeroStat);
 	DOREPLIFETIME(UStatComponent, BaseHeroStat);
-	DOREPLIFETIME(UStatComponent, InGameHUD);
-	DOREPLIFETIME(UStatComponent, HeroUpgradeComponent);
 }

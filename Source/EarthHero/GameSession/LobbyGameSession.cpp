@@ -9,6 +9,7 @@
 #include <EarthHero/PlayerController/LobbyPlayerController.h>
 #include <EarthHero/GameMode/LobbyGameMode.h>
 
+#include "EarthHero/Socket/SocketClient.h"
 
 
 void ALobbyGameSession::BeginPlay()
@@ -176,7 +177,7 @@ void ALobbyGameSession::HandleRegisterPlayerCompleted(FName EOSSessionName, cons
     }
 }
 
-//���ǿ� �÷��̾� ���� �� ���� ȣ���
+//세션 시작
 void ALobbyGameSession::StartSession()
 {
     IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
@@ -335,6 +336,7 @@ void ALobbyGameSession::NotifyLogout(const APlayerController* ExitingPlayer)
     }
 }
 
+//세션이 시작된 상태일 때(StartSession) 세션을 끝내기 위함
 void ALobbyGameSession::EndSession()
 {
     IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
@@ -347,13 +349,27 @@ void ALobbyGameSession::EndSession()
                 Session->AddOnEndSessionCompleteDelegate_Handle(FOnEndSessionCompleteDelegate::CreateUObject(
                     this,
                     &ThisClass::HandleEndSessionCompleted));
-
-            //���� ���� �õ�
+            
             if (!Session->EndSession(SessionName))
             {
                 UE_LOG(LogTemp, Warning, TEXT("Failed to end session!"));
                 Session->ClearOnEndSessionCompleteDelegate_Handle(StartSessionDelegateHandle);
                 EndSessionDelegateHandle.Reset();
+
+
+
+                
+                //endsession에 실패했다면 프로세스 종료 //임시!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+                USocketClient* NewSocket = NewObject<USocketClient>();
+	
+                if(NewSocket) NewSocket->CreateSocket("DestroySession");
+                
+                FGenericPlatformMisc::RequestExit(false);
+
+
+
+                
             }
         }
     }
@@ -392,7 +408,6 @@ void ALobbyGameSession::EndPlay(const EEndPlayReason::Type EndPlayReason)
 // ��� �÷��̾ ���� ������ ���� �� ȣ���
 void ALobbyGameSession::DestroySession()
 {
-    // ������ �ı��Ͽ� �鿣�忡�� ����
     IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
     if (Subsystem)
     {
@@ -403,8 +418,7 @@ void ALobbyGameSession::DestroySession()
                 Session->AddOnDestroySessionCompleteDelegate_Handle(FOnDestroySessionCompleteDelegate::CreateUObject(
                     this,
                     &ThisClass::HandleDestroySessionCompleted));
-
-            //���� ���� �õ�
+            
             if (!Session->DestroySession(SessionName))
             {
                 UE_LOG(LogTemp, Warning, TEXT("Failed to destroy lobby."));

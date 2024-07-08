@@ -25,19 +25,19 @@ public:
 	
 	virtual void CopyProperties(APlayerState* PlayerState) override;
 
-	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category = "Component")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
 	UWarriorStatComponent* WarriorStatComponent;
 
-	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category = "Component")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
 	UMechanicStatComponent* MechanicStatComponent;
 
-	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category = "Component")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
 	UShooterStatComponent* ShooterStatComponent;
 
-	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category = "Component")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
 	UArcherStatComponent* ArcherStatComponent;
 	
-	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category = "Component")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
 	UHeroUpgradeComponent* HeroUpgradeComponent;
 
 	UFUNCTION(BlueprintCallable, Category = "Component")

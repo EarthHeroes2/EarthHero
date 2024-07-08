@@ -23,7 +23,9 @@ public class EarthHero : ModuleRules
                 "Slate",
                 "SlateCore",
                 "Paper2D",
-                "Steamworks"
+                "Steamworks",
+                "Sockets",
+                "Networking"
             }
         );
 
