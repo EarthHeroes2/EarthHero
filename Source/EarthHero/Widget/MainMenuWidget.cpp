@@ -269,9 +269,17 @@ void UMainMenuWidget::CreateLobbyOKBtnClicked()
 	}
 	
 	USocketClient* NewSocket = NewObject<USocketClient>();
-	if(NewSocket) NewSocket->CreateSocket();
+	FString NewLobbyPort;
+	
+	if(NewSocket) NewLobbyPort = NewSocket->CreateSocket("CreateLobby");
 
-	//LeaveSession("CreateLobby");
+	if(!NewLobbyPort.IsEmpty())
+	{
+		//포트 번호로 접속
+
+		//LeaveSession("CreateLobby");
+	}
+	else UE_LOG(LogTemp, Error, TEXT("Failed to get lobby port number"));
 }
 void UMainMenuWidget::CreateLobbyCancleBtnClicked()
 {

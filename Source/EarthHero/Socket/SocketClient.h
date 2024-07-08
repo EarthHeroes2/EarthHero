@@ -14,6 +14,6 @@ class EARTHHERO_API USocketClient : public UObject
 	GENERATED_BODY()
 	
 public:
-	void CreateSocket();
+	FString CreateSocket(FString RequestMessage);
 	
 };
