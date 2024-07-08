@@ -19,6 +19,7 @@ public:
 	AEHShooter();
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void Shoot() override;
+	virtual void Skill() override;
 
 protected:
 	virtual void BeginPlay() override;
@@ -36,7 +37,6 @@ protected:
 	AController *PlayerController;
 	
 private:
-	
 	UPROPERTY(EditDefaultsOnly, Category = "Camera")
 	float MaxPitchAngle;
 	UPROPERTY(EditDefaultsOnly, Category = "Camera")

@@ -134,7 +134,7 @@ void AEHPlayerState::SetStatComponent()
 	}
 	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("EHPlayerState: failed CopyProperties"));
+		//UE_LOG(LogTemp, Error, TEXT("EHPlayerState: failed CopyProperties"));
 	}
 }
 

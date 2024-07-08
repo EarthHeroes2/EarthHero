@@ -45,6 +45,8 @@ private:
 	TObjectPtr<UInputAction> ShootAction;
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> CamAction;
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> SkillAction;
 
 	//승언 : InGameHUD를 컨트롤러에 추가
 	UPROPERTY(EditAnywhere, Category = "HUD")
@@ -58,6 +60,7 @@ private:
 protected:
 	void Jump();
 	void Shoot();
+	void Skill();
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 };
