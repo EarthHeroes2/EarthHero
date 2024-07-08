@@ -6,7 +6,7 @@
 #include "Sockets/Public/Sockets.h"
 #include "Sockets/Public/SocketSubsystem.h"
 
-void SocketClient::CreateSocket()
+void USocketClient::CreateSocket()
 {
 	FSocket* Socket;
 	Socket = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateSocket(NAME_Stream, "TCPSocket", false);

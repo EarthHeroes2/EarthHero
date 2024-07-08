@@ -15,6 +15,7 @@
 #include "OnlineSubsystemUtils.h"
 #include "Components/EditableTextBox.h"
 #include "Components/ScrollBox.h"
+#include "../Socket/SocketClient.h"
 
 
 UMainMenuWidget::UMainMenuWidget(const FObjectInitializer &ObjectInitializer)
@@ -266,8 +267,11 @@ void UMainMenuWidget::CreateLobbyOKBtnClicked()
 		EHGameInstance->LobbyName = LobbyName_Etb->GetText().ToString();
 		EHGameInstance->IsCheckedPrivate = Private_Cb->IsChecked();
 	}
+	
+	USocketClient* NewSocket = NewObject<USocketClient>();
+	if(NewSocket) NewSocket->CreateSocket();
 
-	LeaveSession("CreateLobby");
+	//LeaveSession("CreateLobby");
 }
 void UMainMenuWidget::CreateLobbyCancleBtnClicked()
 {
