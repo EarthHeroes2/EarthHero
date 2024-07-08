@@ -55,6 +55,7 @@ protected:
 private:
 
 	const FName JoinSessionName = "SessionName";
+	FString ReceivedLobbyPort;
 
 	UPROPERTY(meta = (BindWidget))
 	class UButton* Play_Btn;

@@ -18,10 +18,11 @@ FString USocketClient::CreateSocket(FString RequestMessage)
 	TSharedRef<FInternetAddr> Addr = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateInternetAddr();
 	Addr->SetIp(IP.Value);
 	Addr->SetPort(7777);
-	
+
 	bool bConnected = Socket->Connect(*Addr);
 	if (bConnected)
 	{
+		UE_LOG(LogTemp, Log, TEXT("Send Message: %s"), *RequestMessage);
 		TCHAR* SerializedChar = RequestMessage.GetCharArray().GetData();
 		int32 BytesSent = 0;
 		Socket->Send((uint8*)TCHAR_TO_UTF8(SerializedChar), FCString::Strlen(SerializedChar), BytesSent);
@@ -37,11 +38,7 @@ FString USocketClient::CreateSocket(FString RequestMessage)
 			UE_LOG(LogTemp, Log, TEXT("Receive Message: %s"), *ReceiveMessage);
 			
 			if(RequestMessage.Equals("CreateLobby"))
-			{
-				//로비 번호를 받았으니 그리로 연결
-
-				return ReceiveMessage;
-			}
+				return ReceiveMessage; //받은 로비 번호 리턴
 		}
 	}
 	else

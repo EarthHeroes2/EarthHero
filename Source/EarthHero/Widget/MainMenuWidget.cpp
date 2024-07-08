@@ -269,15 +269,12 @@ void UMainMenuWidget::CreateLobbyOKBtnClicked()
 	}
 	
 	USocketClient* NewSocket = NewObject<USocketClient>();
-	FString NewLobbyPort;
 	
-	if(NewSocket) NewLobbyPort = NewSocket->CreateSocket("CreateLobby");
+	if(NewSocket) ReceivedLobbyPort = NewSocket->CreateSocket("CreateLobby");
 
-	if(!NewLobbyPort.IsEmpty())
+	if(!ReceivedLobbyPort.IsEmpty())
 	{
-		//포트 번호로 접속
-
-		//LeaveSession("CreateLobby");
+		LeaveSession("CreateLobby");
 	}
 	else UE_LOG(LogTemp, Error, TEXT("Failed to get lobby port number"));
 }
@@ -285,14 +282,6 @@ void UMainMenuWidget::CreateLobbyCancleBtnClicked()
 {
 	LobbySetting_Bd->SetVisibility(ESlateVisibility::Collapsed);
 }
-
-
-
-
-
-
-
-
 
 
 
@@ -408,6 +397,10 @@ void UMainMenuWidget::SetButtonsEnabled(bool bEnabled)
 	LobbyList_Scr->SetIsEnabled(bEnabled);
 }
 
+
+
+
+
 void UMainMenuWidget::FindLobbys(FString Reason)
 {
 	IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
@@ -482,7 +475,7 @@ void UMainMenuWidget::HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRe
                     	if (GameName == "EH2" &&
 								(
 									(FindSessionReason == "JoinLobby" && NumberOfJoinedPlayers > 0 && bAdvertise) ||
-									(FindSessionReason == "CreateLobby" && NumberOfJoinedPlayers == 0) ||
+									(FindSessionReason == "CreateLobby" && PortNumber == ReceivedLobbyPort) ||
 									(FindSessionReason == "FindLobby" && bAdvertise) //임시로 공개방만 찾음
 								)
 							)
@@ -648,7 +641,11 @@ void UMainMenuWidget::DestroySessionComplete(FName SessionName, bool bWasSuccess
 		IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
 		if (Session.IsValid())
 		{
-			if(LeaveSessionReason != "JoinSelectedLobby")
+			if(LeaveSessionReason == "JoinSelectedLobby")
+			{
+				JoinSession();
+			}
+			else if(LeaveSessionReason == "CreateLobby" || LeaveSessionReason == "JoinLobby")
 			{
 				//일단 성공이든 실패든 세션 찾고 들어감
 				if (bWasSuccessful)
@@ -661,10 +658,7 @@ void UMainMenuWidget::DestroySessionComplete(FName SessionName, bool bWasSuccess
 					FindLobbys(LeaveSessionReason);
 				}
 			}
-			else
-			{
-				JoinSession();
-			}
+			else UE_LOG(LogTemp, Warning, TEXT("Unknown leave reason"));
 
 			Session->ClearOnDestroySessionCompleteDelegate_Handle(DestroySessionCompleteDelegatesHandle);
 			DestroySessionCompleteDelegatesHandle.Reset();
