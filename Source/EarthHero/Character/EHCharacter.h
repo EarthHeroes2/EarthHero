@@ -59,6 +59,16 @@ protected:
     void Initialize();
     
 private:
+
+    //승언 PossessedBy에서 사용하는 변수들
+    FTimerHandle SetStatComponentTimerHandle;
+
+    void SetStatComponent();
+
+    UPROPERTY()
+    class AEHPlayerState* MyPlayerState;
+    /*******************/
+    
     UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true), Category = "Camera")
     UCameraComponent* FPSCamera;
 

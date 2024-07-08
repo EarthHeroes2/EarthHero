@@ -25,19 +25,19 @@ public:
 	
 	virtual void CopyProperties(APlayerState* PlayerState) override;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category = "Component")
 	UWarriorStatComponent* WarriorStatComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category = "Component")
 	UMechanicStatComponent* MechanicStatComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Component")
 	UShooterStatComponent* ShooterStatComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category = "Component")
 	UArcherStatComponent* ArcherStatComponent;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category = "Component")
 	UHeroUpgradeComponent* HeroUpgradeComponent;
 
 	UFUNCTION(BlueprintCallable, Category = "Component")
@@ -45,6 +45,9 @@ public:
 
 	UPROPERTY(Replicated)
 	int PlayerClass;
+
+	UPROPERTY(Replicated)
+	bool IsSetStatCompoentEnd = false;
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
@@ -78,4 +81,5 @@ private:
 
 	UPROPERTY(Replicated)
 	bool IsCopyPropertiesEnd = false;
+	
 };

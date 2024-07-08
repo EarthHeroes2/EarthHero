@@ -12,13 +12,16 @@
 AEHPlayerState::AEHPlayerState()
 {
 	//isdedicatedServer로 바꿔야함
-	if (IsRunningDedicatedServer())
-	{
 		WarriorStatComponent = CreateDefaultSubobject<UWarriorStatComponent>(TEXT("WarriorStatComponent"));
 		MechanicStatComponent = CreateDefaultSubobject<UMechanicStatComponent>(TEXT("MechanicStatComponent"));
 		ShooterStatComponent = CreateDefaultSubobject<UShooterStatComponent>(TEXT("ShooterStatComponent"));
 		ArcherStatComponent = CreateDefaultSubobject<UArcherStatComponent>(TEXT("ArcherStatComponent"));
 	
+
+		WarriorStatComponent->SetIsReplicated(true);
+		MechanicStatComponent->SetIsReplicated(true);
+		ShooterStatComponent->SetIsReplicated(true);
+		ArcherStatComponent->SetIsReplicated(true);
 
 		static ConstructorHelpers::FObjectFinder<UDataTable> WarriorDataTable(TEXT("/Game/Data/HeroUpgrade/DT_WarriorHeroUpgrade.DT_WarriorHeroUpgrade"));
 		if (WarriorDataTable.Succeeded())
@@ -26,27 +29,27 @@ AEHPlayerState::AEHPlayerState()
 			WarriorHeroUpgradeDataTable = WarriorDataTable.Object;
 		}
 		static ConstructorHelpers::FObjectFinder<UDataTable> MechanicDataTable(TEXT("/Game/Data/HeroUpgrade/DT_MechanicHeroUpgrade.DT_MechanicHeroUpgrade"));
-		if (WarriorDataTable.Succeeded())
+		if (MechanicDataTable.Succeeded())
 		{
 			MechanicHeroUpgradeDataTable = MechanicDataTable.Object;
 		}
 		static ConstructorHelpers::FObjectFinder<UDataTable> ShooterDataTable(TEXT("/Game/Data/HeroUpgrade/DT_ShooterHeroUpgrade.DT_ShooterHeroUpgrade"));
-		if (WarriorDataTable.Succeeded())
+		if (ShooterDataTable.Succeeded())
 		{
 			ShooterHeroUpgradeDataTable = ShooterDataTable.Object;
 		}
 		static ConstructorHelpers::FObjectFinder<UDataTable> ArcherDataTable(TEXT("/Game/Data/HeroUpgrade/DT_ArcherHeroUpgrade.DT_ArcherHeroUpgrade"));
-		if (WarriorDataTable.Succeeded())
+		if (ArcherDataTable.Succeeded())
 		{
 			ArcherHeroUpgradeDataTable = ArcherDataTable.Object;
 		}
 	
 		//히어로 업그레이드 컴포넌트
 		HeroUpgradeComponent = CreateDefaultSubobject<UHeroUpgradeComponent>(TEXT("HeroUpgradeComponent"));
-		
-	}
+	
 	//리플리케이트 가능하게 설정, 액터가 리플리케이트 되면 컴포넌트도 리플리케이트 된다.
 	bReplicates = true;
+	bAlwaysRelevant = true; // 항상 복제되도록 설정 (선택 사항)
 }
 
 //현재 플레이어 스테이트에서 새로 생기는 플레이어 스테이트로 정보 복사
@@ -69,13 +72,13 @@ void AEHPlayerState::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//테스트를 위해 임시 카피 프로퍼티 호출
-	// UE_LOG(LogTemp, Log, TEXT("This instance is dedicated."));
-	// PlayerClass = Shooter;
-	// IsCopyPropertiesEnd = true;
-
-	if (IsRunningDedicatedServer())
-		GetWorldTimerManager().SetTimer(SetStatComponentTimerHandle, this, &AEHPlayerState::SetStatComponent, 0.1f, true);
+	if (GetNetMode() != NM_Client)
+	{
+		UE_LOG(LogTemp, Log, TEXT("This instance is dedicated."));
+		PlayerClass = Shooter;
+		IsCopyPropertiesEnd = true;
+		GetWorldTimerManager().SetTimer(SetStatComponentTimerHandle, this, &AEHPlayerState::SetStatComponent, 0.5f,true);
+	}
 }
 
 void AEHPlayerState::SetStatComponent()
@@ -84,7 +87,7 @@ void AEHPlayerState::SetStatComponent()
 	{
 		GetWorldTimerManager().ClearTimer(SetStatComponentTimerHandle);
 		
-		//직업을 확인하고 나머지 StatComponent를 비활성화, 서버에서 파괴하면 클라이언트도 파괴;
+		//직업을 확인하고 나머지 StatComponent를 비활성화, 서버에서 파괴하면 클라이언트도 파괴
 		switch (PlayerClass)
 		{
 		case Warrior:
@@ -136,7 +139,7 @@ void AEHPlayerState::SetStatComponent()
 	}
 	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("EHPlayerState: failed CopyProperties"));
+		//UE_LOG(LogTemp, Error, TEXT("EHPlayerState: failed CopyProperties"));
 	}
 }
 
@@ -188,6 +191,8 @@ void AEHPlayerState::LoadHeroUpgradeDatatable()
 			*Upgrade.Explanation.ToString(),
 			Upgrade.UpgradeLevel);
 	}
+
+	IsSetStatCompoentEnd = true;
 }
 
 
@@ -196,4 +201,9 @@ void AEHPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(AEHPlayerState, PlayerClass);
 	DOREPLIFETIME(AEHPlayerState, IsCopyPropertiesEnd);
+	DOREPLIFETIME(AEHPlayerState, ShooterStatComponent);
+	DOREPLIFETIME(AEHPlayerState, ArcherStatComponent);
+	DOREPLIFETIME(AEHPlayerState, MechanicStatComponent);
+	DOREPLIFETIME(AEHPlayerState, WarriorStatComponent);
+	DOREPLIFETIME(AEHPlayerState, HeroUpgradeComponent);
 }

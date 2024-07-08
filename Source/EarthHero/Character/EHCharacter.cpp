@@ -110,11 +110,18 @@ void AEHCharacter::BeginPlay()
 void AEHCharacter::PossessedBy(AController* NewController)
 {
     Super::PossessedBy(NewController);
+
+    MyPlayerState =  Cast<AEHPlayerState>(NewController->PlayerState);
+    GetWorldTimerManager().SetTimer(SetStatComponentTimerHandle, this, &AEHCharacter::SetStatComponent, 2.f, true);
     
+}
+
+void AEHCharacter::SetStatComponent()
+{
     // 승언 : EHPlayerState에서 StatComponent의 참조 가져오기
-    AEHPlayerState* MyPlayerState =  Cast<AEHPlayerState>(NewController->PlayerState);  
-    if (MyPlayerState)
+    if (MyPlayerState && MyPlayerState->IsSetStatCompoentEnd)
     {
+        GetWorldTimerManager().ClearTimer(SetStatComponentTimerHandle);
         StatComponent = MyPlayerState->GetStatComponent();
         if (StatComponent)
         {
@@ -130,7 +137,6 @@ void AEHCharacter::PossessedBy(AController* NewController)
         UE_LOG(LogTemp, Error, TEXT("EHCharacter.cpp: Fail to Get PlayerState"));
     }
 }
-
 
 void AEHCharacter::Initialize()
 {
