@@ -9,6 +9,7 @@
 #include <EarthHero/PlayerController/LobbyPlayerController.h>
 #include <EarthHero/GameMode/LobbyGameMode.h>
 
+#include "EarthHero/Socket/SocketClient.h"
 
 
 void ALobbyGameSession::BeginPlay()
@@ -355,8 +356,20 @@ void ALobbyGameSession::EndSession()
                 Session->ClearOnEndSessionCompleteDelegate_Handle(StartSessionDelegateHandle);
                 EndSessionDelegateHandle.Reset();
 
-                //endsession에 실패했다면 프로세스 종료
+
+
+                
+                //endsession에 실패했다면 프로세스 종료 //임시!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+                USocketClient* NewSocket = NewObject<USocketClient>();
+	
+                if(NewSocket) NewSocket->CreateSocket("DestroySession");
+                
                 FGenericPlatformMisc::RequestExit(false);
+
+
+
+                
             }
         }
     }
