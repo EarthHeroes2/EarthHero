@@ -15,6 +15,7 @@
 #include "OnlineSubsystemUtils.h"
 #include "Components/EditableTextBox.h"
 #include "Components/ScrollBox.h"
+#include "../Socket/SocketClient.h"
 
 
 UMainMenuWidget::UMainMenuWidget(const FObjectInitializer &ObjectInitializer)
@@ -266,27 +267,30 @@ void UMainMenuWidget::CreateLobbyOKBtnClicked()
 		EHGameInstance->LobbyName = LobbyName_Etb->GetText().ToString();
 		EHGameInstance->IsCheckedPrivate = Private_Cb->IsChecked();
 	}
+	
+	USocketClient* NewSocket = NewObject<USocketClient>();
+	
+	if(NewSocket) ReceivedLobbyPort = NewSocket->CreateSocket("CreateLobby");
 
-	LeaveSession("CreateLobby");
+	if(!ReceivedLobbyPort.IsEmpty())
+	{
+		FTimerHandle Handle;
+
+		if(GEngine) GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Yellow, FString::Printf(TEXT("wait.... 15s")));
+		
+		GetWorld()->GetTimerManager().SetTimer(Handle, this, &ThisClass::CreateLobbyWait, 15.0f, false);
+	}
+	else UE_LOG(LogTemp, Error, TEXT("Failed to get lobby port number"));
 }
 void UMainMenuWidget::CreateLobbyCancleBtnClicked()
 {
 	LobbySetting_Bd->SetVisibility(ESlateVisibility::Collapsed);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+void UMainMenuWidget::CreateLobbyWait()
+{
+	LeaveSession("CreateLobby");
+}
 
 
 void UMainMenuWidget::MenuTearDown()
@@ -396,6 +400,10 @@ void UMainMenuWidget::SetButtonsEnabled(bool bEnabled)
 	LobbyList_Scr->SetIsEnabled(bEnabled);
 }
 
+
+
+
+
 void UMainMenuWidget::FindLobbys(FString Reason)
 {
 	IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
@@ -470,7 +478,7 @@ void UMainMenuWidget::HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRe
                     	if (GameName == "EH2" &&
 								(
 									(FindSessionReason == "JoinLobby" && NumberOfJoinedPlayers > 0 && bAdvertise) ||
-									(FindSessionReason == "CreateLobby" && NumberOfJoinedPlayers == 0) ||
+									(FindSessionReason == "CreateLobby" && PortNumber == ReceivedLobbyPort) ||
 									(FindSessionReason == "FindLobby" && bAdvertise) //임시로 공개방만 찾음
 								)
 							)
@@ -636,7 +644,11 @@ void UMainMenuWidget::DestroySessionComplete(FName SessionName, bool bWasSuccess
 		IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
 		if (Session.IsValid())
 		{
-			if(LeaveSessionReason != "JoinSelectedLobby")
+			if(LeaveSessionReason == "JoinSelectedLobby")
+			{
+				JoinSession();
+			}
+			else if(LeaveSessionReason == "CreateLobby" || LeaveSessionReason == "JoinLobby")
 			{
 				//일단 성공이든 실패든 세션 찾고 들어감
 				if (bWasSuccessful)
@@ -649,10 +661,7 @@ void UMainMenuWidget::DestroySessionComplete(FName SessionName, bool bWasSuccess
 					FindLobbys(LeaveSessionReason);
 				}
 			}
-			else
-			{
-				JoinSession();
-			}
+			else UE_LOG(LogTemp, Warning, TEXT("Unknown leave reason"));
 
 			Session->ClearOnDestroySessionCompleteDelegate_Handle(DestroySessionCompleteDelegatesHandle);
 			DestroySessionCompleteDelegatesHandle.Reset();
