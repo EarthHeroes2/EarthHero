@@ -11,37 +11,41 @@
 
 AEHPlayerState::AEHPlayerState()
 {
-	WarriorStatComponent = CreateDefaultSubobject<UWarriorStatComponent>(TEXT("WarriorStatComponent"));
-	MechanicStatComponent = CreateDefaultSubobject<UMechanicStatComponent>(TEXT("MechanicStatComponent"));
-	ShooterStatComponent = CreateDefaultSubobject<UShooterStatComponent>(TEXT("ShooterStatComponent"));
-	ArcherStatComponent = CreateDefaultSubobject<UArcherStatComponent>(TEXT("ArcherStatComponent"));
+	//isdedicatedServer로 바꿔야함
+	if (IsRunningDedicatedServer())
+	{
+		WarriorStatComponent = CreateDefaultSubobject<UWarriorStatComponent>(TEXT("WarriorStatComponent"));
+		MechanicStatComponent = CreateDefaultSubobject<UMechanicStatComponent>(TEXT("MechanicStatComponent"));
+		ShooterStatComponent = CreateDefaultSubobject<UShooterStatComponent>(TEXT("ShooterStatComponent"));
+		ArcherStatComponent = CreateDefaultSubobject<UArcherStatComponent>(TEXT("ArcherStatComponent"));
 	
 
-	static ConstructorHelpers::FObjectFinder<UDataTable> WarriorDataTable(TEXT("/Game/Data/HeroUpgrade/DT_WarriorHeroUpgrade.DT_WarriorHeroUpgrade"));
-	if (WarriorDataTable.Succeeded())
-	{
-		WarriorHeroUpgradeDataTable = WarriorDataTable.Object;
-	}
-	static ConstructorHelpers::FObjectFinder<UDataTable> MechanicDataTable(TEXT("/Game/Data/HeroUpgrade/DT_MechanicHeroUpgrade.DT_MechanicHeroUpgrade"));
-	if (WarriorDataTable.Succeeded())
-	{
-		MechanicHeroUpgradeDataTable = MechanicDataTable.Object;
-	}
-	static ConstructorHelpers::FObjectFinder<UDataTable> ShooterDataTable(TEXT("/Game/Data/HeroUpgrade/DT_ShooterHeroUpgrade.DT_ShooterHeroUpgrade"));
-	if (WarriorDataTable.Succeeded())
-	{
-		ShooterHeroUpgradeDataTable = ShooterDataTable.Object;
-	}
-	static ConstructorHelpers::FObjectFinder<UDataTable> ArcherDataTable(TEXT("/Game/Data/HeroUpgrade/DT_ArcherHeroUpgrade.DT_ArcherHeroUpgrade"));
-	if (WarriorDataTable.Succeeded())
-	{
-		ArcherHeroUpgradeDataTable = ArcherDataTable.Object;
-	}
+		static ConstructorHelpers::FObjectFinder<UDataTable> WarriorDataTable(TEXT("/Game/Data/HeroUpgrade/DT_WarriorHeroUpgrade.DT_WarriorHeroUpgrade"));
+		if (WarriorDataTable.Succeeded())
+		{
+			WarriorHeroUpgradeDataTable = WarriorDataTable.Object;
+		}
+		static ConstructorHelpers::FObjectFinder<UDataTable> MechanicDataTable(TEXT("/Game/Data/HeroUpgrade/DT_MechanicHeroUpgrade.DT_MechanicHeroUpgrade"));
+		if (WarriorDataTable.Succeeded())
+		{
+			MechanicHeroUpgradeDataTable = MechanicDataTable.Object;
+		}
+		static ConstructorHelpers::FObjectFinder<UDataTable> ShooterDataTable(TEXT("/Game/Data/HeroUpgrade/DT_ShooterHeroUpgrade.DT_ShooterHeroUpgrade"));
+		if (WarriorDataTable.Succeeded())
+		{
+			ShooterHeroUpgradeDataTable = ShooterDataTable.Object;
+		}
+		static ConstructorHelpers::FObjectFinder<UDataTable> ArcherDataTable(TEXT("/Game/Data/HeroUpgrade/DT_ArcherHeroUpgrade.DT_ArcherHeroUpgrade"));
+		if (WarriorDataTable.Succeeded())
+		{
+			ArcherHeroUpgradeDataTable = ArcherDataTable.Object;
+		}
 	
-	//히어로 업그레이드 컴포넌트
-	HeroUpgradeComponent = CreateDefaultSubobject<UHeroUpgradeComponent>(TEXT("HeroUpgradeComponent"));
-
-	//리플리케이트 가능하게 설정
+		//히어로 업그레이드 컴포넌트
+		HeroUpgradeComponent = CreateDefaultSubobject<UHeroUpgradeComponent>(TEXT("HeroUpgradeComponent"));
+		
+	}
+	//리플리케이트 가능하게 설정, 액터가 리플리케이트 되면 컴포넌트도 리플리케이트 된다.
 	bReplicates = true;
 }
 
@@ -66,14 +70,12 @@ void AEHPlayerState::BeginPlay()
 	Super::BeginPlay();
 
 	//테스트를 위해 임시 카피 프로퍼티 호출
-	// if (HasAuthority())
-	// {
-	// 	UE_LOG(LogTemp, Log, TEXT("This instance is dedicated. (is the server)"));
-	// 	PlayerClass = Shooter;
-	// 	CopyProperties(this);
-	// }
-	
-	GetWorldTimerManager().SetTimer(SetStatComponentTimerHandle, this, &AEHPlayerState::SetStatComponent, 0.1f, true);
+	// UE_LOG(LogTemp, Log, TEXT("This instance is dedicated."));
+	// PlayerClass = Shooter;
+	// IsCopyPropertiesEnd = true;
+
+	if (IsRunningDedicatedServer())
+		GetWorldTimerManager().SetTimer(SetStatComponentTimerHandle, this, &AEHPlayerState::SetStatComponent, 0.1f, true);
 }
 
 void AEHPlayerState::SetStatComponent()
@@ -82,7 +84,7 @@ void AEHPlayerState::SetStatComponent()
 	{
 		GetWorldTimerManager().ClearTimer(SetStatComponentTimerHandle);
 		
-		//직업을 확인하고 나머지 StatComponent를 비활성화
+		//직업을 확인하고 나머지 StatComponent를 비활성화, 서버에서 파괴하면 클라이언트도 파괴;
 		switch (PlayerClass)
 		{
 		case Warrior:
@@ -192,12 +194,6 @@ void AEHPlayerState::LoadHeroUpgradeDatatable()
 void AEHPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-	
-	DOREPLIFETIME(AEHPlayerState, ShooterStatComponent);
-	DOREPLIFETIME(AEHPlayerState, ArcherStatComponent);
-	DOREPLIFETIME(AEHPlayerState, WarriorStatComponent);
-	DOREPLIFETIME(AEHPlayerState, MechanicStatComponent);
-	DOREPLIFETIME(AEHPlayerState, HeroUpgradeComponent);
 	DOREPLIFETIME(AEHPlayerState, PlayerClass);
 	DOREPLIFETIME(AEHPlayerState, IsCopyPropertiesEnd);
 }

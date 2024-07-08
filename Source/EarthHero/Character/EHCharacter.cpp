@@ -120,6 +120,10 @@ void AEHCharacter::PossessedBy(AController* NewController)
         {
             UE_LOG(LogTemp, Error, TEXT("EHCharacter.cpp: PlayerState Set Success"));
         }
+        else
+        {
+            UE_LOG(LogTemp, Error, TEXT("EHCharacter.cpp: PlayerState Set failed")); 
+        }
     }
     else
     {
