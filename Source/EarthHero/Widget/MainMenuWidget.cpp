@@ -274,7 +274,11 @@ void UMainMenuWidget::CreateLobbyOKBtnClicked()
 
 	if(!ReceivedLobbyPort.IsEmpty())
 	{
-		LeaveSession("CreateLobby");
+		FTimerHandle Handle;
+
+		if(GEngine) GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Yellow, FString::Printf(TEXT("wait.... 10s")));
+		
+		GetWorld()->GetTimerManager().SetTimer(Handle, this, &ThisClass::CreateLobbyWait, 10.0f, false);
 	}
 	else UE_LOG(LogTemp, Error, TEXT("Failed to get lobby port number"));
 }
@@ -283,11 +287,10 @@ void UMainMenuWidget::CreateLobbyCancleBtnClicked()
 	LobbySetting_Bd->SetVisibility(ESlateVisibility::Collapsed);
 }
 
-
-
-
-
-
+void UMainMenuWidget::CreateLobbyWait()
+{
+	LeaveSession("CreateLobby");
+}
 
 
 void UMainMenuWidget::MenuTearDown()

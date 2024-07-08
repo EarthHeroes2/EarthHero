@@ -89,6 +89,7 @@ private:
 
 	UFUNCTION()
 	void CreateLobbyCancleBtnClicked();
+	void CreateLobbyWait();
 
 	void MenuTearDown();
 
