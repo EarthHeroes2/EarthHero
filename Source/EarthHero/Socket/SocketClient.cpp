@@ -35,7 +35,7 @@ FString USocketClient::CreateSocket(FString RequestMessage)
 	
 	FIPv4Address IP;
 	if(RequestMessage.Equals("CreateLobby")) FIPv4Address::Parse("116.121.57.64", IP); //못 감추나
-	else if(RequestMessage.Equals("DestroySession")) FIPv4Address::Parse("127.0.0.1", IP); //임시
+	else if(RequestMessage.Equals("DestroyServer")) FIPv4Address::Parse("127.0.0.1", IP); //임시
 
 	//FInternetAddr 클래스에 네트워크 정보를 저장?
 	TSharedRef<FInternetAddr> Addr = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateInternetAddr();
@@ -52,16 +52,14 @@ FString USocketClient::CreateSocket(FString RequestMessage)
 		
 		if(RequestMessage.Equals("CreateLobby"))
 			SendMessage = RequestMessage;
-		else if(RequestMessage.Equals("DestroySession"))
-			SendMessage = GetPortNumber();
+		else if(RequestMessage.Equals("DestroyServer"))
+			SendMessage = RequestMessage + "|" + GetPortNumber(); 
 		
 		UE_LOG(LogTemp, Log, TEXT("Send Message: %s"), *SendMessage);
 
 		SerializedChar = SendMessage.GetCharArray().GetData();
-		
 		Socket->Send((uint8*)TCHAR_TO_UTF8(SerializedChar), FCString::Strlen(SerializedChar), BytesSent);
 
-		UE_LOG(LogTemp, Log, TEXT("Send Message: %s"), *RequestMessage);
 		
 		uint8 ReceiveBuf[1000];
 		int32 BytesRead = 0;
@@ -73,7 +71,7 @@ FString USocketClient::CreateSocket(FString RequestMessage)
 
 			UE_LOG(LogTemp, Log, TEXT("Receive Message: %s"), *ReceiveMessage);
 			
-			if(RequestMessage.Equals("CreateLobby")) return ReceiveMessage; //받은 로비 번호 리턴
+			if(RequestMessage.Equals("CreateLobby")) return ReceiveMessage; //ReceiveMessage = 접속할 서버의 포트번호
 		}
 	}
 	else UE_LOG(LogTemp, Error, TEXT("Failed to connect to server"));

@@ -369,13 +369,9 @@ void ALobbyGameSession::EndSession()
 
                 USocketClient* NewSocket = NewObject<USocketClient>(this);
 	
-                if(NewSocket) NewSocket->CreateSocket("DestroySession");
+                if(NewSocket) NewSocket->CreateSocket("DestroyServer");
                 
                 FGenericPlatformMisc::RequestExit(false);
-
-
-
-                
             }
         }
     }
