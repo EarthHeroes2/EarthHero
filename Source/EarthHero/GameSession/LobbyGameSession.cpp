@@ -669,7 +669,7 @@ void ALobbyGameSession::HostAssignment(APlayerController* HostPlayer)
                             else UE_LOG(LogTemp, Log, TEXT("Current Advertise : false"));
 
                             LobbyPlayerController->bHost = true;
-                            LobbyPlayerController->Client_HostAssignment(true, false, bAdvertise);
+                            LobbyPlayerController->Client_HostAssignment(true, false, bAdvertise); //advertise는 새로운 방장에게 현재 advertise 여부를 알리기 위함
                         }
                     }
                     else

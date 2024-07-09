@@ -22,7 +22,7 @@ class EARTHHERO_API ALobbyPlayerController : public APlayerController
 
 protected:
 	UFUNCTION(Server, Reliable)
-	void Server_InitSetup(bool bAdvertise, const FString& LobbyName);
+	void Server_InitSetup();
 
 public:
 	bool bHost = false;

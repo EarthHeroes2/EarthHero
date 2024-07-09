@@ -35,46 +35,6 @@ UMainMenuWidget::UMainMenuWidget(const FObjectInitializer &ObjectInitializer)
 		LobbyRowWidgetClass = LobbyRowWidgetAsset.Class;
 	}
 }
-	
-void UMainMenuWidget::MenuSetup(int32 NumberOfPublicConnections, FString TypeOfMatch, FString LobbyPath)
-{
-	/*
-	PathToLobby = FString::Printf(TEXT("%s?listen"), *LobbyPath);
-	NumPublicConnections = NumberOfPublicConnections;
-	MatchType = TypeOfMatch;
-	AddToViewport();
-	SetVisibility(ESlateVisibility::Visible);
-	bIsFocusable = true;
-
-	UWorld* World = GetWorld();
-	if (World)
-	{
-		APlayerController* PlayerController = World->GetFirstPlayerController();
-		if (PlayerController)
-		{
-			FInputModeUIOnly InputModeData;
-			InputModeData.SetWidgetToFocus(TakeWidget());
-			InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
-			PlayerController->SetInputMode(InputModeData);
-			PlayerController->SetShowMouseCursor(true);
-		}
-	}
-	
-	UGameInstance* GameInstance = GetGameInstance();
-	if (GameInstance)
-	{
-		MultiplayerSessionsSubsystem = GameInstance->GetSubsystem<UMultiplayerSessionsSubsystem>();
-	}
-
-	if (MultiplayerSessionsSubsystem)
-	{
-		MultiplayerSessionsSubsystem->MultiplayerOnCreateSessionComplete.AddDynamic(this, &ThisClass::OnCreateSession);
-		MultiplayerSessionsSubsystem->MultiplayerOnFindSessionsComplete.AddUObject(this, &ThisClass::OnFindSessions);
-		MultiplayerSessionsSubsystem->MultiplayerOnJoinSessionComplete.AddUObject(this, &ThisClass::OnJoinSession);
-		MultiplayerSessionsSubsystem->MultiplayerOnDestroySessionComplete.AddDynamic(this, &ThisClass::OnDestroySession);
-		MultiplayerSessionsSubsystem->MultiplayerOnStartSessionComplete.AddDynamic(this, &ThisClass::OnStartSession);
-	}*/
-}
 
 bool UMainMenuWidget::Initialize()
 {
@@ -128,84 +88,6 @@ bool UMainMenuWidget::Initialize()
 	}
 
 	return true;
-}
-
-void UMainMenuWidget::OnCreateSession(bool bWasSuccessful)
-{
-	if (bWasSuccessful)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Created session, entering game!"));
-		UWorld* World = GetWorld();
-		if (World)
-		{
-			World->ServerTravel(PathToLobby);
-		}
-	}
-	else
-	{
-		if (GEngine)
-		{
-			GEngine->AddOnScreenDebugMessage(
-				-1,
-				15.f,
-				FColor::Red,
-				FString(TEXT("Failed to create session!"))
-			);
-		}
-		Play_Btn->SetIsEnabled(true);
-	}
-}
-
-void UMainMenuWidget::OnFindSessions(const TArray<FOnlineSessionSearchResult>& SessionResults, bool bWasSuccessful)
-{
-	if (MultiplayerSessionsSubsystem == nullptr)
-	{
-		return;
-	}
-
-	for (auto Result : SessionResults)
-	{
-		FString SettingsValue;
-		Result.Session.SessionSettings.Get(FName("MatchType"), SettingsValue);
-		if (SettingsValue == MatchType)
-		{
-			//MultiplayerSessionsSubsystem->JoinSession(Result);
-			return;
-		}
-	}
-	if (!bWasSuccessful || SessionResults.Num() == 0)
-	{
-		Join_Btn->SetIsEnabled(true);
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("No Session Found!"));
-	}
-}
-
-void UMainMenuWidget::OnJoinSession(EOnJoinSessionCompleteResult::Type Result)
-{
-	IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
-	if (Subsystem)
-	{
-		IOnlineSessionPtr SessionInterface = Subsystem->GetSessionInterface();
-		if (SessionInterface.IsValid())
-		{
-			FString Address;
-			SessionInterface->GetResolvedConnectString(NAME_GameSession, Address);
-
-			APlayerController* PlayerController = GetGameInstance()->GetFirstLocalPlayerController();
-			if (PlayerController)
-			{
-				PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
-			}
-		}
-	}
-}
-
-void UMainMenuWidget::OnDestroySession(bool bWasSuccessful)
-{
-}
-
-void UMainMenuWidget::OnStartSession(bool bWasSuccessful)
-{
 }
 
 void UMainMenuWidget::Play_BtnClicked()
@@ -263,15 +145,13 @@ void UMainMenuWidget::CreateLobbyOKBtnClicked()
 	UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(GetWorld()->GetGameInstance());
 	if (EHGameInstance)
 	{
-		//인스턴스에 private 여부 잠시 저장
+		//로비 정보 인스턴스에 임시 저장
 		EHGameInstance->LobbyName = LobbyName_Etb->GetText().ToString();
 		EHGameInstance->IsCheckedPrivate = Private_Cb->IsChecked();
 	}
 	
 	USocketClient* NewSocket = NewObject<USocketClient>(this);
-	
 	if(NewSocket) ReceivedLobbyPort = NewSocket->CreateSocket("CreateLobby");
-
 	if(!ReceivedLobbyPort.IsEmpty())
 	{
 		FTimerHandle Handle;
@@ -280,7 +160,7 @@ void UMainMenuWidget::CreateLobbyOKBtnClicked()
 		
 		GetWorld()->GetTimerManager().SetTimer(Handle, this, &ThisClass::CreateLobbyWait, 15.0f, false);
 	}
-	else UE_LOG(LogTemp, Error, TEXT("Failed to get lobby port number"));
+	else UE_LOG(LogTemp, Error, TEXT("Failed to get server port number"));
 }
 void UMainMenuWidget::CreateLobbyCancleBtnClicked()
 {
@@ -399,9 +279,6 @@ void UMainMenuWidget::SetButtonsEnabled(bool bEnabled)
 	}
 	LobbyList_Scr->SetIsEnabled(bEnabled);
 }
-
-
-
 
 
 void UMainMenuWidget::FindLobbys(FString Reason)
