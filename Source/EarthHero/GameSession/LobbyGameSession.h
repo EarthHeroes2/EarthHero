@@ -3,83 +3,48 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/GameSession.h"
+#include "EHGameSession.h"
 #include "LobbyGameSession.generated.h"
 
 /**
  *
  */
 UCLASS()
-class EARTHHERO_API ALobbyGameSession : public AGameSession
+class EARTHHERO_API ALobbyGameSession : public AEHGameSession
 {
 	GENERATED_BODY()
 
-public:
-	int MaxNumberOfPlayersInSession = 4;
-
+	virtual void BeginPlay() override;
+	
 protected:
-	int NumberOfPlayersInSession = 0;
-
-	FName SessionName = "NAME_GameSession"; //무슨의미일까
-
 	FUniqueNetIdRepl HostPlayerId;
 	APlayerController* NewPlayerPlayerController;
 
-	const FString MainSessionMap = TEXT("/Game/Maps/StartupMap"); //�ӽ�
-	const FString InGameMap = TEXT("/Game/Maps/TestMap"); //�ӽ�
-
-	bool bSessionExists = false;
-
-	virtual void BeginPlay();
-	//virtual void EndPlay(const EEndPlayReason::Type EndPlayReason);
-
-	virtual bool ProcessAutoLogin();
-	virtual void NotifyLogout(const APlayerController* ExitingPlayer);
-
+	void HostAssignment(APlayerController* HostPlayer);
+	void NewHostFind();
+	
+	void ChangeMap();
+	
 public:
-	void CreateSession(FString PortNumber);
 	void ChangeAdvertiseState(bool bAdvertise);
 	void ChangeLobbyName(FString LobbyName);
-	void UpdateNumberOfJoinedPlayers();
-
+	
+	void CreateSession(FString PortNumber);
 protected:
 	void HandleCreateSessionCompleted(FName InSessionName, bool bWasSuccessful);
-
-
-	virtual void RegisterPlayer(APlayerController* NewPlayer, const FUniqueNetIdRepl& UniqueId, bool bWasFromInvite = false);
+	
+	virtual void RegisterPlayer(APlayerController* NewPlayer, const FUniqueNetIdRepl& UniqueId, bool bWasFromInvite = false) override;
 	void HandleRegisterPlayerCompleted(FName SessionName, const TArray<FUniqueNetIdRef>& PlayerIds, bool bWasSuccesful);
 
-	void HostAssignment(APlayerController* HostPlayer);
-
-
-	virtual void UnregisterPlayer(const APlayerController* ExitingPlayer);
+	virtual void UnregisterPlayer(const APlayerController* ExitingPlayer) override;
 	void HandleUnregisterPlayerCompleted(FName SessionName, const TArray<FUniqueNetIdRef>& PlayerIds, bool bWasSuccesful);
-
 public:
 	void StartSession();
 protected:
 	void HandleStartSessionCompleted(FName SessionName, bool bWasSuccessful);
-
-	void ChangeMap();
-
-	void EndSession();
-	void HandleEndSessionCompleted(FName SessionName, bool bWasSuccessful);
-
-	void DestroySession();
-	void HandleDestroySessionCompleted(FName SessionName, bool bWasSuccessful);
-
-
-	void HandleUpdateSessionCompleted(FName SessionName, bool bWasSuccessful);
-
-	void NewHostFind();
-
-
+	
+	FDelegateHandle UnregisterPlayerDelegateHandle;
 	FDelegateHandle CreateSessionDelegateHandle;
 	FDelegateHandle RegisterPlayerDelegateHandle;
-	FDelegateHandle UnregisterPlayerDelegateHandle;
 	FDelegateHandle StartSessionDelegateHandle;
-	FDelegateHandle EndSessionDelegateHandle;
-	FDelegateHandle DestroySessionDelegateHandle;
-
-	FDelegateHandle UpdateSessionDelegateHandle;
 };

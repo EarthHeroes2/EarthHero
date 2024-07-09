@@ -6,10 +6,6 @@
 #include "OnlineSubsystemUtils.h"
 #include "Interfaces/OnlineSessionInterface.h"
 #include "OnlineSessionSettings.h"
-#include <EarthHero/PlayerController/LobbyPlayerController.h>
-#include <EarthHero/GameMode/LobbyGameMode.h>
-
-#include "EarthHero/EHGameInstance.h"
 #include "EarthHero/Socket/SocketClient.h"
 
 void AEHGameSession::BeginPlay()
@@ -31,83 +27,12 @@ void AEHGameSession::BeginPlay()
     }
 }
 
-//�������� �α����ϴ� ���� ���� (AGameModeBase::InitGame()���� �Ҹ�)
+//�������� �α����ϴ� ���� ���� (AGameModeBase::InitGame())
 bool AEHGameSession::ProcessAutoLogin()
 {
     return true;
 }
 
-//NotifyLogout에서 불림
-void AEHGameSession::UnregisterPlayer(const APlayerController* ExitingPlayer)
-{
-    Super::UnregisterPlayer(ExitingPlayer);
-
-    if (IsRunningDedicatedServer())
-    {
-        IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
-        if (Subsystem)
-        {
-            IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
-            if (Session.IsValid())
-            {
-                // 게임모드의 관리 리스트에서 제거
-                ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
-                if(LobbyGameMode)
-                {
-                    UE_LOG(LogTemp, Log, TEXT("Remove exit player information..."));
-                    
-                    const ALobbyPlayerController* ExitingLobbyPlayerController = Cast<ALobbyPlayerController>(ExitingPlayer);
-                    LobbyGameMode->RemovePlayerInfo(ExitingLobbyPlayerController);
-                }
-                
-                // 비정상적으로 플레이어가 떠나면 null일 수 있음
-                if (ExitingPlayer->PlayerState)
-                {
-                    UnregisterPlayerDelegateHandle =
-                        Session->AddOnUnregisterPlayersCompleteDelegate_Handle(FOnUnregisterPlayersCompleteDelegate::CreateUObject(
-                            this,
-                            &ThisClass::HandleUnregisterPlayerCompleted));
-
-                    // ���ǿ��� �÷��̾� ����
-                    if (!Session->UnregisterPlayer(SessionName, *ExitingPlayer->PlayerState->GetUniqueId()))
-                    {
-                        UE_LOG(LogTemp, Warning, TEXT("Failed to Unregister Player!"));
-                        Session->ClearOnUnregisterPlayersCompleteDelegate_Handle(UnregisterPlayerDelegateHandle);
-                        UnregisterPlayerDelegateHandle.Reset();
-                    }
-                }
-                else
-                {
-                    UE_LOG(LogTemp, Warning, TEXT("Failed to Unregister Player!"));
-                    Session->ClearOnUnregisterPlayersCompleteDelegate_Handle(UnregisterPlayerDelegateHandle);
-                    UnregisterPlayerDelegateHandle.Reset();
-                }
-            }
-        }
-    }
-}
-
-void AEHGameSession::HandleUnregisterPlayerCompleted(FName EOSSessionName, const TArray<FUniqueNetIdRef>& PlayerIds, bool bWasSuccesful)
-{
-    IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
-    if (Subsystem)
-    {
-        IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
-        if (Session.IsValid())
-        {
-            if (bWasSuccesful)
-            {
-                UE_LOG(LogTemp, Log, TEXT("Player unregistered in Lobby!"))
-            }
-            else
-            {
-                UE_LOG(LogTemp, Warning, TEXT("Failed to unregister player! (From Callback)"));
-            }
-            Session->ClearOnUnregisterPlayersCompleteDelegate_Handle(UnregisterPlayerDelegateHandle);
-            UnregisterPlayerDelegateHandle.Reset();
-        }
-    }
-}
 
 //플레이어가 세션에서 떠나면 불림
 void AEHGameSession::NotifyLogout(const APlayerController* ExitingPlayer)
@@ -168,7 +93,7 @@ void AEHGameSession::EndSession()
             if (!Session->EndSession(SessionName))
             {
                 UE_LOG(LogTemp, Warning, TEXT("Failed to end session!"));
-                Session->ClearOnEndSessionCompleteDelegate_Handle(StartSessionDelegateHandle);
+                Session->ClearOnEndSessionCompleteDelegate_Handle(EndSessionDelegateHandle); //EndSessionDelegateHandle?
                 EndSessionDelegateHandle.Reset();
             }
         }
@@ -187,11 +112,8 @@ void AEHGameSession::HandleEndSessionCompleted(FName EOSSessionName, bool bWasSu
             {
                 UE_LOG(LogTemp, Log, TEXT("Session ended!"));
             }
-            else
-            {
-                UE_LOG(LogTemp, Warning, TEXT("Failed to end Session! (From Callback)"));
-            }
-
+            else UE_LOG(LogTemp, Warning, TEXT("Failed to end Session! (From Callback)"));
+            
             Session->ClearOnEndSessionCompleteDelegate_Handle(EndSessionDelegateHandle);
             EndSessionDelegateHandle.Reset();
         }
@@ -213,7 +135,7 @@ void AEHGameSession::DestroySession()
             
             if (!Session->DestroySession(SessionName))
             {
-                UE_LOG(LogTemp, Warning, TEXT("Failed to destroy lobby."));
+                UE_LOG(LogTemp, Warning, TEXT("Failed to destroy session."));
                 Session->ClearOnDestroySessionCompleteDelegate_Handle(DestroySessionDelegateHandle);
                 DestroySessionDelegateHandle.Reset();
             }
@@ -231,12 +153,11 @@ void AEHGameSession::HandleDestroySessionCompleted(FName EOSSessionName, bool bW
         {
             if (bWasSuccesful)
             {
-                bSessionExists = false;
-                UE_LOG(LogTemp, Log, TEXT("Destroyed lobby succesfully."));
+                UE_LOG(LogTemp, Log, TEXT("Destroyed session succesfully."));
             }
             else
             {
-                UE_LOG(LogTemp, Warning, TEXT("Failed to destroy lobby."));
+                UE_LOG(LogTemp, Warning, TEXT("Failed to destroy session"));
             }
 
             Session->ClearOnDestroySessionCompleteDelegate_Handle(DestroySessionDelegateHandle);
@@ -280,12 +201,12 @@ void AEHGameSession::UpdateNumberOfJoinedPlayers()
                 UpdateSessionDelegateHandle =
                     Session->AddOnUpdateSessionCompleteDelegate_Handle(FOnUpdateSessionCompleteDelegate::CreateUObject(
                         this,
-                        &AEHGameSession::HandleUpdateSessionCompleted));
+                        &ThisClass::HandleUpdateSessionCompleted));
 
                 // 세션 정보 업데이트
                 if (!Session->UpdateSession(SessionName, *SessionSettings, true))
                 {
-                    UE_LOG(LogTemp, Warning, TEXT("Failed to update Lobby"));
+                    UE_LOG(LogTemp, Warning, TEXT("Failed to update session"));
                     Session->ClearOnUpdateSessionCompleteDelegate_Handle(UpdateSessionDelegateHandle);
                     UpdateSessionDelegateHandle.Reset();
                 }
@@ -308,11 +229,11 @@ void AEHGameSession::HandleUpdateSessionCompleted(FName EOSSessionName, bool bWa
         {
             if (bWasSuccesful)
             {
-                UE_LOG(LogTemp, Log, TEXT("Update lobby succesfully."));
+                UE_LOG(LogTemp, Log, TEXT("Update session succesfully."));
             }
             else
             {
-                UE_LOG(LogTemp, Warning, TEXT("Failed to update lobby."));
+                UE_LOG(LogTemp, Warning, TEXT("Failed to update session."));
             }
 
             Session->ClearOnUpdateSessionCompleteDelegate_Handle(UpdateSessionDelegateHandle);

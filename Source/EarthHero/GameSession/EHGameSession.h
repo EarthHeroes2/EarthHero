@@ -15,47 +15,35 @@ class EARTHHERO_API AEHGameSession : public AGameSession
 	GENERATED_BODY()
 
 public:
-	int MaxNumberOfPlayersInSession = 4;
+	const int MaxNumberOfPlayersInSession = 4;
 
 protected:
 	int NumberOfPlayersInSession = 0;
 
-	FName SessionName = "NAME_GameSession"; 
-	
-	const FString MainSessionMap = TEXT("/Game/Maps/StartupMap");
+	const FName SessionName = "NAME_GameSession"; 
 	const FString InGameMap = TEXT("/Game/Maps/TestMap");
+	
+	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
-	bool bSessionExists = false;
-
-	virtual void BeginPlay();
-	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason);
-
-	virtual bool ProcessAutoLogin();
-	virtual void NotifyLogout(const APlayerController* ExitingPlayer);
+	virtual bool ProcessAutoLogin() override;
+	
+	virtual void NotifyLogout(const APlayerController* ExitingPlayer) override; //일단 여기
 
 public:
-	void UpdateNumberOfJoinedPlayers();
+	virtual void UpdateNumberOfJoinedPlayers();
 
-protected:
-	virtual void UnregisterPlayer(const APlayerController* ExitingPlayer);
-	void HandleUnregisterPlayerCompleted(FName SessionName, const TArray<FUniqueNetIdRef>& PlayerIds, bool bWasSuccesful);
 protected:
 	void EndSession();
 	void HandleEndSessionCompleted(FName SessionName, bool bWasSuccessful);
 
 	void DestroySession();
 	void HandleDestroySessionCompleted(FName SessionName, bool bWasSuccessful);
-
-
+	
 	void HandleUpdateSessionCompleted(FName SessionName, bool bWasSuccessful);
-
-	FDelegateHandle CreateSessionDelegateHandle;
-	FDelegateHandle RegisterPlayerDelegateHandle;
-	FDelegateHandle UnregisterPlayerDelegateHandle;
-	FDelegateHandle StartSessionDelegateHandle;
+	
 	FDelegateHandle EndSessionDelegateHandle;
 	FDelegateHandle DestroySessionDelegateHandle;
-
 	FDelegateHandle UpdateSessionDelegateHandle;
 };
 

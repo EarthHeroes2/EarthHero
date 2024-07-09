@@ -10,7 +10,6 @@
 #include <EarthHero/GameMode/LobbyGameMode.h>
 
 #include "EarthHero/EHGameInstance.h"
-#include "EarthHero/Socket/SocketClient.h"
 
 
 void ALobbyGameSession::BeginPlay()
@@ -18,7 +17,7 @@ void ALobbyGameSession::BeginPlay()
     Super::BeginPlay();
 
     //dedicated 서버에서만 실행
-    if (IsRunningDedicatedServer() && !bSessionExists)
+    if (IsRunningDedicatedServer())
     {
         UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(GetGameInstance());
 
@@ -104,7 +103,6 @@ void ALobbyGameSession::HandleCreateSessionCompleted(FName EOSSessionName, bool 
         {
             if (bWasSuccessful)
             {
-                bSessionExists = true;
                 UE_LOG(LogTemp, Log, TEXT("Lobby: %s Created!"), *EOSSessionName.ToString());
             }
             else UE_LOG(LogTemp, Warning, TEXT("Failed to create lobby!"));
@@ -113,12 +111,6 @@ void ALobbyGameSession::HandleCreateSessionCompleted(FName EOSSessionName, bool 
             CreateSessionDelegateHandle.Reset();
         }
     }
-}
-
-//�������� �α����ϴ� ���� ���� (AGameModeBase::InitGame()���� �Ҹ�)
-bool ALobbyGameSession::ProcessAutoLogin()
-{
-    return true;
 }
 
 void ALobbyGameSession::RegisterPlayer(APlayerController* NewPlayer, const FUniqueNetIdRepl& UniqueId, bool bWasFromInvite)
@@ -140,8 +132,7 @@ void ALobbyGameSession::RegisterPlayer(APlayerController* NewPlayer, const FUniq
                     Session->AddOnRegisterPlayersCompleteDelegate_Handle(FOnRegisterPlayersCompleteDelegate::CreateUObject(
                         this,
                         &ThisClass::HandleRegisterPlayerCompleted));
-
-                //���ǿ� �÷��̾� ���
+                
                 if (!Session->RegisterPlayer(SessionName, *UniqueId, false))
                 {
                     UE_LOG(LogTemp, Warning, TEXT("Failed to Register Player!"));
@@ -153,8 +144,6 @@ void ALobbyGameSession::RegisterPlayer(APlayerController* NewPlayer, const FUniq
     }
 }
 
-//�÷��̾� ��� ���
-//PlayerIds�� �¶��� ���񽺿� ����� ��� �÷��̾� id�� �ǹ�
 void ALobbyGameSession::HandleRegisterPlayerCompleted(FName EOSSessionName, const TArray<FUniqueNetIdRef>& PlayerIds, bool bWasSuccesful)
 {
     IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
@@ -183,8 +172,7 @@ void ALobbyGameSession::HandleRegisterPlayerCompleted(FName EOSSessionName, cons
                 }
             }
             else UE_LOG(LogTemp, Warning, TEXT("Failed to register player! (From Callback)"));
-
-            // Clear and reset delegates
+            
             Session->ClearOnRegisterPlayersCompleteDelegate_Handle(RegisterPlayerDelegateHandle);
             RegisterPlayerDelegateHandle.Reset();
         }
@@ -239,7 +227,6 @@ void ALobbyGameSession::HandleStartSessionCompleted(FName EOSSessionName, bool b
 
 void ALobbyGameSession::ChangeMap()
 {
-    // 임시
     GetWorld()->ServerTravel(InGameMap, true);
 }
 
@@ -273,8 +260,7 @@ void ALobbyGameSession::UnregisterPlayer(const APlayerController* ExitingPlayer)
                         Session->AddOnUnregisterPlayersCompleteDelegate_Handle(FOnUnregisterPlayersCompleteDelegate::CreateUObject(
                             this,
                             &ThisClass::HandleUnregisterPlayerCompleted));
-
-                    // ���ǿ��� �÷��̾� ����
+                    
                     if (!Session->UnregisterPlayer(SessionName, *ExitingPlayer->PlayerState->GetUniqueId()))
                     {
                         UE_LOG(LogTemp, Warning, TEXT("Failed to Unregister Player!"));
@@ -311,163 +297,19 @@ void ALobbyGameSession::HandleUnregisterPlayerCompleted(FName EOSSessionName, co
                     if (HostPlayerId == PlayerId)
                     {
                         UE_LOG(LogTemp, Log, TEXT("Host has left the lobby"));
-
                         NewHostFind();
-
                         break;
                     }
                 }
             }
-            else
-            {
-                UE_LOG(LogTemp, Warning, TEXT("Failed to unregister player! (From Callback)"));
-            }
+            else UE_LOG(LogTemp, Warning, TEXT("Failed to unregister player! (From Callback)"));
+            
             Session->ClearOnUnregisterPlayersCompleteDelegate_Handle(UnregisterPlayerDelegateHandle);
             UnregisterPlayerDelegateHandle.Reset();
         }
     }
 }
 
-//플레이어가 세션에서 떠나면 불림
-void ALobbyGameSession::NotifyLogout(const APlayerController* ExitingPlayer)
-{
-    Super::NotifyLogout(ExitingPlayer); //UnregisterPlayer를 호출함
-
-    if (IsRunningDedicatedServer())
-    {
-        NumberOfPlayersInSession--;
-
-        //나간 사람 수 세션 정보 업데이트
-        UpdateNumberOfJoinedPlayers();
-        
-        //사람이 아무도 없으면 세션 종료
-        if (NumberOfPlayersInSession == 0)
-        {
-            IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
-            if (Subsystem)
-            {
-                IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
-                if (Session.IsValid())
-                {
-                    EOnlineSessionState::Type SessionState = Session->GetSessionState(SessionName);
-                    switch (SessionState)
-                    {
-                        case EOnlineSessionState::Pending:
-                            UE_LOG(LogTemp, Log, TEXT("Session is Pending state."));
-                            DestroySession();
-                            break;
-                        case EOnlineSessionState::Starting:
-                            UE_LOG(LogTemp, Log, TEXT("Session is Started state."));
-                            EndSession();
-                            break;
-                        default:
-                            UE_LOG(LogTemp, Log, TEXT("Session is another state: %d"), static_cast<int>(SessionState));
-                            break;
-                    }
-                }
-            }
-        }
-    }
-}
-
-//세션이 시작된 상태일 때 세션을 끝내기 위함           <-현재 테스트 안해봄
-void ALobbyGameSession::EndSession()
-{
-    IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
-    if (Subsystem)
-    {
-        IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
-        if (Session.IsValid())
-        {
-            EndSessionDelegateHandle =
-                Session->AddOnEndSessionCompleteDelegate_Handle(FOnEndSessionCompleteDelegate::CreateUObject(
-                    this,
-                    &ThisClass::HandleEndSessionCompleted));
-            
-            if (!Session->EndSession(SessionName))
-            {
-                UE_LOG(LogTemp, Warning, TEXT("Failed to end session!"));
-                Session->ClearOnEndSessionCompleteDelegate_Handle(StartSessionDelegateHandle);
-                EndSessionDelegateHandle.Reset();
-            }
-        }
-    }
-}
-
-void ALobbyGameSession::HandleEndSessionCompleted(FName EOSSessionName, bool bWasSuccessful)
-{
-    IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
-    if (Subsystem)
-    {
-        IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
-        if (Session.IsValid())
-        {
-            if (bWasSuccessful)
-            {
-                UE_LOG(LogTemp, Log, TEXT("Session ended!"));
-            }
-            else
-            {
-                UE_LOG(LogTemp, Warning, TEXT("Failed to end Session! (From Callback)"));
-            }
-
-            Session->ClearOnEndSessionCompleteDelegate_Handle(EndSessionDelegateHandle);
-            EndSessionDelegateHandle.Reset();
-        }
-    }
-}
-
-void ALobbyGameSession::DestroySession()
-{
-    IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
-    if (Subsystem)
-    {
-        IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
-        if (Session.IsValid())
-        {
-            DestroySessionDelegateHandle =
-                Session->AddOnDestroySessionCompleteDelegate_Handle(FOnDestroySessionCompleteDelegate::CreateUObject(
-                    this,
-                    &ThisClass::HandleDestroySessionCompleted));
-            
-            if (!Session->DestroySession(SessionName))
-            {
-                UE_LOG(LogTemp, Warning, TEXT("Failed to destroy lobby."));
-                Session->ClearOnDestroySessionCompleteDelegate_Handle(DestroySessionDelegateHandle);
-                DestroySessionDelegateHandle.Reset();
-            }
-        }
-    }
-}
-
-void ALobbyGameSession::HandleDestroySessionCompleted(FName EOSSessionName, bool bWasSuccesful)
-{
-    IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
-    if (Subsystem)
-    {
-        IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
-        if (Session.IsValid())
-        {
-            if (bWasSuccesful)
-            {
-                bSessionExists = false;
-                UE_LOG(LogTemp, Log, TEXT("Destroyed lobby succesfully."));
-            }
-            else
-            {
-                UE_LOG(LogTemp, Warning, TEXT("Failed to destroy lobby."));
-            }
-
-            Session->ClearOnDestroySessionCompleteDelegate_Handle(DestroySessionDelegateHandle);
-            DestroySessionDelegateHandle.Reset();
-        }
-    }
-    
-    //프로세스 종료
-    USocketClient* NewSocket = NewObject<USocketClient>(this);
-    if(NewSocket) NewSocket->CreateSocket("DestroyServer");
-    FGenericPlatformMisc::RequestExit(false);
-}
 
 void ALobbyGameSession::ChangeAdvertiseState(bool bAdvertise)
 {
@@ -493,7 +335,7 @@ void ALobbyGameSession::ChangeAdvertiseState(bool bAdvertise)
                 UpdateSessionDelegateHandle =
                     Session->AddOnUpdateSessionCompleteDelegate_Handle(FOnUpdateSessionCompleteDelegate::CreateUObject(
                         this,
-                        &ALobbyGameSession::HandleUpdateSessionCompleted));
+                        &ThisClass::HandleUpdateSessionCompleted));
 
                 // 세션 정보 업데이트
                 if (!Session->UpdateSession(SessionName, *SessionSettings, true))
@@ -531,7 +373,7 @@ void ALobbyGameSession::ChangeLobbyName(FString LobbyName)
                 UpdateSessionDelegateHandle =
                     Session->AddOnUpdateSessionCompleteDelegate_Handle(FOnUpdateSessionCompleteDelegate::CreateUObject(
                         this,
-                        &ALobbyGameSession::HandleUpdateSessionCompleted));
+                        &ThisClass::HandleUpdateSessionCompleted));
 
                 // 세션 정보 업데이트
                 if (!Session->UpdateSession(SessionName, *SessionSettings, true))
@@ -545,66 +387,6 @@ void ALobbyGameSession::ChangeLobbyName(FString LobbyName)
             {
                 UE_LOG(LogTemp, Warning, TEXT("No session settings found for session: %s"), *SessionName.ToString());
             }
-        }
-    }
-}
-
-void ALobbyGameSession::UpdateNumberOfJoinedPlayers()
-{
-    IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
-    if (Subsystem)
-    {
-        IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
-        if (Session.IsValid())
-        {
-            //기존 세션 정보 받아오고
-            FOnlineSessionSettings* SessionSettings = Session->GetSessionSettings(SessionName);
-            if (SessionSettings)
-            {
-                SessionSettings->Set("NumberOfJoinedPlayers", NumberOfPlayersInSession, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
-                
-                UE_LOG(LogTemp, Log, TEXT("Update Number Of Joined Players : %d"), NumberOfPlayersInSession);
-
-                UpdateSessionDelegateHandle =
-                    Session->AddOnUpdateSessionCompleteDelegate_Handle(FOnUpdateSessionCompleteDelegate::CreateUObject(
-                        this,
-                        &ALobbyGameSession::HandleUpdateSessionCompleted));
-
-                // 세션 정보 업데이트
-                if (!Session->UpdateSession(SessionName, *SessionSettings, true))
-                {
-                    UE_LOG(LogTemp, Warning, TEXT("Failed to update Lobby"));
-                    Session->ClearOnUpdateSessionCompleteDelegate_Handle(UpdateSessionDelegateHandle);
-                    UpdateSessionDelegateHandle.Reset();
-                }
-            }
-            else
-            {
-                UE_LOG(LogTemp, Warning, TEXT("No session settings found for session: %s"), *SessionName.ToString());
-            }
-        }
-    }
-}
-
-void ALobbyGameSession::HandleUpdateSessionCompleted(FName EOSSessionName, bool bWasSuccesful)
-{
-    IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
-    if (Subsystem)
-    {
-        IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
-        if (Session.IsValid())
-        {
-            if (bWasSuccesful)
-            {
-                UE_LOG(LogTemp, Log, TEXT("Update lobby succesfully."));
-            }
-            else
-            {
-                UE_LOG(LogTemp, Warning, TEXT("Failed to update lobby."));
-            }
-
-            Session->ClearOnUpdateSessionCompleteDelegate_Handle(UpdateSessionDelegateHandle);
-            UpdateSessionDelegateHandle.Reset();
         }
     }
 }
