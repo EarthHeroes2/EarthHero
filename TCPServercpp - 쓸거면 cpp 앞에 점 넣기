@@ -1,0 +1,217 @@
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#include <cstdio>
+#include <string>
+#include <map>
+#include <thread>
+#include <cstring>
+#include <vector>
+
+using namespace std;
+
+#pragma comment(lib, "Ws2_32.lib")
+
+#define SERVERPORT 7777
+#define MAX_NUM_SERVERS 10
+#define MAX_BUFFER_LENGTH 1000
+
+
+map<int, PROCESS_INFORMATION> ProcessInfoMap;
+int bLobbyExist[MAX_NUM_SERVERS] = {false, };
+
+
+vector<string> StringTokenizer(char *str)
+{
+    vector<string> tokens;
+    char *token;
+    char *context = NULL;
+    
+    token = strtok_s(str, "|", &context);
+    
+    while (token != NULL)
+    {
+        tokens.push_back(string(token));
+        token = strtok_s(NULL, "|", &context);
+    }
+
+    return tokens;
+}
+
+//서버 인스턴스 실행만 시키고 리턴됨
+void CreateNewLobbyInstance(const wchar_t* Command, int LobbyNumber)
+{
+    STARTUPINFO si;
+    PROCESS_INFORMATION pi;
+
+    //초기화
+    ZeroMemory(&si, sizeof(si));
+    si.cb = sizeof(si);
+    ZeroMemory(&pi, sizeof(pi));
+    
+    if (!CreateProcess(
+        NULL,
+        const_cast<wchar_t*>(Command),
+        NULL,
+        NULL,
+        FALSE,
+        0,
+        NULL,
+        NULL,
+        &si,
+        &pi )
+    )
+    {
+        printf("CreateProcess failed: %d\n", GetLastError());
+        return;
+    }
+
+    ProcessInfoMap.insert({LobbyNumber, pi}); //{로비 번호,프로세스 정보} 저장
+    bLobbyExist[LobbyNumber] = true;
+    
+    CloseHandle(pi.hProcess);
+    CloseHandle(pi.hThread);
+}
+
+string CreateNewLobby(const string *lobbyName, const string *isPrivate)
+{
+    string unrealPath = "C:\\UnrealEngine-5.1.1-release\\Engine\\Binaries\\Win64\\UnrealEditor.exe"; //소스빌드 UnrealEditor.exe 경로
+    string projectPath = "C:\\Git\\EarthHero\\EarthHero.uproject"; //우리 프로젝트 uproject 경로
+    string portNumber = "";
+    
+    for(int LobbyNumber = 0; LobbyNumber < MAX_NUM_SERVERS; LobbyNumber++)
+    {
+        if(!bLobbyExist[LobbyNumber])
+        {
+            portNumber = to_string(LobbyNumber + 7778);
+            string command = unrealPath + " " + projectPath + " Lobby -server -log"
+                            + " -Port=" + portNumber
+                            + " -QueryPort=" + to_string(stoi(portNumber) + 19238)
+                            + " -LobbyName=" + *lobbyName
+                            + " -Private=" + *isPrivate;
+            
+            //문자열 변환...
+            std::wstring wCommand(command.begin(), command.end());
+            const wchar_t* wCharCommand = wCommand.c_str();   
+            CreateNewLobbyInstance(wCharCommand, LobbyNumber);
+            
+            return portNumber;
+        }
+    }
+    return portNumber;
+}
+
+
+int main()
+{
+    WSADATA wsaData;
+    int iResult;
+    
+    // Winsock 초기화
+    iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
+    if (iResult != 0)
+    {
+        printf("WSAStartup failed: %d", iResult);
+        return 1;
+    }
+    
+    // 소켓 생성
+    SOCKET ListenSocket = INVALID_SOCKET;
+    ListenSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (ListenSocket == INVALID_SOCKET)
+    {
+        printf("Socket creation failed: %d\n", WSAGetLastError());
+        WSACleanup();
+        return 1;
+    }
+
+    // 주소 및 포트 설정
+    sockaddr_in serverAddr;
+    serverAddr.sin_family = AF_INET;
+    serverAddr.sin_addr.s_addr = INADDR_ANY;
+    serverAddr.sin_port = htons(SERVERPORT);
+
+    
+    // 소켓 바인드
+    iResult = bind(ListenSocket, (sockaddr*)&serverAddr, sizeof(serverAddr));
+    if (iResult == SOCKET_ERROR) {
+        printf("Bind failed: %d", WSAGetLastError());
+        closesocket(ListenSocket);
+        WSACleanup();
+        return 1;
+    }
+
+    
+    // 소켓 리슨
+    iResult = listen(ListenSocket, SOMAXCONN);
+    if (iResult == SOCKET_ERROR)
+    {
+        printf("Listen failed: %d\n", WSAGetLastError());
+        closesocket(ListenSocket);
+        WSACleanup();
+        return 1;
+    }
+    
+    printf("Waiting for connections...\n");
+
+    while (true)
+    {
+        // 클라이언트 연결 수락
+        SOCKET ClientSocket;
+        ClientSocket = accept(ListenSocket, NULL, NULL);
+        if (ClientSocket == INVALID_SOCKET)
+        {
+            printf("Accept failed: %d\n", WSAGetLastError());
+            closesocket(ListenSocket);
+            WSACleanup();
+            return 1;
+        }
+        
+        char buffer[MAX_BUFFER_LENGTH] = {0};
+        iResult = recv(ClientSocket, buffer, MAX_BUFFER_LENGTH, 0);
+        
+        if (iResult > 0)
+        {
+            vector<string> tokens = StringTokenizer(buffer); //토큰으로 자르고
+            int NumTokens = tokens.size();
+
+            string Request = tokens[0];
+            
+            if(Request == "CreateLobby" && NumTokens == 3)
+            {
+                //새로운 서버 열고 해당 포트 번호 리턴
+                string NewServerPortString = CreateNewLobby(&tokens[1], &tokens[2]); 
+                const char* NewServerPort = NewServerPortString.c_str();
+                
+
+                //플레이어에게 접속할 포트 번호 알려줌
+                send(ClientSocket,  NewServerPort, strlen( NewServerPort) + 1, 0); 
+                
+                printf("Send new server port : %s\n",  NewServerPort);
+            }
+            else if(Request == "DestroyServer" && NumTokens == 2)
+            {
+                string DestroyServerPort = tokens[1];
+                
+                printf("Destroy server port : %s\n", DestroyServerPort.c_str());
+                
+                int LobbyNumber = stoi(DestroyServerPort) - 7778;
+                ProcessInfoMap.erase(LobbyNumber);
+                bLobbyExist[LobbyNumber] = false;
+            }
+            else
+            {
+                printf("Invalid request : %s\n", Request.c_str());
+            }
+        }
+        else
+        {
+            printf("Receive failed: %d\n", WSAGetLastError());
+        }
+        
+        closesocket(ClientSocket);
+    }
+    closesocket(ListenSocket);
+    WSACleanup();
+
+    return 0;
+}

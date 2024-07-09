@@ -204,8 +204,7 @@ void ALobbyGameSession::StartSession()
                 Session->AddOnStartSessionCompleteDelegate_Handle(FOnStartSessionCompleteDelegate::CreateUObject(
                     this,
                     &ThisClass::HandleStartSessionCompleted));
-
-            //���� ���� �õ�
+            
             if (!Session->StartSession(SessionName))
             {
                 UE_LOG(LogTemp, Warning, TEXT("Failed to start lobby!"));
@@ -468,15 +467,6 @@ void ALobbyGameSession::HandleDestroySessionCompleted(FName EOSSessionName, bool
     USocketClient* NewSocket = NewObject<USocketClient>(this);
     if(NewSocket) NewSocket->CreateSocket("DestroyServer");
     FGenericPlatformMisc::RequestExit(false);
-}
-
-//이 게임 세션이 레벨에서 제거할 때 호출됨
-//일단 놔둬봄...
-void ALobbyGameSession::EndPlay(const EEndPlayReason::Type EndPlayReason)
-{
-    UE_LOG(LogTemp, Warning, TEXT("LobbyGameSession - EndPlay!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"));
-    Super::EndPlay(EndPlayReason);
-    DestroySession();
 }
 
 void ALobbyGameSession::ChangeAdvertiseState(bool bAdvertise)
