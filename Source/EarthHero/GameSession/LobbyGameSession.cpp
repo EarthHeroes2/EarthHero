@@ -52,27 +52,35 @@ void ALobbyGameSession::CreateSession(FString PortNumber)
                 Session->AddOnCreateSessionCompleteDelegate_Handle(FOnCreateSessionCompleteDelegate::CreateUObject(
                     this,
                     &ThisClass::HandleCreateSessionCompleted));
-
+            
             TSharedRef<FOnlineSessionSettings> SessionSettings = MakeShared<FOnlineSessionSettings>();
             SessionSettings->bIsDedicated = true;
             SessionSettings->bIsLANMatch = false;
             SessionSettings->NumPublicConnections = MaxNumberOfPlayersInSession;
             SessionSettings->NumPrivateConnections = 0;
-            SessionSettings->bShouldAdvertise = true; //일단 무조건 public
             SessionSettings->bUsesPresence = false; // 무조건 false여야 함
             SessionSettings->bUseLobbiesIfAvailable = false; // 무조건 false여야 함
-
             SessionSettings->bAllowInvites = true;
-            SessionSettings->bAllowJoinInProgress = false; // 시작 후 참가 불가
-
+            SessionSettings->bAllowJoinInProgress = false;
+            SessionSettings->bShouldAdvertise = false; //일단 무조건 public
+            
             //SessionSettings->bUsesStats = false; // 업적관련?
             //SessionSettings->bAntiCheatProtected = true; // 지원하나?
+
+            FString LobbyName;
+            FParse::Value(FCommandLine::Get(), TEXT("LobbyName="), LobbyName);
+
+            FString Private; 
+            FParse::Value(FCommandLine::Get(), TEXT("Private="), Private);
             
             SessionSettings->Set("GameName", FString("EH2"), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
             SessionSettings->Set("PortNumber", PortNumber, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
             SessionSettings->Set("NumberOfJoinedPlayers", 0, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
-            SessionSettings->Set("Advertise", true, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
-            SessionSettings->Set("LobbyName", FString("TestName"), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+            SessionSettings->Set("LobbyName", LobbyName, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+            if(Private == "true") SessionSettings->Set("Advertise", false, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+            else SessionSettings->Set("Advertise", true, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+
+            UE_LOG(LogTemp, Error, TEXT("ln = %s     p = %s"), *LobbyName, *Private);
 
             UE_LOG(LogTemp, Log, TEXT("Creating lobby..."));
             

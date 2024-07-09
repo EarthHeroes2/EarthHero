@@ -268,7 +268,7 @@ void UMainMenuWidget::CreateLobbyOKBtnClicked()
 		EHGameInstance->IsCheckedPrivate = Private_Cb->IsChecked();
 	}
 	
-	USocketClient* NewSocket = NewObject<USocketClient>();
+	USocketClient* NewSocket = NewObject<USocketClient>(this);
 	
 	if(NewSocket) ReceivedLobbyPort = NewSocket->CreateSocket("CreateLobby");
 

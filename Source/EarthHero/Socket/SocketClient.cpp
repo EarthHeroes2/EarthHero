@@ -8,6 +8,28 @@
 #include "Sockets/Public/Sockets.h"
 #include "Sockets/Public/SocketSubsystem.h"
 
+FString USocketClient::GetLobbyNameAndPrivateState()
+{
+	FString LobbyName;
+	FString IsPrivate;
+	
+	UWorld* World = GetWorld();
+	
+	if (World)
+	{
+		UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(World->GetGameInstance());
+		if(EHGameInstance)
+		{
+			LobbyName = EHGameInstance->LobbyName;
+			if(EHGameInstance->IsCheckedPrivate) IsPrivate = "true";
+			else IsPrivate = "false";
+			
+			UE_LOG(LogTemp, Log, TEXT("Lobby name : %s     Private : %s"), *LobbyName, *IsPrivate);
+		}
+	}
+	return LobbyName + "|" + IsPrivate;
+}
+
 FString USocketClient::GetPortNumber()
 {
 	FString PortNumber;
@@ -46,20 +68,19 @@ FString USocketClient::CreateSocket(FString RequestMessage)
 	bool bConnected = Socket->Connect(*Addr);
 	if (bConnected)
 	{
-		TCHAR* SerializedChar = nullptr;
+		
 		int32 BytesSent = 0;
 		FString SendMessage;
 		
 		if(RequestMessage.Equals("CreateLobby"))
-			SendMessage = RequestMessage;
+			SendMessage = RequestMessage + "|" + GetLobbyNameAndPrivateState();
 		else if(RequestMessage.Equals("DestroyServer"))
 			SendMessage = RequestMessage + "|" + GetPortNumber(); 
 		
 		UE_LOG(LogTemp, Log, TEXT("Send Message: %s"), *SendMessage);
 
-		SerializedChar = SendMessage.GetCharArray().GetData();
+		TCHAR* SerializedChar = SendMessage.GetCharArray().GetData();
 		Socket->Send((uint8*)TCHAR_TO_UTF8(SerializedChar), FCString::Strlen(SerializedChar), BytesSent);
-
 		
 		uint8 ReceiveBuf[1000];
 		int32 BytesRead = 0;
