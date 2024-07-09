@@ -111,18 +111,27 @@ void UMainMenuWidget::Join_BtnClicked()
 	LeaveSession("JoinLobby");
 }
 
-//임시로 지우고 생성하는 방식으로 만듬
 void UMainMenuWidget::OptionsBtnClicked()
 {
-	if(OptionsWidget)
+	if (OptionsWidget)
 	{
-		OptionsWidget->RemoveFromParent();
-		OptionsWidget = nullptr;
+		if (OptionsWidget->IsVisible())
+		{
+			OptionsWidget->SetVisibility(ESlateVisibility::Hidden);
+		}
+		else
+		{
+			OptionsWidget->SetVisibility(ESlateVisibility::Visible);
+		}
 	}
 	else
 	{
 		OptionsWidget = Cast<UUserWidget>(CreateWidget(GetWorld(), OptionsWidgetClass));
-		OptionsWidget->AddToViewport();
+		if (OptionsWidget)
+		{
+			OptionsWidget->AddToViewport();
+			OptionsWidget->SetVisibility(ESlateVisibility::Visible);
+		}
 	}
 }
 

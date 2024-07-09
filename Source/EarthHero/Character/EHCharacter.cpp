@@ -72,7 +72,7 @@ AEHCharacter::AEHCharacter()
     // Create the PaperSpriteComponent for the minimap
     MinimapSprite = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("MinimapSprite"));
     MinimapSprite->SetupAttachment(RootComponent);
-    static ConstructorHelpers::FObjectFinder<UPaperSprite> PlayerArrowSprite(TEXT("/Game/Blueprints/HUD/MinimapTextures/T_PlayerArrow_Sprite.T_PlayerArrow_Sprite"));
+    static ConstructorHelpers::FObjectFinder<UPaperSprite> PlayerArrowSprite(TEXT("/Game/Blueprints/HUD/Textures/T_PlayerArrow_Sprite.T_PlayerArrow_Sprite"));
     if (PlayerArrowSprite.Succeeded())
     {
         MinimapSprite->SetSprite(PlayerArrowSprite.Object);
