@@ -9,6 +9,7 @@
 #include <EarthHero/PlayerController/LobbyPlayerController.h>
 #include <EarthHero/GameMode/LobbyGameMode.h>
 
+#include "EarthHero/EHGameInstance.h"
 #include "EarthHero/Socket/SocketClient.h"
 
 
@@ -19,18 +20,23 @@ void ALobbyGameSession::BeginPlay()
     //dedicated 서버에서만 실행
     if (IsRunningDedicatedServer() && !bSessionExists)
     {
-        FString PortNumber;
-        UWorld* World = GetWorld();
-        if (World)
+        UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(GetGameInstance());
+
+        if(EHGameInstance)
         {
-            PortNumber = FString::FromInt(World->URL.Port);
+            FString PortNumber;
+            UWorld* World = GetWorld();
+            
+            if (World) PortNumber = FString::FromInt(World->URL.Port);
+            
+            if (!PortNumber.IsEmpty())
+            {
+                UE_LOG(LogTemp, Log, TEXT("Lobby port : %s"), *PortNumber);
+                EHGameInstance->ServerPortNumber = PortNumber;
+                CreateSession(PortNumber);
+            }
+            else UE_LOG(LogTemp, Error, TEXT("Port number error"));
         }
-        if (!PortNumber.IsEmpty())
-        {
-            UE_LOG(LogTemp, Log, TEXT("Lobby port : %s"), *PortNumber);
-            CreateSession(PortNumber);
-        }
-        else UE_LOG(LogTemp, Error, TEXT("Port number error"));
     }
 }
 
@@ -361,7 +367,7 @@ void ALobbyGameSession::EndSession()
                 
                 //endsession에 실패했다면 프로세스 종료 //임시!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-                USocketClient* NewSocket = NewObject<USocketClient>();
+                USocketClient* NewSocket = NewObject<USocketClient>(this);
 	
                 if(NewSocket) NewSocket->CreateSocket("DestroySession");
                 

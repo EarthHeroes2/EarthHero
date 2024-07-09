@@ -14,6 +14,7 @@ class EARTHHERO_API USocketClient : public UObject
 	GENERATED_BODY()
 	
 public:
+	FString GetPortNumber();
 	FString CreateSocket(FString RequestMessage);
 	
 };

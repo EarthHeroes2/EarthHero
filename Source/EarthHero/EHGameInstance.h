@@ -17,6 +17,7 @@ class EARTHHERO_API UEHGameInstance : public UGameInstance
 
 public:
 	FStatStructure* GetStatStructure(FName HeroName) const;
+	FString ServerPortNumber;
 	
 protected:
 	UEHGameInstance();
