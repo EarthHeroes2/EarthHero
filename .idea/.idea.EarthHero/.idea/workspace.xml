@@ -78,17 +78,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4591bad7-fd9f-4860-903f-8700cd913377" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Content/Blueprints/Menu/Cyberpunk.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Blueprints/Menu/NightCity.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Textures/BackGround_2.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Textures/Cyberpunk.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Textures/Empty_Star.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Textures/Full_Star_Yellow.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Textures/GrenadePng.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Textures/GunImage.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Textures/MouseLeftClick.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Textures/MouseLeftClickWhite.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Textures/NightCity.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_InGameHUD_2.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_IngameHUD_HeroUpgrade.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Assets/UIMaterialLab/Materials/6_Patterns/4_Halftone/MI_UI_Halftone_4.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/UIMaterialLab/Materials/6_Patterns/4_Halftone/MI_UI_Halftone_4.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/UIMaterialLab/Widgets/ComponentMaterials/MaterialInstances/MI_UI_Button3.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/UIMaterialLab/Widgets/ComponentMaterials/MaterialInstances/MI_UI_Button3.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_InGameHUD.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_InGameHUD.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_Tab.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_Tab.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Menu/BackGround_2.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Menu/Cyberpunk.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Menu/NightCity.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Menu/WBP_Lobby.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Menu/WBP_Lobby.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Blueprints/Menu/WBP_MainMenu.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Menu/WBP_MainMenu.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Menu/WBP_Options.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Menu/WBP_Options.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/StartupMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/StartupMap.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plugins/MultiplayerSessions/Content/WBP_Menu.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Plugins/MultiplayerSessions/Content/WBP_Menu.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Options.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Options.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Options.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Options.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Widget/MainMenuWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Widget/MainMenuWidget.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -290,7 +299,7 @@
       <workItem from="1720367497309" duration="1358000" />
       <workItem from="1720409623122" duration="3701000" />
       <workItem from="1720448662481" duration="7057000" />
-      <workItem from="1720523039643" duration="2420000" />
+      <workItem from="1720523039643" duration="6022000" />
     </task>
     <servers />
   </component>
