@@ -294,7 +294,6 @@ void ALobbyGameSession::UnregisterPlayer(const APlayerController* ExitingPlayer)
     }
 }
 
-//PlayerIds�� �¶��� ���꿡�� ���� �÷��̾� id��
 void ALobbyGameSession::HandleUnregisterPlayerCompleted(FName EOSSessionName, const TArray<FUniqueNetIdRef>& PlayerIds, bool bWasSuccesful)
 {
     IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
@@ -330,7 +329,7 @@ void ALobbyGameSession::HandleUnregisterPlayerCompleted(FName EOSSessionName, co
     }
 }
 
-//�÷��̾ ���� ������ ���� �� �ڵ����� ȣ���
+//플레이어가 세션에서 떠나면 불림
 void ALobbyGameSession::NotifyLogout(const APlayerController* ExitingPlayer)
 {
     Super::NotifyLogout(ExitingPlayer); //UnregisterPlayer를 호출함
@@ -342,15 +341,37 @@ void ALobbyGameSession::NotifyLogout(const APlayerController* ExitingPlayer)
         //나간 사람 수 세션 정보 업데이트
         UpdateNumberOfJoinedPlayers();
         
-        //사람이 아무도 없으면 초기화 해줘야함 (수정필요) //테스트!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //사람이 아무도 없으면 세션 종료
         if (NumberOfPlayersInSession == 0)
         {
-            EndSession();
+            IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
+            if (Subsystem)
+            {
+                IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
+                if (Session.IsValid())
+                {
+                    EOnlineSessionState::Type SessionState = Session->GetSessionState(SessionName);
+                    switch (SessionState)
+                    {
+                        case EOnlineSessionState::Pending:
+                            UE_LOG(LogTemp, Log, TEXT("Session is Pending state."));
+                            DestroySession();
+                            break;
+                        case EOnlineSessionState::Starting:
+                            UE_LOG(LogTemp, Log, TEXT("Session is Started state."));
+                            EndSession();
+                            break;
+                        default:
+                            UE_LOG(LogTemp, Log, TEXT("Session is another state: %d"), static_cast<int>(SessionState));
+                            break;
+                    }
+                }
+            }
         }
     }
 }
 
-//세션이 시작된 상태일 때(StartSession) 세션을 끝내기 위함
+//세션이 시작된 상태일 때 세션을 끝내기 위함           <-현재 테스트 안해봄
 void ALobbyGameSession::EndSession()
 {
     IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
@@ -369,17 +390,6 @@ void ALobbyGameSession::EndSession()
                 UE_LOG(LogTemp, Warning, TEXT("Failed to end session!"));
                 Session->ClearOnEndSessionCompleteDelegate_Handle(StartSessionDelegateHandle);
                 EndSessionDelegateHandle.Reset();
-
-
-
-                
-                //endsession에 실패했다면 프로세스 종료 //임시!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-                USocketClient* NewSocket = NewObject<USocketClient>(this);
-	
-                if(NewSocket) NewSocket->CreateSocket("DestroyServer");
-                
-                FGenericPlatformMisc::RequestExit(false);
             }
         }
     }
@@ -395,11 +405,11 @@ void ALobbyGameSession::HandleEndSessionCompleted(FName EOSSessionName, bool bWa
         {
             if (bWasSuccessful)
             {
-                UE_LOG(LogTemp, Log, TEXT("Lobby ended!"));
+                UE_LOG(LogTemp, Log, TEXT("Session ended!"));
             }
             else
             {
-                UE_LOG(LogTemp, Warning, TEXT("Failed to end lobby! (From Callback)"));
+                UE_LOG(LogTemp, Warning, TEXT("Failed to end Session! (From Callback)"));
             }
 
             Session->ClearOnEndSessionCompleteDelegate_Handle(EndSessionDelegateHandle);
@@ -408,14 +418,6 @@ void ALobbyGameSession::HandleEndSessionCompleted(FName EOSSessionName, bool bWa
     }
 }
 
-//���� �ı� �� ���� �� Ŭ���̾�Ʈ �� �� ȣ���
-void ALobbyGameSession::EndPlay(const EEndPlayReason::Type EndPlayReason)
-{
-    Super::EndPlay(EndPlayReason);
-    DestroySession();
-}
-
-// ��� �÷��̾ ���� ������ ���� �� ȣ���
 void ALobbyGameSession::DestroySession()
 {
     IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
@@ -461,6 +463,20 @@ void ALobbyGameSession::HandleDestroySessionCompleted(FName EOSSessionName, bool
             DestroySessionDelegateHandle.Reset();
         }
     }
+    
+    //프로세스 종료
+    USocketClient* NewSocket = NewObject<USocketClient>(this);
+    if(NewSocket) NewSocket->CreateSocket("DestroyServer");
+    FGenericPlatformMisc::RequestExit(false);
+}
+
+//이 게임 세션이 레벨에서 제거할 때 호출됨
+//일단 놔둬봄...
+void ALobbyGameSession::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+    UE_LOG(LogTemp, Warning, TEXT("LobbyGameSession - EndPlay!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"));
+    Super::EndPlay(EndPlayReason);
+    DestroySession();
 }
 
 void ALobbyGameSession::ChangeAdvertiseState(bool bAdvertise)
