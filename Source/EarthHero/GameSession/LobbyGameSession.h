@@ -31,7 +31,7 @@ protected:
 	bool bSessionExists = false;
 
 	virtual void BeginPlay();
-	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason);
+	//virtual void EndPlay(const EEndPlayReason::Type EndPlayReason);
 
 	virtual bool ProcessAutoLogin();
 	virtual void NotifyLogout(const APlayerController* ExitingPlayer);
@@ -60,7 +60,7 @@ public:
 protected:
 	void HandleStartSessionCompleted(FName SessionName, bool bWasSuccessful);
 
-	void ChangeMap(); //�׽�Ʈ��
+	void ChangeMap();
 
 	void EndSession();
 	void HandleEndSessionCompleted(FName SessionName, bool bWasSuccessful);

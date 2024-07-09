@@ -78,14 +78,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4591bad7-fd9f-4860-903f-8700cd913377" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Content/Blueprints/Menu/Cyberpunk.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Blueprints/Menu/NightCity.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Item/BP_ExpItem.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Item/BP_ExpItem.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/TestMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/TestMap.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EarthHero.uproject" beforeDir="false" afterPath="$PROJECT_DIR$/EarthHero.uproject" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/EHCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/EHCharacter.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/EHCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/EHCharacter.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerState.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerState.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerState.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerState.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/UIMaterialLab/Materials/6_Patterns/4_Halftone/MI_UI_Halftone_4.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/UIMaterialLab/Materials/6_Patterns/4_Halftone/MI_UI_Halftone_4.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Menu/WBP_MainMenu.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Menu/WBP_MainMenu.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Menu/WBP_Options.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Menu/WBP_Options.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/StartupMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/StartupMap.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plugins/MultiplayerSessions/Content/WBP_Menu.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Plugins/MultiplayerSessions/Content/WBP_Menu.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Options.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Options.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Options.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Options.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Widget/MainMenuWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Widget/MainMenuWidget.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -136,9 +139,9 @@
   },
   "keyToStringList": {
     "rider.external.source.directories": [
-      "C:\\Users\\doban\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\DecompilerCache",
-      "C:\\Users\\doban\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\SourcesCache",
-      "C:\\Users\\doban\\AppData\\Local\\Symbols\\src"
+      "C:\\Users\\paran\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\DecompilerCache",
+      "C:\\Users\\paran\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\SourcesCache",
+      "C:\\Users\\paran\\AppData\\Local\\Symbols\\src"
     ]
   }
 }]]></component>
@@ -287,6 +290,7 @@
       <workItem from="1720367497309" duration="1358000" />
       <workItem from="1720409623122" duration="3701000" />
       <workItem from="1720448662481" duration="7057000" />
+      <workItem from="1720523039643" duration="2420000" />
     </task>
     <servers />
   </component>

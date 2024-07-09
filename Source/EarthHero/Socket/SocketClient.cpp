@@ -56,7 +56,7 @@ FString USocketClient::CreateSocket(FString RequestMessage)
 	Socket = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateSocket(NAME_Stream, "TCPSocket", false);
 	
 	FIPv4Address IP;
-	if(RequestMessage.Equals("CreateLobby")) FIPv4Address::Parse("116.121.57.64", IP); //못 감추나
+	if(RequestMessage.Equals("CreateLobby")) FIPv4Address::Parse("116.121.57.64", IP); //못 감추나 //
 	else if(RequestMessage.Equals("DestroyServer")) FIPv4Address::Parse("127.0.0.1", IP); //임시
 
 	//FInternetAddr 클래스에 네트워크 정보를 저장?
