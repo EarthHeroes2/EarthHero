@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/Button.h"
 #include "Options.generated.h"
 
 class UComboBoxString;
@@ -47,6 +48,9 @@ public:
 
     UPROPERTY(meta = (BindWidget))
     USlider* MouseSensitivitySlider;
+
+    UPROPERTY(meta = (BindWidget))
+    UButton* CloseBtn;
     
     void SetRecommendedResolution();
 
@@ -87,6 +91,9 @@ private:
 
     UFUNCTION()
     void OnMouseSensitivityChanged(float Value);
+
+    UFUNCTION()
+    void OnCloseBtnClicked();
 
     FString QualityToString(int32 Quality);
     int32 QualityFromString(const FString& QualityString);

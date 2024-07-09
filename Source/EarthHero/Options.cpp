@@ -6,6 +6,7 @@
 #include "EHGameInstance.h"
 #include "GameFramework/GameUserSettings.h"
 #include "Kismet/GameplayStatics.h"
+#include "Components/Button.h"
 
 void UOptions::NativeConstruct()
 {
@@ -64,6 +65,11 @@ void UOptions::NativeConstruct()
     if (MouseSensitivitySlider)
     {
         MouseSensitivitySlider->OnValueChanged.AddDynamic(this, &UOptions::OnMouseSensitivityChanged);
+    }
+
+    if (CloseBtn)
+    {
+        CloseBtn->OnClicked.AddDynamic(this, &UOptions::OnCloseBtnClicked);
     }
 
     InitializeOptions();
@@ -422,3 +428,7 @@ bool UOptions::ParseResolution(const FString& ResolutionString, int32& Width, in
     return false;
 }
 
+void UOptions::OnCloseBtnClicked()
+{
+    SetVisibility(ESlateVisibility::Hidden);
+}
