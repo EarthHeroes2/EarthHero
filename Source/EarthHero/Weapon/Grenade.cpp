@@ -5,6 +5,8 @@
 
 #include "Components/SphereComponent.h"
 #include "EarthHero/Character/Monster/MonsterBase.h"
+#include "EarthHero/Stat/ShooterStatComponent.h"
+#include "EarthHero/Stat/DamageType/NormalDamageType.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 
@@ -26,9 +28,6 @@ void AGrenade::BeginPlay()
 	Super::BeginPlay();
 
 	SphereComponent->OnComponentHit.AddDynamic(this, &ThisClass::GrenadeHit);
-
-	GrenadeDamage = 40.f;
-	GrenadeRange = 200.f;
 }
 
 void AGrenade::GrenadeHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
@@ -37,13 +36,16 @@ void AGrenade::GrenadeHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 	if(GetNetMode() != NM_Client)
 	{
 		const FVector HitLocation = Hit.Location;
-		Server_GrenadeHit(HitLocation);	
+		Server_GrenadeHit(HitLocation);
 	}
 }
 
 
 void AGrenade::Server_GrenadeHit_Implementation(FVector HitLocation)
 {
+	//스텟 컴포넌트는 서버에서만 접근 권장
+	GrenadeRange = ShooterStatComponent->SH_GrenadeRange;
+	
 	TArray<AActor*> ActorsToIgnore;
 	ActorsToIgnore.Add(this);
 	TArray<FHitResult> HitArray;
@@ -54,7 +56,7 @@ void AGrenade::Server_GrenadeHit_Implementation(FVector HitLocation)
 		const bool bHit = UKismetSystemLibrary::SphereTraceMulti(World, HitLocation, HitLocation, GrenadeRange,
 			UEngineTypes::ConvertToTraceType(ECC_Pawn), false, ActorsToIgnore,
 			EDrawDebugTrace::ForDuration, HitArray, true, FLinearColor::Gray, FLinearColor::Blue, 5.f);
-
+	
 		if(bHit)
 		{
 			TSet<AActor*> UniqueActors;
@@ -70,7 +72,7 @@ void AGrenade::Server_GrenadeHit_Implementation(FVector HitLocation)
 				
 				if(AMonsterBase* HitMonster = Cast<AMonsterBase>(HitResult.GetActor()))
 				{
-					UE_LOG(LogTemp, Error, TEXT("Monster Damaged"));
+					ShooterStatComponent->ShooterGrenadeDamage(HitMonster);
 				}
 			}
 		}

@@ -18,6 +18,10 @@ public:
 	AGrenade();
 	virtual void Tick(float DeltaTime) override;
 
+	//승언 : SHooterStatComponent 추가
+	UPROPERTY()
+	class UShooterStatComponent *ShooterStatComponent;
+
 protected:
 	virtual void BeginPlay() override;
 

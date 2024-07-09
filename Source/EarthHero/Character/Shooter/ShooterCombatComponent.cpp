@@ -5,6 +5,7 @@
 
 #include "EHShooter.h"
 #include "Camera/CameraComponent.h"
+#include "EarthHero/Character/Monster/MonsterBase.h"
 #include "EarthHero/Stat/ShooterStatComponent.h"
 #include "EarthHero/Stat/DamageType/NormalDamageType.h"
 #include "EarthHero/Weapon/Grenade.h"
@@ -78,6 +79,9 @@ void UShooterCombatComponent::NetMulticast_GrenadeFire_Implementation()
 			if(Grenade)
 			{
 				Grenade->GetProjectileMovementComponent()->InitialSpeed = 4000.f;
+				
+				//승언 : Grenade에 ShooterStatComponent 참조 추가
+				Grenade->ShooterStatComponent = Shooter->ShooterStatComponent;
 			}
 		}
 	}
@@ -102,7 +106,8 @@ void UShooterCombatComponent::Server_Fire_Implementation(FVector TraceStartVecto
 	
 	if(bHit)
 	{
-		AEHCharacter *HitActor = Cast<AEHCharacter>(HitResult.GetActor());
+		//07.09 AEHCharacter -> Monster로 변경
+		AMonsterBase *HitActor = Cast<AMonsterBase>(HitResult.GetActor());
 		if (!Shooter)
 		{
 			UE_LOG(LogClass, Warning, TEXT("ShooterCombatComponent::Fire() : No Shooter"));

@@ -4,11 +4,10 @@
 #include "ShooterStatComponent.h"
 #include "StatCalculationLibrary.h"
 #include "EarthHero/Character/EHCharacter.h"
+#include "EarthHero/Character/Monster/MonsterBase.h"
 #include "EarthHero/Character/Shooter/EHShooter.h"
+#include "Kismet/KismetSystemLibrary.h"
 
-UShooterStatComponent::UShooterStatComponent()
-{
-}
 
 void UShooterStatComponent::TickComponent(float DeltaTime, ELevelTick TickType,
                                           FActorComponentTickFunction* ThisTickFunction)
@@ -24,9 +23,9 @@ void UShooterStatComponent::BeginPlay()
 
 
 //슈터 스텟 초기화 함수(오버라이드)
-void UShooterStatComponent::InitializeStatData_Implementation(FName HeroName)
+void UShooterStatComponent::InitializeStatData_Implementation()
 {
-	Super::InitializeStatData_Implementation(HeroName);
+	Super::InitializeStatData_Implementation();
 }
 
 ////////////////
@@ -43,12 +42,20 @@ void UShooterStatComponent::ShooterDamage_Implementation(AActor* DamagedActor, c
 	if (resultDamage > 0)
 	{
 		//몬스터용 데미지 입는 함수 호출
-		//임시로 히어로끼리 데미지 입게 만들기
-		Cast<AEHCharacter>(DamagedActor)->StatComponent->DamageTaken(resultDamage, DamageTypeClass, HitInfo, GetOwner()->GetInstigatorController(), Cast<AEHCharacter>(GetOwner()));
+		if(AMonsterBase* HitMonster = Cast<AMonsterBase>(DamagedActor))
+		{
+			UE_LOG(LogTemp, Error, TEXT("Monster Damaged"));
+		}
 	}
 }
 
-//슈터 수류탄 공격
-void UShooterStatComponent::ShooterGenerateDamage_Implementation(FVector Origin,  TSubclassOf<UDamageType> DamageTypeClass)
+void UShooterStatComponent::ShooterGrenadeDamage_Implementation(AActor* DamagedActor)
 {
+	UStatCalculationLibrary::CalShooterGrenadeDamage(HeroStat, SH_GrenadeDamage);
+
+	if(AMonsterBase* HitMonster = Cast<AMonsterBase>(DamagedActor))
+	{
+		UE_LOG(LogTemp, Error, TEXT("Monster Damaged"));
+	}
 }
+

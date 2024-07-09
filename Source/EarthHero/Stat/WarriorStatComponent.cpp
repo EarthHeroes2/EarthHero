@@ -23,9 +23,9 @@ void UWarriorStatComponent::BeginPlay()
 
 
 //워리어 스텟 초기화 함수(오버라이드)
-void UWarriorStatComponent::InitializeStatData_Implementation(FName HeroName)
+void UWarriorStatComponent::InitializeStatData_Implementation()
 {
-	Super::InitializeStatData_Implementation(HeroName);
+	Super::InitializeStatData_Implementation();
 }
 
 

@@ -64,6 +64,11 @@ float UStatCalculationLibrary::CalShooterNormalDamage(FStatStructure &HeroStat, 
 	return resultDamage;
 }
 
+float UStatCalculationLibrary::CalShooterGrenadeDamage(FStatStructure& HeroStat, float SH_GrenadeDamage)
+{
+	return SH_GrenadeDamage;
+}
+
 bool UStatCalculationLibrary::AddExp(FStatStructure& HeroStat, int32 ExpMount)
 {
 	float resultExp = HeroStat.Exp + ExpMount;

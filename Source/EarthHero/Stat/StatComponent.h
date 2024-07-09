@@ -98,7 +98,7 @@ private:
 	
 	//초기화 작업을 위한 DataTable과 함수
 	UFUNCTION(Server, Reliable, WithValidation)
-	void InitializeStatData(FName HeroName);
+	void InitializeStatData();
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
@@ -107,5 +107,7 @@ private:
 
 	UPROPERTY()
 	class UHeroUpgradeComponent *HeroUpgradeComponent;
+
+	FTimerHandle InitializeTimerHandle;
 
 };

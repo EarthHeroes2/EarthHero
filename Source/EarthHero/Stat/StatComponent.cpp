@@ -40,7 +40,9 @@ void UStatComponent::BeginPlay()
 	Super::BeginPlay();
 	
 	//스텟 초기화(서버->클라이언트)
-	InitializeStatData("Hero");
+	//GetWorldTimerManager().SetTimer(InitializeTimerHandle, this, &ThisClass::InitializeStatData, 1.f, true);
+	
+	InitializeStatData();
 }
 
 
@@ -82,32 +84,37 @@ float UStatComponent::DamageTaken(float InDamage, TSubclassOf<UDamageType> Damag
 /* GameInstance에 저장된 초기 스텟을 불러와 StatComponent의 Base스텟과 스텟을 초기화하는 함수
  * FName HeroName : DataTable에서 가져올 RowName = 현재 Hero로 고정
 */
-void UStatComponent::InitializeStatData_Implementation(FName HeroName)
+void UStatComponent::InitializeStatData_Implementation()
 {
-	UEHGameInstance* ABGameInstance = Cast<UEHGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-	if (nullptr == ABGameInstance)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 1233223.f, FColor::Green, TEXT("No GameInstacnce"));
-		return ;
-	}
+	// if (GetOwner() && GetOwner()->GetInstigatorController() && GetOwner()->GetInstigatorController()->PlayerState)
+	// {
+		//GetOwner->GetWorldTimerManager().ClearTimer(InitializeTimerHandle); // 타이머 해제
+		
+		UEHGameInstance* ABGameInstance = Cast<UEHGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+		if (nullptr == ABGameInstance)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 1233223.f, FColor::Green, TEXT("No GameInstacnce"));
+			return ;
+		}
 
-	// 테이블이 존재한다면, 해당 값으로 스텟을 초기화
-	if (FStatStructure *TempStat = ABGameInstance->GetStatStructure(HeroName))
-	{
-		BaseHeroStat = *TempStat;
-		BaseHeroStat.Health = BaseHeroStat.MaxHealth;
-		BaseHeroStat.MaxExp = BaseHeroStat.RequiresExp[BaseHeroStat.Level];
-		HeroStat = BaseHeroStat;
-	}
-	else
-	{
-		// 데이터 테이블에 없는 행일 때
-		//GEngine->AddOnScreenDebugMessage(-1, 1233223.f, FColor::Green, TEXT("Row %s data doesn't exist"), *HeroName.ToString());
-		UE_LOG(LogClass, Warning, TEXT("Row '%s' data doesn't exist."), *HeroName.ToString());
-	}
+		// 테이블이 존재한다면, 해당 값으로 스텟을 초기화
+		if (FStatStructure *TempStat = ABGameInstance->GetStatStructure("Hero"))
+		{
+			BaseHeroStat = *TempStat;
+			BaseHeroStat.Health = BaseHeroStat.MaxHealth;
+			BaseHeroStat.MaxExp = BaseHeroStat.RequiresExp[BaseHeroStat.Level];
+			HeroStat = BaseHeroStat;
+		}
+		else
+		{
+			// 데이터 테이블에 없는 행일 때
+			//GEngine->AddOnScreenDebugMessage(-1, 1233223.f, FColor::Green, TEXT("Row %s data doesn't exist"), *HeroName.ToString());
+			UE_LOG(LogClass, Warning, TEXT("Row 'Hero' data doesn't exist."));
+		}
+	//}
 }
 
-bool UStatComponent::InitializeStatData_Validate(FName HeroName)
+bool UStatComponent::InitializeStatData_Validate()
 {
 	return true;
 }

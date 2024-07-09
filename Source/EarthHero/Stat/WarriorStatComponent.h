@@ -31,7 +31,7 @@ protected:
 
 private:
 
-	virtual void InitializeStatData_Implementation(FName HeroName) override;
+	virtual void InitializeStatData_Implementation() override;
 
 	/*워리어용 스텟*/
 
