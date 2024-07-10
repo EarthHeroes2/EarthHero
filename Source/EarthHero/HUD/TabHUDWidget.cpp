@@ -19,7 +19,7 @@ void UTabHUDWidget::SetTeamMemberWidgetValues(int32 Index, FText Name, FText Cla
             TeamMemberWidget = BP_TabUserInfo_4;
             break;
         default:
-            return; // Invalid index
+            return;
     }
 
     if (TeamMemberWidget)
@@ -51,7 +51,7 @@ void UTabHUDWidget::SetBasicStatsWidgetValues(int32 Index, FText KillScore, FTex
             BasicStatsWidget = BP_TabBasicStatsInfo_4;
             break;
         default:
-            return; // Invalid index
+            return;
     }
 
     if (BasicStatsWidget)
@@ -77,5 +77,62 @@ void UTabHUDWidget::SetStatusWidgetValues(FText AttackDamage, FText AttackSpeed,
         BP_TabStatusInfo->SetMaxHealth(MaxHealth);
         BP_TabStatusInfo->SetHealthRegenerationRate(HealthRegenerationRate);
         BP_TabStatusInfo->SetMoveSpeed(MoveSpeed);
+    }
+}
+
+void UTabHUDWidget::SetHeroUpgradeWidgetValues(int32 Index, UTexture2D* UpgradeImage, UTexture2D* Level1Image, UTexture2D* Level2Image, UTexture2D* Level3Image, FText UpgradeName, FText UpgradeDesc)
+{
+    UHeroUpgradeWidget* HeroUpgradeWidget = nullptr;
+
+    switch(Index)
+    {
+        case 0:
+            HeroUpgradeWidget = BP_TabHeroUpgrade_0;
+            break;
+        case 1:
+            HeroUpgradeWidget = BP_TabHeroUpgrade_1;
+            break;
+        case 2:
+            HeroUpgradeWidget = BP_TabHeroUpgrade_2;
+            break;
+        case 3:
+            HeroUpgradeWidget = BP_TabHeroUpgrade_3;
+            break;
+        case 4:
+            HeroUpgradeWidget = BP_TabHeroUpgrade_4;
+            break;
+        case 5:
+            HeroUpgradeWidget = BP_TabHeroUpgrade_5;
+            break;
+        case 6:
+            HeroUpgradeWidget = BP_TabHeroUpgrade_6;
+            break;
+        case 7:
+            HeroUpgradeWidget = BP_TabHeroUpgrade_7;
+            break;
+        case 8:
+            HeroUpgradeWidget = BP_TabHeroUpgrade_8;
+            break;
+        case 9:
+            HeroUpgradeWidget = BP_TabHeroUpgrade_9;
+            break;
+        case 10:
+            HeroUpgradeWidget = BP_TabHeroUpgrade_10;
+            break;
+        case 11:
+            HeroUpgradeWidget = BP_TabHeroUpgrade_11;
+            break;
+        default:
+            return;
+    }
+
+    if (HeroUpgradeWidget)
+    {
+        HeroUpgradeWidget->SetUpgradeImage(UpgradeImage);
+        HeroUpgradeWidget->SetLevel1Image(Level1Image);
+        HeroUpgradeWidget->SetLevel2Image(Level2Image);
+        HeroUpgradeWidget->SetLevel3Image(Level3Image);
+        HeroUpgradeWidget->SetUpgradeName(UpgradeName);
+        HeroUpgradeWidget->SetUpgradeDesc(UpgradeDesc);
     }
 }
