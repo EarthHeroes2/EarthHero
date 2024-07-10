@@ -11,23 +11,9 @@
 void AEHGameSession::BeginPlay()
 {
     Super::BeginPlay();
-
-    if(IsRunningDedicatedServer())
-    {
-        IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
-        if (Subsystem)
-        {
-            IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
-            if (Session.IsValid())
-            {
-                EOnlineSessionState::Type SessionState = Session->GetSessionState(SessionName);
-                UE_LOG(LogTemp, Log, TEXT("Session state on BeginPlay: %d"), static_cast<int>(SessionState));
-            }
-        }
-    }
 }
 
-//�������� �α����ϴ� ���� ���� (AGameModeBase::InitGame())
+//AGameModeBase::InitGame()에서 불림
 bool AEHGameSession::ProcessAutoLogin()
 {
     return true;
@@ -79,6 +65,7 @@ void AEHGameSession::NotifyLogout(const APlayerController* ExitingPlayer)
 //세션이 시작된 상태일 때 세션을 끝내기 위함           <-현재 테스트 안해봄
 void AEHGameSession::EndSession()
 {
+    UE_LOG(LogTemp, Warning, TEXT("AEHGameSession - EndSession!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"));
     IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
     if (Subsystem)
     {
@@ -122,6 +109,7 @@ void AEHGameSession::HandleEndSessionCompleted(FName EOSSessionName, bool bWasSu
 
 void AEHGameSession::DestroySession()
 {
+    UE_LOG(LogTemp, Warning, TEXT("AEHGameSession - DestroySesison!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"));
     IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
     if (Subsystem)
     {
