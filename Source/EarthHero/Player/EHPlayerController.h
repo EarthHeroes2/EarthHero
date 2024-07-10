@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -20,14 +19,16 @@ public:
 	virtual void Tick(float DeltaSeconds) override;
 
 	UPROPERTY()
-	class UInGameHUD *HUD;
+	class UInGameHUD* HUD;
+
+	UPROPERTY()
+	UUserWidget* TabHUD;
 
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
 	virtual void OnPossess(APawn* InPawn) override;
 
-	//승언 : 소유 클라이언트 실행 Possess
 	UFUNCTION(Client, Reliable)
 	void ClientPossess();
 
@@ -47,14 +48,18 @@ private:
 	TObjectPtr<UInputAction> CamAction;
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> SkillAction;
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> TabAction;
 
-	//승언 : InGameHUD를 컨트롤러에 추가
 	UPROPERTY(EditAnywhere, Category = "HUD")
 	TSubclassOf<class UUserWidget> InGameHUD;
 
+	UPROPERTY(EditAnywhere, Category = "HUD")
+	TSubclassOf<class UUserWidget> TabHUDClass;
+
 	void InitializeHUD();
 	FTimerHandle PlayerStateCheckTimerHandle;
-	
+
 	TObjectPtr<ACharacter> ControlledCharacter;
 
 protected:
@@ -63,4 +68,6 @@ protected:
 	void Skill();
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
+	void ShowTabHUD(); // Add the function to show the TabHUD
+	void HideTabHUD(); // Add the function to hide the TabHUD
 };
