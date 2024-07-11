@@ -16,6 +16,7 @@ class EARTHHERO_API AEHGameSession : public AGameSession
 
 public:
 	const int MaxNumberOfPlayersInSession = 4;
+	int GetNumPlayersInSession();
 
 protected:
 	int NumberOfPlayersInSession = 0;

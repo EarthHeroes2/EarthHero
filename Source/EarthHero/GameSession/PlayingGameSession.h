@@ -15,5 +15,6 @@ class EARTHHERO_API APlayingGameSession : public AEHGameSession
 	GENERATED_BODY()
 
 
-	void BeginPlay();
+	virtual void BeginPlay() override;
+	virtual void NotifyLogout(const APlayerController* ExitingPlayer) override;
 };

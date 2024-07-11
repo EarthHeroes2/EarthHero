@@ -15,7 +15,18 @@ class EARTHHERO_API APlayingGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 
+	virtual void BeginPlay() override;
 	virtual void InitSeamlessTravelPlayer(AController* NewController) override;
+	//플레이어 나간 것은 게임 세션에서 처리?
+	
+	void InitLevelSetting();
+	void GameTimerCount();
 
-	TArray<AEHPlayerController*> AllConnectedPlayerControllers;
+	TArray<AEHPlayerController*> EHPlayerControllers;
+
+
+public:
+	int NumPlayersInSession;
+	int GameTimer = 0;
+	void PlayerLogOut(const AEHPlayerController* ExitingEHPlayerController);
 };

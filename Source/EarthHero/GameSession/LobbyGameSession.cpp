@@ -78,9 +78,7 @@ void ALobbyGameSession::CreateSession(FString PortNumber)
             SessionSettings->Set("LobbyName", LobbyName, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
             if(Private == "true") SessionSettings->Set("Advertise", false, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
             else SessionSettings->Set("Advertise", true, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
-
-            UE_LOG(LogTemp, Error, TEXT("ln = %s     p = %s"), *LobbyName, *Private);
-
+            
             UE_LOG(LogTemp, Log, TEXT("Creating lobby..."));
             
             if (!Session->CreateSession(0, SessionName, *SessionSettings))
