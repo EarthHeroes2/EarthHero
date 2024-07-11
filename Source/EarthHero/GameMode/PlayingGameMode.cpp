@@ -2,10 +2,8 @@
 
 
 #include "PlayingGameMode.h"
-
-#include <string>
-
 #include "EarthHero/GameSession/PlayingGameSession.h"
+#include "EarthHero/GameState/PlayingGameState.h"
 #include "EarthHero/Player/EHPlayerController.h"
 
 
@@ -32,8 +30,7 @@ void APlayingGameMode::InitSeamlessTravelPlayer(AController* NewController) //�
 				EHPlayerControllers.Add(NewEHPlayerController);
 				
 				//세션 속 모든 플레이어가 레벨에 들어왔다면 레벨 초기 작업 시작
-				if(EHPlayerControllers.Num() == PlayingGameSession->GetNumPlayersInSession())
-					InitLevelSetting();
+				if(EHPlayerControllers.Num() == PlayingGameSession->GetNumPlayersInSession()) InitLevelSetting();
 			}
 		}
 	}
@@ -41,21 +38,30 @@ void APlayingGameMode::InitSeamlessTravelPlayer(AController* NewController) //�
 
 void APlayingGameMode::InitLevelSetting()
 {
-	UE_LOG(LogTemp, Log, TEXT("InitLevelSetting()"));
 	for(int i = 0; i < EHPlayerControllers.Num(); i++)
 	{
-		//여기서 플레이어 시작위치 정해줘도 스폰에는 문제가 없는데... 보이지는 않지만 폰이 2개 생성되는 것 같음
-		UE_LOG(LogTemp, Log, TEXT("InitLevelSetting()2"));
+		//플레이어 시작위치를 정해줄 수는 있는데.. 코드를 보면 보이지는 않지만 폰이 2개 생성되는 것 같음 (보류)
 		//AActor* TargetPlayerStart = FindPlayerStart(EHPlayerControllers[i], FString::FromInt(i));
-		UE_LOG(LogTemp, Log, TEXT("InitLevelSetting()3"));
 		//RestartPlayerAtPlayerStart(EHPlayerControllers[i], TargetPlayerStart);
 	}
 	
 	//플레이어 스테이트에서 플레이어 이름, 체력정보 취합해서 게임 스테이트를 통해 전파
-	//모두의 움직임 풀어주고
+	
+	//모두의 움직임 풀어주고 //모두가 동시에 시작하는 편이 좋긴하지만... 2순위
+
 	//게임 시간초 시작
+	FTimerHandle Handle;
+	GetWorld()->GetTimerManager().SetTimer(Handle, this, &ThisClass::GameTimerCount, 1.0f, true);
 }
 
+
+void APlayingGameMode::GameTimerCount()
+{
+	GameTimer++;
+
+	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
+	PlayingGameState->UpdateHUDGameTimer(GameTimer);
+}
 
 
 

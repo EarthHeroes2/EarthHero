@@ -22,8 +22,13 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock *Level_Num;
 
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock *GameTimer_Tb;
+
 	void InitializePlayerState(class UStatComponent *StatComponent);
 
+	void UpdateGameTimer(int GameTimerSec);
+	
 protected:
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 
