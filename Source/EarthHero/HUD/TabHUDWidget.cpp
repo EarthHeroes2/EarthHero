@@ -38,7 +38,8 @@ void UTabHUDWidget::SetTeamMemberWidgetValues(int32 Index, FText Name, FText Cla
         TeamMemberWidget->SetName(Name);
         TeamMemberWidget->SetClass(Class);
         TeamMemberWidget->SetPlayerNumber(PlayerNumber);
-        TeamMemberWidget->SetLevelAndExp(Level, Exp);
+        TeamMemberWidget->SetLevel(Level);
+        TeamMemberWidget->SetExp(Exp);
         TeamMemberWidget->SetProgress(HealthProgress);
     }
 }
@@ -153,5 +154,21 @@ void UTabHUDWidget::UpdatePlayerHealths(TArray<float> PlayerMaxHealths, TArray<f
     for(int i = 0; i < PlayerMaxHealths.Num(); i++)
     {
         TabUserInfoArray[i]->SetProgress(PlayerMaxHealths[i] / PlayerCurrentHealths[i]);
+    }
+}
+
+void UTabHUDWidget::UpdatePlayerLevels(TArray<int> PlayerLevels)
+{
+    for(int i = 0; i < PlayerLevels.Num(); i++)
+    {
+      //  TabUserInfoArray[i]->SetLevelAndExp();
+    }
+}
+
+void UTabHUDWidget::UpdatePlayerExps(TArray<float> PlayerExps)
+{
+    for(int i = 0; i < PlayerExps.Num(); i++)
+    {
+        //  TabUserInfoArray[i]->SetLevelAndExp();
     }
 }

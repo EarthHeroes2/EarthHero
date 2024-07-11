@@ -106,3 +106,47 @@ void APlayingGameMode::UpdateGameStateHealths()
 	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
 	PlayingGameState->UpdateGameStateHealths(PlayerMaxHealths, PlayerCurrentHealths);
 }
+
+void APlayingGameMode::UpdateGameStateLevels()
+{
+	TArray<int> PlayerLevels;
+	
+	for(AEHPlayerController* EHPlayerController : EHPlayerControllers)
+	{
+		if(EHPlayerController && EHPlayerController->PlayerState)
+		{
+			AEHPlayerState* EHPlayerState = Cast<AEHPlayerState>(EHPlayerController->PlayerState);
+			if(EHPlayerState)
+			{
+				UStatComponent* StatComponent = EHPlayerState->GetStatComponent();
+				if(StatComponent)
+					PlayerLevels.Add(StatComponent->GetLevel());
+			}
+		}
+	}
+
+	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
+	PlayingGameState->UpdateGameStateLevels(PlayerLevels);
+}
+
+void APlayingGameMode::UpdateGameStateExps()
+{
+	TArray<float> PlayerExps;
+	
+	for(AEHPlayerController* EHPlayerController : EHPlayerControllers)
+	{
+		if(EHPlayerController && EHPlayerController->PlayerState)
+		{
+			AEHPlayerState* EHPlayerState = Cast<AEHPlayerState>(EHPlayerController->PlayerState);
+			if(EHPlayerState)
+			{
+				UStatComponent* StatComponent = EHPlayerState->GetStatComponent();
+				if(StatComponent)
+					PlayerExps.Add(StatComponent->GetExpPercent());
+			}
+		}
+	}
+
+	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
+	PlayingGameState->UpdateGameStateExps(PlayerExps);
+}

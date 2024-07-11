@@ -40,6 +40,7 @@ void APlayingGameState::OnRep_GameTimerSec()
 	}
 }
 
+
 void APlayingGameState::UpdateGameStateHealths(TArray<float> PlayerMaxHealths, TArray<float> PlayerCurrentHealths)
 {
 	AllPlayerMaxHealths = PlayerMaxHealths;
@@ -49,11 +50,44 @@ void APlayingGameState::UpdateGameStateHealths(TArray<float> PlayerMaxHealths, T
 void APlayingGameState::OnRep_GameStateHealths() //일단은 현재 체력이 변했을 때만 이것이 불림
 {
 	UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateHealths"));
-	if(EHPlayerController && EHPlayerController->HUD)
+	if(EHPlayerController && EHPlayerController->TabHUD)
 	{
 		EHPlayerController->TabHUD->UpdatePlayerHealths(AllPlayerMaxHealths, AllPlayerCurrentHealths);
 	}
 }
+
+
+void APlayingGameState::UpdateGameStateLevels(TArray<int> PlayerLevels)
+{
+	AllPlayerLevels = PlayerLevels;
+}
+
+void APlayingGameState::OnRep_GameStateLevels()
+{
+	UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateLevels"));
+	if(EHPlayerController && EHPlayerController->TabHUD)
+	{
+		EHPlayerController->TabHUD->UpdatePlayerLevels(AllPlayerLevels);
+	}
+}
+
+
+void APlayingGameState::UpdateGameStateExps(TArray<float> PlayerExps)
+{
+	AllPlayerExps = PlayerExps;
+}
+
+void APlayingGameState::OnRep_GameStateExps()
+{
+	UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateExps"));
+	if(EHPlayerController && EHPlayerController->TabHUD)
+	{
+		EHPlayerController->TabHUD->UpdatePlayerExps(AllPlayerExps);
+	}
+}
+
+
+
 
 
 
@@ -63,4 +97,6 @@ void APlayingGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(APlayingGameState, GameTimerSec);
 	DOREPLIFETIME(APlayingGameState, AllPlayerCurrentHealths);
+	DOREPLIFETIME(APlayingGameState, AllPlayerLevels);
+	DOREPLIFETIME(APlayingGameState, AllPlayerExps);
 }

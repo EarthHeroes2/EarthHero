@@ -95,4 +95,6 @@ public:
 
 
 	void UpdatePlayerHealths(TArray<float> PlayerMaxHealths, TArray<float> PlayerCurrentHealths);
+	void UpdatePlayerLevels(TArray<int> PlayerLevels);
+	void UpdatePlayerExps(TArray<float> PlayerExps);
 };
