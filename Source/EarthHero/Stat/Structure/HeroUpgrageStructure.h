@@ -15,8 +15,8 @@ struct FHeroUpgradeStructure : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HeroUpgrade")
 	FText UpgradeName;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HeroUpgrade")
-	FText Explanation;
+	UPROPERTY(EditAnywhere, Category = "HeroUpgrade")
+	FText Explanation[3];
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HeroUpgrade")
 	int32 UpgradeLevel = 0;
@@ -24,11 +24,14 @@ struct FHeroUpgradeStructure : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HeroUpgrade")
 	int HeroUpgradeType;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HeroUpgrade")
+	UTexture2D* UpgradeImage;
+
 	// == 연산자 오버로드
 	bool operator==(const FHeroUpgradeStructure& Other) const
 	{
 		return UpgradeName.EqualTo(Other.UpgradeName) && 
-			   Explanation.EqualTo(Other.Explanation) && 
+			   Explanation[UpgradeLevel].EqualTo(Other.Explanation[UpgradeLevel]) && 
 			   UpgradeLevel == Other.UpgradeLevel && 
 			   HeroUpgradeType == Other.HeroUpgradeType;
 	}
