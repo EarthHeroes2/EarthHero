@@ -22,7 +22,7 @@ public:
 	class UInGameHUD* HUD;
 
 	UPROPERTY()
-	UUserWidget* TabHUD;
+	class UTabHUDWidget* TabHUD;
 
 protected:
 	virtual void BeginPlay() override;

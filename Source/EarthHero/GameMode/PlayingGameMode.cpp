@@ -5,6 +5,7 @@
 #include "EarthHero/GameSession/PlayingGameSession.h"
 #include "EarthHero/GameState/PlayingGameState.h"
 #include "EarthHero/Player/EHPlayerController.h"
+#include "EarthHero/Player/EHPlayerState.h"
 
 
 void APlayingGameMode::BeginPlay()
@@ -54,18 +55,6 @@ void APlayingGameMode::InitLevelSetting()
 	GetWorld()->GetTimerManager().SetTimer(Handle, this, &ThisClass::GameTimerCount, 1.0f, true);
 }
 
-
-void APlayingGameMode::GameTimerCount()
-{
-	GameTimer++;
-
-	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
-	PlayingGameState->UpdateHUDGameTimer(GameTimer);
-}
-
-
-
-
 void APlayingGameMode::PlayerLogOut(const AEHPlayerController* ConstExitingEHPlayerController)
 {
 	AEHPlayerController* ExitingEHPlayerController = const_cast<AEHPlayerController*>(ConstExitingEHPlayerController);
@@ -82,4 +71,38 @@ void APlayingGameMode::PlayerLogOut(const AEHPlayerController* ConstExitingEHPla
 
 		//나간 플레이어는 죽은 것으로 처리 -> 모든 플레이어가 죽었는 지 확인
 	}
+}
+
+void APlayingGameMode::GameTimerCount()
+{
+	GameTimer++;
+
+	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
+	PlayingGameState->UpdateHUDGameTimer(GameTimer);
+}
+
+void APlayingGameMode::UpdateGameStateHealths()
+{
+	TArray<float> PlayerMaxHealths;
+	TArray<float> PlayerCurrentHealths;
+	
+	for(AEHPlayerController* EHPlayerController : EHPlayerControllers)
+	{
+		if(EHPlayerController && EHPlayerController->PlayerState)
+		{
+			AEHPlayerState* EHPlayerState = Cast<AEHPlayerState>(EHPlayerController->PlayerState);
+			if(EHPlayerState)
+			{
+				UStatComponent* StatComponent = EHPlayerState->GetStatComponent();
+				if(StatComponent)
+				{
+					PlayerMaxHealths.Add(StatComponent->GetHealth());
+					PlayerCurrentHealths.Add(StatComponent->GetMaxHealth());
+				}
+			}
+		}
+	}
+
+	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
+	PlayingGameState->UpdateGameStateHealths(PlayerMaxHealths, PlayerCurrentHealths);
 }
