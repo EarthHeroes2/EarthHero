@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "EarthHero/Character/EHCharacter.h"
 #include "EarthHero/HUD/InGameHUD.h"
+#include "EarthHero/HUD/TabHUDWidget.h"
 #include "GameFramework/Character.h"
 
 AEHPlayerController::AEHPlayerController()
@@ -64,7 +65,7 @@ void AEHPlayerController::InitializeHUD()
 		}
 
 		// Initialize and hide TabHUD
-		TabHUD = CreateWidget<UUserWidget>(this, TabHUDClass);
+		TabHUD = CreateWidget<UTabHUDWidget>(this, TabHUDClass);
 		if (TabHUD)
 		{
 			TabHUD->AddToViewport();

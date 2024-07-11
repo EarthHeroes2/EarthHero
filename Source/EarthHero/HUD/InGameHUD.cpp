@@ -5,6 +5,7 @@
 
 #include "EarthHero/Stat/StatComponent.h"
 #include "Components/ProgressBar.h"
+#include "Components/TextBlock.h"
 
 void UInGameHUD::InitializePlayerState(UStatComponent *StatComponent)
 {
@@ -22,4 +23,9 @@ void UInGameHUD::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 	{
 		HealthBar->SetPercent(StatComponentRef->GetHealthPercent());
 	}
+}
+
+void UInGameHUD::UpdateGameTimer(int GameTimerSec)
+{
+	GameTimer_Tb->SetText(FText::Format(FText::FromString("{0} : {1}"), FText::AsNumber(GameTimerSec/60), FText::AsNumber(GameTimerSec % 60)));
 }

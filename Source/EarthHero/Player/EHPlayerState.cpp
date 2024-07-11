@@ -188,7 +188,7 @@ void AEHPlayerState::LoadHeroUpgradeDatatable()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Upgrade Name: %s, Explanation: %s, Level: %d"),
 			*Upgrade.UpgradeName.ToString(),
-			*Upgrade.Explanation.ToString(),
+			*Upgrade.Explanation[0].ToString(),
 			Upgrade.UpgradeLevel);
 	}
 

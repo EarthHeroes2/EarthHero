@@ -1,5 +1,16 @@
 #include "TabHUDWidget.h"
 
+#include "BehaviorTree/BehaviorTreeTypes.h"
+
+
+void UTabHUDWidget::BeginPlay()
+{
+    TabUserInfoArray.Add(BP_TabUserInfo_1);
+    TabUserInfoArray.Add(BP_TabUserInfo_2);
+    TabUserInfoArray.Add(BP_TabUserInfo_3);
+    TabUserInfoArray.Add(BP_TabUserInfo_4);
+}
+
 void UTabHUDWidget::SetTeamMemberWidgetValues(int32 Index, FText Name, FText Class, FText PlayerNumber, int32 Level, float Exp, float HealthProgress)
 {
     UTeamMemberWidget* TeamMemberWidget = nullptr;
@@ -27,7 +38,8 @@ void UTabHUDWidget::SetTeamMemberWidgetValues(int32 Index, FText Name, FText Cla
         TeamMemberWidget->SetName(Name);
         TeamMemberWidget->SetClass(Class);
         TeamMemberWidget->SetPlayerNumber(PlayerNumber);
-        TeamMemberWidget->SetLevelAndExp(Level, Exp);
+        TeamMemberWidget->SetLevel(Level);
+        TeamMemberWidget->SetExp(Exp);
         TeamMemberWidget->SetProgress(HealthProgress);
     }
 }
@@ -134,5 +146,29 @@ void UTabHUDWidget::SetHeroUpgradeWidgetValues(int32 Index, UTexture2D* UpgradeI
         HeroUpgradeWidget->SetLevel3Image(Level3Image);
         HeroUpgradeWidget->SetUpgradeName(UpgradeName);
         HeroUpgradeWidget->SetUpgradeDesc(UpgradeDesc);
+    }
+}
+
+void UTabHUDWidget::UpdatePlayerHealths(TArray<float> PlayerMaxHealths, TArray<float> PlayerCurrentHealths)
+{
+    for(int i = 0; i < PlayerMaxHealths.Num(); i++)
+    {
+        TabUserInfoArray[i]->SetProgress(PlayerMaxHealths[i] / PlayerCurrentHealths[i]);
+    }
+}
+
+void UTabHUDWidget::UpdatePlayerLevels(TArray<int> PlayerLevels)
+{
+    for(int i = 0; i < PlayerLevels.Num(); i++)
+    {
+      //  TabUserInfoArray[i]->SetLevelAndExp();
+    }
+}
+
+void UTabHUDWidget::UpdatePlayerExps(TArray<float> PlayerExps)
+{
+    for(int i = 0; i < PlayerExps.Num(); i++)
+    {
+        //  TabUserInfoArray[i]->SetLevelAndExp();
     }
 }

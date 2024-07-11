@@ -24,7 +24,10 @@ public:
 	UTextBlock* PlayerNumberText;
 	
 	UPROPERTY(meta = (BindWidget))
-	UTextBlock* LevelAndExpText;
+	UTextBlock* LevelText;
+
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* ExpText;
 
 	UPROPERTY(meta = (BindWidget))
 	UProgressBar* HealthProgressBar;
@@ -39,8 +42,12 @@ public:
 	void SetPlayerNumber(FText PlayerNumber);
 
 	UFUNCTION(BlueprintCallable, Category = "TeamMember")
-	void SetLevelAndExp(int32 Level, float ExpPercentage);
+	void SetLevel(int32 Level);
 
+	UFUNCTION(BlueprintCallable, Category = "TeamMember")
+	void SetExp(float ExpPercentage);
+
+	
 	UFUNCTION(BlueprintCallable, Category = "TeamMember")
 	void SetProgress(float Progress);
 };
