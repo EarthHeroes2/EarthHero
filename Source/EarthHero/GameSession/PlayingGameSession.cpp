@@ -5,7 +5,11 @@
 
 #include "OnlineSessionSettings.h"
 #include "OnlineSubsystem.h"
+#include "EarthHero/GameMode/PlayingGameMode.h"
+#include "EarthHero/Player/EHPlayerController.h"
 #include "Interfaces/OnlineSessionInterface.h"
+
+class APlayingGameMode;
 
 void APlayingGameSession::BeginPlay()
 {
@@ -23,15 +27,34 @@ void APlayingGameSession::BeginPlay()
 				FOnlineSessionSetting* NumJoinedPlayersSetting = SessionSettings->Settings.Find("NumberOfJoinedPlayers");
 				if(NumJoinedPlayersSetting)
 				{
-					//세션의 참가 플레이어 수를 가져옴??????????????????????????????????????? (직접 register에서 카운트해주는게 좋나?)
 					NumberOfPlayersInSession = FCString::Atoi(*NumJoinedPlayersSetting->Data.ToString());
-		
+
 					UE_LOG(LogTemp, Log, TEXT("Receive NumberOfPlayersInSession : %d"), NumberOfPlayersInSession);
 				}
 			}
 			else
 			{
 				UE_LOG(LogTemp, Warning, TEXT("No session settings found for session: %s"), *SessionName.ToString());
+			}
+		}
+	}
+}
+
+void APlayingGameSession::NotifyLogout(const APlayerController* ExitingPlayer)
+{
+	Super::NotifyLogout(ExitingPlayer); //여기있어도 되려나?
+
+	if(IsRunningDedicatedServer())
+	{
+		// 게임모드의 관리 리스트에서 제거
+		APlayingGameMode* PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode());
+		if(PlayingGameMode)
+		{
+			const AEHPlayerController* ConstExitingEHPlayerController = Cast<AEHPlayerController>(ExitingPlayer);
+			if(ConstExitingEHPlayerController)
+			{
+				AEHPlayerController* ExitingEHPlayerController = const_cast<AEHPlayerController*>(ConstExitingEHPlayerController);
+				if(ExitingEHPlayerController) PlayingGameMode->PlayerLogOut(ExitingEHPlayerController);
 			}
 		}
 	}

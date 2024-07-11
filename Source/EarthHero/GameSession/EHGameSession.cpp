@@ -8,6 +8,8 @@
 #include "OnlineSessionSettings.h"
 #include "EarthHero/Socket/SocketClient.h"
 
+
+
 void AEHGameSession::BeginPlay()
 {
     Super::BeginPlay();
@@ -19,6 +21,10 @@ bool AEHGameSession::ProcessAutoLogin()
     return true;
 }
 
+int AEHGameSession::GetNumPlayersInSession()
+{
+    return NumberOfPlayersInSession;
+}
 
 //플레이어가 세션에서 떠나면 불림
 void AEHGameSession::NotifyLogout(const APlayerController* ExitingPlayer)
@@ -28,7 +34,7 @@ void AEHGameSession::NotifyLogout(const APlayerController* ExitingPlayer)
     if (IsRunningDedicatedServer())
     {
         NumberOfPlayersInSession--;
-
+        
         //나간 사람 수 세션 정보 업데이트
         UpdateNumberOfJoinedPlayers();
         
@@ -48,7 +54,7 @@ void AEHGameSession::NotifyLogout(const APlayerController* ExitingPlayer)
                             UE_LOG(LogTemp, Log, TEXT("Session is Pending state."));
                             DestroySession();
                             break;
-                        case EOnlineSessionState::Starting:
+                        case EOnlineSessionState::InProgress:
                             UE_LOG(LogTemp, Log, TEXT("Session is Started state."));
                             EndSession();
                             break;
@@ -62,10 +68,9 @@ void AEHGameSession::NotifyLogout(const APlayerController* ExitingPlayer)
     }
 }
 
-//세션이 시작된 상태일 때 세션을 끝내기 위함           <-현재 테스트 안해봄
+//세션이 시작된 상태일 때 세션을 끝내기 위함
 void AEHGameSession::EndSession()
 {
-    UE_LOG(LogTemp, Warning, TEXT("AEHGameSession - EndSession!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"));
     IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
     if (Subsystem)
     {
@@ -100,6 +105,8 @@ void AEHGameSession::HandleEndSessionCompleted(FName EOSSessionName, bool bWasSu
                 UE_LOG(LogTemp, Log, TEXT("Session ended!"));
             }
             else UE_LOG(LogTemp, Warning, TEXT("Failed to end Session! (From Callback)"));
+
+            DestroySession(); //세션 제거
             
             Session->ClearOnEndSessionCompleteDelegate_Handle(EndSessionDelegateHandle);
             EndSessionDelegateHandle.Reset();
@@ -109,7 +116,6 @@ void AEHGameSession::HandleEndSessionCompleted(FName EOSSessionName, bool bWasSu
 
 void AEHGameSession::DestroySession()
 {
-    UE_LOG(LogTemp, Warning, TEXT("AEHGameSession - DestroySesison!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"));
     IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
     if (Subsystem)
     {
@@ -165,7 +171,6 @@ void AEHGameSession::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
     UE_LOG(LogTemp, Warning, TEXT("AEHGameSession - EndPlay!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"));
     Super::EndPlay(EndPlayReason);
-    DestroySession();
 }
 
 
