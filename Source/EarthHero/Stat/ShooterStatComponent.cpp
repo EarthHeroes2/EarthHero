@@ -3,6 +3,7 @@
 
 #include "ShooterStatComponent.h"
 #include "StatCalculationLibrary.h"
+#include "DamageType/NormalDamageType.h"
 #include "EarthHero/Character/EHCharacter.h"
 #include "EarthHero/Character/Monster/MonsterBase.h"
 #include "EarthHero/Character/Shooter/EHShooter.h"
@@ -45,6 +46,10 @@ void UShooterStatComponent::ShooterDamage_Implementation(AActor* DamagedActor, c
 		if(AMonsterBase* HitMonster = Cast<AMonsterBase>(DamagedActor))
 		{
 			UE_LOG(LogTemp, Error, TEXT("Monster Damaged"));
+		}
+		else if (AEHCharacter *HitHero = Cast<AEHCharacter>(DamagedActor)) // 임시 슈터끼리 공격
+		{
+			HitHero->StatComponent->DamageTaken(10, UNormalDamageType::StaticClass(), HitInfo, nullptr, Shooter);
 		}
 	}
 }

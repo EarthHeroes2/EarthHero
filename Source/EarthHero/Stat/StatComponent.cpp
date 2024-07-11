@@ -16,11 +16,12 @@
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
 #include "EarthHero/HUD/InGameHUD.h"
+#include "EarthHero/HUD/TabHUDWidget.h"
 
 UStatComponent::UStatComponent()
 {
 
-	PrimaryComponentTick.bCanEverTick = false;
+	PrimaryComponentTick.bCanEverTick = true;
 	SetIsReplicatedByDefault(true);  // 컴포넌트가 네트워크에서 복제될 수 있도록 설정
 }
 
@@ -31,6 +32,16 @@ void UStatComponent::SetInGameHUD(UInGameHUD* ControllerInGameHUD)
 		UE_LOG(LogClass, Warning, TEXT("StatComponent: ERROR!! InGameHUD is NULL"));
 	}
 	InGameHUD = ControllerInGameHUD;
+}
+
+void UStatComponent::SetTabHUD(UTabHUDWidget* ControllerTabHUD)
+{
+	
+	if (!ControllerTabHUD)
+	{
+		UE_LOG(LogClass, Warning, TEXT("StatComponent: ERROR!! TabHUD is NULL"));
+	}
+	TabHUD = ControllerTabHUD;
 }
 
 
@@ -45,13 +56,16 @@ void UStatComponent::BeginPlay()
 	InitializeStatData();
 }
 
-
 void UStatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	//체력 재생 (1 * (1 + 체력 재생 능력치))
-	HeroStat.Health = UE::Geometry::VectorUtil::Clamp(HeroStat.Health + 1 * (1 + HeroStat.HealthRegeneration), 0.f, HeroStat.MaxHealth);
+	//체력 재생 (1 * (1 + 체력 재생 능력치)) -> 타이머로 수정 예정
+	HeroStat.Health = HeroStat.Health + 1 * (1 + HeroStat.HealthRegeneration) * DeltaTime;
+	if (HeroStat.Health > HeroStat.MaxHealth)
+	{
+		HeroStat.Health = HeroStat.MaxHealth;
+	}
 }
 
 
@@ -130,7 +144,7 @@ void UStatComponent::UpdateExp(float ExpMount)
 	if (isLevelUp)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("LevelUp.. PushRandomUpgrade Activate"));
-		HeroUpgradeComponent->PushRandomHeroUpgrade();
+		HeroUpgradeComponent->PushRandomHeroUpgrade(InGameHUD);
 	}
 }
 
@@ -257,6 +271,31 @@ float UStatComponent::GetJumpPower() const
 /*****************************************/
 
 /*서버에서 클라이언트로 복사할 변수들*/
+
+void UStatComponent::OnRep_HeroStat()
+{
+	//TabHUD의 정보 업데이트
+	// editor listen server 환경에선 서버는 클라이언트를 안가지고 있기 때문에 업데이트가 안되는 게 맞다.
+	if (GetNetMode() == NM_Client && TabHUD)
+	{ 
+		TabHUD->SetStatusWidgetValues(
+			FText::Format(FText::FromString(TEXT("{0}%")),FText::AsNumber(HeroStat.NormalDamage * 100)),
+			FText::Format(FText::FromString(TEXT("{0}%")),FText::AsNumber(HeroStat.AttackSpeed * 100)),
+			FText::Format(FText::FromString(TEXT("{0}%")),FText::AsNumber(HeroStat.SkillDamage * 100)),
+			FText::Format(FText::FromString(TEXT("{0}%")),FText::AsNumber(HeroStat.SkillCoolTime * 100)),
+			FText::Format(FText::FromString(TEXT("{0}%")),FText::AsNumber(HeroStat.DashCoolTime * 100)),
+			FText::AsNumber(HeroStat.Health),
+			FText::AsNumber(HeroStat.DefensePower),
+			FText::AsNumber(HeroStat.MaxHealth),
+			FText::AsNumber(HeroStat.HealthRegeneration),
+			FText::Format(FText::FromString(TEXT("{0}%")),FText::AsNumber(HeroStat.MovementSpeed * 100)));
+	}
+}
+
+void UStatComponent::OnRep_BaseHeroStat()
+{
+}
+
 void UStatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);

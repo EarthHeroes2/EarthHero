@@ -21,7 +21,7 @@ public:
 	TArray<FHeroUpgradeStructure> HeroUpgrades;
 
 	UFUNCTION(Server, Reliable)
-	void PushRandomHeroUpgrade();
+	void PushRandomHeroUpgrade(class UInGameHUD *UInGameHUD);
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 

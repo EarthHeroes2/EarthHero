@@ -12,6 +12,8 @@ public:
 	UStatComponent();
 
 	void SetInGameHUD(class UInGameHUD *ControllerInGameHUD);
+
+	void SetTabHUD(class UTabHUDWidget *ControllerTabHUD);
 	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -88,11 +90,17 @@ protected:
 	virtual void BeginPlay() override;
 
 	//HeroStat 변수
-	UPROPERTY(Replicated)
+	UPROPERTY(ReplicatedUsing = OnRep_HeroStat)
 	FStatStructure HeroStat;
 	
-	UPROPERTY(Replicated)
+	UPROPERTY(ReplicatedUsing = OnRep_BaseHeroStat)
 	FStatStructure BaseHeroStat;
+
+	UFUNCTION()
+	void OnRep_HeroStat();
+
+	UFUNCTION()
+	void OnRep_BaseHeroStat();	
 
 private:
 	
@@ -104,6 +112,9 @@ private:
 
 	UPROPERTY()
 	class UInGameHUD *InGameHUD;
+
+	UPROPERTY()
+	class UTabHUDWidget *TabHUD;
 
 	UPROPERTY()
 	class UHeroUpgradeComponent *HeroUpgradeComponent;
