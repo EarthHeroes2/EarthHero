@@ -3,6 +3,8 @@
 
 #include "PlayingGameMode.h"
 
+#include <string>
+
 #include "EarthHero/GameSession/PlayingGameSession.h"
 #include "EarthHero/Player/EHPlayerController.h"
 
@@ -10,8 +12,6 @@
 void APlayingGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-
-	
 }
 
 //심레스 트래블 이후 새로운 컨트롤러 생김
@@ -32,7 +32,8 @@ void APlayingGameMode::InitSeamlessTravelPlayer(AController* NewController) //�
 				EHPlayerControllers.Add(NewEHPlayerController);
 				
 				//세션 속 모든 플레이어가 레벨에 들어왔다면 레벨 초기 작업 시작
-				if(EHPlayerControllers.Num() == PlayingGameSession->GetNumPlayersInSession()) InitLevelSetting();
+				if(EHPlayerControllers.Num() == PlayingGameSession->GetNumPlayersInSession())
+					InitLevelSetting();
 			}
 		}
 	}
@@ -40,14 +41,18 @@ void APlayingGameMode::InitSeamlessTravelPlayer(AController* NewController) //�
 
 void APlayingGameMode::InitLevelSetting()
 {
-	for(AEHPlayerController* EHPlayerController : EHPlayerControllers)
+	UE_LOG(LogTemp, Log, TEXT("InitLevelSetting()"));
+	for(int i = 0; i < EHPlayerControllers.Num(); i++)
 	{
-		//플레이어 스폰장소 정해주기 (restart player at player start_
+		//여기서 플레이어 시작위치 정해줘도 스폰에는 문제가 없는데... 보이지는 않지만 폰이 2개 생성되는 것 같음
+		UE_LOG(LogTemp, Log, TEXT("InitLevelSetting()2"));
+		//AActor* TargetPlayerStart = FindPlayerStart(EHPlayerControllers[i], FString::FromInt(i));
+		UE_LOG(LogTemp, Log, TEXT("InitLevelSetting()3"));
+		//RestartPlayerAtPlayerStart(EHPlayerControllers[i], TargetPlayerStart);
 	}
+	
 	//플레이어 스테이트에서 플레이어 이름, 체력정보 취합해서 게임 스테이트를 통해 전파
-
 	//모두의 움직임 풀어주고
-
 	//게임 시간초 시작
 }
 
