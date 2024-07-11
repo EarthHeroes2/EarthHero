@@ -70,6 +70,7 @@ void AEHPlayerController::InitializeHUD()
 		{
 			TabHUD->AddToViewport();
 			TabHUD->SetVisibility(ESlateVisibility::Hidden);
+			MyPlayerState->GetStatComponent()->SetTabHUD(TabHUD);
 		}
 	}
 }

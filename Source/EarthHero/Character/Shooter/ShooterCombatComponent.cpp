@@ -108,7 +108,7 @@ void UShooterCombatComponent::Server_Fire_Implementation(FVector TraceStartVecto
 	if(bHit)
 	{
 		//07.09 AEHCharacter -> Monster로 변경
-		AMonsterBase *HitActor = Cast<AMonsterBase>(HitResult.GetActor());
+		//AMonsterBase *HitActor = Cast<AMonsterBase>(HitResult.GetActor());
 		if (!Shooter)
 		{
 			UE_LOG(LogClass, Warning, TEXT("ShooterCombatComponent::Fire() : No Shooter"));
@@ -119,9 +119,9 @@ void UShooterCombatComponent::Server_Fire_Implementation(FVector TraceStartVecto
 			UE_LOG(LogClass, Warning, TEXT("ShooterCombatComponent::Fire() : No ShooterStatComponent"));
 			return;
 		}
-		if (HitActor && Shooter && Shooter->ShooterStatComponent)
+		if (HitResult.GetActor() && Shooter && Shooter->ShooterStatComponent)
 		{
-			Shooter->ShooterStatComponent->ShooterDamage(HitActor, HitResult, UNormalDamageType::StaticClass(), Shooter);
+			Shooter->ShooterStatComponent->ShooterDamage(HitResult.GetActor(), HitResult, UNormalDamageType::StaticClass(), Shooter);
 		}
 		// TODO
 		// a. If Target is an Enemy, Call the Damage Function

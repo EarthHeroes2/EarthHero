@@ -35,6 +35,7 @@ private:
 	virtual void InitializeStatData_Implementation() override;
 
 	/*슈터용 스텟*/
+	UPROPERTY()
 	class AEHShooter *Shooter;
 	
 	//헤드샷 피해

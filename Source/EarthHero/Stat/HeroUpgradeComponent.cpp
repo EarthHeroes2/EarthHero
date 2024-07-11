@@ -2,6 +2,7 @@
 
 #include "HeroUpgradeComponent.h"
 
+#include "EarthHero/HUD/InGameHUD.h"
 #include "Net/UnrealNetwork.h"
 
 UHeroUpgradeComponent::UHeroUpgradeComponent()
@@ -19,7 +20,7 @@ void UHeroUpgradeComponent::BeginPlay()
 	
 }
 
-void UHeroUpgradeComponent::PushRandomHeroUpgrade_Implementation()
+void UHeroUpgradeComponent::PushRandomHeroUpgrade_Implementation(UInGameHUD *InGameHUD)
 {
 	RandomUpgrades.Empty();
 	
