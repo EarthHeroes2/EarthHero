@@ -92,7 +92,4 @@ public:
 
     FORCEINLINE void SetMaxPitchAngle(float _MaxPitchAngle) { MaxPitchAngle = _MaxPitchAngle; }
     FORCEINLINE void SetMinPitchAngle(float _MinPitchAngle) { MaxPitchAngle = _MinPitchAngle; }
-    
-    USpringArmComponent* GetMinimapSpringArm() const { return MinimapSpringArm; }
-    USceneCaptureComponent2D* GetMinimapCaptureComponent() const { return MinimapCaptureComponent; }
 };
