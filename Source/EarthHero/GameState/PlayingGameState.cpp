@@ -5,6 +5,7 @@
 
 #include "EarthHero/GameSession/PlayingGameSession.h"
 #include "EarthHero/HUD/InGameHUD.h"
+#include "EarthHero/HUD/TabHUDWidget.h"
 #include "EarthHero/Player/EHPlayerController.h"
 #include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
@@ -32,15 +33,70 @@ void APlayingGameState::UpdateHUDGameTimer(int GameTimer)
 
 void APlayingGameState::OnRep_GameTimerSec()
 {
-	UE_LOG(LogTemp, Log, TEXT("GameTimerSec updated to: %d"), GameTimerSec);
+	UE_LOG(LogTemp, Log, TEXT("OnRep_GameTimerSec"));
 	if(EHPlayerController && EHPlayerController->HUD)
 	{
 		EHPlayerController->HUD->UpdateGameTimer(GameTimerSec);
 	}
 }
 
+
+void APlayingGameState::UpdateGameStateHealths(TArray<float> PlayerMaxHealths, TArray<float> PlayerCurrentHealths)
+{
+	AllPlayerMaxHealths = PlayerMaxHealths;
+	AllPlayerCurrentHealths = PlayerCurrentHealths;
+}
+
+void APlayingGameState::OnRep_GameStateHealths() //일단은 현재 체력이 변했을 때만 이것이 불림
+{
+	UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateHealths"));
+	if(EHPlayerController && EHPlayerController->TabHUD)
+	{
+		EHPlayerController->TabHUD->UpdatePlayerHealths(AllPlayerMaxHealths, AllPlayerCurrentHealths);
+	}
+}
+
+
+void APlayingGameState::UpdateGameStateLevels(TArray<int> PlayerLevels)
+{
+	AllPlayerLevels = PlayerLevels;
+}
+
+void APlayingGameState::OnRep_GameStateLevels()
+{
+	UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateLevels"));
+	if(EHPlayerController && EHPlayerController->TabHUD)
+	{
+		EHPlayerController->TabHUD->UpdatePlayerLevels(AllPlayerLevels);
+	}
+}
+
+
+void APlayingGameState::UpdateGameStateExps(TArray<float> PlayerExps)
+{
+	AllPlayerExps = PlayerExps;
+}
+
+void APlayingGameState::OnRep_GameStateExps()
+{
+	UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateExps"));
+	if(EHPlayerController && EHPlayerController->TabHUD)
+	{
+		EHPlayerController->TabHUD->UpdatePlayerExps(AllPlayerExps);
+	}
+}
+
+
+
+
+
+
+
 void APlayingGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(APlayingGameState, GameTimerSec);
+	DOREPLIFETIME(APlayingGameState, AllPlayerCurrentHealths);
+	DOREPLIFETIME(APlayingGameState, AllPlayerLevels);
+	DOREPLIFETIME(APlayingGameState, AllPlayerExps);
 }

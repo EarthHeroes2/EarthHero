@@ -27,13 +27,19 @@ void UTeamMemberWidget::SetPlayerNumber(FText PlayerNumber)
 	}
 }
 
-void UTeamMemberWidget::SetLevelAndExp(int32 Level, float ExpPercentage)
+void UTeamMemberWidget::SetLevel(int32 Level)
 {
-	if (LevelAndExpText)
+	if (LevelText)
 	{
-		// Format the text as "Lv.<Level> / <ExpPercentage>%"
-		FText LevelAndExp = FText::Format(FText::FromString("Lv.{0} / {1}%"), FText::AsNumber(Level), FText::AsNumber(ExpPercentage));
-		LevelAndExpText->SetText(LevelAndExp);
+		LevelText->SetText(FText::Format(FText::FromString("Lv.{0}"), FText::AsNumber(Level)));
+	}
+}
+
+void UTeamMemberWidget::SetExp(float ExpPercentage)
+{
+	if (ExpText)
+	{
+		ExpText->SetText(FText::Format(FText::FromString(" / {0}%"), FText::AsNumber(ExpPercentage)));
 	}
 }
 

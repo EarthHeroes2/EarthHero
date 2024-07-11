@@ -38,6 +38,7 @@ void AGrenade::GrenadeHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 		const FVector HitLocation = Hit.Location;
 		Server_GrenadeHit(HitLocation);
 	}
+	Destroy();
 }
 
 
@@ -85,7 +86,6 @@ void AGrenade::Server_GrenadeHit_Implementation(FVector HitLocation)
 void AGrenade::NetMulticast_GrenadeHit_Implementation(FVector HitLocation)
 {
 	//애니메이션 재생
-	Destroy();
 }
 
 void AGrenade::Tick(float DeltaTime)

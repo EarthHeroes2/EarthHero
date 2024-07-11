@@ -16,22 +16,6 @@ class EARTHHERO_API AEHCharacter : public AEHCharacterBase
     GENERATED_BODY()
     friend class AEHPlayerController;
 
-    /** Minimap spring arm */
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-    USpringArmComponent* MinimapSpringArm;
-
-    /** Minimap Scene Capture Component */
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-    USceneCaptureComponent2D* MinimapCaptureComponent;
-
-    /** Minimap render target */
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-    UTextureRenderTarget2D* MinimapRenderTarget;
-
-    /** Minimap widget class */
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = UI, meta = (AllowPrivateAccess = "true"))
-    TSubclassOf<UUserWidget> MinimapWidgetClass;
-
 public:
     AEHCharacter();
     virtual void Tick(float DeltaSeconds) override;
@@ -61,7 +45,6 @@ protected:
     void Initialize();
     
 private:
-
     //승언 PossessedBy에서 사용하는 변수들
     FTimerHandle SetStatComponentTimerHandle;
 
@@ -92,20 +75,21 @@ private:
     UPROPERTY()
     ABP_BossZone* BossZone;
 
+    UPROPERTY(EditDefaultsOnly, Category = "Camera")
+    float MaxPitchAngle;
+    UPROPERTY(EditDefaultsOnly, Category = "Camera")
+    float MinPitchAngle;
+    
     UPROPERTY()
     bool bIsInBossZone;
-
     UPROPERTY()
     bool bIsInForceField;
-
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Minimap", meta = (AllowPrivateAccess = "true"))
-    class UPaperSpriteComponent* MinimapSprite;
 
 public:
     FORCEINLINE USkeletalMeshComponent* GetEquippedWeapon() { return WeaponMesh; }
     FORCEINLINE USkeletalMeshComponent* GetFirstPersonMesh() { return FirstPersonHand; }
     FORCEINLINE UCameraComponent* GetFPSCamera() { return FPSCamera; }
-    
-    USpringArmComponent* GetMinimapSpringArm() const { return MinimapSpringArm; }
-    USceneCaptureComponent2D* GetMinimapCaptureComponent() const { return MinimapCaptureComponent; }
+
+    FORCEINLINE void SetMaxPitchAngle(float _MaxPitchAngle) { MaxPitchAngle = _MaxPitchAngle; }
+    FORCEINLINE void SetMinPitchAngle(float _MinPitchAngle) { MaxPitchAngle = _MinPitchAngle; }
 };

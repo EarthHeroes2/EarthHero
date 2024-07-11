@@ -12,6 +12,8 @@ UCLASS()
 class EARTHHERO_API UTabHUDWidget : public UUserWidget
 {
 	GENERATED_BODY()
+
+	TArray<UTeamMemberWidget*> TabUserInfoArray;
     
 public:
 	UPROPERTY(meta = (BindWidget))
@@ -77,6 +79,7 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	UHeroUpgradeWidget* BP_TabHeroUpgrade_11;
 
+	void BeginPlay();
 	// Functions to set values for each widget
 	UFUNCTION(BlueprintCallable, Category = "TabHUD")
 	void SetTeamMemberWidgetValues(int32 Index, FText Name, FText Class, FText PlayerNumber, int32 Level, float Exp, float HealthProgress);
@@ -89,4 +92,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "TabHUD")
 	void SetHeroUpgradeWidgetValues(int32 Index, UTexture2D* UpgradeImage, UTexture2D* Level1Image, UTexture2D* Level2Image, UTexture2D* Level3Image, FText UpgradeName, FText UpgradeDesc);
+
+
+	void UpdatePlayerHealths(TArray<float> PlayerMaxHealths, TArray<float> PlayerCurrentHealths);
+	void UpdatePlayerLevels(TArray<int> PlayerLevels);
+	void UpdatePlayerExps(TArray<float> PlayerExps);
 };

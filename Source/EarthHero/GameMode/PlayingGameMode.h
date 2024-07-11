@@ -29,4 +29,9 @@ public:
 	int NumPlayersInSession;
 	int GameTimer = 0;
 	void PlayerLogOut(const AEHPlayerController* ExitingEHPlayerController);
+	void UpdateGameStateHealths();
+	void UpdateGameStateLevels();
+	void UpdateGameStateExps();
+	void UpdateGameStateNames();
+	void UpdateGameStateClasses();
 };
