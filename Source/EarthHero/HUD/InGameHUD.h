@@ -1,11 +1,8 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "InGameHUD.generated.h"
-
 
 UCLASS()
 class EARTHHERO_API UInGameHUD : public UUserWidget
@@ -14,25 +11,36 @@ class EARTHHERO_API UInGameHUD : public UUserWidget
 
 public:
 	UPROPERTY(meta = (BindWidget))
-	class UProgressBar *HealthBar;
+	class UProgressBar* HealthBar;
 	
 	UPROPERTY(meta = (BindWidget))
-	class UProgressBar *ExpBar;
+	class UProgressBar* ExpBar;
 
 	UPROPERTY(meta = (BindWidget))
-	class UTextBlock *Level_Num;
+	class UTextBlock* Level_Num;
 
 	UPROPERTY(meta = (BindWidget))
-	UTextBlock *GameTimer_Tb;
+	UTextBlock* GameTimer_Tb;
 
-	void InitializePlayerState(class UStatComponent *StatComponent);
+	UPROPERTY(meta = (BindWidget))
+	class UIngameHUDHeroUpgradeWidget* BP_IngameHUDHeroUpgrade;
+
+	UPROPERTY(meta = (BindWidget))
+	class UIngameHUDHeroUpgradeWidget* BP_IngameHUDHeroUpgrade_1;
+
+	UPROPERTY(meta = (BindWidget))
+	class UIngameHUDHeroUpgradeWidget* BP_IngameHUDHeroUpgrade_2;
+
+	void InitializePlayerState(class UStatComponent* StatComponent);
 
 	void UpdateGameTimer(int GameTimerSec);
-	
+
+	void SetIngameHUDHeroUpgrade(int Index, UTexture2D* UpgradeImage, UTexture2D* Level1Image, UTexture2D* Level2Image, UTexture2D* Level3Image, FText UpgradeName, FText UpgradeDetail);
+
 protected:
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 
 private:
 	UPROPERTY()
-	class UStatComponent *StatComponentRef;
+	class UStatComponent* StatComponentRef;
 };
