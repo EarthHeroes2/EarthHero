@@ -50,36 +50,6 @@ AEHCharacter::AEHCharacter()
     bIsInForceField = false;
 
     GetCharacterMovement()->MaxWalkSpeed = 500.f;
-
-    // Create a spring arm for the minimap SceneCaptureComponent2D
-    MinimapSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("MinimapSpringArm"));
-    MinimapSpringArm->SetupAttachment(RootComponent);
-    MinimapSpringArm->SetRelativeLocation(FVector(0.f, 0.f, 300.f));
-    MinimapSpringArm->TargetArmLength = 450.f;
-    MinimapSpringArm->bDoCollisionTest = false;
-    MinimapSpringArm->bUsePawnControlRotation = false;
-    MinimapSpringArm->SetRelativeRotation(FRotator(-90.f, 0.f, -180.f));
-    MinimapSpringArm->bInheritPitch = false;
-    MinimapSpringArm->bInheritRoll = false;
-    MinimapSpringArm->bInheritYaw = false;
-
-    // Create the SceneCaptureComponent2D for the minimap
-    MinimapCaptureComponent = CreateDefaultSubobject<USceneCaptureComponent2D>(TEXT("MinimapCapture"));
-    MinimapCaptureComponent->SetupAttachment(MinimapSpringArm, USpringArmComponent::SocketName);
-    MinimapCaptureComponent->ProjectionType = ECameraProjectionMode::Orthographic;
-    MinimapCaptureComponent->OrthoWidth = 2000;
-
-    // Create the PaperSpriteComponent for the minimap
-    MinimapSprite = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("MinimapSprite"));
-    MinimapSprite->SetupAttachment(RootComponent);
-    static ConstructorHelpers::FObjectFinder<UPaperSprite> PlayerArrowSprite(TEXT("/Game/Blueprints/HUD/Textures/T_PlayerArrow_Sprite.T_PlayerArrow_Sprite"));
-    if (PlayerArrowSprite.Succeeded())
-    {
-        MinimapSprite->SetSprite(PlayerArrowSprite.Object);
-    }
-    MinimapSprite->SetRelativeLocation(FVector(0.f, 0.f, 300.f));
-    MinimapSprite->SetRelativeRotation(FRotator(0.f, 0.f, 90.f)); // Set rotation to -90 degrees on X-axis
-    MinimapSprite->SetRelativeScale3D(FVector(0.4f, 0.4f, 0.4f)); // Set scale to 0.4 on all axes
 }
 
 void AEHCharacter::Tick(float DeltaSeconds)
