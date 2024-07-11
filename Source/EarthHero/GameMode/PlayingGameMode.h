@@ -32,4 +32,6 @@ public:
 	void UpdateGameStateHealths();
 	void UpdateGameStateLevels();
 	void UpdateGameStateExps();
+	void UpdateGameStateNames();
+	void UpdateGameStateClasses();
 };

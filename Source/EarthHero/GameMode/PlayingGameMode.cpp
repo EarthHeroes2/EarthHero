@@ -150,3 +150,13 @@ void APlayingGameMode::UpdateGameStateExps()
 	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
 	PlayingGameState->UpdateGameStateExps(PlayerExps);
 }
+
+void APlayingGameMode::UpdateGameStateNames()
+{
+	
+}
+
+void APlayingGameMode::UpdateGameStateClasses()
+{
+	
+}
