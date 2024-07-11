@@ -61,7 +61,6 @@ protected:
     void Initialize();
     
 private:
-
     //승언 PossessedBy에서 사용하는 변수들
     FTimerHandle SetStatComponentTimerHandle;
 
@@ -92,9 +91,13 @@ private:
     UPROPERTY()
     ABP_BossZone* BossZone;
 
+    UPROPERTY(EditDefaultsOnly, Category = "Camera")
+    float MaxPitchAngle;
+    UPROPERTY(EditDefaultsOnly, Category = "Camera")
+    float MinPitchAngle;
+    
     UPROPERTY()
     bool bIsInBossZone;
-
     UPROPERTY()
     bool bIsInForceField;
 
@@ -105,6 +108,9 @@ public:
     FORCEINLINE USkeletalMeshComponent* GetEquippedWeapon() { return WeaponMesh; }
     FORCEINLINE USkeletalMeshComponent* GetFirstPersonMesh() { return FirstPersonHand; }
     FORCEINLINE UCameraComponent* GetFPSCamera() { return FPSCamera; }
+
+    FORCEINLINE void SetMaxPitchAngle(float _MaxPitchAngle) { MaxPitchAngle = _MaxPitchAngle; }
+    FORCEINLINE void SetMinPitchAngle(float _MinPitchAngle) { MaxPitchAngle = _MinPitchAngle; }
     
     USpringArmComponent* GetMinimapSpringArm() const { return MinimapSpringArm; }
     USceneCaptureComponent2D* GetMinimapCaptureComponent() const { return MinimapCaptureComponent; }

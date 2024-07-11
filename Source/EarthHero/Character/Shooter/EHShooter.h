@@ -35,14 +35,4 @@ protected:
 
 	UPROPERTY()
 	AController *PlayerController;
-	
-private:
-	UPROPERTY(EditDefaultsOnly, Category = "Camera")
-	float MaxPitchAngle;
-	UPROPERTY(EditDefaultsOnly, Category = "Camera")
-	float MinPitchAngle;
-
-	FTimerHandle ShootTimerHandle;
-	bool bCanFire = true;
-
 };

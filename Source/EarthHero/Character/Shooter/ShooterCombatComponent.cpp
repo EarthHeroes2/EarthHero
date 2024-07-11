@@ -79,6 +79,7 @@ void UShooterCombatComponent::NetMulticast_GrenadeFire_Implementation()
 			if(Grenade)
 			{
 				Grenade->GetProjectileMovementComponent()->InitialSpeed = 4000.f;
+				Grenade->SetOwner(Shooter);
 				
 				//승언 : Grenade에 ShooterStatComponent 참조 추가
 				Grenade->ShooterStatComponent = Shooter->ShooterStatComponent;

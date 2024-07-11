@@ -9,8 +9,8 @@
 
 AEHShooter::AEHShooter()
 {
-	MaxPitchAngle = 70.f;
-	MinPitchAngle = -60.f;
+	SetMaxPitchAngle(70.f);
+	SetMinPitchAngle(-60.f);
 
 	CombatComponent = CreateDefaultSubobject<UShooterCombatComponent>(TEXT("Shooter Combat Component"));
 	//승언 : ShooterCombatComponent에서 beginPlay에서 슈터 가져오도록 수정함
@@ -21,23 +21,6 @@ AEHShooter::AEHShooter()
 void AEHShooter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-
-	// 위아래 시야각 제한
-	if(Controller)
-	{
-		FRotator NewRotator = Controller->GetControlRotation();
-		float NewPitch;
-		if(NewRotator.Pitch < 180)
-		{
-			NewPitch = FMath::Clamp(NewRotator.Pitch, MinPitchAngle, MaxPitchAngle);
-		}
-		else
-		{
-			NewPitch = FMath::Clamp(NewRotator.Pitch-360.f, MinPitchAngle, MaxPitchAngle);
-		}
-		NewRotator.Pitch = NewPitch;
-		Controller->SetControlRotation(NewRotator);
-	}
 }
 
 void AEHShooter::Shoot()

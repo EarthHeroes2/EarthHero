@@ -85,6 +85,23 @@ AEHCharacter::AEHCharacter()
 void AEHCharacter::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
+
+    // 위아래 시야각 제한
+    if(Controller)
+    {
+        FRotator NewRotator = Controller->GetControlRotation();
+        float NewPitch;
+        if(NewRotator.Pitch < 180)
+        {
+            NewPitch = FMath::Clamp(NewRotator.Pitch, MinPitchAngle, MaxPitchAngle);
+        }
+        else
+        {
+            NewPitch = FMath::Clamp(NewRotator.Pitch-360.f, MinPitchAngle, MaxPitchAngle);
+        }
+        NewRotator.Pitch = NewPitch;
+        Controller->SetControlRotation(NewRotator);
+    }
 }
 
 void AEHCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
