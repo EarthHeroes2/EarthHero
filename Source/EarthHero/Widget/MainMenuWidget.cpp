@@ -150,6 +150,8 @@ void UMainMenuWidget::Exit_BtnClicked()
 
 void UMainMenuWidget::CreateLobbyOKBtnClicked()
 {
+	SetButtonsEnabled(false);
+	
 	UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(GetWorld()->GetGameInstance());
 	if (EHGameInstance)
 	{
@@ -168,7 +170,11 @@ void UMainMenuWidget::CreateLobbyOKBtnClicked()
 		
 		GetWorld()->GetTimerManager().SetTimer(Handle, this, &ThisClass::CreateLobbyWait, 15.0f, false);
 	}
-	else UE_LOG(LogTemp, Error, TEXT("Failed to get server port number"));
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to get server port number"));
+		SetButtonsEnabled(true);
+	}
 }
 void UMainMenuWidget::CreateLobbyCancleBtnClicked()
 {
