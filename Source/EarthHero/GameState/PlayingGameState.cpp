@@ -94,7 +94,7 @@ void APlayingGameState::UpdateGameStateClasses(const TArray<int>& PlayerClasses)
 
 void APlayingGameState::OnRep_GameStateClasses() const
 {
-	UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateExps"));
+	UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateClasses"));
 	if(EHPlayerController && EHPlayerController->TabHUD)
 	{
 		EHPlayerController->TabHUD->UpdatePlayerClasses(AllPlayerClasses);
@@ -102,7 +102,19 @@ void APlayingGameState::OnRep_GameStateClasses() const
 }
 
 
+void APlayingGameState::UpdateGameStateNames(const TArray<FString>& PlayerNames)
+{
+	AllPlayerNames = PlayerNames;
+}
 
+void APlayingGameState::OnRep_GameStateNames() const
+{
+	UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateNames"));
+	if(EHPlayerController && EHPlayerController->TabHUD)
+	{
+		EHPlayerController->TabHUD->UpdatePlayerNames(AllPlayerNames);
+	}
+}
 
 void APlayingGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
@@ -112,4 +124,5 @@ void APlayingGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME(APlayingGameState, AllPlayerLevels);
 	DOREPLIFETIME(APlayingGameState, AllPlayerExps);
 	DOREPLIFETIME(APlayingGameState, AllPlayerClasses);
+	DOREPLIFETIME(APlayingGameState, AllPlayerNames);
 }

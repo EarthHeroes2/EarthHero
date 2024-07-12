@@ -3,16 +3,18 @@
 
 #include "TeamMemberWidget.h"
 
-void UTeamMemberWidget::SetName(const FText& Name)
+void UTeamMemberWidget::SetName(const FString& Name) const
 {
+	UE_LOG(LogTemp, Log, TEXT("Name = %s"), *Name);
 	if (NameText)
 	{
-		NameText->SetText(Name);
+		NameText->SetText(FText::FromString(Name));
 	}
 }
 
-void UTeamMemberWidget::SetClass(const EClassType ClassType)
+void UTeamMemberWidget::SetClass(const EClassType ClassType) const
 {
+	UE_LOG(LogTemp, Log, TEXT("Class = %d"), ClassType);
 	if (ClassText)
 	{
 		switch (ClassType)

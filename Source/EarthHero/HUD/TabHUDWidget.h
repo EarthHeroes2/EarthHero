@@ -79,9 +79,9 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	UHeroUpgradeWidget* BP_TabHeroUpgrade_11;
 
-	void BeginPlay();
+	virtual bool Initialize() override;
 	// Functions to set values for each widget //잠시 수정함 - 박정익
-	void SetTeamMemberWidgetValues(int32 Index, FText Name, EClassType ClassType, FText PlayerNumber, int32 Level, float Exp, float HealthProgress);
+	void SetTeamMemberWidgetValues(int32 Index, FString Name, EClassType ClassType, FText PlayerNumber, int32 Level, float Exp, float HealthProgress);
 
 	UFUNCTION(BlueprintCallable, Category = "TabHUD")
 	void SetBasicStatsWidgetValues(int32 Index, FText KillScore, FText TotalDamage, FText TotalShield, FText TotalHeal);
@@ -97,4 +97,5 @@ public:
 	void UpdatePlayerLevels(const TArray<int>& PlayerLevels);
 	void UpdatePlayerExps(const TArray<float>& PlayerExps);
 	void UpdatePlayerClasses(const TArray<int>& PlayerClasses);
+	void UpdatePlayerNames(const TArray<FString>& PlayerNames);
 };

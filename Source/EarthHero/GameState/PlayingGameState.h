@@ -24,7 +24,7 @@ public:
 	void UpdateGameStateLevels(const TArray<int>& PlayerLevels);
 	void UpdateGameStateExps(const TArray<float>& PlayerExps);
 	void UpdateGameStateClasses(const TArray<int>& PlayerClasses);
-	
+	void UpdateGameStateNames(const TArray<FString>& PlayerNames);
 
 	UPROPERTY(ReplicatedUsing = OnRep_GameTimerSec)
 	int GameTimerSec;
@@ -38,6 +38,8 @@ public:
 	TArray<float> AllPlayerExps;
 	UPROPERTY(ReplicatedUsing = OnRep_GameStateClasses)
 	TArray<int> AllPlayerClasses;
+	UPROPERTY(ReplicatedUsing = OnRep_GameStateNames)
+	TArray<FString> AllPlayerNames;
 	
 
 	UFUNCTION()
@@ -50,4 +52,6 @@ public:
 	void OnRep_GameStateExps() const;
 	UFUNCTION()
 	void OnRep_GameStateClasses() const;
+	UFUNCTION()
+	void OnRep_GameStateNames() const;
 };

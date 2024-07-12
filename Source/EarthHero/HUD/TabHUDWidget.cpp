@@ -3,15 +3,21 @@
 //#include "BehaviorTree/BehaviorTreeTypes.h" <- 현재 이거 있으면 fatal 에러남 - 박정익
 
 
-void UTabHUDWidget::BeginPlay()
+bool UTabHUDWidget::Initialize()
 {
+    Super::Initialize();
+    
     TabUserInfoArray.Add(BP_TabUserInfo_1);
     TabUserInfoArray.Add(BP_TabUserInfo_2);
     TabUserInfoArray.Add(BP_TabUserInfo_3);
     TabUserInfoArray.Add(BP_TabUserInfo_4);
+
+    UE_LOG(LogTemp, Log, TEXT("TAB UHD!!!!!!!!!!!!!!!!!!!!!!!"));
+
+    return true;
 }
 
-void UTabHUDWidget::SetTeamMemberWidgetValues(int32 Index, FText Name, EClassType ClassType, FText PlayerNumber, int32 Level, float Exp, float HealthProgress)
+void UTabHUDWidget::SetTeamMemberWidgetValues(int32 Index, FString Name, EClassType ClassType, FText PlayerNumber, int32 Level, float Exp, float HealthProgress)
 {
     UTeamMemberWidget* TeamMemberWidget = nullptr;
 
@@ -152,31 +158,29 @@ void UTabHUDWidget::SetHeroUpgradeWidgetValues(int32 Index, UTexture2D* UpgradeI
 void UTabHUDWidget::UpdatePlayerHealths(const TArray<float>& PlayerMaxHealths, const TArray<float>& PlayerCurrentHealths)
 {
     for(int i = 0; i < PlayerMaxHealths.Num(); i++)
-    {
         TabUserInfoArray[i]->SetProgress(PlayerMaxHealths[i] / PlayerCurrentHealths[i]);
-    }
 }
 
 void UTabHUDWidget::UpdatePlayerLevels(const TArray<int>& PlayerLevels)
 {
     for(int i = 0; i < PlayerLevels.Num(); i++)
-    {
         TabUserInfoArray[i]->SetLevel(PlayerLevels[i]);
-    }
 }
 
 void UTabHUDWidget::UpdatePlayerExps(const TArray<float>& PlayerExps)
 {
     for(int i = 0; i < PlayerExps.Num(); i++)
-    {
         TabUserInfoArray[i]->SetExp(PlayerExps[i]);
-    }
 }
 
 void UTabHUDWidget::UpdatePlayerClasses(const TArray<int>& PlayerClasses)
 {
     for(int i = 0; i < PlayerClasses.Num(); i++)
-    {
         TabUserInfoArray[i]->SetClass(static_cast<EClassType>(PlayerClasses[i]));
-    }
+}
+
+void UTabHUDWidget::UpdatePlayerNames(const TArray<FString>& PlayerNames)
+{
+    for(int i = 0; i < PlayerNames.Num(); i++)
+        TabUserInfoArray[i]->SetName(PlayerNames[i]);
 }

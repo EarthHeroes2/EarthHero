@@ -33,8 +33,8 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	UProgressBar* HealthProgressBar;
 	
-	void SetName(const FText& Name);
-	void SetClass(const EClassType ClassType);
+	void SetName(const FString& Name) const;
+	void SetClass(const EClassType ClassType) const;
 	void SetPlayerNumber(const FText& PlayerNumber) const;
 	void SetLevel(const int32 Level) const;
 	void SetExp(const float ExpPercentage) const;
