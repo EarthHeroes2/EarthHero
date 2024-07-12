@@ -205,7 +205,7 @@ void AEHPlayerController::Server_SendChatMessage_Implementation(const FText& Tex
 	UE_LOG(LogTemp, Log, TEXT("Send a chat message"));
 
 	FText PlayerName = FText::FromString(PlayerState->GetPlayerName());
-	FText ChatText = FText::Format(FText::FromString("[{0}] : {1}"), PlayerName, Text);
+	FText ChatText = FText::Format(FText::FromString("[{0}]: {1}"), PlayerName, Text);
 
 	APlayingGameMode* PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode());
 	if (PlayingGameMode)

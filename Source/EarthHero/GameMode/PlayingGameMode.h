@@ -26,12 +26,16 @@ class EARTHHERO_API APlayingGameMode : public AGameModeBase
 
 	int NumPlayerControllerReady = 0;
 
+	int NumDeadPlayers = 0;
+	
+	const FString GameOverMap = TEXT("/Game/Maps/GameOverMap");
 
 public:
 	int NumPlayersInSession;
 	int GameTimer = 0;
 	void PlayerLogOut(const AEHPlayerController* ExitingEHPlayerController);
 	void SendChatMessage(const FText& Text);
+	void AddPlayerDead();
 	void UpdateGameStateHealths();
 	void UpdateGameStateLevels();
 	void UpdateGameStateExps();

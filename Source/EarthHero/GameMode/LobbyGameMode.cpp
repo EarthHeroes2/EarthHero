@@ -29,12 +29,8 @@ ALobbyGameMode::ALobbyGameMode()
 void ALobbyGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-
-	AGameModeBase* GameModeBase = GetWorld()->GetAuthGameMode<AGameModeBase>();
-	if (IsValid(GameModeBase))
-	{
-		GameModeBase->bUseSeamlessTravel = true;
-	}
+	
+	bUseSeamlessTravel = true;
 
 	SpawnLocations.Add(FVector(500.0f, -150.0f, 0.0f));
 	SpawnLocations.Add(FVector(500.0f, -50.0f, 0.0f));

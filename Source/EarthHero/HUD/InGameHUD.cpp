@@ -107,6 +107,10 @@ void UInGameHUD::AddChatMessage(const FText& Text)
 
 	if (TextBlock)
 	{
+		FSlateFontInfo FontInfo = TextBlock->GetFont();
+		FontInfo.Size = 16;
+		
+		TextBlock->SetFont(FontInfo);
 		TextBlock->SetText(Text);
 		TextBlock->SetAutoWrapText(true);
 		TextBlock->SetColorAndOpacity(FSlateColor(FLinearColor::Black));

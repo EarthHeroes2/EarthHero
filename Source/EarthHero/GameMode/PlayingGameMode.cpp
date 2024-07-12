@@ -11,6 +11,8 @@
 void APlayingGameMode::BeginPlay()
 {
 	Super::BeginPlay();
+
+	bUseSeamlessTravel = true;
 }
 
 //심레스 트래블 이후 새로운 컨트롤러 생김
@@ -51,23 +53,21 @@ void APlayingGameMode::PlayerControllerReady() //조금 느리지만 안전하�
 {
 	NumPlayerControllerReady++;
 	
-	APlayingGameSession* PlayingGameSession = Cast<APlayingGameSession>(GameSession);
-	if (PlayingGameSession)
+	//모든 플레이어가 준비 완료되었다면
+	if(NumPlayerControllerReady == EHPlayerControllers.Num())
 	{
-		//모든 플레이어가 준비 완료되었다면
-		if(NumPlayerControllerReady == PlayingGameSession->GetNumPlayersInSession())
-		{
-			//모두의 이름과 클래스 알려줌
-			UpdateGameStateNames();
-			UpdateGameStateClasses();
+		UpdateGameStateNames();
+		UpdateGameStateClasses();
+		UpdateGameStateExps();
+		UpdateGameStateLevels();
+		UpdateGameStateHealths();
 	 
-			//모두의 움직임 풀어줌
-			EnableAllInput();
+		//모두의 움직임 풀어줌
+		EnableAllInput();
 
-			//게임 시간은 흐르기 시작
-			FTimerHandle Handle;
-			GetWorld()->GetTimerManager().SetTimer(Handle, this, &ThisClass::GameTimerCount, 1.0f, true);
-		}
+		//게임 시간은 흐르기 시작
+		FTimerHandle Handle;
+		GetWorld()->GetTimerManager().SetTimer(Handle, this, &ThisClass::GameTimerCount, 1.0f, true);
 	}
 }
 
@@ -91,9 +91,13 @@ void APlayingGameMode::PlayerLogOut(const AEHPlayerController* ConstExitingEHPla
 		
 		if (PlayerIndex != INDEX_NONE) EHPlayerControllers.RemoveAt(PlayerIndex);
 
-
-		//플레이어 스테이트에서 플레이어 이름, 체력정보 취합해서 게임 스테이트를 통해 전파
-
+		//이러면 나간 자리는 초기화 해줘야겠네
+		UpdateGameStateNames();
+		UpdateGameStateClasses();
+		UpdateGameStateExps();
+		UpdateGameStateLevels();
+		UpdateGameStateHealths();
+		
 		//나간 플레이어는 죽은 것으로 처리 -> 모든 플레이어가 죽었는 지 확인
 	}
 }
@@ -113,18 +117,19 @@ void APlayingGameMode::SendChatMessage(const FText& Text)
 	}
 }
 
+void APlayingGameMode::AddPlayerDead()
+{
+	NumDeadPlayers++;
 
-
-
-
-
-
-
-
-
-
-
-
+	//모두가 죽었다면
+	if(NumDeadPlayers == EHPlayerControllers.Num())
+	{
+		for(AEHPlayerController* EHPlayerController : EHPlayerControllers)
+		{
+			GetWorld()->ServerTravel(GameOverMap, true); //이 이후 구현안됨
+		}
+	}
+}
 
 
 

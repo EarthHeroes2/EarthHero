@@ -183,7 +183,7 @@ void ALobbyPlayerController::Server_SendChatMessage_Implementation(const FText& 
 	UE_LOG(LogTemp, Log, TEXT("Send a chat message"));
 
 	FText PlayerName = FText::FromString(PlayerState->GetPlayerName());
-	FText ChatText = FText::Format(FText::FromString("[{0}] : {1}"), PlayerName, Text);
+	FText ChatText = FText::Format(FText::FromString("[{0}]: {1}"), PlayerName, Text);
 
 	ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
 	if (LobbyGameMode)

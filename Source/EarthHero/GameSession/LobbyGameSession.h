@@ -23,8 +23,6 @@ protected:
 	void HostAssignment(APlayerController* HostPlayer);
 	void NewHostFind();
 	
-	void ChangeMap();
-	
 public:
 	void ChangeAdvertiseState(bool bAdvertise);
 	void ChangeLobbyName(FString LobbyName);

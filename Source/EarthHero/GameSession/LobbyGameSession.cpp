@@ -213,7 +213,7 @@ void ALobbyGameSession::HandleStartSessionCompleted(FName EOSSessionName, bool b
             {
                 UE_LOG(LogTemp, Log, TEXT("Lobby Started!"));
 
-                ChangeMap();
+                GetWorld()->ServerTravel(InGameMap, true);
             }
             else UE_LOG(LogTemp, Warning, TEXT("Failed to start lobby!! (From Callback)"));
 
@@ -221,11 +221,6 @@ void ALobbyGameSession::HandleStartSessionCompleted(FName EOSSessionName, bool b
             StartSessionDelegateHandle.Reset();
         }
     }
-}
-
-void ALobbyGameSession::ChangeMap()
-{
-    GetWorld()->ServerTravel(InGameMap, true);
 }
 
 //NotifyLogout에서 불림

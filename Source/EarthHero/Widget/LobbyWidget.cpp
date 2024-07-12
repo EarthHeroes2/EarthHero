@@ -370,9 +370,13 @@ void ULobbyWidget::AddChatMessage(const FText& Text)
 
 	if (TextBlock)
 	{
+		FSlateFontInfo FontInfo = TextBlock->GetFont();
+        FontInfo.Size = 16;
+		
+		TextBlock->SetFont(FontInfo);
 		TextBlock->SetText(Text);
 		TextBlock->SetAutoWrapText(true);
-		TextBlock->SetColorAndOpacity(FSlateColor(FLinearColor::Black));
+		TextBlock->SetColorAndOpacity(FSlateColor(FLinearColor::White));
 
 		if (Chat_Scr)
 		{
