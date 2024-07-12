@@ -47,6 +47,38 @@ void APlayingGameMode::InitLevelSetting()
 	}
 }
 
+void APlayingGameMode::PlayerControllerReady() //조금 느리지만 안전하게 다 확인하고
+{
+	NumPlayerControllerReady++;
+	
+	APlayingGameSession* PlayingGameSession = Cast<APlayingGameSession>(GameSession);
+	if (PlayingGameSession)
+	{
+		//모든 플레이어가 준비 완료되었다면
+		if(NumPlayerControllerReady == PlayingGameSession->GetNumPlayersInSession())
+		{
+			UpdateGameStateNames();
+			UpdateGameStateClasses();
+	 
+			//모두의 움직임 풀어주고 //모두가 동시에 시작하는 편이 좋긴하지만... 2순위
+			EnableAllInput();
+
+			//게임 시간초 시작
+			FTimerHandle Handle;
+			GetWorld()->GetTimerManager().SetTimer(Handle, this, &ThisClass::GameTimerCount, 1.0f, true);
+		}
+	}
+}
+
+void APlayingGameMode::EnableAllInput() //모든 플레이어 input 허용
+{
+	for(AEHPlayerController* EHPlayerController : EHPlayerControllers)
+	{
+		EHPlayerController->Client_EnableInput();
+	}
+}
+
+
 void APlayingGameMode::PlayerLogOut(const AEHPlayerController* ConstExitingEHPlayerController)
 {
 	AEHPlayerController* ExitingEHPlayerController = const_cast<AEHPlayerController*>(ConstExitingEHPlayerController);
@@ -177,24 +209,3 @@ void APlayingGameMode::UpdateGameStateClasses()
 	PlayingGameState->UpdateGameStateClasses(PlayerClasses);
 }
 
-void APlayingGameMode::PlayerReady()
-{
-	NumReadyPlayers++;
-	
-	APlayingGameSession* PlayingGameSession = Cast<APlayingGameSession>(GameSession);
-	if (PlayingGameSession)
-	{
-		//모든 플레이어가 준비 완료되었다면
-		if(NumReadyPlayers == PlayingGameSession->GetNumPlayersInSession()) //좀 더 빠르게 하려면 InitLevelSetting()에서 처리하면 좋겠는데
-		{
-			UpdateGameStateNames();
-			UpdateGameStateClasses();
-	
-			//모두의 움직임 풀어주고 //모두가 동시에 시작하는 편이 좋긴하지만... 2순위
-
-			//게임 시간초 시작
-			FTimerHandle Handle;
-			GetWorld()->GetTimerManager().SetTimer(Handle, this, &ThisClass::GameTimerCount, 1.0f, true);
-		}
-	}
-}

@@ -44,25 +44,7 @@ void AEHPlayerController::ClientPossess_Implementation()
 	{
 		Subsystem->AddMappingContext(HeroContext, 0);
 	}
-	
-	ShowHUD();
-
 	GetWorldTimerManager().SetTimer(PlayerStateCheckTimerHandle, this, &AEHPlayerController::InitializeHUD, 0.1f, true);
-}
-
-//먼저 HUD는 만들어주고
-void AEHPlayerController::ShowHUD()
-{
-	HUD = Cast<UInGameHUD>(CreateWidget(this, InGameHUD));
-	if (HUD) HUD->AddToViewport();
-	else UE_LOG(LogClass, Warning, TEXT("EHPlayerController(Client): ShowHUD() - HUD Cast Failed"));
-	
-	TabHUD = CreateWidget<UTabHUDWidget>(this, TabHUDClass);
-	if (TabHUD)
-	{
-		TabHUD->AddToViewport();
-		TabHUD->SetVisibility(ESlateVisibility::Hidden);
-	}
 }
 
 //여기서 HUD 설정
@@ -73,27 +55,36 @@ void AEHPlayerController::InitializeHUD()
 	{
 		GetWorldTimerManager().ClearTimer(PlayerStateCheckTimerHandle);
 
+		HUD = Cast<UInGameHUD>(CreateWidget(this, InGameHUD));
 		if (HUD)
 		{
 			HUD->InitializePlayerState(MyPlayerState->GetStatComponent());
+			HUD->AddToViewport();
 			MyPlayerState->GetStatComponent()->SetInGameHUD(HUD);
 		}
 		else UE_LOG(LogClass, Warning, TEXT("EHPlayerController(Client): HUD Cast Failed"));
 		
-		if (TabHUD) MyPlayerState->GetStatComponent()->SetTabHUD(TabHUD);
+		// Initialize and hide TabHUD
+		TabHUD = CreateWidget<UTabHUDWidget>(this, TabHUDClass);
+		if (TabHUD)
+		{
+			TabHUD->AddToViewport();
+			TabHUD->SetVisibility(ESlateVisibility::Hidden);
+			MyPlayerState->GetStatComponent()->SetTabHUD(TabHUD);
+		}
 
 		//준비가 다 되었으니 서버에게 이 사실을 알림
-		Server_PlayerReady();
+		Server_PlayerControllerReady();
 	}
 }
 
 //서버에게 플레이어가 시작할 준비가 됨을 알림
-void AEHPlayerController::Server_PlayerReady_Implementation()
+void AEHPlayerController::Server_PlayerControllerReady_Implementation()
 {
 	APlayingGameMode* PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode());
 	if (PlayingGameMode)
 	{
-		PlayingGameMode->PlayerReady();
+		PlayingGameMode->PlayerControllerReady();
 	}
 }
 
@@ -179,4 +170,9 @@ void AEHPlayerController::HideTabHUD()
 	{
 		TabHUD->SetVisibility(ESlateVisibility::Hidden);
 	}
+}
+
+void AEHPlayerController::Client_EnableInput_Implementation()
+{
+	EnableInput(this);
 }

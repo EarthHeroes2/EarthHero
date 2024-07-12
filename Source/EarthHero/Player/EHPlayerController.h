@@ -24,6 +24,9 @@ public:
 	UPROPERTY()
 	class UTabHUDWidget* TabHUD;
 
+	UFUNCTION(Client, Reliable)
+	void Client_EnableInput();
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
@@ -61,7 +64,7 @@ private:
 	void InitializeHUD();
 
 	UFUNCTION(Server, Reliable)
-	void Server_PlayerReady();
+	void Server_PlayerControllerReady();
 
 	
 	FTimerHandle PlayerStateCheckTimerHandle;

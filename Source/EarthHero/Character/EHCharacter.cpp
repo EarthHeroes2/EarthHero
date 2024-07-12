@@ -12,6 +12,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "PaperSpriteComponent.h"
 #include "PaperSprite.h"
+#include "EarthHero/Player/EHPlayerController.h"
 
 AEHCharacter::AEHCharacter()
 {
@@ -100,7 +101,15 @@ void AEHCharacter::PossessedBy(AController* NewController)
 
     MyPlayerState =  Cast<AEHPlayerState>(NewController->PlayerState);
     GetWorldTimerManager().SetTimer(SetStatComponentTimerHandle, this, &AEHCharacter::SetStatComponent, 2.f, true);
+
+    APlayerController* NewPlayerController = Cast<APlayerController>(NewController);
     
+    Client_DisableAllInput(NewPlayerController); //테스트 용 - 박정익
+}
+
+void AEHCharacter::Client_DisableAllInput_Implementation(APlayerController* PlayerController)
+{
+    PlayerController->DisableInput(PlayerController); //움직임을 서버측에서 관리하기에는...
 }
 
 void AEHCharacter::SetStatComponent()

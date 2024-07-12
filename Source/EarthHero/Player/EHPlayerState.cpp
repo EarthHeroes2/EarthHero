@@ -66,18 +66,20 @@ void AEHPlayerState::CopyProperties(APlayerState* PlayerState)
 	}
 
 	EHPlayerState->IsCopyPropertiesEnd = true;
+
+	//EHPlayerState->SetStatComponent(); //copy propertie 끝나자 마자 실행 가능. 다만 컴포넌트 파괴를 나중에 해야할듯?
 }
 
 void AEHPlayerState::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 	if (GetNetMode() != NM_Client)
 	{
 		UE_LOG(LogTemp, Log, TEXT("This instance is dedicated."));
-		PlayerClass = Shooter;
-		IsCopyPropertiesEnd = true;
-		GetWorldTimerManager().SetTimer(SetStatComponentTimerHandle, this, &AEHPlayerState::SetStatComponent, 0.5f,true);
+		PlayerClass = Shooter; ////
+		IsCopyPropertiesEnd = true; ////
+		GetWorldTimerManager().SetTimer(SetStatComponentTimerHandle, this, &AEHPlayerState::SetStatComponent, 0.5f,true);  ////
 	}
 }
 
@@ -85,7 +87,7 @@ void AEHPlayerState::SetStatComponent()
 {
 	if (IsCopyPropertiesEnd)
 	{
-		GetWorldTimerManager().ClearTimer(SetStatComponentTimerHandle);
+		GetWorldTimerManager().ClearTimer(SetStatComponentTimerHandle); //
 		
 		//직업을 확인하고 나머지 StatComponent를 비활성화, 서버에서 파괴하면 클라이언트도 파괴
 		switch (PlayerClass)
@@ -112,11 +114,10 @@ void AEHPlayerState::SetStatComponent()
 		
 		case Shooter:
 			UE_LOG(LogTemp, Error, TEXT("EHPlayerState: Possesed Character is Shooter"));
-			DestroyComponent(MechanicStatComponent);
-			DestroyComponent(WarriorStatComponent);
-			DestroyComponent(ArcherStatComponent);
+			DestroyComponent(MechanicStatComponent); //
+			DestroyComponent(WarriorStatComponent); //
+			DestroyComponent(ArcherStatComponent); //
 			HeroUpgradeDataTable = ShooterHeroUpgradeDataTable;
-
 			ShooterStatComponent->SetHeroUpgradeStComp(HeroUpgradeComponent);
 			break;
 		
@@ -139,7 +140,7 @@ void AEHPlayerState::SetStatComponent()
 	}
 	else
 	{
-		//UE_LOG(LogTemp, Error, TEXT("EHPlayerState: failed CopyProperties"));
+		UE_LOG(LogTemp, Error, TEXT("EHPlayerState: failed CopyProperties"));
 	}
 }
 
@@ -182,7 +183,7 @@ void AEHPlayerState::LoadHeroUpgradeDatatable()
 			HeroUpgradeComponent->HeroUpgrades.Add(*Upgrade);
 		}
 	}
-	
+
 	// 로그 출력
 	for (const FHeroUpgradeStructure& Upgrade : HeroUpgradeComponent->HeroUpgrades)
 	{
@@ -191,7 +192,6 @@ void AEHPlayerState::LoadHeroUpgradeDatatable()
 			*Upgrade.Explanation[0].ToString(),
 			Upgrade.UpgradeLevel);
 	}
-
 	IsSetStatCompoentEnd = true;
 }
 

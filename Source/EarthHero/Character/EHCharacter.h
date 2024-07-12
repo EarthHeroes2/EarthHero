@@ -84,6 +84,10 @@ private:
     bool bIsInBossZone;
     UPROPERTY()
     bool bIsInForceField;
+    
+    UFUNCTION(Client, Reliable)
+    void Client_DisableAllInput(APlayerController* PlayerController);
+    
 
 public:
     FORCEINLINE USkeletalMeshComponent* GetEquippedWeapon() { return WeaponMesh; }
