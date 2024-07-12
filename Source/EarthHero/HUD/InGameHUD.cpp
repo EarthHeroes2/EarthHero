@@ -7,6 +7,17 @@
 #include "Components/ScrollBox.h"
 #include "EarthHero/Player/EHPlayerController.h"
 
+bool UInGameHUD::Initialize()
+{
+	Super::Initialize();
+
+	Chat_Etb->OnTextCommitted.AddDynamic(this, &ThisClass::ChatTextCommitted);
+	
+	return true;
+}
+
+
+
 void UInGameHUD::InitializePlayerState(UStatComponent* StatComponent)
 {
 	if (!StatComponent)
@@ -66,6 +77,7 @@ void UInGameHUD::SetIngameHUDHeroUpgrade(int Index, UTexture2D* UpgradeImage, UT
 
 void UInGameHUD::ChatTextCommitted(const FText& Text, ETextCommit::Type CommitMethod)
 {
+	FInputModeGameOnly InputMode;
 	switch (CommitMethod)
 	{
 	case ETextCommit::Default:
@@ -81,13 +93,12 @@ void UInGameHUD::ChatTextCommitted(const FText& Text, ETextCommit::Type CommitMe
 			}
 			Chat_Etb->SetText(FText::GetEmpty());
 		}
+		GetOwningPlayer()->SetInputMode(InputMode); //포커스 초기화
 		break;
-
 	case ETextCommit::OnUserMovedFocus:
 	case ETextCommit::OnCleared:
 		break;
 	}
-	FSlateApplication::Get().SetKeyboardFocus(Chat_Etb->TakeWidget());
 }
 
 void UInGameHUD::AddChatMessage(const FText& Text)

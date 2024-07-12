@@ -53,6 +53,8 @@ private:
 	TObjectPtr<UInputAction> SkillAction;
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> TabAction;
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> ChatAction;
 
 	UPROPERTY(EditAnywhere, Category = "HUD")
 	TSubclassOf<class UUserWidget> InGameHUD;
@@ -78,7 +80,7 @@ protected:
 	void Look(const FInputActionValue& Value);
 	void ShowTabHUD(); // Add the function to show the TabHUD
 	void HideTabHUD(); // Add the function to hide the TabHUD
-	
+	void FocusChatBox();
 
 public:
 	UFUNCTION(Server, Reliable)

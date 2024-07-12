@@ -4,6 +4,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/EditableTextBox.h"
 #include "EarthHero/Character/EHCharacter.h"
 #include "EarthHero/GameMode/PlayingGameMode.h"
 #include "EarthHero/HUD/InGameHUD.h"
@@ -103,6 +104,8 @@ void AEHPlayerController::SetupInputComponent()
 	EnhancedInputComponent->BindAction(TabAction, ETriggerEvent::Started, this, &ThisClass::ShowTabHUD);
 	EnhancedInputComponent->BindAction(TabAction, ETriggerEvent::Completed, this, &ThisClass::HideTabHUD);
 
+	EnhancedInputComponent->BindAction(ChatAction, ETriggerEvent::Triggered, this, &ThisClass::FocusChatBox);
+
 	FInputModeGameOnly InputMode;
 	SetInputMode(InputMode);
 }
@@ -171,6 +174,20 @@ void AEHPlayerController::HideTabHUD()
 		TabHUD->SetVisibility(ESlateVisibility::Hidden);
 	}
 }
+
+
+void AEHPlayerController::FocusChatBox()
+{
+	if (HUD)
+	{
+		UEditableTextBox* Chat = HUD->Chat_Etb;
+		if(!Chat->HasKeyboardFocus()) Chat->SetKeyboardFocus();
+	}
+}
+
+
+
+
 
 void AEHPlayerController::Client_EnableInput_Implementation()
 {

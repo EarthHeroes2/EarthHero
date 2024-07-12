@@ -9,6 +9,8 @@ class EARTHHERO_API UInGameHUD : public UUserWidget
 {
 	GENERATED_BODY()
 
+	virtual bool Initialize() override;
+
 public:
 	UPROPERTY(meta = (BindWidget))
 	class UProgressBar* HealthBar;
@@ -37,15 +39,18 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	class UIngameHUDHeroUpgradeWidget* BP_IngameHUDHeroUpgrade_2;
 
+	
 	void InitializePlayerState(class UStatComponent* StatComponent);
 
 	void UpdateGameTimer(int GameTimerSec);
 
 	void SetIngameHUDHeroUpgrade(int Index, UTexture2D* UpgradeImage, UTexture2D* Level1Image, UTexture2D* Level2Image, UTexture2D* Level3Image, FText UpgradeName, FText UpgradeDetail);
-	void ChatTextCommitted(const FText& Text, ETextCommit::Type CommitMethod);
+	
 	void AddChatMessage(const FText& Text);
-
 protected:
+	UFUNCTION()
+	void ChatTextCommitted(const FText& Text, ETextCommit::Type CommitMethod);
+	
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 
 private:
