@@ -11,9 +11,7 @@ bool UTabHUDWidget::Initialize()
     TabUserInfoArray.Add(BP_TabUserInfo_2);
     TabUserInfoArray.Add(BP_TabUserInfo_3);
     TabUserInfoArray.Add(BP_TabUserInfo_4);
-
-    UE_LOG(LogTemp, Log, TEXT("TAB UHD!!!!!!!!!!!!!!!!!!!!!!!"));
-
+    
     return true;
 }
 

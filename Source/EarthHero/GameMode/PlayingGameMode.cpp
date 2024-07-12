@@ -45,16 +45,6 @@ void APlayingGameMode::InitLevelSetting()
 		//AActor* TargetPlayerStart = FindPlayerStart(EHPlayerControllers[i], FString::FromInt(i));
 		//RestartPlayerAtPlayerStart(EHPlayerControllers[i], TargetPlayerStart);
 	}
-	
-	//플레이어 스테이트에서 플레이어 이름, 체력정보 취합해서 게임 스테이트를 통해 전파
-	UpdateGameStateNames();
-	UpdateGameStateClasses();
-	
-	//모두의 움직임 풀어주고 //모두가 동시에 시작하는 편이 좋긴하지만... 2순위
-
-	//게임 시간초 시작
-	FTimerHandle Handle;
-	GetWorld()->GetTimerManager().SetTimer(Handle, this, &ThisClass::GameTimerCount, 1.0f, true);
 }
 
 void APlayingGameMode::PlayerLogOut(const AEHPlayerController* ConstExitingEHPlayerController)
@@ -185,4 +175,26 @@ void APlayingGameMode::UpdateGameStateClasses()
 	
 	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
 	PlayingGameState->UpdateGameStateClasses(PlayerClasses);
+}
+
+void APlayingGameMode::PlayerReady()
+{
+	NumReadyPlayers++;
+	
+	APlayingGameSession* PlayingGameSession = Cast<APlayingGameSession>(GameSession);
+	if (PlayingGameSession)
+	{
+		//모든 플레이어가 준비 완료되었다면
+		if(NumReadyPlayers == PlayingGameSession->GetNumPlayersInSession()) //좀 더 빠르게 하려면 InitLevelSetting()에서 처리하면 좋겠는데
+		{
+			UpdateGameStateNames();
+			UpdateGameStateClasses();
+	
+			//모두의 움직임 풀어주고 //모두가 동시에 시작하는 편이 좋긴하지만... 2순위
+
+			//게임 시간초 시작
+			FTimerHandle Handle;
+			GetWorld()->GetTimerManager().SetTimer(Handle, this, &ThisClass::GameTimerCount, 1.0f, true);
+		}
+	}
 }

@@ -24,6 +24,8 @@ class EARTHHERO_API APlayingGameMode : public AGameModeBase
 
 	TArray<AEHPlayerController*> EHPlayerControllers;
 
+	int NumReadyPlayers = 0;
+
 
 public:
 	int NumPlayersInSession;
@@ -34,4 +36,6 @@ public:
 	void UpdateGameStateExps();
 	void UpdateGameStateNames();
 	void UpdateGameStateClasses();
+
+	void PlayerReady();
 };

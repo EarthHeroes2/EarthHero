@@ -57,7 +57,13 @@ private:
 	UPROPERTY(EditAnywhere, Category = "HUD")
 	TSubclassOf<class UUserWidget> TabHUDClass;
 
+	void ShowHUD();
 	void InitializeHUD();
+
+	UFUNCTION(Server, Reliable)
+	void Server_PlayerReady();
+
+	
 	FTimerHandle PlayerStateCheckTimerHandle;
 
 	TObjectPtr<ACharacter> ControlledCharacter;
