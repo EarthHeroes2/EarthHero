@@ -176,3 +176,32 @@ void AEHPlayerController::Client_EnableInput_Implementation()
 {
 	EnableInput(this);
 }
+
+
+
+
+
+
+
+void AEHPlayerController::Server_SendChatMessage_Implementation(const FText& Text)
+{
+	UE_LOG(LogTemp, Log, TEXT("Send a chat message"));
+
+	FText PlayerName = FText::FromString(PlayerState->GetPlayerName());
+	FText ChatText = FText::Format(FText::FromString("[{0}] : {1}"), PlayerName, Text);
+
+	APlayingGameMode* PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode());
+	if (PlayingGameMode)
+	{
+		PlayingGameMode->SendChatMessage(ChatText);
+	}
+}
+
+void AEHPlayerController::Client_SendChatMessage_Implementation(const FText& Text)
+{
+	UE_LOG(LogTemp, Log, TEXT("Receive a chat message"));
+	if (HUD)
+	{
+		HUD->AddChatMessage(Text);
+	}
+}

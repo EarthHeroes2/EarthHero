@@ -23,6 +23,12 @@ public:
 	UTextBlock* GameTimer_Tb;
 
 	UPROPERTY(meta = (BindWidget))
+	class UScrollBox* Chat_Scr;
+
+	UPROPERTY(meta = (BindWidget))
+	class UEditableTextBox* Chat_Etb;
+
+	UPROPERTY(meta = (BindWidget))
 	class UIngameHUDHeroUpgradeWidget* BP_IngameHUDHeroUpgrade;
 
 	UPROPERTY(meta = (BindWidget))
@@ -36,6 +42,8 @@ public:
 	void UpdateGameTimer(int GameTimerSec);
 
 	void SetIngameHUDHeroUpgrade(int Index, UTexture2D* UpgradeImage, UTexture2D* Level1Image, UTexture2D* Level2Image, UTexture2D* Level3Image, FText UpgradeName, FText UpgradeDetail);
+	void ChatTextCommitted(const FText& Text, ETextCommit::Type CommitMethod);
+	void AddChatMessage(const FText& Text);
 
 protected:
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;

@@ -364,7 +364,23 @@ void ULobbyWidget::ChatTextCommitted(const FText& Text, ETextCommit::Type Commit
 	FSlateApplication::Get().SetKeyboardFocus(Chat_Etb->TakeWidget());
 }
 
+void ULobbyWidget::AddChatMessage(const FText& Text)
+{
+	UTextBlock* TextBlock = NewObject<UTextBlock>(this, UTextBlock::StaticClass());
 
+	if (TextBlock)
+	{
+		TextBlock->SetText(Text);
+		TextBlock->SetAutoWrapText(true);
+		TextBlock->SetColorAndOpacity(FSlateColor(FLinearColor::Black));
+
+		if (Chat_Scr)
+		{
+			Chat_Scr->AddChild(TextBlock);
+			Chat_Scr->ScrollToEnd();
+		}
+	}
+}
 
 
 
@@ -409,29 +425,8 @@ void ULobbyWidget::UpdateReadyState(const TArray<bool>& PlayerReadyStateArray)
 }
 
 
-void ULobbyWidget::AddChatMessage(const FText& Text)
-{
-	UTextBlock* TextBlock = NewObject<UTextBlock>(this, UTextBlock::StaticClass());
-
-	if (TextBlock)
-	{
-		TextBlock->SetText(Text);
-		TextBlock->SetAutoWrapText(true);
-		TextBlock->SetColorAndOpacity(FSlateColor(FLinearColor::Black));
-
-		if (Chat_Scr)
-		{
-			Chat_Scr->AddChild(TextBlock);
-			Chat_Scr->ScrollToEnd();
-		}
-	}
-}
-
-
 void ULobbyWidget::ExitClicked()
 {
-	//세션 제거도 필요한가?
-	
 	APlayerController* PlayerController = GetOwningPlayer();
 	if (PlayerController)
 	{

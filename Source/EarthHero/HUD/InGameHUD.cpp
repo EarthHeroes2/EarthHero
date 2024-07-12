@@ -3,6 +3,9 @@
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
 #include "IngameHUDHeroUpgradeWidget.h"
+#include "Components/EditableTextBox.h"
+#include "Components/ScrollBox.h"
+#include "EarthHero/Player/EHPlayerController.h"
 
 void UInGameHUD::InitializePlayerState(UStatComponent* StatComponent)
 {
@@ -58,5 +61,49 @@ void UInGameHUD::SetIngameHUDHeroUpgrade(int Index, UTexture2D* UpgradeImage, UT
 		TargetWidget->SetLevel1Img(Level1Image);
 		TargetWidget->SetLevel2Img(Level2Image);
 		TargetWidget->SetLevel3Img(Level3Image);
+	}
+}
+
+void UInGameHUD::ChatTextCommitted(const FText& Text, ETextCommit::Type CommitMethod)
+{
+	switch (CommitMethod)
+	{
+	case ETextCommit::Default:
+	case ETextCommit::OnEnter:
+		if (!Text.IsEmpty())
+		{
+			APlayerController* PlayerController = GetOwningPlayer();
+			if (PlayerController)
+			{
+				AEHPlayerController* EHPlayerController= Cast<AEHPlayerController>(PlayerController);
+				if (EHPlayerController)
+					EHPlayerController->Server_SendChatMessage(Text);
+			}
+			Chat_Etb->SetText(FText::GetEmpty());
+		}
+		break;
+
+	case ETextCommit::OnUserMovedFocus:
+	case ETextCommit::OnCleared:
+		break;
+	}
+	FSlateApplication::Get().SetKeyboardFocus(Chat_Etb->TakeWidget());
+}
+
+void UInGameHUD::AddChatMessage(const FText& Text)
+{
+	UTextBlock* TextBlock = NewObject<UTextBlock>(this, UTextBlock::StaticClass());
+
+	if (TextBlock)
+	{
+		TextBlock->SetText(Text);
+		TextBlock->SetAutoWrapText(true);
+		TextBlock->SetColorAndOpacity(FSlateColor(FLinearColor::Black));
+
+		if (Chat_Scr)
+		{
+			Chat_Scr->AddChild(TextBlock);
+			Chat_Scr->ScrollToEnd();
+		}
 	}
 }

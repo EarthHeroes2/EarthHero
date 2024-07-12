@@ -57,13 +57,14 @@ void APlayingGameMode::PlayerControllerReady() //조금 느리지만 안전하�
 		//모든 플레이어가 준비 완료되었다면
 		if(NumPlayerControllerReady == PlayingGameSession->GetNumPlayersInSession())
 		{
+			//모두의 이름과 클래스 알려줌
 			UpdateGameStateNames();
 			UpdateGameStateClasses();
 	 
-			//모두의 움직임 풀어주고 //모두가 동시에 시작하는 편이 좋긴하지만... 2순위
+			//모두의 움직임 풀어줌
 			EnableAllInput();
 
-			//게임 시간초 시작
+			//게임 시간은 흐르기 시작
 			FTimerHandle Handle;
 			GetWorld()->GetTimerManager().SetTimer(Handle, this, &ThisClass::GameTimerCount, 1.0f, true);
 		}
@@ -96,6 +97,36 @@ void APlayingGameMode::PlayerLogOut(const AEHPlayerController* ConstExitingEHPla
 		//나간 플레이어는 죽은 것으로 처리 -> 모든 플레이어가 죽었는 지 확인
 	}
 }
+
+void APlayingGameMode::SendChatMessage(const FText& Text)
+{
+	int32 NumberOfPlayers = EHPlayerControllers.Num();
+
+	UE_LOG(LogTemp, Log, TEXT("Send a message to clients"));
+
+	for (int i = 0; i < NumberOfPlayers; i++)
+	{
+		if (EHPlayerControllers[i])
+		{
+			EHPlayerControllers[i]->Client_SendChatMessage(Text);
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 void APlayingGameMode::GameTimerCount()
 {

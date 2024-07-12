@@ -59,8 +59,7 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "HUD")
 	TSubclassOf<class UUserWidget> TabHUDClass;
-
-	void ShowHUD();
+	
 	void InitializeHUD();
 
 	UFUNCTION(Server, Reliable)
@@ -79,4 +78,12 @@ protected:
 	void Look(const FInputActionValue& Value);
 	void ShowTabHUD(); // Add the function to show the TabHUD
 	void HideTabHUD(); // Add the function to hide the TabHUD
+	
+
+public:
+	UFUNCTION(Server, Reliable)
+	void Server_SendChatMessage(const FText& Text);
+
+	UFUNCTION(Client, Reliable)
+	void Client_SendChatMessage(const FText& Text);
 };

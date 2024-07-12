@@ -104,12 +104,12 @@ void AEHCharacter::PossessedBy(AController* NewController)
 
     APlayerController* NewPlayerController = Cast<APlayerController>(NewController);
     
-    Client_DisableAllInput(NewPlayerController); //테스트 용 - 박정익
+    //Client_DisableAllInput(NewPlayerController); //이거 인게임 테스트 불가능해져서 일단 꺼둠 - 박정익
 }
 
 void AEHCharacter::Client_DisableAllInput_Implementation(APlayerController* PlayerController)
 {
-    PlayerController->DisableInput(PlayerController); //움직임을 서버측에서 관리하기에는...
+    PlayerController->DisableInput(PlayerController);
 }
 
 void AEHCharacter::SetStatComponent()
