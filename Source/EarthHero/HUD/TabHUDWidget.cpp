@@ -1,6 +1,6 @@
 #include "TabHUDWidget.h"
 
-#include "BehaviorTree/BehaviorTreeTypes.h"
+//#include "BehaviorTree/BehaviorTreeTypes.h" <- 현재 이거 있으면 fatal 에러남 - 박정익
 
 
 void UTabHUDWidget::BeginPlay()
@@ -11,7 +11,7 @@ void UTabHUDWidget::BeginPlay()
     TabUserInfoArray.Add(BP_TabUserInfo_4);
 }
 
-void UTabHUDWidget::SetTeamMemberWidgetValues(int32 Index, FText Name, FText Class, FText PlayerNumber, int32 Level, float Exp, float HealthProgress)
+void UTabHUDWidget::SetTeamMemberWidgetValues(int32 Index, FText Name, EClassType ClassType, FText PlayerNumber, int32 Level, float Exp, float HealthProgress)
 {
     UTeamMemberWidget* TeamMemberWidget = nullptr;
 
@@ -36,7 +36,7 @@ void UTabHUDWidget::SetTeamMemberWidgetValues(int32 Index, FText Name, FText Cla
     if (TeamMemberWidget)
     {
         TeamMemberWidget->SetName(Name);
-        TeamMemberWidget->SetClass(Class);
+        TeamMemberWidget->SetClass(ClassType);
         TeamMemberWidget->SetPlayerNumber(PlayerNumber);
         TeamMemberWidget->SetLevel(Level);
         TeamMemberWidget->SetExp(Exp);
@@ -149,7 +149,7 @@ void UTabHUDWidget::SetHeroUpgradeWidgetValues(int32 Index, UTexture2D* UpgradeI
     }
 }
 
-void UTabHUDWidget::UpdatePlayerHealths(TArray<float> PlayerMaxHealths, TArray<float> PlayerCurrentHealths)
+void UTabHUDWidget::UpdatePlayerHealths(const TArray<float>& PlayerMaxHealths, const TArray<float>& PlayerCurrentHealths)
 {
     for(int i = 0; i < PlayerMaxHealths.Num(); i++)
     {
@@ -157,18 +157,26 @@ void UTabHUDWidget::UpdatePlayerHealths(TArray<float> PlayerMaxHealths, TArray<f
     }
 }
 
-void UTabHUDWidget::UpdatePlayerLevels(TArray<int> PlayerLevels)
+void UTabHUDWidget::UpdatePlayerLevels(const TArray<int>& PlayerLevels)
 {
     for(int i = 0; i < PlayerLevels.Num(); i++)
     {
-      //  TabUserInfoArray[i]->SetLevelAndExp();
+        TabUserInfoArray[i]->SetLevel(PlayerLevels[i]);
     }
 }
 
-void UTabHUDWidget::UpdatePlayerExps(TArray<float> PlayerExps)
+void UTabHUDWidget::UpdatePlayerExps(const TArray<float>& PlayerExps)
 {
     for(int i = 0; i < PlayerExps.Num(); i++)
     {
-        //  TabUserInfoArray[i]->SetLevelAndExp();
+        TabUserInfoArray[i]->SetExp(PlayerExps[i]);
+    }
+}
+
+void UTabHUDWidget::UpdatePlayerClasses(const TArray<int>& PlayerClasses)
+{
+    for(int i = 0; i < PlayerClasses.Num(); i++)
+    {
+        TabUserInfoArray[i]->SetClass(static_cast<EClassType>(PlayerClasses[i]));
     }
 }

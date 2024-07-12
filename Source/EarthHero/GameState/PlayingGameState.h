@@ -20,9 +20,11 @@ class EARTHHERO_API APlayingGameState : public AGameStateBase
 public:
 	virtual void BeginPlay() override;
 	void UpdateHUDGameTimer(int GameTimer);
-	void UpdateGameStateHealths(TArray<float> PlayerMaxHealths, TArray<float> PlayerCurrentHealths);
-	void UpdateGameStateLevels(TArray<int> PlayerLevels);
-	void UpdateGameStateExps(TArray<float> PlayerExps);
+	void UpdateGameStateHealths(const TArray<float>& PlayerMaxHealths, const TArray<float>& PlayerCurrentHealths);
+	void UpdateGameStateLevels(const TArray<int>& PlayerLevels);
+	void UpdateGameStateExps(const TArray<float>& PlayerExps);
+	void UpdateGameStateClasses(const TArray<int>& PlayerClasses);
+	
 
 	UPROPERTY(ReplicatedUsing = OnRep_GameTimerSec)
 	int GameTimerSec;
@@ -34,13 +36,18 @@ public:
 	TArray<int> AllPlayerLevels;
 	UPROPERTY(ReplicatedUsing = OnRep_GameStateExps)
 	TArray<float> AllPlayerExps;
+	UPROPERTY(ReplicatedUsing = OnRep_GameStateClasses)
+	TArray<int> AllPlayerClasses;
+	
 
 	UFUNCTION()
-	void OnRep_GameTimerSec();
+	void OnRep_GameTimerSec() const;
 	UFUNCTION()
-	void OnRep_GameStateHealths();
+	void OnRep_GameStateHealths() const;
 	UFUNCTION()
-	void OnRep_GameStateLevels();
+	void OnRep_GameStateLevels() const;
 	UFUNCTION()
-	void OnRep_GameStateExps();
+	void OnRep_GameStateExps() const;
+	UFUNCTION()
+	void OnRep_GameStateClasses() const;
 };

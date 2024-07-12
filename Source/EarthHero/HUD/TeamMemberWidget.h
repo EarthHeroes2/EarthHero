@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Components/TextBlock.h"
 #include "Components/ProgressBar.h"
+#include "EarthHero/Enum/Enums.h"
 #include "TeamMemberWidget.generated.h"
 
 UCLASS()
@@ -31,23 +32,11 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	UProgressBar* HealthProgressBar;
-
-	UFUNCTION(BlueprintCallable, Category = "TeamMember")
-	void SetName(FText Name);
-
-	UFUNCTION(BlueprintCallable, Category = "TeamMember")
-	void SetClass(FText ClassName);
-
-	UFUNCTION(BlueprintCallable, Category = "TeamMember")
-	void SetPlayerNumber(FText PlayerNumber);
-
-	UFUNCTION(BlueprintCallable, Category = "TeamMember")
-	void SetLevel(int32 Level);
-
-	UFUNCTION(BlueprintCallable, Category = "TeamMember")
-	void SetExp(float ExpPercentage);
-
 	
-	UFUNCTION(BlueprintCallable, Category = "TeamMember")
-	void SetProgress(float Progress);
+	void SetName(const FText& Name);
+	void SetClass(const EClassType ClassType);
+	void SetPlayerNumber(const FText& PlayerNumber) const;
+	void SetLevel(const int32 Level) const;
+	void SetExp(const float ExpPercentage) const;
+	void SetProgress(const float Progress) const;
 };

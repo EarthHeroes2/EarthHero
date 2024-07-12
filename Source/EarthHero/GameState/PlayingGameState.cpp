@@ -26,12 +26,12 @@ void APlayingGameState::BeginPlay()
 
 
 
-void APlayingGameState::UpdateHUDGameTimer(int GameTimer)
+void APlayingGameState::UpdateHUDGameTimer(const int GameTimer)
 {
 	GameTimerSec = GameTimer;
 }
 
-void APlayingGameState::OnRep_GameTimerSec()
+void APlayingGameState::OnRep_GameTimerSec() const
 {
 	UE_LOG(LogTemp, Log, TEXT("OnRep_GameTimerSec"));
 	if(EHPlayerController && EHPlayerController->HUD)
@@ -41,13 +41,13 @@ void APlayingGameState::OnRep_GameTimerSec()
 }
 
 
-void APlayingGameState::UpdateGameStateHealths(TArray<float> PlayerMaxHealths, TArray<float> PlayerCurrentHealths)
+void APlayingGameState::UpdateGameStateHealths(const TArray<float>& PlayerMaxHealths, const TArray<float>& PlayerCurrentHealths)
 {
 	AllPlayerMaxHealths = PlayerMaxHealths;
 	AllPlayerCurrentHealths = PlayerCurrentHealths;
 }
 
-void APlayingGameState::OnRep_GameStateHealths() //일단은 현재 체력이 변했을 때만 이것이 불림
+void APlayingGameState::OnRep_GameStateHealths() const //일단은 현재 체력이 변했을 때만 이것이 불림
 {
 	UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateHealths"));
 	if(EHPlayerController && EHPlayerController->TabHUD)
@@ -57,12 +57,12 @@ void APlayingGameState::OnRep_GameStateHealths() //일단은 현재 체력이 �
 }
 
 
-void APlayingGameState::UpdateGameStateLevels(TArray<int> PlayerLevels)
+void APlayingGameState::UpdateGameStateLevels(const TArray<int>& PlayerLevels)
 {
 	AllPlayerLevels = PlayerLevels;
 }
 
-void APlayingGameState::OnRep_GameStateLevels()
+void APlayingGameState::OnRep_GameStateLevels() const
 {
 	UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateLevels"));
 	if(EHPlayerController && EHPlayerController->TabHUD)
@@ -72,12 +72,12 @@ void APlayingGameState::OnRep_GameStateLevels()
 }
 
 
-void APlayingGameState::UpdateGameStateExps(TArray<float> PlayerExps)
+void APlayingGameState::UpdateGameStateExps(const TArray<float>& PlayerExps)
 {
 	AllPlayerExps = PlayerExps;
 }
 
-void APlayingGameState::OnRep_GameStateExps()
+void APlayingGameState::OnRep_GameStateExps() const
 {
 	UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateExps"));
 	if(EHPlayerController && EHPlayerController->TabHUD)
@@ -87,7 +87,19 @@ void APlayingGameState::OnRep_GameStateExps()
 }
 
 
+void APlayingGameState::UpdateGameStateClasses(const TArray<int>& PlayerClasses)
+{
+	AllPlayerClasses = PlayerClasses;
+}
 
+void APlayingGameState::OnRep_GameStateClasses() const
+{
+	UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateExps"));
+	if(EHPlayerController && EHPlayerController->TabHUD)
+	{
+		EHPlayerController->TabHUD->UpdatePlayerClasses(AllPlayerClasses);
+	}
+}
 
 
 
@@ -99,4 +111,5 @@ void APlayingGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME(APlayingGameState, AllPlayerCurrentHealths);
 	DOREPLIFETIME(APlayingGameState, AllPlayerLevels);
 	DOREPLIFETIME(APlayingGameState, AllPlayerExps);
+	DOREPLIFETIME(APlayingGameState, AllPlayerClasses);
 }

@@ -47,6 +47,7 @@ void APlayingGameMode::InitLevelSetting()
 	}
 	
 	//플레이어 스테이트에서 플레이어 이름, 체력정보 취합해서 게임 스테이트를 통해 전파
+	UpdateGameStateNames();
 	
 	//모두의 움직임 풀어주고 //모두가 동시에 시작하는 편이 좋긴하지만... 2순위
 
@@ -158,5 +159,18 @@ void APlayingGameMode::UpdateGameStateNames()
 
 void APlayingGameMode::UpdateGameStateClasses()
 {
+	TArray<int> PlayerClasses;
 	
+	for(AEHPlayerController* EHPlayerController : EHPlayerControllers)
+	{
+		if(EHPlayerController && EHPlayerController->PlayerState)
+		{
+			AEHPlayerState* EHPlayerState = Cast<AEHPlayerState>(EHPlayerController->PlayerState);
+			if(EHPlayerState)
+				PlayerClasses.Add(EHPlayerState->PlayerClass);
+		}
+	}
+	
+	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
+	PlayingGameState->UpdateGameStateClasses(PlayerClasses);
 }

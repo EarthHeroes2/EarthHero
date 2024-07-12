@@ -3,7 +3,7 @@
 
 #include "TeamMemberWidget.h"
 
-void UTeamMemberWidget::SetName(FText Name)
+void UTeamMemberWidget::SetName(const FText& Name)
 {
 	if (NameText)
 	{
@@ -11,15 +11,30 @@ void UTeamMemberWidget::SetName(FText Name)
 	}
 }
 
-void UTeamMemberWidget::SetClass(FText ClassName)
+void UTeamMemberWidget::SetClass(const EClassType ClassType)
 {
 	if (ClassText)
 	{
-		ClassText->SetText(ClassName);
+		switch (ClassType)
+		{
+		case Warrior:
+			ClassText->SetText(FText::FromString("Warrior"));
+			break;
+		case Mechanic:
+			ClassText->SetText(FText::FromString("Mechanic"));
+			break;
+		case Shooter:
+			ClassText->SetText(FText::FromString("Shooter"));
+			break;
+		case Archer:
+			ClassText->SetText(FText::FromString("Archer"));
+			break;
+		default: break;
+		}
 	}
 }
 
-void UTeamMemberWidget::SetPlayerNumber(FText PlayerNumber)
+void UTeamMemberWidget::SetPlayerNumber(const FText& PlayerNumber) const
 {
 	if (PlayerNumberText)
 	{
@@ -27,7 +42,7 @@ void UTeamMemberWidget::SetPlayerNumber(FText PlayerNumber)
 	}
 }
 
-void UTeamMemberWidget::SetLevel(int32 Level)
+void UTeamMemberWidget::SetLevel(const int32 Level) const
 {
 	if (LevelText)
 	{
@@ -35,7 +50,7 @@ void UTeamMemberWidget::SetLevel(int32 Level)
 	}
 }
 
-void UTeamMemberWidget::SetExp(float ExpPercentage)
+void UTeamMemberWidget::SetExp(const float ExpPercentage) const
 {
 	if (ExpText)
 	{
@@ -43,7 +58,7 @@ void UTeamMemberWidget::SetExp(float ExpPercentage)
 	}
 }
 
-void UTeamMemberWidget::SetProgress(float Progress)
+void UTeamMemberWidget::SetProgress(const float Progress) const
 {
 	if (HealthProgressBar)
 	{
