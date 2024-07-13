@@ -207,7 +207,6 @@ void AEHPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(AEHPlayerState, PlayerClass);
 	DOREPLIFETIME(AEHPlayerState, IsCopyPropertiesEnd);
-	DOREPLIFETIME(AEHPlayerState, IsSetStatComponentEnd);
 	DOREPLIFETIME(AEHPlayerState, ShooterStatComponent);
 	DOREPLIFETIME(AEHPlayerState, ArcherStatComponent);
 	DOREPLIFETIME(AEHPlayerState, MechanicStatComponent);

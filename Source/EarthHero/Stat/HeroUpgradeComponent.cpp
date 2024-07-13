@@ -77,10 +77,7 @@ void UHeroUpgradeComponent::PushHeroUpgrade_Implementation(const TArray<FHeroUpg
 
 void UHeroUpgradeComponent::OnRep_HeroUpgrades()
 {
-	// if (HeroUpgrades.IsEmpty())
-	// {
-	// 	UE_LOG(LogClass, Warning, TEXT("HeroUpgrades is Empty"));
-	// }
+	UE_LOG(LogClass, Warning, TEXT("OnRep_HeroUpgrades"));
 	
 	if (GetNetMode() == NM_Client && TabHUD && !HeroUpgrades.IsEmpty() &&HeroUpgrades.Num() >= 12)
 	{

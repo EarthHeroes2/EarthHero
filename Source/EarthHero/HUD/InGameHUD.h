@@ -14,9 +14,19 @@ class EARTHHERO_API UInGameHUD : public UUserWidget
 public:
 	UPROPERTY(meta = (BindWidget))
 	class UProgressBar* HealthBar;
+
+	//07 13 체력 /최대 체력 텍스트 연동
+	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* CurrentHealthText;
+
+	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* MaxHealthText;
 	
 	UPROPERTY(meta = (BindWidget))
 	class UProgressBar* ExpBar;
+
+	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* Exp_Num;
 
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* Level_Num;

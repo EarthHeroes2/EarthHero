@@ -48,7 +48,7 @@ public:
 	UPROPERTY(Replicated)
 	int PlayerClass;
 
-	UPROPERTY(Replicated)
+	UPROPERTY()
 	bool IsSetStatComponentEnd = false;
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;

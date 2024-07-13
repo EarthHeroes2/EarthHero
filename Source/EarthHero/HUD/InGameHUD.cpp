@@ -33,6 +33,8 @@ void UInGameHUD::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 	if (StatComponentRef)
 	{
 		HealthBar->SetPercent(StatComponentRef->GetHealthPercent());
+		CurrentHealthText->SetText(FText::AsNumber(StatComponentRef->GetHealth()));
+		MaxHealthText->SetText(FText::Format(FText::FromString(TEXT("/ {0}")), FText::AsNumber(StatComponentRef->GetMaxHealth())));
 	}
 }
 

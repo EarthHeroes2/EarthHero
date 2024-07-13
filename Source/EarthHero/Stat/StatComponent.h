@@ -27,7 +27,7 @@ public:
 
 	// 경험치 UI 업데이트 함수(소유 클라이언트 호출)
 	UFUNCTION(Client, Reliable)
-	void UpdateExpUI(float ExpPercent, int32 Level, bool IsLevelUp);
+	void UpdateExpUI(float ExpPercent, float CurExp, int32 Level, bool IsLevelUp);
 
 	//HeroUpgradeComponent 설정 함수
 	void SetHeroUpgradeStComp(class UHeroUpgradeComponent *NewComponent);

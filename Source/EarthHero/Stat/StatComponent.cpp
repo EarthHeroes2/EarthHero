@@ -140,7 +140,7 @@ bool UStatComponent::InitializeStatData_Validate()
 void UStatComponent::UpdateExp(float ExpMount)
 {
 	bool isLevelUp = UStatCalculationLibrary::AddExp(HeroStat, ExpMount);
-	UpdateExpUI(GetExpPercent(), HeroStat.Level, isLevelUp);
+	UpdateExpUI(GetExpPercent(), GetExp(), HeroStat.Level, isLevelUp);
 	if (isLevelUp)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("LevelUp.. PushRandomUpgrade Activate"));
@@ -154,10 +154,11 @@ void UStatComponent::UpdateExp(float ExpMount)
  *int32 Level : 레벨
  *bool IsLevelUp : 레벨업을 했으면 true, 아니면 false
  */
-void UStatComponent::UpdateExpUI_Implementation(float ExpPercent, int32 Level, bool IsLevelUp)
+void UStatComponent::UpdateExpUI_Implementation(float ExpPercent, float CurExp, int32 Level, bool IsLevelUp)
 {
 	//UI 갱신
 	InGameHUD->ExpBar->SetPercent(ExpPercent);
+	InGameHUD->Exp_Num->SetText(FText::FromString(FString::Printf(TEXT("%f%%"), CurExp)));
 	if (IsLevelUp)
 	{
 		//레벨 갱신
