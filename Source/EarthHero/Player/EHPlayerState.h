@@ -7,7 +7,6 @@
 #include "EarthHero/Stat/WarriorStatComponent.h"
 #include "EarthHero/Stat/ShooterStatComponent.h"
 #include "EarthHero/Stat/ArcherStatComponent.h"
-#include "EarthHero/Enum/Enums.h"
 #include "EarthHero/Stat/HeroUpgradeComponent.h"
 #include "GameFramework/PlayerState.h"
 #include "EHPlayerState.generated.h"
@@ -43,11 +42,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Component")
 	UStatComponent *GetStatComponent();
 
+	UFUNCTION(BlueprintCallable, Category = "Component")
+	UHeroUpgradeComponent *GetHeroUpgradeComponent();
+
 	UPROPERTY(Replicated)
 	int PlayerClass;
 
 	UPROPERTY(Replicated)
-	bool IsSetStatCompoentEnd = false;
+	bool IsSetStatComponentEnd = false;
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 

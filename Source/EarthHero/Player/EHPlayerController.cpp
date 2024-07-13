@@ -52,8 +52,9 @@ void AEHPlayerController::ClientPossess_Implementation()
 void AEHPlayerController::InitializeHUD()
 {
 	AEHPlayerState* MyPlayerState = Cast<AEHPlayerState>(PlayerState);
-	if (MyPlayerState && MyPlayerState->GetStatComponent())
+	if (MyPlayerState && MyPlayerState->GetStatComponent() && MyPlayerState->GetHeroUpgradeComponent() && MyPlayerState->IsSetStatComponentEnd)
 	{
+		UE_LOG(LogClass, Warning, TEXT("EHPlayerController(Client): HUD 설정 시작"));
 		GetWorldTimerManager().ClearTimer(PlayerStateCheckTimerHandle);
 
 		HUD = Cast<UInGameHUD>(CreateWidget(this, InGameHUD));
@@ -62,6 +63,7 @@ void AEHPlayerController::InitializeHUD()
 			HUD->InitializePlayerState(MyPlayerState->GetStatComponent());
 			HUD->AddToViewport();
 			MyPlayerState->GetStatComponent()->SetInGameHUD(HUD);
+			MyPlayerState->GetHeroUpgradeComponent()->SetInGameHUD(HUD);
 		}
 		else UE_LOG(LogClass, Warning, TEXT("EHPlayerController(Client): HUD Cast Failed"));
 		
@@ -72,6 +74,7 @@ void AEHPlayerController::InitializeHUD()
 			TabHUD->AddToViewport();
 			TabHUD->SetVisibility(ESlateVisibility::Hidden);
 			MyPlayerState->GetStatComponent()->SetTabHUD(TabHUD);
+			MyPlayerState->GetHeroUpgradeComponent()->SetTabHUD(TabHUD);
 		}
 
 		//준비가 다 되었으니 서버에게 이 사실을 알림

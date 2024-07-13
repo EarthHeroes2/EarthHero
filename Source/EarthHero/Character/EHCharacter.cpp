@@ -115,22 +115,22 @@ void AEHCharacter::Client_DisableAllInput_Implementation(APlayerController* Play
 void AEHCharacter::SetStatComponent()
 {
     // 승언 : EHPlayerState에서 StatComponent의 참조 가져오기
-    if (MyPlayerState && MyPlayerState->IsSetStatCompoentEnd)
+    if (MyPlayerState && MyPlayerState->IsSetStatComponentEnd)
     {
         GetWorldTimerManager().ClearTimer(SetStatComponentTimerHandle);
         StatComponent = MyPlayerState->GetStatComponent();
         if (StatComponent)
         {
-            UE_LOG(LogTemp, Error, TEXT("EHCharacter.cpp: PlayerState Set Success"));
+            UE_LOG(LogTemp, Error, TEXT("EHCharacter.cpp: StatComponent Set Success"));
         }
         else
         {
-            UE_LOG(LogTemp, Error, TEXT("EHCharacter.cpp: PlayerState Set failed")); 
+            UE_LOG(LogTemp, Error, TEXT("EHCharacter.cpp: StatComponent Set failed")); 
         }
     }
     else
     {
-        UE_LOG(LogTemp, Error, TEXT("EHCharacter.cpp: Fail to Get PlayerState"));
+        UE_LOG(LogTemp, Error, TEXT("EHCharacter.cpp: Fail to Get StatComponent"));
     }
 }
 

@@ -36,12 +36,12 @@ void UStatComponent::SetInGameHUD(UInGameHUD* ControllerInGameHUD)
 
 void UStatComponent::SetTabHUD(UTabHUDWidget* ControllerTabHUD)
 {
-	
 	if (!ControllerTabHUD)
 	{
 		UE_LOG(LogClass, Warning, TEXT("StatComponent: ERROR!! TabHUD is NULL"));
 	}
 	TabHUD = ControllerTabHUD;
+	OnRep_HeroStat();
 }
 
 
@@ -144,7 +144,7 @@ void UStatComponent::UpdateExp(float ExpMount)
 	if (isLevelUp)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("LevelUp.. PushRandomUpgrade Activate"));
-		HeroUpgradeComponent->PushRandomHeroUpgrade(InGameHUD);
+		HeroUpgradeComponent->PushRandomHeroUpgrade();
 	}
 }
 

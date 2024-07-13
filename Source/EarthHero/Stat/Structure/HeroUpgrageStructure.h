@@ -22,10 +22,10 @@ struct FHeroUpgradeStructure : public FTableRowBase
 	int32 UpgradeLevel = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HeroUpgrade")
-	int HeroUpgradeType;
+	int HeroUpgradeType = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HeroUpgrade")
-	UTexture2D* UpgradeImage;
+	UTexture2D* UpgradeImage = nullptr;
 
 	// == 연산자 오버로드
 	bool operator==(const FHeroUpgradeStructure& Other) const
