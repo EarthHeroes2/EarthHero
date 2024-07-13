@@ -16,15 +16,7 @@ class EARTHHERO_API AGameOverGameMode : public AGameModeBase
 
 	AGameOverGameMode();
 
-public:
-	void SaveClientData(const FUniqueNetId& UserId, const FString& FileName, TArray<uint8>& Contents);
 private:
-	void OnWriteSharedFileComplete(bool bWasSuccessful, const FUniqueNetId& UserId, const FString& FileName, const TSharedRef<FSharedContentHandle>& SharedHandle);
-	void LoadCloudData(const FString& UserId, const FString& FileName);
-	void OnReadSharedFileComplete(bool bWasSuccessful, const FSharedContentHandle& SharedContentHandle);
-
-
-
 	TSharedPtr<FSharedContentHandle> TestSharedHandle;
 
 	
