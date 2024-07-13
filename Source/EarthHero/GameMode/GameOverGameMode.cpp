@@ -31,6 +31,8 @@ void AGameOverGameMode::SaveClientData(const FUniqueNetId& UserId, const FString
 			SharedCloud->AddOnWriteSharedFileCompleteDelegate_Handle(
 				FOnWriteSharedFileCompleteDelegate::CreateUObject(this, &AGameOverGameMode::OnWriteSharedFileComplete)
 			);
+
+			UE_LOG(LogTemp, Log, TEXT("%s %s %hhu %hhu"), *UserId.ToString(), *FileName, Contents[0], Contents[1]);
 			
 			SharedCloud->WriteSharedFile(UserId, FileName, Contents);
 		}
@@ -42,6 +44,9 @@ void AGameOverGameMode::OnWriteSharedFileComplete(bool bWasSuccessful, const FUn
 	if (bWasSuccessful)
 	{
 		UE_LOG(LogTemp, Log, TEXT("Successfully saved file %s for user %s"), *FileName, *UserId.ToString());
+		TestSharedHandle = SharedHandle;
+
+		LoadCloudData("", ""); //임시
 	}
 	else
 	{
@@ -58,14 +63,11 @@ void AGameOverGameMode::LoadCloudData(const FString& UserId, const FString& File
 		IOnlineSharedCloudPtr SharedCloud = Subsystem->GetSharedCloudInterface();
 		if (SharedCloud.IsValid())
 		{
-			
 			SharedCloud->AddOnReadSharedFileCompleteDelegate_Handle(
 				FOnReadSharedFileCompleteDelegate::CreateUObject(this, &AGameOverGameMode::OnReadSharedFileComplete)
 			);
-			//SharedCloud->ReadSharedFile()
-
-			//FSharedContentHandle SharedHandle; ??????????
-			//SharedCloud->ReadSharedFile(SharedHandle);
+			
+			SharedCloud->ReadSharedFile(*TestSharedHandle);
 		}
 	}
 }
@@ -74,7 +76,24 @@ void AGameOverGameMode::OnReadSharedFileComplete(bool bWasSuccessful, const FSha
 {
 	if (bWasSuccessful)
 	{
-		//어떻게 해야하나...
+		UE_LOG(LogTemp, Warning, TEXT("Success to read shared file"));
+
+
+		IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
+		if (Subsystem)
+		{
+			IOnlineSharedCloudPtr SharedCloud = Subsystem->GetSharedCloudInterface();
+			if (SharedCloud.IsValid())
+			{
+				TArray<uint8> FileContents;
+				SharedCloud->GetSharedFileContents(SharedContentHandle, FileContents);
+
+				for (int i = 0; i < FileContents.Num(); i++)
+				{
+					UE_LOG(LogTemp, Log, TEXT("i %d: %d"), i, FileContents[i]);
+				}
+			}
+		}
 	}
 	else
 	{

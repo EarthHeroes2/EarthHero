@@ -13,9 +13,10 @@ UCLASS()
 class EARTHHERO_API AGameOverPlayerState : public APlayerState
 {
 	GENERATED_BODY()
-
+	FTimerHandle SetStatComponentTimerHandle;
+	virtual void BeginPlay() override;
 
 public:
-	int TestVar;
+	int TestVar = 1;
 	void TestFunc();
 };
