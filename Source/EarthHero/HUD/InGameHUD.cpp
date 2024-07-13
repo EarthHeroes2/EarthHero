@@ -5,6 +5,7 @@
 #include "IngameHUDHeroUpgradeWidget.h"
 #include "Components/EditableTextBox.h"
 #include "Components/ScrollBox.h"
+#include "Components/VerticalBox.h"
 #include "EarthHero/Player/EHPlayerController.h"
 
 bool UInGameHUD::Initialize()
@@ -13,10 +14,13 @@ bool UInGameHUD::Initialize()
 
 	Chat_Etb->OnTextCommitted.AddDynamic(this, &ThisClass::ChatTextCommitted);
 	
+	if (HeroUpgradeVerticalBox)
+	{
+		HeroUpgradeVerticalBox->SetVisibility(ESlateVisibility::Collapsed);
+	}
+	
 	return true;
 }
-
-
 
 void UInGameHUD::InitializePlayerState(UStatComponent* StatComponent)
 {

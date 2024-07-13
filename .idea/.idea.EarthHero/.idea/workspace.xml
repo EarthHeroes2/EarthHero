@@ -78,15 +78,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4591bad7-fd9f-4860-903f-8700cd913377" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_IngameHUDHeroUpgrade.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/IngameHUDHeroUpgradeWidget.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/IngameHUDHeroUpgradeWidget.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_InGameHUD.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_InGameHUD.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_IngameHUD_HeroUpgrade.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_TabUserInfo.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_TabUserInfo.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_TabHeroUpgrade.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_TabHeroUpgrade.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/Lobby.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/Lobby.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EarthHero.uproject" beforeDir="false" afterPath="$PROJECT_DIR$/EarthHero.uproject" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/EarthHero/HUD/InGameHUD.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/InGameHUD.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/EarthHero/HUD/InGameHUD.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/InGameHUD.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/HUD/TabHUDWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/TabHUDWidget.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/HUD/TabHUDWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/TabHUDWidget.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/HUD/TeamMemberWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/TeamMemberWidget.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/HUD/TeamMemberWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/TeamMemberWidget.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -295,6 +297,7 @@
       <workItem from="1720714604053" duration="18000" />
       <workItem from="1720714634428" duration="1094000" />
       <workItem from="1720715870531" duration="1028000" />
+      <workItem from="1720850763412" duration="1801000" />
     </task>
     <servers />
   </component>
