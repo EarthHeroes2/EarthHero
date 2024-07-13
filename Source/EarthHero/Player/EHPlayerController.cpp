@@ -51,7 +51,7 @@ void AEHPlayerController::ClientPossess_Implementation()
 //여기서 HUD 설정
 void AEHPlayerController::InitializeHUD()
 {
-	AEHPlayerState* MyPlayerState = Cast<AEHPlayerState>(PlayerState);
+	MyPlayerState = Cast<AEHPlayerState>(PlayerState);
 	if (MyPlayerState && MyPlayerState->GetStatComponent() && MyPlayerState->GetHeroUpgradeComponent() && MyPlayerState->IsSetStatComponentEnd)
 	{
 		UE_LOG(LogClass, Warning, TEXT("EHPlayerController(Client): HUD 설정 시작"));
@@ -108,6 +108,10 @@ void AEHPlayerController::SetupInputComponent()
 	EnhancedInputComponent->BindAction(TabAction, ETriggerEvent::Completed, this, &ThisClass::HideTabHUD);
 
 	EnhancedInputComponent->BindAction(ChatAction, ETriggerEvent::Triggered, this, &ThisClass::FocusChatBox);
+
+	EnhancedInputComponent->BindAction(SelectHUAction_1, ETriggerEvent::Started, this, &ThisClass::SelectHU_1);
+	EnhancedInputComponent->BindAction(SelectHUAction_2, ETriggerEvent::Started, this, &ThisClass::SelectHU_2);
+	EnhancedInputComponent->BindAction(SelectHUAction_3, ETriggerEvent::Started, this, &ThisClass::SelectHU_3);
 
 	FInputModeGameOnly InputMode;
 	SetInputMode(InputMode);
@@ -188,8 +192,42 @@ void AEHPlayerController::FocusChatBox()
 	}
 }
 
+void AEHPlayerController::SelectHU_1()
+{
+	if (HUD->IsHeroUpgradeReadys())
+	{
+		//서버에서 업그레이드 적용
+		MyPlayerState->HeroUpgradeComponent->ApplyHeroUpgrade(0);
+	}
+	else
+	{
+		UE_LOG(LogClass, Warning, TEXT("IsHeroUpgradeReadys = false"));
+	}
+}
 
+void AEHPlayerController::SelectHU_2()
+{
+	if (HUD->IsHeroUpgradeReadys())
+	{
+		MyPlayerState->HeroUpgradeComponent->ApplyHeroUpgrade(1);
+	}
+	else
+	{
+		UE_LOG(LogClass, Warning, TEXT("IsHeroUpgradeReadys = false"));
+	}
+}
 
+void AEHPlayerController::SelectHU_3()
+{
+	if (HUD->IsHeroUpgradeReadys())
+	{
+		MyPlayerState->HeroUpgradeComponent->ApplyHeroUpgrade(2);
+	}
+	else
+	{
+		UE_LOG(LogClass, Warning, TEXT("IsHeroUpgradeReadys = false"));
+	}
+}
 
 
 void AEHPlayerController::Client_EnableInput_Implementation()

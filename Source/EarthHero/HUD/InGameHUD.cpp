@@ -33,8 +33,8 @@ void UInGameHUD::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 	if (StatComponentRef)
 	{
 		HealthBar->SetPercent(StatComponentRef->GetHealthPercent());
-		CurrentHealthText->SetText(FText::AsNumber(StatComponentRef->GetHealth()));
-		MaxHealthText->SetText(FText::Format(FText::FromString(TEXT("/ {0}")), FText::AsNumber(StatComponentRef->GetMaxHealth())));
+		CurrentHealthText->SetText(FText::AsNumber(FMath::FloorToInt(StatComponentRef->GetHealth())));
+		MaxHealthText->SetText(FText::Format(FText::FromString(TEXT("/ {0}")), FText::AsNumber(FMath::FloorToInt(StatComponentRef->GetMaxHealth()))));
 	}
 }
 
@@ -75,6 +75,22 @@ void UInGameHUD::SetIngameHUDHeroUpgrade(int Index, UTexture2D* UpgradeImage, UT
 		TargetWidget->SetLevel2Img(Level2Image);
 		TargetWidget->SetLevel3Img(Level3Image);
 	}
+
+	IsHeroUpGradeReady[Index] = true;
+}
+
+bool UInGameHUD::IsHeroUpgradeReadys() const
+{
+	if (IsHeroUpGradeReady[0] && IsHeroUpGradeReady[1] && IsHeroUpGradeReady[2])
+		return true;
+	return false;
+}
+
+void UInGameHUD::SetFalseHeroUpgradeReady()
+{
+	IsHeroUpGradeReady[0] = false;
+	IsHeroUpGradeReady[1] = false;
+	IsHeroUpGradeReady[2] = false;
 }
 
 void UInGameHUD::ChatTextCommitted(const FText& Text, ETextCommit::Type CommitMethod)
@@ -124,3 +140,4 @@ void UInGameHUD::AddChatMessage(const FText& Text)
 		}
 	}
 }
+

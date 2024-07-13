@@ -22,7 +22,6 @@ void UHeroUpgradeComponent::SetTabHUD(UTabHUDWidget* ControllerTabHUD)
 	OnRep_HeroUpgrades(); //HeroUpgrades 가 이시점에선 없다... 확인해야함
 }
 
-
 // Called when the game starts
 void UHeroUpgradeComponent::BeginPlay()
 {
@@ -95,6 +94,16 @@ void UHeroUpgradeComponent::OnRep_HeroUpgrades()
 	}
 }
 
+void UHeroUpgradeComponent::ApplyHeroUpgrade_Implementation(int index)
+{
+	UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *RandomUpgrades[index].UpgradeName.ToString());
+	SetFalseHUReady();
+}
+
+void UHeroUpgradeComponent::SetFalseHUReady_Implementation()
+{
+	InGameHUD->SetFalseHeroUpgradeReady();
+}
 
 void UHeroUpgradeComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {

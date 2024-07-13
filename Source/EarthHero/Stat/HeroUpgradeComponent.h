@@ -35,6 +35,9 @@ public:
 	UFUNCTION()
 	void OnRep_HeroUpgrades();
 
+	UFUNCTION(Server, Reliable)
+	void ApplyHeroUpgrade(int index);
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -48,5 +51,8 @@ private:
 
 	UPROPERTY()
 	UTabHUDWidget *TabHUD;
+
+	UFUNCTION(Client, Reliable)
+	void SetFalseHUReady();
 		
 };

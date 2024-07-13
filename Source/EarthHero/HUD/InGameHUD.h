@@ -57,6 +57,14 @@ public:
 	void SetIngameHUDHeroUpgrade(int Index, UTexture2D* UpgradeImage, UTexture2D* Level1Image, UTexture2D* Level2Image, UTexture2D* Level3Image, FText UpgradeName, FText UpgradeDetail);
 	
 	void AddChatMessage(const FText& Text);
+
+	//플레이어 컨트롤러가 히어로 업그레이드 선택할 수 있는 환경인지 확인하는 변수
+	bool IsHeroUpgradeReadys() const;
+	
+	bool IsHeroUpGradeReady[3] = {false, };
+
+	UFUNCTION()
+	void SetFalseHeroUpgradeReady();
 protected:
 	UFUNCTION()
 	void ChatTextCommitted(const FText& Text, ETextCommit::Type CommitMethod);

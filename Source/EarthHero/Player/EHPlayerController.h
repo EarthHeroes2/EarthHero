@@ -56,6 +56,14 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> ChatAction;
 
+	//07 13 히어로 업그레이드 선택 맵핑 액션 추가
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> SelectHUAction_1;
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> SelectHUAction_2;
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> SelectHUAction_3;
+
 	UPROPERTY(EditAnywhere, Category = "HUD")
 	TSubclassOf<class UUserWidget> InGameHUD;
 
@@ -63,6 +71,9 @@ private:
 	TSubclassOf<class UUserWidget> TabHUDClass;
 	
 	void InitializeHUD();
+
+	UPROPERTY()
+	class AEHPlayerState *MyPlayerState;
 
 	UFUNCTION(Server, Reliable)
 	void Server_PlayerControllerReady();
@@ -81,6 +92,9 @@ protected:
 	void ShowTabHUD(); // Add the function to show the TabHUD
 	void HideTabHUD(); // Add the function to hide the TabHUD
 	void FocusChatBox();
+	void SelectHU_1();
+	void SelectHU_2();
+	void SelectHU_3();
 	virtual void EndPlay(EEndPlayReason::Type EndPlayReason) override;
 
 public:
