@@ -81,6 +81,7 @@ protected:
 	void ShowTabHUD(); // Add the function to show the TabHUD
 	void HideTabHUD(); // Add the function to hide the TabHUD
 	void FocusChatBox();
+	virtual void EndPlay(EEndPlayReason::Type EndPlayReason) override;
 
 public:
 	UFUNCTION(Server, Reliable)

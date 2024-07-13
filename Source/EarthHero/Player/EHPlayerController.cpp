@@ -225,3 +225,13 @@ void AEHPlayerController::Client_SendChatMessage_Implementation(const FText& Tex
 		HUD->AddChatMessage(Text);
 	}
 }
+
+
+
+void AEHPlayerController::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	if (HUD) HUD->RemoveFromParent();
+	else if(TabHUD) TabHUD->RemoveFromParent();
+	
+	Super::EndPlay(EndPlayReason);
+}
