@@ -1,21 +1,24 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "EndGameMode.h"
+#include "GameOverGameMode.h"
 
 #include "OnlineSubsystem.h"
 #include "Interfaces/OnlineSharedCloudInterface.h"
 #include "EarthHero/Player/EHPlayerState.h"
+#include "EarthHero/PlayerController/GameOverPlayerController.h"
 
 
-AEndGameMode::AEndGameMode()
+AGameOverGameMode::AGameOverGameMode()
 {
 	PlayerStateClass = AEHPlayerState::StaticClass();
+	PlayerControllerClass = AGameOverPlayerController::StaticClass();
+	//GameSessionClass = 
 }
 
 class IOnlineSharedCloud;
 
-void AEndGameMode::SaveClientData(const FUniqueNetId& UserId, const FString& FileName, TArray<uint8>& Contents)
+void AGameOverGameMode::SaveClientData(const FUniqueNetId& UserId, const FString& FileName, TArray<uint8>& Contents)
 {
 	IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
 	if (Subsystem)
@@ -25,7 +28,7 @@ void AEndGameMode::SaveClientData(const FUniqueNetId& UserId, const FString& Fil
 		{
 			// 콜백 함수 등록
 			SharedCloud->AddOnWriteSharedFileCompleteDelegate_Handle(
-				FOnWriteSharedFileCompleteDelegate::CreateUObject(this, &AEndGameMode::OnWriteSharedFileComplete)
+				FOnWriteSharedFileCompleteDelegate::CreateUObject(this, &AGameOverGameMode::OnWriteSharedFileComplete)
 			);
 			
 			SharedCloud->WriteSharedFile(UserId, FileName, Contents);
@@ -33,7 +36,7 @@ void AEndGameMode::SaveClientData(const FUniqueNetId& UserId, const FString& Fil
 	}
 }
 
-void AEndGameMode::OnWriteSharedFileComplete(bool bWasSuccessful, const FUniqueNetId& UserId, const FString& FileName, const TSharedRef<FSharedContentHandle>& SharedHandle)
+void AGameOverGameMode::OnWriteSharedFileComplete(bool bWasSuccessful, const FUniqueNetId& UserId, const FString& FileName, const TSharedRef<FSharedContentHandle>& SharedHandle)
 {
 	if (bWasSuccessful)
 	{
@@ -46,7 +49,7 @@ void AEndGameMode::OnWriteSharedFileComplete(bool bWasSuccessful, const FUniqueN
 }
 
 
-void AEndGameMode::LoadCloudData(const FString& UserId, const FString& FileName)
+void AGameOverGameMode::LoadCloudData(const FString& UserId, const FString& FileName)
 {
 	IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
 	if (Subsystem)
@@ -56,7 +59,7 @@ void AEndGameMode::LoadCloudData(const FString& UserId, const FString& FileName)
 		{
 			
 			SharedCloud->AddOnReadSharedFileCompleteDelegate_Handle(
-				FOnReadSharedFileCompleteDelegate::CreateUObject(this, &AEndGameMode::OnReadSharedFileComplete)
+				FOnReadSharedFileCompleteDelegate::CreateUObject(this, &AGameOverGameMode::OnReadSharedFileComplete)
 			);
 
 			//FSharedContentHandle SharedHandle; ??????????
@@ -65,7 +68,7 @@ void AEndGameMode::LoadCloudData(const FString& UserId, const FString& FileName)
 	}
 }
 
-void AEndGameMode::OnReadSharedFileComplete(bool bWasSuccessful, const FSharedContentHandle& SharedContentHandle)
+void AGameOverGameMode::OnReadSharedFileComplete(bool bWasSuccessful, const FSharedContentHandle& SharedContentHandle)
 {
 	if (bWasSuccessful)
 	{
@@ -74,5 +77,26 @@ void AEndGameMode::OnReadSharedFileComplete(bool bWasSuccessful, const FSharedCo
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Failed to read shared file"));
+	}
+}
+
+
+
+
+
+
+
+void AGameOverGameMode::SendChatMessage(const FText& Text)
+{
+	int32 NumberOfPlayers = GameOverPlayerControllers.Num();
+
+	UE_LOG(LogTemp, Log, TEXT("Send a message to clients"));
+
+	for (int i = 0; i < NumberOfPlayers; i++)
+	{
+		if (GameOverPlayerControllers[i])
+		{
+			GameOverPlayerControllers[i]->Client_SendChatMessage(Text);
+		}
 	}
 }
