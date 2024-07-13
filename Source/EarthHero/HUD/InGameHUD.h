@@ -41,6 +41,9 @@ public:
 	class UEditableTextBox* Chat_Etb;
 
 	UPROPERTY(meta = (BindWidget))
+	class UVerticalBox* HeroUpgradeVerticalBox;
+
+	UPROPERTY(meta = (BindWidget))
 	class UIngameHUDHeroUpgradeWidget* BP_IngameHUDHeroUpgrade;
 
 	UPROPERTY(meta = (BindWidget))
