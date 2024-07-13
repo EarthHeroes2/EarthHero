@@ -97,8 +97,11 @@ void APlayingGameMode::PlayerLogOut(const AEHPlayerController* ConstExitingEHPla
 		UpdateGameStateExps();
 		UpdateGameStateLevels();
 		UpdateGameStateHealths();
-		
-		//나간 플레이어는 죽은 것으로 처리 -> 모든 플레이어가 죽었는 지 확인
+
+		/*
+		if(이미 죽은 플레이어) NumDeadPlayers--;
+		CheckAllPlayerDead();
+		*/
 	}
 }
 
@@ -120,8 +123,11 @@ void APlayingGameMode::SendChatMessage(const FText& Text)
 void APlayingGameMode::AddPlayerDead()
 {
 	NumDeadPlayers++;
+	CheckAllPlayerDead();
+}
 
-	//모두가 죽었다면
+void APlayingGameMode::CheckAllPlayerDead()
+{
 	if(NumDeadPlayers == EHPlayerControllers.Num())
 	{
 		UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(GetGameInstance());
@@ -133,6 +139,15 @@ void APlayingGameMode::AddPlayerDead()
 	}
 }
 
+void APlayingGameMode::BossDead()
+{
+	UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(GetGameInstance());
+	if(EHGameInstance)
+	{
+		EHGameInstance->bGameClear = true;
+		GetWorld()->ServerTravel(GameOverMap, true);
+	}
+}
 
 
 void APlayingGameMode::GameTimerCount()

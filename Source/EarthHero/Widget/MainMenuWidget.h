@@ -71,6 +71,9 @@ private:
 	void Exit_BtnClicked();
 
 	UFUNCTION()
+	void LobbyNameEtbChanged(const FText& Text);
+
+	UFUNCTION()
 	void CreateLobbyOKBtnClicked();
 
 	UFUNCTION()

@@ -25,7 +25,6 @@ protected:
 	const FString InGameMap = TEXT("/Game/Maps/TestMap");
 	
 	virtual void BeginPlay() override;
-	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 	virtual bool ProcessAutoLogin() override;
 	

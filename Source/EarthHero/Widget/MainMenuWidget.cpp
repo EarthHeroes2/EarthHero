@@ -68,6 +68,7 @@ bool UMainMenuWidget::Initialize()
 	{
 		CreateLobbyOK_Btn->OnClicked.AddDynamic(this, &ThisClass::CreateLobbyOKBtnClicked);
 		ButtonArray.Add(CreateLobbyOK_Btn);
+		CreateLobbyOK_Btn->SetIsEnabled(false);
 	}
 	if(CreateLobbyCancle_Btn)
 	{
@@ -85,6 +86,8 @@ bool UMainMenuWidget::Initialize()
 		FindLobby_Btn->OnClicked.AddDynamic(this, &ThisClass::FindLobbyBtnClicked);
 		ButtonArray.Add(FindLobby_Btn);
 	}
+
+	if(LobbyName_Etb) LobbyName_Etb->OnTextChanged.AddDynamic(this, &ThisClass::LobbyNameEtbChanged);
 
 	return true;
 }
@@ -148,14 +151,22 @@ void UMainMenuWidget::Exit_BtnClicked()
 }
 
 
+void UMainMenuWidget::LobbyNameEtbChanged(const FText& Text)
+{
+	if (CreateLobbyOK_Btn)
+	{
+		CreateLobbyOK_Btn->SetIsEnabled(!Text.IsEmpty());
+	}
+}
+
 void UMainMenuWidget::CreateLobbyOKBtnClicked()
 {
 	SetButtonsEnabled(false);
-	
+
+	//로비 정보 인스턴스에 임시 저장
 	UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(GetWorld()->GetGameInstance());
 	if (EHGameInstance)
 	{
-		//로비 정보 인스턴스에 임시 저장
 		EHGameInstance->LobbyName = LobbyName_Etb->GetText().ToString();
 		EHGameInstance->IsCheckedPrivate = Private_Cb->IsChecked();
 	}
@@ -165,10 +176,7 @@ void UMainMenuWidget::CreateLobbyOKBtnClicked()
 	if(!ReceivedLobbyPort.IsEmpty())
 	{
 		FTimerHandle Handle;
-
-		if(GEngine) GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Yellow, FString::Printf(TEXT("wait.... 15s")));
-		
-		GetWorld()->GetTimerManager().SetTimer(Handle, this, &ThisClass::CreateLobbyWait, 15.0f, false);
+		GetWorld()->GetTimerManager().SetTimer(Handle, this, &ThisClass::CreateLobbyWait, 20.0f, false); //이거 나중에 방식을 바꾸자
 	}
 	else
 	{
