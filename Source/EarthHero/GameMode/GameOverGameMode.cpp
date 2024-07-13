@@ -4,16 +4,17 @@
 #include "GameOverGameMode.h"
 
 #include "OnlineSubsystem.h"
+#include "EarthHero/GameSession/EHGameSession.h"
 #include "Interfaces/OnlineSharedCloudInterface.h"
-#include "EarthHero/Player/EHPlayerState.h"
 #include "EarthHero/PlayerController/GameOverPlayerController.h"
+#include "EarthHero/PlayerState/GameOverPlayerState.h"
 
 
 AGameOverGameMode::AGameOverGameMode()
 {
-	PlayerStateClass = AEHPlayerState::StaticClass();
+	PlayerStateClass = AGameOverPlayerState::StaticClass();
 	PlayerControllerClass = AGameOverPlayerController::StaticClass();
-	//GameSessionClass = 
+	GameSessionClass = AEHGameSession::StaticClass();
 }
 
 class IOnlineSharedCloud;
@@ -61,6 +62,7 @@ void AGameOverGameMode::LoadCloudData(const FString& UserId, const FString& File
 			SharedCloud->AddOnReadSharedFileCompleteDelegate_Handle(
 				FOnReadSharedFileCompleteDelegate::CreateUObject(this, &AGameOverGameMode::OnReadSharedFileComplete)
 			);
+			//SharedCloud->ReadSharedFile()
 
 			//FSharedContentHandle SharedHandle; ??????????
 			//SharedCloud->ReadSharedFile(SharedHandle);
@@ -80,7 +82,7 @@ void AGameOverGameMode::OnReadSharedFileComplete(bool bWasSuccessful, const FSha
 	}
 }
 
-
+//모든 플레이어 정보를 서버에 저장...
 
 
 

@@ -124,9 +124,11 @@ void APlayingGameMode::AddPlayerDead()
 	//모두가 죽었다면
 	if(NumDeadPlayers == EHPlayerControllers.Num())
 	{
-		for(AEHPlayerController* EHPlayerController : EHPlayerControllers)
+		UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(GetGameInstance());
+		if(EHGameInstance)
 		{
-			GetWorld()->ServerTravel(GameOverMap, true); //이 이후 구현안됨
+			EHGameInstance->bGameClear = false;
+			GetWorld()->ServerTravel(GameOverMap, true);
 		}
 	}
 }

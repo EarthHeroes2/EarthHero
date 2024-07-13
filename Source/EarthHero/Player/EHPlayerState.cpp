@@ -6,6 +6,7 @@
 #include "EarthHero/Stat/ShooterStatComponent.h"
 #include "EarthHero/Stat/StatComponent.h"
 #include "EarthHero/Enum/Enums.h"
+#include "EarthHero/PlayerState/GameOverPlayerState.h"
 #include "EarthHero/Stat/Structure/HeroUpgrageStructure.h"
 #include "Net/UnrealNetwork.h"
 
@@ -51,22 +52,21 @@ AEHPlayerState::AEHPlayerState()
 	bAlwaysRelevant = true; // 항상 복제되도록 설정 (선택 사항)
 }
 
-//현재 플레이어 스테이트에서 새로 생기는 플레이어 스테이트로 정보 복사
+//인게임 -> 게임종료로 필요한 데이터 복사
 void AEHPlayerState::CopyProperties(APlayerState* PlayerState)
 {
 	Super::CopyProperties(PlayerState);
 
-	UE_LOG(LogTemp, Error, TEXT("Copy Properties Activated"));
+	UE_LOG(LogTemp, Error, TEXT("Copy Properties - EH"));
 	
-	AEHPlayerState* EHPlayerState = Cast<AEHPlayerState>(PlayerState);
-	if (EHPlayerState)
-	{
-		EHPlayerState->PlayerClass = PlayerClass;
-	}
+	AGameOverPlayerState* GameOverPlayerState = Cast<AGameOverPlayerState>(PlayerState);
+	
+	if (GameOverPlayerState)
+		GameOverPlayerState->TestVar = PlayerClass;
 
-	EHPlayerState->IsCopyPropertiesEnd = true;
+	GameOverPlayerState->TestFunc();
 
-	//EHPlayerState->SetStatComponent(); //copy propertie 끝나자 마자 실행 가능. 다만 컴포넌트 파괴를 나중에 해야할듯? -> 패키징 테스트 때 도전
+	//EHPlayerState->SetStatComponent(); //이것은 사정상 lobbyPlayerState로 이동되었습니다 - 박정익
 }
 
 void AEHPlayerState::BeginPlay()

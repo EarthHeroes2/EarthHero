@@ -8,9 +8,7 @@
 
 class AGameOverPlayerController;
 class FSharedContentHandle;
-/**
- * 
- */
+
 UCLASS()
 class EARTHHERO_API AGameOverGameMode : public AGameModeBase
 {

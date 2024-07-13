@@ -7,6 +7,7 @@
 #include "Components/EditableTextBox.h"
 #include "Components/ScrollBox.h"
 #include "Components/TextBlock.h"
+#include "EarthHero/EHGameInstance.h"
 #include "EarthHero/PlayerController/GameOverPlayerController.h"
 
 bool UGameOverWidget::Initialize()
@@ -14,8 +15,15 @@ bool UGameOverWidget::Initialize()
 	Super::Initialize();
 
 	Exit_Btn->OnClicked.AddDynamic(this, &UGameOverWidget::ExitClicked);
-	
 	Chat_Etb->OnTextCommitted.AddDynamic(this, &UGameOverWidget::ChatTextCommitted);
+
+
+	UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(GetGameInstance());
+	if(EHGameInstance)
+	{
+		if(EHGameInstance->bGameClear) GameResult_Tb->SetText(FText::FromString("Clear!"));
+		else GameResult_Tb->SetText(FText::FromString("Defeat?"));
+	}
 	
 	return true;
 }

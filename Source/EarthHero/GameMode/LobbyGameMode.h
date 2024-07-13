@@ -18,7 +18,7 @@ class EARTHHERO_API ALobbyGameMode : public AGameModeBase
 	GENERATED_BODY()
 
 protected:
-	virtual void BeginPlay();
+	virtual void BeginPlay() override;
 
 	int ReadyCount = 0;
 	
