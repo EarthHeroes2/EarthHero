@@ -46,13 +46,16 @@ private:
 	FTimerHandle ShootTimerHandle;
 	bool bCanFire = true;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true), Category = "Fire")
-	float FireRate = 0.1f;
+	float FireRate = 10.f;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true), Category = "Particle")
 	UParticleSystem* FireParticle;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true), Category = "Particle")
 	UParticleSystem* BulletHitParticle;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true), Category = "Weapon")
+	TSubclassOf<class AGrenade> GrenadeClass;
+	
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true), Category = "AnimMontage")
 	UAnimMontage* FPS_FireMontage;
 	

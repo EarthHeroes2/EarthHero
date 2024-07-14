@@ -87,17 +87,9 @@
   <component name="ChangeListManager">
     <list default="true" id="0cbbd613-fc41-47be-bbe4-1434fbbd246c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.EarthHero.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EarthHero.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Animations/Rigs/IK_Warrior.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Animations/Rigs/IK_WarriorMannequin.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Animations/Rigs/RTG_Warrior.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Assets/FPSAssets/IK_Mannequin_Arm.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Assets/FPSAssets/IK_Shooter_Arm.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Assets/FPSAssets/RTG_ShooterArm.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Assets/ParagonKwang/Characters/Heroes/Kwang/Meshes/FPS_Kwang.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/ParagonKwang/Characters/Heroes/Kwang/Meshes/FPS_Kwang.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Assets/ParagonKwang/Characters/Heroes/Kwang/Meshes/FPS_Kwang_Skeleton.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/ParagonKwang/Characters/Heroes/Kwang/Meshes/FPS_Kwang_Skeleton.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Assets/ParagonKwang/Characters/Heroes/Kwang/Meshes/TPS_Kwang_Skeleton.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/ParagonKwang/Characters/Heroes/Kwang/Meshes/TPS_Kwang_Skeleton.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Character/Warrior/BP_Warrior.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Character/Warrior/BP_Warrior.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/TestMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/TestMap.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Character/Shooter/BP_Shooter.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Character/Shooter/BP_Shooter.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/Shooter/ShooterCombatComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Shooter/ShooterCombatComponent.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/Shooter/ShooterCombatComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Shooter/ShooterCombatComponent.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
