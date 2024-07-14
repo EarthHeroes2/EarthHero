@@ -55,6 +55,7 @@ float UStatCalculationLibrary::CalShooterNormalDamage(FStatStructure &HeroStat, 
 	float resultDamage = 0.f;
 	if (HitInfo.BoneName == "head")
 	{
+		UE_LOG(LogClass, Warning, TEXT("HeadShot"));
 		resultDamage = 10 * HeroStat.NormalDamage * SH_HeadShot;
 	}
 	else
