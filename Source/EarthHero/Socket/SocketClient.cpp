@@ -8,74 +8,30 @@
 #include "Sockets/Public/Sockets.h"
 #include "Sockets/Public/SocketSubsystem.h"
 
-FString USocketClient::GetLobbyNameAndPrivateState()
-{
-	FString LobbyName;
-	FString IsPrivate;
-	
-	UWorld* World = GetWorld();
-	
-	if (World)
-	{
-		UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(World->GetGameInstance());
-		if(EHGameInstance)
-		{
-			LobbyName = EHGameInstance->LobbyName;
-			if(EHGameInstance->IsCheckedPrivate) IsPrivate = "true";
-			else IsPrivate = "false";
-			
-			UE_LOG(LogTemp, Log, TEXT("Lobby name : %s     Private : %s"), *LobbyName, *IsPrivate);
-		}
-	}
-	return LobbyName + "|" + IsPrivate;
-}
-
-FString USocketClient::GetPortNumber()
-{
-	FString PortNumber;
-	UWorld* World = GetWorld();
-	
-	if (World)
-	{
-		UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(World->GetGameInstance());
-		if(EHGameInstance)
-		{
-			PortNumber = EHGameInstance->ServerPortNumber;
-			UE_LOG(LogTemp, Log, TEXT("Server port: %s"), *PortNumber);
-		}
-	}
-
-	return PortNumber;
-}
 
 //필요한 리턴값이 있다면 리턴함
 //없다면 FString()리턴
-FString USocketClient::CreateSocket(FString RequestMessage)
+FString USocketClient::CreateSocket(const FString& RequestMessage, const FString& ExtraInfo)
 {
 	FSocket* Socket;
 	Socket = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateSocket(NAME_Stream, "TCPSocket", false);
 	
 	FIPv4Address IP;
-	if(RequestMessage.Equals("CreateLobby")) FIPv4Address::Parse("116.121.57.64", IP); //음...
-	else if(RequestMessage.Equals("DestroyServer")) FIPv4Address::Parse("127.0.0.1", IP); //임시
-
-	//FInternetAddr 클래스에 네트워크 정보를 저장?
-	TSharedRef<FInternetAddr> Addr = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateInternetAddr();
-	Addr->SetIp(IP.Value);
-	Addr->SetPort(7777);
-
+	if(RequestMessage.Equals("CreateLobby")) FIPv4Address::Parse("116.121.57.64", IP); //뭘로 감출까
+	else if(RequestMessage.Equals("DestroyServer") ||
+			RequestMessage.Equals("UpdateData")) FIPv4Address::Parse("127.0.0.1", IP);
 	
-	bool bConnected = Socket->Connect(*Addr);
+	TSharedRef<FInternetAddr> Address = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateInternetAddr();
+	Address->SetIp(IP.Value);
+	Address->SetPort(7777);
+
+	bool bConnected = Socket->Connect(*Address);
 	if (bConnected)
 	{
-		
 		int32 BytesSent = 0;
 		FString SendMessage;
 		
-		if(RequestMessage.Equals("CreateLobby"))
-			SendMessage = RequestMessage + "|" + GetLobbyNameAndPrivateState();
-		else if(RequestMessage.Equals("DestroyServer"))
-			SendMessage = RequestMessage + "|" + GetPortNumber(); 
+		SendMessage = RequestMessage + "|" + ExtraInfo;
 		
 		UE_LOG(LogTemp, Log, TEXT("Send Message: %s"), *SendMessage);
 

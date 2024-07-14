@@ -25,7 +25,9 @@ public class EarthHero : ModuleRules
                 "Paper2D",
                 "Steamworks",
                 "Sockets",
-                "Networking"
+                "Networking",
+                "SQLiteCore",
+                "SQLiteSupport"
             }
         );
 

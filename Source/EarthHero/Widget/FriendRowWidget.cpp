@@ -37,14 +37,21 @@ void UFriendRowWidget::InviteClicked()
 	if (Subsystem)
 	{
 		IOnlineSessionPtr Sessions = Subsystem->GetSessionInterface();
-		if (Sessions.IsValid())
+		IOnlineIdentityPtr Identity = Subsystem->GetIdentityInterface();
+		if (Sessions.IsValid() && Identity.IsValid())
 		{
-			FUniqueNetIdPtr FriendNetId = Subsystem->GetIdentityInterface()->CreateUniquePlayerId(FriendInfo->GetUserId()->ToString());
+			FUniqueNetIdPtr FriendNetId = Identity->CreateUniquePlayerId(FriendInfo->GetUserId()->ToString());
+			
 			if (FriendNetId.IsValid())
 			{
 				TArray<TSharedRef<const FUniqueNetId>> FriendsToInvite;
 				FriendsToInvite.Add(FriendNetId.ToSharedRef());
-				Sessions->SendSessionInviteToFriend(0, "MainSession", *FriendNetId);
+
+				if (Sessions->SendSessionInviteToFriend(0, "SessionName", *FriendNetId))
+				{
+					UE_LOG(LogTemp, Log, TEXT("Invite sent successfully to %s"), *FriendNetId->ToString());
+				}
+				else UE_LOG(LogTemp, Warning, TEXT("Failed to send invite to %s"), *FriendNetId->ToString());
 			}
 		}
 	}

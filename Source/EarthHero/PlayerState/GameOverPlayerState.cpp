@@ -3,6 +3,7 @@
 
 #include "GameOverPlayerState.h"
 #include "EarthHero/GameMode/GameOverGameMode.h"
+#include "EarthHero/Socket/SocketClient.h"
 
 void AGameOverPlayerState::BeginPlay()
 {
@@ -26,9 +27,8 @@ void AGameOverPlayerState::TestFunc()
 		{
 			//플레이어 정보 저장
 
-
-
-			
+			USocketClient* NewSocket = NewObject<USocketClient>(this);
+			if(NewSocket) NewSocket->CreateSocket("UpdateData", "54321");
 		}
 	}
 }
