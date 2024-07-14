@@ -76,6 +76,18 @@ bool UMainMenuWidget::Initialize()
 		ButtonArray.Add(CreateLobbyCancle_Btn);
 	}
 
+	if(PasswordOK_Btn)
+	{
+		PasswordOK_Btn->OnClicked.AddDynamic(this, &ThisClass::PasswordOKBtnClicked);
+		ButtonArray.Add(PasswordOK_Btn);
+		PasswordOK_Btn->SetIsEnabled(false);
+	}
+	if(PasswordCancle_Btn)
+	{
+		PasswordCancle_Btn->OnClicked.AddDynamic(this, &ThisClass::PasswordCancleBtnClicked);
+		ButtonArray.Add(PasswordCancle_Btn);
+	}
+
 	if(LobbyList_Btn)
 	{
 		LobbyList_Btn->OnClicked.AddDynamic(this, &ThisClass::LobbyListBtnClicked);
@@ -88,6 +100,7 @@ bool UMainMenuWidget::Initialize()
 	}
 
 	if(LobbyName_Etb) LobbyName_Etb->OnTextChanged.AddDynamic(this, &ThisClass::LobbyNameEtbChanged);
+	if(Password_Etb) Password_Etb->OnTextChanged.AddDynamic(this, &ThisClass::PasswordEtbChanged);
 
 	return true;
 }
@@ -154,10 +167,15 @@ void UMainMenuWidget::Exit_BtnClicked()
 void UMainMenuWidget::LobbyNameEtbChanged(const FText& Text)
 {
 	if (CreateLobbyOK_Btn)
-	{
 		CreateLobbyOK_Btn->SetIsEnabled(!Text.IsEmpty());
-	}
 }
+
+void UMainMenuWidget::PasswordEtbChanged(const FText& Text)
+{
+	if (PasswordOK_Btn)
+		PasswordOK_Btn->SetIsEnabled(!Text.IsEmpty());
+}
+
 
 void UMainMenuWidget::CreateLobbyOKBtnClicked()
 {
@@ -165,11 +183,12 @@ void UMainMenuWidget::CreateLobbyOKBtnClicked()
 	
 	FString LobbyName = LobbyName_Etb->GetText().ToString();
 	FString IsPrivate;
+	FString Password = PasswordSetting_Etb->GetText().ToString();
 	
 	if(Private_Cb->IsChecked()) IsPrivate = "true";
 	else IsPrivate = "false";
 
-	FString ExtraInfo = LobbyName + "|" + IsPrivate;
+	FString ExtraInfo = LobbyName + "|" + IsPrivate + "|" + Password;
 	
 	USocketClient* NewSocket = NewObject<USocketClient>(this);
 	if(NewSocket) ReceivedLobbyPort = NewSocket->CreateSocket("CreateLobby", ExtraInfo);
@@ -188,6 +207,41 @@ void UMainMenuWidget::CreateLobbyCancleBtnClicked()
 {
 	LobbySetting_Bd->SetVisibility(ESlateVisibility::Collapsed);
 }
+
+
+void UMainMenuWidget::PasswordOKBtnClicked()
+{
+	SetButtonsEnabled(false);
+
+	//선택한 서버와 비번 비교
+	FString Password = Password_Etb->GetText().ToString();
+	FString ServerPort;
+	SelectedLobbyInfo.Session.SessionSettings.Get("PortNumber", ServerPort);
+	
+	FString ExtraInfo = ServerPort + "|" + Password;
+	FString CompareResult;
+	
+	USocketClient* NewSocket = NewObject<USocketClient>(this);
+	if(NewSocket)
+		CompareResult = NewSocket->CreateSocket("ComparePassword", ExtraInfo);
+	
+	if(CompareResult == "true")
+	{
+		UE_LOG(LogTemp, Error, TEXT("correct password!!!!!"));
+		ServerRowClicked();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to Join Lobby (wrong password)"));
+		SetButtonsEnabled(true);
+	}
+}
+void UMainMenuWidget::PasswordCancleBtnClicked()
+{
+	Password_Bd->SetVisibility(ESlateVisibility::Collapsed);
+}
+
+
 
 void UMainMenuWidget::CreateLobbyWait()
 {
@@ -287,6 +341,41 @@ void UMainMenuWidget::UpdateLobbyList(TArray<FOnlineSessionSearchResult> FindLob
 	SetButtonsEnabled(true);
 }
 
+void UMainMenuWidget::PrivateServerRowClicked()
+{
+	if(Password_Bd)
+	{
+		if(Password_Bd->GetVisibility() == ESlateVisibility::Collapsed)
+			Password_Bd->SetVisibility(ESlateVisibility::Visible);
+		else
+			Password_Bd->SetVisibility(ESlateVisibility::Collapsed);
+	}
+}
+
+void UMainMenuWidget::ServerRowClicked()
+{
+	IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
+	if (Subsystem)
+	{
+		IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
+		if (Session.IsValid())
+		{
+			FString ConnectString2;
+			if (Session->GetResolvedConnectString(SelectedLobbyInfo, NAME_GamePort, ConnectString))
+			{
+				FOnlineSessionSearchResult* SessionToJoin2 = &SelectedLobbyInfo;
+				if (SessionToJoin)
+				{
+					ConnectString = ConnectString2;
+					SessionToJoin = SessionToJoin2;
+
+					LeaveSession("JoinSelectedLobby");
+				}
+			}
+		}
+	}
+}
+
 //메인메뉴 모든 버튼의 enalbed 설정
 void UMainMenuWidget::SetButtonsEnabled(bool bEnabled)
 {
@@ -373,7 +462,7 @@ void UMainMenuWidget::HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRe
 								(
 									(FindSessionReason == "JoinLobby" && NumberOfJoinedPlayers > 0 && bAdvertise) ||
 									(FindSessionReason == "CreateLobby" && PortNumber == ReceivedLobbyPort) ||
-									(FindSessionReason == "FindLobby" && bAdvertise) //임시로 공개방만 찾음
+									(FindSessionReason == "FindLobby" && NumberOfJoinedPlayers > 0)
 								)
 							)
                     	{

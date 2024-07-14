@@ -72,12 +72,21 @@ private:
 
 	UFUNCTION()
 	void LobbyNameEtbChanged(const FText& Text);
+	UFUNCTION()
+	void PasswordEtbChanged(const FText& Text);
 
 	UFUNCTION()
 	void CreateLobbyOKBtnClicked();
 
 	UFUNCTION()
 	void CreateLobbyCancleBtnClicked();
+
+	UFUNCTION()
+	void PasswordOKBtnClicked();
+	UFUNCTION()
+	void PasswordCancleBtnClicked();
+
+	
 	void CreateLobbyWait();
 
 	void MenuTearDown();
@@ -89,12 +98,29 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	UEditableTextBox* LobbyName_Etb;
+
+	UPROPERTY(meta = (BindWidget))
+	UEditableTextBox* PasswordSetting_Etb;
 	
 	UPROPERTY(meta = (BindWidget))
 	UButton* CreateLobbyOK_Btn;
 
 	UPROPERTY(meta = (BindWidget))
 	UButton* CreateLobbyCancle_Btn;
+
+	
+	
+	UPROPERTY(meta = (BindWidget))
+	UBorder* Password_Bd;
+
+	UPROPERTY(meta = (BindWidget))
+	UEditableTextBox* Password_Etb;
+	
+	UPROPERTY(meta = (BindWidget))
+	UButton* PasswordOK_Btn;
+
+	UPROPERTY(meta = (BindWidget))
+	UButton* PasswordCancle_Btn;
 
 
 	
@@ -122,6 +148,9 @@ private:
 	void HandleJoinSessionCompleted(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
 public:
 	void LeaveSession(FString Reason);
+	void PrivateServerRowClicked();
+	void ServerRowClicked();
+
 private:
 	void DestroySessionComplete(FName SessionName, bool bWasSuccessful);
 	
@@ -133,7 +162,8 @@ private:
 	
 	//주요 버튼들 저장
 	TArray<UButton*> ButtonArray;
-
+public:
+	FOnlineSessionSearchResult SelectedLobbyInfo;
 
 
 protected:

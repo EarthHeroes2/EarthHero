@@ -25,12 +25,21 @@ void ULobbyRowWidget::UpdateLobbyInfo(FOnlineSessionSearchResult Lobby)
 {
 	LobbyInfo = Lobby;
 	
+	bool bKeyValueFound = LobbyInfo.Session.SessionSettings.Get("Advertise", bAdvertise);
+
+	if(bKeyValueFound)
+	{
+		if(bAdvertise)
+		{
+			SetColorAndOpacity(FLinearColor::Red);
+		}
+	}
+	
 	FString LobbyName;
-	bool bKeyValueFound = LobbyInfo.Session.SessionSettings.Get("LobbyName", LobbyName);
+	bKeyValueFound = LobbyInfo.Session.SessionSettings.Get("LobbyName", LobbyName);
 
 	if(bKeyValueFound) LobbyName_Tb->SetText(FText::FromString(LobbyName));
 	else LobbyName_Tb->SetText(FText::FromString("Earth Hero"));
-
 	
 	int NumberOfJoinedPlayers;
 
@@ -46,35 +55,11 @@ void ULobbyRowWidget::UpdateLobbyInfo(FOnlineSessionSearchResult Lobby)
 
 void ULobbyRowWidget::JoinClicked()
 {
-	IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
-	if (Subsystem)
+	if (MainMenuWidget)
 	{
-		IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
-		if (Session.IsValid())
-		{
-			FString ConnectString;
-			
-			if (Session->GetResolvedConnectString(LobbyInfo, NAME_GamePort, ConnectString))
-			{
-				FOnlineSessionSearchResult* SessionToJoin = &LobbyInfo;
-				if (SessionToJoin)
-				{
-					if (MainMenuWidget)
-					{
-						MainMenuWidget->ConnectString = ConnectString;
-						MainMenuWidget->SessionToJoin = SessionToJoin;
-
-						MainMenuWidget->LeaveSession("JoinSelectedLobby");
-					}
-					else
-					{
-						UE_LOG(LogTemp, Error, TEXT("ParentWidget(MainMenuWidget) is not valid"));
-					}
-				}
-			}
-		}
+		MainMenuWidget->SelectedLobbyInfo = LobbyInfo;
+		
+		if(!bAdvertise) MainMenuWidget->PrivateServerRowClicked();
+		else MainMenuWidget->ServerRowClicked();
 	}
 }
-
-
-
