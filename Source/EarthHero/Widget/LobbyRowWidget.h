@@ -43,5 +43,6 @@ private:
 	UTextBlock* Ping_Tb;
 
 	FOnlineSessionSearchResult LobbyInfo;
-	
+
+	bool bAdvertise;
 };
