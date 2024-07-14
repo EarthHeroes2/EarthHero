@@ -172,45 +172,45 @@ void UHeroUpgradeComponent::ApplyHeroUpgrade_Implementation(int index)
 	switch (SelectHeroUpgrade.HeroUpgradeType)
 	{
 		case Pb_NormalAttackDamage :
-				UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
+			UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
 
-				UHeroUpgradeLibrary::Pb_NormalAttackDamage(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat());
-				break;
+			UHeroUpgradeLibrary::Pb_NormalAttackDamage(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat());
+			break;
 		case Pb_NormalAttackSpeed :
-				UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
+			UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
 
-				UHeroUpgradeLibrary::Pb_NormalAttackSpeed(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat());
-				break;
+			UHeroUpgradeLibrary::Pb_NormalAttackSpeed(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat());
+			break;
 		case Pb_AttackSkillDamage :
-				UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
+			UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
 
-				UHeroUpgradeLibrary::Pb_AttackSkillDamage(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat());
-				break;
+			UHeroUpgradeLibrary::Pb_AttackSkillDamage(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat());
+			break;
 		case Pb_AttackSkillCooldown :
-				UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
+			UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
 
-				UHeroUpgradeLibrary::Pb_AttackSkillCooldown(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat());
-				break;
+			UHeroUpgradeLibrary::Pb_AttackSkillCooldown(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat());
+			break;
 		case Pb_MovementSkillCooldown :
-				UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
+			UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
 
-				UHeroUpgradeLibrary::Pb_MovementSkillCooldown(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat());
-				break;
+			UHeroUpgradeLibrary::Pb_MovementSkillCooldown(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat());
+			break;
 		case Pb_MaxHealth :
-				UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
+			UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
 
-				UHeroUpgradeLibrary::Pb_MaxHealth(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat());
-				break;
+			UHeroUpgradeLibrary::Pb_MaxHealth(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat());
+			break;
 		case Pb_HealthRegenPerSecond :
-				UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
-		
-				UHeroUpgradeLibrary::Pb_HealthRegenPerSecond(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat());
-				break;
+			UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
+	
+			UHeroUpgradeLibrary::Pb_HealthRegenPerSecond(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat());
+			break;
 		case Pb_MovementSpeed :
-				UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
-		
-				UHeroUpgradeLibrary::Pb_MovementSpeed(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat());
-				break;
+			UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
+	
+			UHeroUpgradeLibrary::Pb_MovementSpeed(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat());
+			break;
 		case Wr_Berserker :
 			break;
 		case Wr_Guardian :
@@ -228,12 +228,24 @@ void UHeroUpgradeComponent::ApplyHeroUpgrade_Implementation(int index)
 		case Mc_Teleport :
 			break;
 		case St_Headshot :
+			UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
+			
+			UHeroUpgradeLibrary::St_Headshot(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat(), ShooterStatComponent);
 			break;
 		case St_IncreasedAmmoCapacity :
+			UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
+			
+			UHeroUpgradeLibrary::St_IncreasedAmmoCapacity(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat(), ShooterStatComponent);
 			break;
 		case St_GrenadeEnhancement :
+			UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
+			
+			UHeroUpgradeLibrary::St_GrenadeEnhancement(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat(), ShooterStatComponent);
 			break;
 		case St_RocketBooster :
+			UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
+			
+			UHeroUpgradeLibrary::St_RocketBooster(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat(), ShooterStatComponent);
 			break;
 		case Ac_PoisonedArrows :
 			break;
@@ -246,7 +258,23 @@ void UHeroUpgradeComponent::ApplyHeroUpgrade_Implementation(int index)
 		default :
 			UE_LOG(LogClass, Error, TEXT("HeroUpgradeComponent.ApplyHeroUpgrade : Not Valid Hero Upgrade"));
 	}
-	
+
+	//서버에서 수동으로 해줘야 할 업데이트
+	switch (OwnerClass)
+	{
+		case Warrior :
+			WarriorStatComponent->OnRep_HeroStat();
+			break;
+		case Mechanic :
+			MechanicStatComponent->OnRep_HeroStat();
+		break;
+		case Shooter :
+			ShooterStatComponent->OnRep_HeroStat();
+		break;
+		case Archer :
+			ArcherStatComponent->OnRep_HeroStat();
+		break;
+	}
 	Update_TabHeroUpgrades(HeroUpgrades);
 }
 

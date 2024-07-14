@@ -41,7 +41,8 @@ void UShooterCombatComponent::Fire()
 		FVector MuzzleLocation = Shooter->GetEquippedWeapon()->GetSocketLocation(FName("FireSocket"));
 		
 		Server_Fire(StartLocation, EndLocation, MuzzleLocation);
-		
+
+		//UE_LOG(LogClass, Warning, TEXT("FireRate = %f"), FireRate);
 		Shooter->GetWorldTimerManager().SetTimer(ShootTimerHandle, this, &ThisClass::ResetFire, FireRate, false);
 	}
 }

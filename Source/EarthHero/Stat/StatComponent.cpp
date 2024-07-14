@@ -14,6 +14,7 @@
 #include "TimerManager.h"  // FTimerHandle과 TimerManager를 사용하기 위해 필요
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
+#include "EarthHero/Character/Shooter/EHShooter.h"
 #include "EarthHero/GameMode/PlayingGameMode.h"
 #include "EarthHero/HUD/InGameHUD.h"
 #include "EarthHero/HUD/TabHUDWidget.h"

@@ -58,6 +58,8 @@ void AEHShooter::PossessedBy(AController* NewController)
 		if (ShooterStatComponent)
 		{
 			UE_LOG(LogClass, Warning, TEXT("EHShooter: SUCCESS load ShooterStatComponent"));
+			CombatComponent->SetFireRate(ShooterStatComponent->CalFireRate());
+			ShooterStatComponent->Shooter = this;
 		}
 		else
 		{

@@ -89,6 +89,9 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Stat")
 	float GetJumpPower() const;
 
+	UFUNCTION()
+	virtual void OnRep_HeroStat();
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -99,9 +102,6 @@ protected:
 	
 	UPROPERTY(ReplicatedUsing = OnRep_BaseHeroStat)
 	FStatStructure BaseHeroStat;
-
-	UFUNCTION()
-	void OnRep_HeroStat();
 
 	UFUNCTION()
 	void OnRep_BaseHeroStat();	

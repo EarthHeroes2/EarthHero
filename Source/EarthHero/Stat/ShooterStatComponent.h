@@ -25,7 +25,7 @@ public:
 	float SH_FlightTime = 4.f;
 	//로켓 비행 이동 속도
 	float SH_FLightSpeed = 1.5f;
-	//로켓 비행 간 공격 속도(HeroStat.AttackSpeed에 합연산)
+	//로켓 비행 간 공격 속도(HeroStat.AttackSpeed에 합 연산)
 	float SH_FlightAttackSpeed = 0.f;
 	
 	//헤드샷 피해
@@ -44,6 +44,9 @@ public:
 	int32 HU_EnhnacedGenerate = 0;
 	//부스터 로켓 강화
 	int32 HU_EnhancedBooster = 0;
+
+	UPROPERTY()
+	class AEHShooter *Shooter;
 	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -54,14 +57,11 @@ public:
 	UFUNCTION(BlueprintCallable, Reliable, Server)
 	void ShooterGrenadeDamage(AActor* DamagedActor);
 
+	float CalFireRate();
+	
+	virtual void OnRep_HeroStat() override;
+
 protected:
 	virtual void BeginPlay() override;
-
-private:
-
-	virtual void InitializeStatData_Implementation() override;
-	
-	UPROPERTY()
-	class AEHShooter *Shooter;
 	
 };
