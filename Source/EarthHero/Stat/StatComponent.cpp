@@ -143,11 +143,6 @@ void UStatComponent::InitializeStatData_Implementation()
 	//}
 }
 
-bool UStatComponent::InitializeStatData_Validate()
-{
-	return true;
-}
-
 
 /*경험치 획득 시 외부에서 호출하는 함수 (서버에서 호출해야 함)
  *float ExpMount : 얻은 경험치

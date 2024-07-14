@@ -79,13 +79,15 @@
   <component name="ChangeListManager">
     <list default="true" id="4591bad7-fd9f-4860-903f-8700cd913377" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_IngameHUDHeroUpgrade.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_IngameHUDHeroUpgrade.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/TestMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/TestMap.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/HUD/InGameHUD.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/InGameHUD.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/HUD/InGameHUD.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/InGameHUD.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/HUD/TabHUDWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/TabHUDWidget.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/HUD/TabHUDWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/TabHUDWidget.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Stat/HeroUpgradeComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Stat/HeroUpgradeComponent.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/ForceField/BP_ForceField.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/ForceField/BP_ForceField.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/ForceFieldTestMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/ForceFieldTestMap.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ForceFieldTestMap/1/BF/KP1E7RPEJUCAQ31T4FZ2GS.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ForceFieldTestMap/8/8X/6CZZFUMMPICLV6UMKQ8JL5.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ForceFieldTestMap/9/DK/LJY09TZRHOS2QW23Q5LBZK.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ForceFieldTestMap/A/AB/WBW9YD1T2I2SR2WO1M1ADL.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ForceFieldTestMap/E/9M/UBBNCY1BB1QEYADD7JVR4S.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/ForceField/BossZone.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/ForceField/BossZone.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/ForceField/BossZone.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/ForceField/BossZone.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -297,6 +299,8 @@
       <workItem from="1720714634428" duration="1094000" />
       <workItem from="1720715870531" duration="1028000" />
       <workItem from="1720850763412" duration="3718000" />
+      <workItem from="1720943467462" duration="142000" />
+      <workItem from="1720943778105" duration="731000" />
     </task>
     <servers />
   </component>
