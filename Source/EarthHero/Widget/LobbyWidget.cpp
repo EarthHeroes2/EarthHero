@@ -50,15 +50,6 @@ bool ULobbyWidget::Initialize()
 	Private_Cb->OnCheckStateChanged.AddDynamic(this, &ULobbyWidget::ChangePrivateState);
 
 	Exit_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::ExitClicked);
-
-	UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(GetWorld()->GetGameInstance());
-	if (EHGameInstance)
-	{
-		if (EHGameInstance->IsCheckedPrivate) Private_Cb->SetCheckedState(ECheckBoxState::Checked);
-		else Private_Cb->SetCheckedState(ECheckBoxState::Unchecked);
-	}
-
-	//친구 불러오기
 	
 	IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
 	if (Subsystem)

@@ -61,7 +61,7 @@ void ALobbyGameSession::CreateSession(FString PortNumber)
             SessionSettings->bUseLobbiesIfAvailable = false; // 무조건 false여야 함
             SessionSettings->bAllowInvites = true;
             SessionSettings->bAllowJoinInProgress = false;
-            SessionSettings->bShouldAdvertise = false; //일단 무조건 public
+            SessionSettings->bShouldAdvertise = true; //일단 무조건 public
             
             //SessionSettings->bUsesStats = false; // 업적관련?
             //SessionSettings->bAntiCheatProtected = true; // 지원하나?
@@ -423,6 +423,18 @@ void ALobbyGameSession::NewHostFind()
 //한 클라이언트에게 방장 할당
 void ALobbyGameSession::HostAssignment(APlayerController* HostPlayer)
 {
+    bool bAdvertise = true;
+    
+    ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
+    if (LobbyGameMode)
+    {
+        ALobbyGameSession* LobbyGameSession = Cast<ALobbyGameSession>(LobbyGameMode->GameSession);
+        if (LobbyGameSession)
+        {
+            bAdvertise = LobbyGameSession->GetAdvertiseState();
+        }
+    }
+    
     if (HostPlayer)
     {
         ALobbyPlayerController* LobbyPlayerController = Cast<ALobbyPlayerController>(HostPlayer);
@@ -430,36 +442,39 @@ void ALobbyGameSession::HostAssignment(APlayerController* HostPlayer)
         {
             UE_LOG(LogTemp, Log, TEXT("Host Assignment : %s"), *HostPlayerId->ToString());
 
-            IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
-            if (Subsystem)
-            {
-                IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
-                if (Session.IsValid())
-                {
-                    FOnlineSessionSettings* SessionSettings = Session->GetSessionSettings(SessionName);
-                    if (SessionSettings)
-                    {
-                        FOnlineSessionSetting* AdvertiseState = SessionSettings->Settings.Find("Advertise");
-                        if(AdvertiseState)
-                        {
-                            bool bAdvertise = AdvertiseState->Data.ToString().ToBool();
-                            if(bAdvertise)
-                            {
-                                UE_LOG(LogTemp, Log, TEXT("Current Advertise : true"));
-                            }
-                            else UE_LOG(LogTemp, Log, TEXT("Current Advertise : false"));
-
-                            LobbyPlayerController->bHost = true;
-                            LobbyPlayerController->Client_HostAssignment(true, false, bAdvertise); //advertise는 새로운 방장에게 현재 advertise 여부를 알리기 위함
-                        }
-                    }
-                    else
-                    {
-                        UE_LOG(LogTemp, Warning, TEXT("Failed to get advertise state"));
-                    }
-                }
-            }
-            
+            LobbyPlayerController->bHost = true;
+            LobbyPlayerController->Client_HostAssignment(true, bAdvertise);
         }
     }
+}
+
+bool ALobbyGameSession::GetAdvertiseState()
+{
+    IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
+    if (Subsystem)
+    {
+        IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
+        if (Session.IsValid())
+        {
+            FOnlineSessionSettings* SessionSettings = Session->GetSessionSettings(SessionName);
+            if (SessionSettings)
+            {
+                FOnlineSessionSetting* AdvertiseState = SessionSettings->Settings.Find("Advertise");
+                if(AdvertiseState)
+                {
+                    bool bAdvertise = AdvertiseState->Data.ToString().ToBool();
+                    if(bAdvertise)
+                    {
+                        UE_LOG(LogTemp, Log, TEXT("Current Advertise : true"));
+                    }
+                    else UE_LOG(LogTemp, Log, TEXT("Current Advertise : false"));
+
+                    return bAdvertise;
+                }
+            }
+            else UE_LOG(LogTemp, Warning, TEXT("Failed to get advertise state"));
+        }
+    }
+
+    return true; //임시
 }

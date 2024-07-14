@@ -162,17 +162,17 @@ void UMainMenuWidget::LobbyNameEtbChanged(const FText& Text)
 void UMainMenuWidget::CreateLobbyOKBtnClicked()
 {
 	SetButtonsEnabled(false);
+	
+	FString LobbyName = LobbyName_Etb->GetText().ToString();
+	FString IsPrivate;
+	
+	if(Private_Cb->IsChecked()) IsPrivate = "true";
+	else IsPrivate = "false";
 
-	//로비 정보 인스턴스에 임시 저장
-	UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(GetWorld()->GetGameInstance());
-	if (EHGameInstance)
-	{
-		EHGameInstance->LobbyName = LobbyName_Etb->GetText().ToString();
-		EHGameInstance->IsCheckedPrivate = Private_Cb->IsChecked();
-	}
+	FString ExtraInfo = LobbyName + "|" + IsPrivate;
 	
 	USocketClient* NewSocket = NewObject<USocketClient>(this);
-	if(NewSocket) ReceivedLobbyPort = NewSocket->CreateSocket("CreateLobby");
+	if(NewSocket) ReceivedLobbyPort = NewSocket->CreateSocket("CreateLobby", ExtraInfo);
 	if(!ReceivedLobbyPort.IsEmpty())
 	{
 		FTimerHandle Handle;

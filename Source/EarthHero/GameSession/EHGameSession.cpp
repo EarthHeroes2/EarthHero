@@ -6,6 +6,7 @@
 #include "OnlineSubsystemUtils.h"
 #include "Interfaces/OnlineSessionInterface.h"
 #include "OnlineSessionSettings.h"
+#include "EarthHero/EHGameInstance.h"
 #include "EarthHero/Socket/SocketClient.h"
 
 
@@ -158,10 +159,22 @@ void AEHGameSession::HandleDestroySessionCompleted(FName EOSSessionName, bool bW
             DestroySessionDelegateHandle.Reset();
         }
     }
+
+    FString PortNumber;
+    UWorld* World = GetWorld();
+    if (World)
+    {
+        UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(World->GetGameInstance());
+        if(EHGameInstance)
+        {
+            PortNumber = EHGameInstance->ServerPortNumber;
+            UE_LOG(LogTemp, Log, TEXT("Server port: %s"), *PortNumber);
+        }
+    }
     
     //프로세스 종료
     USocketClient* NewSocket = NewObject<USocketClient>(this);
-    if(NewSocket) NewSocket->CreateSocket("DestroyServer");
+    if(NewSocket) NewSocket->CreateSocket("DestroyServer", PortNumber);
     FGenericPlatformMisc::RequestExit(false);
 }
 

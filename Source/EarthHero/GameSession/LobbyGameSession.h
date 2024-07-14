@@ -26,6 +26,8 @@ protected:
 public:
 	void ChangeAdvertiseState(bool bAdvertise);
 	void ChangeLobbyName(FString LobbyName);
+
+	bool GetAdvertiseState();
 	
 	void CreateSession(FString PortNumber);
 protected:
