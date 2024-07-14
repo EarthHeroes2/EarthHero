@@ -5,8 +5,6 @@
 
 #include "MainMenuWidget.h"
 #include "OnlineSessionSettings.h"
-#include "Interfaces/OnlineSessionInterface.h"
-#include "OnlineSubsystem.h"
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
 

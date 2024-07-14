@@ -68,7 +68,6 @@ bool UMainMenuWidget::Initialize()
 	{
 		CreateLobbyOK_Btn->OnClicked.AddDynamic(this, &ThisClass::CreateLobbyOKBtnClicked);
 		ButtonArray.Add(CreateLobbyOK_Btn);
-		CreateLobbyOK_Btn->SetIsEnabled(false);
 	}
 	if(CreateLobbyCancle_Btn)
 	{
@@ -80,7 +79,6 @@ bool UMainMenuWidget::Initialize()
 	{
 		PasswordOK_Btn->OnClicked.AddDynamic(this, &ThisClass::PasswordOKBtnClicked);
 		ButtonArray.Add(PasswordOK_Btn);
-		PasswordOK_Btn->SetIsEnabled(false);
 	}
 	if(PasswordCancle_Btn)
 	{
@@ -98,9 +96,6 @@ bool UMainMenuWidget::Initialize()
 		FindLobby_Btn->OnClicked.AddDynamic(this, &ThisClass::FindLobbyBtnClicked);
 		ButtonArray.Add(FindLobby_Btn);
 	}
-
-	if(LobbyName_Etb) LobbyName_Etb->OnTextChanged.AddDynamic(this, &ThisClass::LobbyNameEtbChanged);
-	if(Password_Etb) Password_Etb->OnTextChanged.AddDynamic(this, &ThisClass::PasswordEtbChanged);
 
 	return true;
 }
@@ -163,20 +158,6 @@ void UMainMenuWidget::Exit_BtnClicked()
 	}
 }
 
-
-void UMainMenuWidget::LobbyNameEtbChanged(const FText& Text)
-{
-	if (CreateLobbyOK_Btn)
-		CreateLobbyOK_Btn->SetIsEnabled(!Text.IsEmpty());
-}
-
-void UMainMenuWidget::PasswordEtbChanged(const FText& Text)
-{
-	if (PasswordOK_Btn)
-		PasswordOK_Btn->SetIsEnabled(!Text.IsEmpty());
-}
-
-
 void UMainMenuWidget::CreateLobbyOKBtnClicked()
 {
 	SetButtonsEnabled(false);
@@ -184,10 +165,20 @@ void UMainMenuWidget::CreateLobbyOKBtnClicked()
 	FString LobbyName = LobbyName_Etb->GetText().ToString();
 	FString IsPrivate;
 	FString Password = PasswordSetting_Etb->GetText().ToString();
-	
+
 	if(Private_Cb->IsChecked()) IsPrivate = "true";
 	else IsPrivate = "false";
 
+	if(LobbyName.IsEmpty()) LobbyName = "Earth Hero"; //기본값
+	if(IsPrivate == "true" && Password.IsEmpty())
+	{
+		PasswordSetting_Etb->SetHintText(FText::FromString("No Blank")); //어차피 공개방이라 아무값이나 줌
+		SetButtonsEnabled(true);
+		return;
+	}
+	else if(IsPrivate == "false" && Password.IsEmpty()) Password = "123";
+
+	
 	FString ExtraInfo = LobbyName + "|" + IsPrivate + "|" + Password;
 	
 	USocketClient* NewSocket = NewObject<USocketClient>(this);

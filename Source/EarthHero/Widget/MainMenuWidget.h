@@ -69,11 +69,7 @@ private:
 
 	UFUNCTION()
 	void Exit_BtnClicked();
-
-	UFUNCTION()
-	void LobbyNameEtbChanged(const FText& Text);
-	UFUNCTION()
-	void PasswordEtbChanged(const FText& Text);
+	
 
 	UFUNCTION()
 	void CreateLobbyOKBtnClicked();
