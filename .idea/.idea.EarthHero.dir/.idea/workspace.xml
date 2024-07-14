@@ -87,6 +87,16 @@
   <component name="ChangeListManager">
     <list default="true" id="0cbbd613-fc41-47be-bbe4-1434fbbd246c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.EarthHero.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EarthHero.dir/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Animations/Rigs/IK_Warrior.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Animations/Rigs/IK_WarriorMannequin.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Animations/Rigs/RTG_Warrior.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/FPSAssets/IK_Mannequin_Arm.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/FPSAssets/IK_Shooter_Arm.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/FPSAssets/RTG_ShooterArm.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/ParagonKwang/Characters/Heroes/Kwang/Meshes/FPS_Kwang.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/ParagonKwang/Characters/Heroes/Kwang/Meshes/FPS_Kwang.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/ParagonKwang/Characters/Heroes/Kwang/Meshes/FPS_Kwang_Skeleton.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/ParagonKwang/Characters/Heroes/Kwang/Meshes/FPS_Kwang_Skeleton.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/ParagonKwang/Characters/Heroes/Kwang/Meshes/TPS_Kwang_Skeleton.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/ParagonKwang/Characters/Heroes/Kwang/Meshes/TPS_Kwang_Skeleton.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Character/Warrior/BP_Warrior.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Character/Warrior/BP_Warrior.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Maps/TestMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/TestMap.umap" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -100,11 +110,15 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/Plugins/MultiplayerSessions/Source/MultiplayerSessions/Private/Menu.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Plugins/MultiplayerSessions/Source/MultiplayerSessions/Public/Menu.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/EarthHero/Character/EHAnimInstanceBase.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/EarthHero/Character/EHAnimInstanceBase.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/EarthHero/Character/EHCharacter.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/EarthHero/Character/EHCharacter.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/EarthHero/Character/Shooter/EHShooter.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/EarthHero/Character/Shooter/EHShooterAnimInstance.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/EarthHero/Character/Shooter/EHShooterAnimInstance.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/EarthHero/Character/Shooter/ShooterCombatComponent.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/EarthHero/Character/Warrior/TPSWarriorAnimInstance.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/EarthHero/EHComponents/CombatComponent.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/EarthHero/EHComponents/CombatComponent.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/EarthHero/HUD/InGameHUD.h" root0="FORCE_HIGHLIGHTING" />
@@ -113,6 +127,7 @@
     <setting file="file://$PROJECT_DIR$/Source/EarthHero/Stat/StatComponent.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/EarthHero/Stat/StatComponent.h" root0="FORCE_HIGHLIGHTING" />
   </component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="false" />
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 0
@@ -28820,4 +28835,5 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="false" />
 </project>
