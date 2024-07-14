@@ -2,7 +2,6 @@
 #include <ws2tcpip.h>
 #include <cstdio>
 #include <string>
-#include <map>
 #include <thread>
 #include <cstring>
 #include <vector>
@@ -16,8 +15,8 @@ using namespace std;
 #define MAX_BUFFER_LENGTH 1000
 
 
-map<int, PROCESS_INFORMATION> ProcessInfoMap;
 int bLobbyExist[MAX_NUM_SERVERS] = {false, };
+string lobbyPassword[MAX_NUM_SERVERS];
 
 
 vector<string> StringTokenizer(char *str)
@@ -61,28 +60,29 @@ void CreateNewLobbyInstance(const wchar_t* Command, int LobbyNumber)
         &pi )
     )
     {
-        printf("CreateProcess failed: %d\n", GetLastError());
+        printf("CreateProcess failed: %lu\n", GetLastError());
         return;
     }
-
-    ProcessInfoMap.insert({LobbyNumber, pi}); //{로비 번호,프로세스 정보} 저장
+    
     bLobbyExist[LobbyNumber] = true;
     
     CloseHandle(pi.hProcess);
     CloseHandle(pi.hThread);
 }
 
-string CreateNewLobby(const string *lobbyName, const string *isPrivate)
+string CreateNewLobby(const string *lobbyName, const string *isPrivate, const string *password)
 {
     string unrealPath = "C:\\UnrealEngine-5.1.1-release\\Engine\\Binaries\\Win64\\UnrealEditor.exe"; //소스빌드 UnrealEditor.exe 경로
     string projectPath = "C:\\Git\\EarthHero\\EarthHero.uproject"; //우리 프로젝트 uproject 경로
     string portNumber = "";
-    
-    for(int LobbyNumber = 0; LobbyNumber < MAX_NUM_SERVERS; LobbyNumber++)
+
+    for(int lobbyNumber = 0; lobbyNumber < MAX_NUM_SERVERS; lobbyNumber++)
     {
-        if(!bLobbyExist[LobbyNumber])
+        if(!bLobbyExist[lobbyNumber])
         {
-            portNumber = to_string(LobbyNumber + 7778);
+            lobbyPassword[lobbyNumber] = *password; //비번 할당
+            
+            portNumber = to_string(lobbyNumber + 7778);
             string command = unrealPath + " " + projectPath + " Lobby -server -log"
                             + " -Port=" + portNumber
                             + " -QueryPort=" + to_string(stoi(portNumber) + 19238)
@@ -92,7 +92,7 @@ string CreateNewLobby(const string *lobbyName, const string *isPrivate)
             //문자열 변환...
             std::wstring wCommand(command.begin(), command.end());
             const wchar_t* wCharCommand = wCommand.c_str();   
-            CreateNewLobbyInstance(wCharCommand, LobbyNumber);
+            CreateNewLobbyInstance(wCharCommand, lobbyNumber);
             
             return portNumber;
         }
@@ -172,35 +172,58 @@ int main()
         if (iResult > 0)
         {
             vector<string> tokens = StringTokenizer(buffer); //토큰으로 자르고
-            int NumTokens = tokens.size();
+            int numTokens = tokens.size();
 
-            string Request = tokens[0];
+            string request = tokens[0];
             
-            if(Request == "CreateLobby" && NumTokens == 3)
+            if(request == "CreateLobby" && numTokens == 4)
             {
                 //새로운 서버 열고 해당 포트 번호 리턴
-                string NewServerPortString = CreateNewLobby(&tokens[1], &tokens[2]); 
-                const char* NewServerPort = NewServerPortString.c_str();
-                
+                string newServerPortString = CreateNewLobby(&tokens[1], &tokens[2], &tokens[3]); 
+                const char* newServerPort = newServerPortString.c_str();
 
                 //플레이어에게 접속할 포트 번호 알려줌
-                send(ClientSocket,  NewServerPort, strlen( NewServerPort) + 1, 0); 
+                send(ClientSocket, newServerPort, strlen(newServerPort) + 1, 0);
                 
-                printf("Send new server port : %s\n",  NewServerPort);
+                printf("Send new server port : %s\n",  newServerPort);
             }
-            else if(Request == "DestroyServer" && NumTokens == 2)
+            else if(request == "DestroyServer" && numTokens == 2)
             {
-                string DestroyServerPort = tokens[1];
+                string destroyServerPort = tokens[1];
                 
-                printf("Destroy server port : %s\n", DestroyServerPort.c_str());
+                printf("Destroy server port : %s\n", destroyServerPort.c_str());
                 
-                int LobbyNumber = stoi(DestroyServerPort) - 7778;
-                ProcessInfoMap.erase(LobbyNumber);
-                bLobbyExist[LobbyNumber] = false;
+                int lobbyNumber = stoi(destroyServerPort) - 7778;
+                bLobbyExist[lobbyNumber] = false;
+            }
+            else if(request == "ComparePassword" && numTokens == 3)
+            {
+                int selectedLobbyNumber = stoi(tokens[1]) - 7778;
+                string password = tokens[2];
+
+                printf("Receive Password : %s         Correct Password : %s\n", password.c_str(), lobbyPassword[selectedLobbyNumber].c_str());
+
+                string compareResultString;
+                if(password == lobbyPassword[selectedLobbyNumber])
+                {
+                    printf("equal\n");
+                    compareResultString = "true";
+                }
+                else
+                {
+                    printf("not equal\n");
+                    compareResultString = "false";
+                }
+                const char* compareResult = compareResultString.c_str();
+                send(ClientSocket, compareResult, strlen(compareResult) + 1, 0);
+            }
+            else if(request == "UpdateData") // 미구현
+            {
+                printf("data : %s\n", tokens[1].c_str());
             }
             else
             {
-                printf("Invalid request : %s\n", Request.c_str());
+                printf("Invalid request : %s\n", request.c_str());
             }
         }
         else
