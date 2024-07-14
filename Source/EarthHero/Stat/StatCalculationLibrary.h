@@ -20,5 +20,5 @@ public:
 	static float CalShooterGrenadeDamage(FStatStructure &HeroStat, float SH_GrenadeDamage);
 
 	UFUNCTION()
-	static bool AddExp(FStatStructure &HeroStat, int32 ExpMount);
+	static bool AddExp(FStatStructure &HeroStat, FStatStructure &BaseHeroStat, int32 ExpMount);
 };

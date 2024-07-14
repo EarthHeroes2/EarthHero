@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Structure/HeroUpgrageStructure.h"
+#include "Structure/StatStructure.h"
 #include "HeroUpgradeComponent.generated.h"
 
 
@@ -19,6 +20,9 @@ public:
 	void SetInGameHUD(class UInGameHUD *ControllerInGameHUD);
 
 	void SetTabHUD(class UTabHUDWidget *ControllerTabHUD);
+
+	void SetStatComponent(int PlayerClass, class UWarriorStatComponent *Wr, class UMechanicStatComponent *Mc, class UShooterStatComponent *Sh, class UArcherStatComponent *Ar);
+	//PlayerState에서 호출할 스텟 컴포넌트 가져오는 함수 짜야 함
 	
 	// 업그레이드 배열 목록
 	UPROPERTY(ReplicatedUsing=OnRep_HeroUpgrades, EditAnywhere, BlueprintReadWrite, Category = "Upgrade")
@@ -47,6 +51,12 @@ private:
 	TArray<FHeroUpgradeStructure> RandomUpgrades;
 
 	UPROPERTY()
+	int RandomUpgradesIndex[3];
+
+	FStatStructure &GetHeroStat();
+	FStatStructure &GetBaseHeroStat();
+
+	UPROPERTY()
 	UInGameHUD *InGameHUD;
 
 	UPROPERTY()
@@ -54,5 +64,19 @@ private:
 
 	UFUNCTION(Client, Reliable)
 	void SetFalseHUReady();
-		
+
+	UPROPERTY()
+	int OwnerClass;
+
+	UPROPERTY()
+	class UWarriorStatComponent *WarriorStatComponent;
+
+	UPROPERTY()
+	class UMechanicStatComponent *MechanicStatComponent;
+
+	UPROPERTY()
+	class UShooterStatComponent *ShooterStatComponent;
+
+	UPROPERTY()
+	class UArcherStatComponent *ArcherStatComponent;
 };

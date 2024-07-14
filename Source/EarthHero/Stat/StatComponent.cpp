@@ -12,7 +12,6 @@
 #include "HeroUpgradeComponent.h"
 #include "GameFramework/Actor.h"
 #include "TimerManager.h"  // FTimerHandle과 TimerManager를 사용하기 위해 필요
-#include "VectorUtil.h"
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
 #include "EarthHero/HUD/InGameHUD.h"
@@ -44,6 +43,16 @@ void UStatComponent::SetTabHUD(UTabHUDWidget* ControllerTabHUD)
 	OnRep_HeroStat();
 }
 
+FStatStructure &UStatComponent::GetHeroStat()
+{
+	return HeroStat;
+}
+
+FStatStructure &UStatComponent::GetBaseHeroStat()
+{
+	return BaseHeroStat;
+}
+
 
 // Called when the game starts
 void UStatComponent::BeginPlay()
@@ -61,7 +70,7 @@ void UStatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	//체력 재생 (1 * (1 + 체력 재생 능력치)) -> 타이머로 수정 예정
-	HeroStat.Health = HeroStat.Health + 1 * (1 + HeroStat.HealthRegeneration) * DeltaTime;
+	HeroStat.Health = HeroStat.Health + HeroStat.HealthRegeneration * DeltaTime;
 	if (HeroStat.Health > HeroStat.MaxHealth)
 	{
 		HeroStat.Health = HeroStat.MaxHealth;
@@ -139,7 +148,7 @@ bool UStatComponent::InitializeStatData_Validate()
 */
 void UStatComponent::UpdateExp(float ExpMount)
 {
-	bool isLevelUp = UStatCalculationLibrary::AddExp(HeroStat, ExpMount);
+	bool isLevelUp = UStatCalculationLibrary::AddExp(HeroStat, BaseHeroStat, ExpMount);
 	UpdateExpUI(GetExpPercent(), HeroStat.Level, isLevelUp);
 	if (isLevelUp)
 	{
@@ -295,6 +304,22 @@ void UStatComponent::OnRep_HeroStat()
 
 void UStatComponent::OnRep_BaseHeroStat()
 {
+	//BaseHeroStat이 변경 -> 영구 업그레이드(퍽즈, 히어로 업그레이드)이므로,
+	//HeroStat과 동기화 시켜준다.
+	// 단, 현재 체력과 현재 경험치, 경험치, 요구 경험치, 레벨은 제외 한다.
+	// 또한 상태 이상 적용 중이라면 해당 능력치가 포험된 계산을 다시 수행한다.
+	
+	HeroStat.MaxHealth = BaseHeroStat.MaxHealth;
+	HeroStat.HealthRegeneration = BaseHeroStat.HealthRegeneration;		//체력 재생
+	HeroStat.MovementSpeed = BaseHeroStat.MovementSpeed;				//이동속도
+	HeroStat.NormalDamage = BaseHeroStat.NormalDamage; 					//일반 공격 데미지
+	HeroStat.AttackSpeed = BaseHeroStat.AttackSpeed;					//공격 속도
+	HeroStat.SkillDamage = BaseHeroStat.SkillDamage;					//스킬 데미지
+	HeroStat.SkillCoolTime = BaseHeroStat.SkillCoolTime;				//공격 스킬 쿨타임 감소
+	HeroStat.DashCoolTime = BaseHeroStat.DashCoolTime;					//이동 스킬 쿨타임 감소
+	HeroStat.DefensePower = BaseHeroStat.DefensePower;					//보호막
+	HeroStat.IncreasedExpGain = BaseHeroStat.IncreasedExpGain;			//경험치 획득량 증가
+	HeroStat.JumpPower = BaseHeroStat.JumpPower;						//점프력
 }
 
 void UStatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

@@ -14,6 +14,10 @@ public:
 	void SetInGameHUD(class UInGameHUD *ControllerInGameHUD);
 
 	void SetTabHUD(class UTabHUDWidget *ControllerTabHUD);
+
+	FStatStructure &GetHeroStat();
+
+	FStatStructure &GetBaseHeroStat();
 	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

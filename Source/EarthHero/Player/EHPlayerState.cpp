@@ -135,7 +135,8 @@ void AEHPlayerState::SetStatComponent()
 			UE_LOG(LogTemp, Error, TEXT("Invalid Player Class"));
 			return;
 		}
-		
+
+		HeroUpgradeComponent->SetStatComponent(PlayerClass, WarriorStatComponent, MechanicStatComponent, ShooterStatComponent, ArcherStatComponent);
 		LoadHeroUpgradeDatatable();
 	}
 	else

@@ -69,7 +69,7 @@ float UStatCalculationLibrary::CalShooterGrenadeDamage(FStatStructure& HeroStat,
 	return SH_GrenadeDamage;
 }
 
-bool UStatCalculationLibrary::AddExp(FStatStructure& HeroStat, int32 ExpMount)
+bool UStatCalculationLibrary::AddExp(FStatStructure& HeroStat, FStatStructure &BaseHeroStat, int32 ExpMount)
 {
 	float resultExp = HeroStat.Exp + ExpMount;
 	if (resultExp >= HeroStat.MaxExp)
@@ -77,8 +77,10 @@ bool UStatCalculationLibrary::AddExp(FStatStructure& HeroStat, int32 ExpMount)
 		while (resultExp >= HeroStat.MaxExp)
 		{
 			resultExp = resultExp - HeroStat.MaxExp;
+			BaseHeroStat.Level += 1;
 			HeroStat.Level += 1;
-			HeroStat.MaxExp = HeroStat.RequiresExp[HeroStat.Level];
+			BaseHeroStat.MaxExp = HeroStat.RequiresExp[HeroStat.Level];
+			HeroStat.MaxExp = BaseHeroStat.MaxExp;
 		}
 		
 		HeroStat.Exp = resultExp;
