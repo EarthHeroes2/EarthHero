@@ -52,12 +52,15 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	class UIngameHUDHeroUpgradeWidget* BP_IngameHUDHeroUpgrade_2;
 
+	void ShowHeroUpgradeVerticalBox();
+
+	void HideHeroUpgradeVerticalBox();
 	
 	void InitializePlayerState(class UStatComponent* StatComponent);
 
 	void UpdateGameTimer(int GameTimerSec);
 
-	void SetIngameHUDHeroUpgrade(int Index, UTexture2D* UpgradeImage, UTexture2D* Level1Image, UTexture2D* Level2Image, UTexture2D* Level3Image, FText UpgradeName, FText UpgradeDetail);
+	void SetIngameHUDHeroUpgrade(int Index, UTexture2D* UpgradeImage, int Level, FText UpgradeName, FText UpgradeDetail);
 	
 	void AddChatMessage(const FText& Text);
 

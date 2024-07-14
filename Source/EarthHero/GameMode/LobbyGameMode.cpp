@@ -5,13 +5,13 @@
 #include <EarthHero/GameSession/LobbyGameSession.h>
 #include "GameFramework/PlayerState.h"
 #include "EarthHero/Character/Shooter/EHShooter.h"
-#include "EarthHero/Player/EHPlayerState.h"
+#include "EarthHero/PlayerState/LobbyPlayerState.h"
 
 ALobbyGameMode::ALobbyGameMode()
 {
 	PlayerControllerClass = ALobbyPlayerController::StaticClass();
 	GameSessionClass = ALobbyGameSession::StaticClass();
-	PlayerStateClass = AEHPlayerState::StaticClass();
+	PlayerStateClass = ALobbyPlayerState::StaticClass();
 
 	CharacterClasses.SetNum(4);
 	

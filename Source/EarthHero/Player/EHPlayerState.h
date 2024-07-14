@@ -81,6 +81,7 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Upgrade", meta = (AllowPrivateAccess = "true"))
 	UDataTable* ArcherHeroUpgradeDataTable;
 
+public:
 	UPROPERTY(Replicated)
 	bool IsCopyPropertiesEnd = false;
 	

@@ -165,15 +165,6 @@ void AEHGameSession::HandleDestroySessionCompleted(FName EOSSessionName, bool bW
     FGenericPlatformMisc::RequestExit(false);
 }
 
-//이 게임 세션이 레벨에서 제거할 때 호출됨
-//일단 놔둬봄...
-void AEHGameSession::EndPlay(const EEndPlayReason::Type EndPlayReason)
-{
-    UE_LOG(LogTemp, Warning, TEXT("AEHGameSession - EndPlay!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"));
-    Super::EndPlay(EndPlayReason);
-}
-
-
 
 void AEHGameSession::UpdateNumberOfJoinedPlayers()
 {

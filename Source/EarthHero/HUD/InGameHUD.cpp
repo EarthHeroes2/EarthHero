@@ -48,7 +48,7 @@ void UInGameHUD::UpdateGameTimer(int GameTimerSec)
 }
 
 //우선 세 개의 히어로 업그레이드 기준으로 만듦
-void UInGameHUD::SetIngameHUDHeroUpgrade(int Index, UTexture2D* UpgradeImage, UTexture2D* Level1Image, UTexture2D* Level2Image, UTexture2D* Level3Image, FText UpgradeName, FText UpgradeDetail)
+void UInGameHUD::SetIngameHUDHeroUpgrade(int Index, UTexture2D* UpgradeImage, int Level, FText UpgradeName, FText UpgradeDetail)
 {
 	UIngameHUDHeroUpgradeWidget* TargetWidget = nullptr;
 
@@ -75,12 +75,35 @@ void UInGameHUD::SetIngameHUDHeroUpgrade(int Index, UTexture2D* UpgradeImage, UT
 		TargetWidget->SetHeroUpgradeName(UpgradeName);
 		TargetWidget->SetHeroUpgradeDetail(UpgradeDetail);
 		TargetWidget->SetHeroUpgradeImg(UpgradeImage);
-		TargetWidget->SetLevel1Img(Level1Image);
-		TargetWidget->SetLevel2Img(Level2Image);
-		TargetWidget->SetLevel3Img(Level3Image);
+		
+		UTexture2D* GoldStar = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/Textures/Full_Star_Yellow.Full_Star_Yellow'")));
+		UTexture2D* WhiteStar = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/Textures/Empty_Star.Empty_Star'")));
+		
+		switch(Level)
+		{
+		case 0:
+			TargetWidget->SetLevel1Img(WhiteStar);
+			TargetWidget->SetLevel2Img(WhiteStar);
+			TargetWidget->SetLevel3Img(WhiteStar);
+			break;
+		case 1:
+			TargetWidget->SetLevel1Img(GoldStar);
+			TargetWidget->SetLevel2Img(WhiteStar);
+			TargetWidget->SetLevel3Img(WhiteStar);
+			break;
+		case 2:
+			TargetWidget->SetLevel1Img(GoldStar);
+			TargetWidget->SetLevel2Img(GoldStar);
+			TargetWidget->SetLevel3Img(WhiteStar);
+			break;
+		default:
+			UE_LOG(LogClass, Warning, TEXT("InGameHUD: Invalid Level"));
+			break;
+		}
 	}
 
 	IsHeroUpGradeReady[Index] = true;
+	ShowHeroUpgradeVerticalBox();
 }
 
 bool UInGameHUD::IsHeroUpgradeReadys() const
@@ -95,6 +118,23 @@ void UInGameHUD::SetFalseHeroUpgradeReady()
 	IsHeroUpGradeReady[0] = false;
 	IsHeroUpGradeReady[1] = false;
 	IsHeroUpGradeReady[2] = false;
+	HideHeroUpgradeVerticalBox();
+}
+
+void UInGameHUD::ShowHeroUpgradeVerticalBox()
+{
+	if (HeroUpgradeVerticalBox)
+	{
+		HeroUpgradeVerticalBox->SetVisibility(ESlateVisibility::Visible);
+	}
+}
+
+void UInGameHUD::HideHeroUpgradeVerticalBox()
+{
+	if (HeroUpgradeVerticalBox)
+	{
+		HeroUpgradeVerticalBox->SetVisibility(ESlateVisibility::Hidden);
+	}
 }
 
 void UInGameHUD::ChatTextCommitted(const FText& Text, ETextCommit::Type CommitMethod)
@@ -144,4 +184,3 @@ void UInGameHUD::AddChatMessage(const FText& Text)
 		}
 	}
 }
-

@@ -8,7 +8,7 @@
 #include <EarthHero/GameMode/LobbyGameMode.h>
 
 #include "Components/CheckBox.h"
-#include "EarthHero/Player/EHPlayerState.h"
+#include "EarthHero/PlayerState/LobbyPlayerState.h"
 
 
 ALobbyPlayerController::ALobbyPlayerController()
@@ -233,10 +233,10 @@ void ALobbyPlayerController::Server_SetPlayerCharacter_Implementation(int ClassT
 		LobbyGameMode->UpdateCharacter(this, PlayerClass);
 	}
 
-	AEHPlayerState* EHPlayerState = Cast<AEHPlayerState>(PlayerState);
-	if (EHPlayerState)
+	ALobbyPlayerState* LobbyPlayerState = Cast<ALobbyPlayerState>(PlayerState);
+	if (LobbyPlayerState)
 	{
-		EHPlayerState->PlayerClass = PlayerClass;
+		LobbyPlayerState->PlayerClass = PlayerClass;
 	}
 }
 

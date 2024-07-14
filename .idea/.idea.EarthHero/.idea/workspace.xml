@@ -79,16 +79,13 @@
   <component name="ChangeListManager">
     <list default="true" id="4591bad7-fd9f-4860-903f-8700cd913377" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_InGameHUD.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_InGameHUD.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_TabHeroUpgrade.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_TabHeroUpgrade.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/Lobby.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/Lobby.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EarthHero.uproject" beforeDir="false" afterPath="$PROJECT_DIR$/EarthHero.uproject" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_IngameHUDHeroUpgrade.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_IngameHUDHeroUpgrade.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/TestMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/TestMap.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/EarthHero/HUD/InGameHUD.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/InGameHUD.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/EarthHero/HUD/InGameHUD.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/InGameHUD.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/EarthHero/HUD/TabHUDWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/TabHUDWidget.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/EarthHero/HUD/TabHUDWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/TabHUDWidget.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/HUD/TeamMemberWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/TeamMemberWidget.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/HUD/TeamMemberWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/TeamMemberWidget.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Stat/HeroUpgradeComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Stat/HeroUpgradeComponent.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,6 +96,8 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock://D:/Unreal_Projects/EarthHeroes/EarthHero/Source/EarthHero/HUD/InGameHUD.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Unreal_Projects/EarthHeroes/EarthHero/Source/EarthHero/HUD/InGameHUD.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/EarthHero/Stat/ShooterStatComponent.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/EarthHero/Stat/ShooterStatComponent.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/EarthHero/Stat/StatComponent.cpp" root0="FORCE_HIGHLIGHTING" />
@@ -297,7 +296,7 @@
       <workItem from="1720714604053" duration="18000" />
       <workItem from="1720714634428" duration="1094000" />
       <workItem from="1720715870531" duration="1028000" />
-      <workItem from="1720850763412" duration="1801000" />
+      <workItem from="1720850763412" duration="3718000" />
     </task>
     <servers />
   </component>

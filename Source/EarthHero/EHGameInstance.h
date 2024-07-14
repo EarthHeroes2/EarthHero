@@ -29,6 +29,7 @@ private:
 public:
 	FString LobbyName;
 	bool IsCheckedPrivate = false;
+	bool bGameClear = true; //클리어 못할 시 false 적용해줘야함
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
 	USoundMix* MainSoundMix;
