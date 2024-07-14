@@ -42,7 +42,7 @@ void UShooterCombatComponent::Fire()
 		
 		Server_Fire(StartLocation, EndLocation, MuzzleLocation);
 		
-		Shooter->GetWorldTimerManager().SetTimer(ShootTimerHandle, this, &ThisClass::ResetFire, FireRate, false);
+		Shooter->GetWorldTimerManager().SetTimer(ShootTimerHandle, this, &ThisClass::ResetFire, 1/FireRate, false);
 	}
 }
 
@@ -63,22 +63,15 @@ void UShooterCombatComponent::Server_GrenadeFire_Implementation()
 void UShooterCombatComponent::NetMulticast_GrenadeFire_Implementation()
 {
 	UWorld* World = GetWorld();
-	UObject* GrenadeBPObject = StaticLoadObject(UObject::StaticClass(), nullptr, TEXT("/Game/Blueprints/Weapons/BP_Grenade.BP_Grenade"));
-	UBlueprint* GrenadeBP = Cast<UBlueprint>(GrenadeBPObject);
-	TSubclassOf<UObject> GrenadeBPClass;
-	if (GrenadeBP)
-	{
-		GrenadeBPClass = (UClass*)GrenadeBP->GeneratedClass;
-	}
 	
-	if(World && GrenadeBPClass)
+	if(World && GrenadeClass)
 	{
 		if(Shooter && Shooter->GetEquippedWeapon() && Shooter->GetController())
 		{
 			FVector SpawnLocation = Shooter->GetEquippedWeapon()->GetSocketLocation(FName("FireSocket"));
 			FRotator SpawnRotation = Shooter->GetController()->GetControlRotation();
 			SpawnRotation += FRotator(3.f,0.f,0.f);
-			AActor* SpawnGrenade = World->SpawnActor<AActor>(GrenadeBPClass, SpawnLocation, SpawnRotation);
+			AActor* SpawnGrenade = World->SpawnActor<AActor>(GrenadeClass, SpawnLocation, SpawnRotation);
 			AGrenade* Grenade = Cast<AGrenade>(SpawnGrenade);
 			if(Grenade)
 			{
