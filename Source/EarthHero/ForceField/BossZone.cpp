@@ -34,6 +34,10 @@ ABP_BossZone::ABP_BossZone()
     CapsuleComponent->SetCapsuleHalfHeight(100.0f);
     CapsuleComponent->SetCapsuleRadius(50.0f);
 
+    // Set custom collision to overlap all channels
+    CapsuleComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+    CapsuleComponent->SetCollisionResponseToAllChannels(ECR_Overlap);
+
     CapsuleComponent->OnComponentBeginOverlap.AddDynamic(this, &ABP_BossZone::OnOverlapBegin);
     CapsuleComponent->OnComponentEndOverlap.AddDynamic(this, &ABP_BossZone::OnOverlapEnd);
 }
@@ -50,6 +54,7 @@ void ABP_BossZone::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AAct
         if (AEHCharacter* Character = Cast<AEHCharacter>(OtherActor))
         {
             Character->SetIsInBossZone(true);
+            UE_LOG(LogTemp, Log, TEXT("Character entered the Boss Zone"));
         }
     }
 }
@@ -61,6 +66,7 @@ void ABP_BossZone::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor
         if (AEHCharacter* Character = Cast<AEHCharacter>(OtherActor))
         {
             Character->SetIsInBossZone(false);
+            UE_LOG(LogTemp, Log, TEXT("Character exited the Boss Zone"));
         }
     }
 }

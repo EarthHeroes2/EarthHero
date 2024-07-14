@@ -58,37 +58,39 @@ void ALobbyPlayerController::ShowLobbyWidget()
 void ALobbyPlayerController::Server_InitSetup_Implementation()
 {
 	ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
+	if (LobbyGameMode)
+	{
+		ALobbyGameSession* LobbyGameSession = Cast<ALobbyGameSession>(LobbyGameMode->GameSession);
+		if (LobbyGameSession)
+		{	//클라이언트에게 방장 유무와 현재 광고 상태를 알림
+			bool bAdvertise = LobbyGameSession->GetAdvertiseState();
+			
+			if (bHost) Client_HostAssignment(true, bAdvertise); 
+			else Client_HostAssignment(false, bAdvertise);
+		}
+	}
 	
-	//클라이언트에게 방장 유무를 알림
-	if (bHost) Client_HostAssignment(true, true); 
-	else Client_HostAssignment(false, true);
 
 	//게임모드에 플레이어 정보 등록
 	if (LobbyGameMode) LobbyGameMode->AddPlayerInfo(this);
 }
 
 //서버에게서 방장 유무를 받음
-//함수이름 바꾸고 싶은데...
-void ALobbyPlayerController::Client_HostAssignment_Implementation(bool bHostAssignment, bool bInitSetUp, bool bAdvertise)
+void ALobbyPlayerController::Client_HostAssignment_Implementation(bool bHostAssignment, bool bAdvertise)
 {
 	bHost = bHostAssignment; //클라이언트도 방장 유무는 알고 있지만, 서버에서 항상 확인해주기
 	
 	if (LobbyWidget)
 	{
-		if(!bInitSetUp)
-		{
-			//private설정 이어받음
-			if(bAdvertise) LobbyWidget->Private_Cb->SetCheckedState(ECheckBoxState::Unchecked);
-			else LobbyWidget->Private_Cb->SetCheckedState(ECheckBoxState::Checked);
-		}
+		if(bAdvertise) LobbyWidget->Private_Cb->SetCheckedState(ECheckBoxState::Unchecked);
+		else LobbyWidget->Private_Cb->SetCheckedState(ECheckBoxState::Checked);
+		
 		LobbyWidget->HostAssignment(bHost);
 	}
 	
 	if (bHost)
 	{
 		UE_LOG(LogTemp, Log, TEXT("Host Assignmented!"));
-		if (GEngine)
-			GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Yellow, FString::Printf(TEXT("You are host!!!!!!!!!!")));
 	}
 	
 }
@@ -97,7 +99,6 @@ void ALobbyPlayerController::Client_HostAssignment_Implementation(bool bHostAssi
 void ALobbyPlayerController::Server_ChangeAdvertiseState_Implementation(bool bAdvertise)
 {
 	ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
-	
 	if (bHost)
 	{
 		if (LobbyGameMode)
