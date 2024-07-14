@@ -12,7 +12,8 @@ class EARTHHERO_API UShooterStatComponent : public UStatComponent
 	GENERATED_BODY()
 
 public:
-
+	//일반 공격 데미지
+	float SH_NormalDamage = 10.f;
 	//수류탄 범위
 	float SH_GrenadeRange = 200.f;
 	//수류탄 데미지

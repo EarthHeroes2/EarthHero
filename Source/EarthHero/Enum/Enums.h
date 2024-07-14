@@ -2,6 +2,7 @@
 
 #pragma once
 
+UENUM(BlueprintType)
 enum EClassType
 {
 	Warrior,
@@ -11,6 +12,7 @@ enum EClassType
 	NumberOfClass
 };
 
+UENUM(BlueprintType)
 enum EHeroUpgrade
 {
 	Pb_NormalAttackDamage,
@@ -37,4 +39,12 @@ enum EHeroUpgrade
 	Ac_CursedArrows,
 	Ac_FanArrowsEnhancement,
 	Ac_RollEnhancement
+};
+
+//몬스터 타입
+UENUM(BlueprintType)
+enum MonsterType
+{
+	Normal,
+	Boss
 };

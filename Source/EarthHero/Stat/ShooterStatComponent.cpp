@@ -8,6 +8,7 @@
 #include "EarthHero/Character/Monster/MonsterBase.h"
 #include "EarthHero/Character/Shooter/EHShooter.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Monster/MonsterStatComponent.h"
 
 
 void UShooterStatComponent::TickComponent(float DeltaTime, ELevelTick TickType,
@@ -37,7 +38,7 @@ void UShooterStatComponent::InitializeStatData_Implementation()
 void UShooterStatComponent::ShooterDamage_Implementation(AActor* DamagedActor, const FHitResult& HitInfo,
 	TSubclassOf<UDamageType> DamageTypeClass, AEHCharacter* DamageCusor)
 {
-	float resultDamage = UStatCalculationLibrary::CalShooterNormalDamage(HeroStat, HitInfo, SH_HeadShot);
+	float resultDamage = UStatCalculationLibrary::CalShooterNormalDamage(HeroStat, HitInfo, SH_HeadShot, SH_NormalDamage);
 	float actualDamage = 0;
 
 	if (resultDamage > 0)
@@ -45,22 +46,27 @@ void UShooterStatComponent::ShooterDamage_Implementation(AActor* DamagedActor, c
 		//몬스터용 데미지 입는 함수 호출
 		if(AMonsterBase* HitMonster = Cast<AMonsterBase>(DamagedActor))
 		{
-			UE_LOG(LogTemp, Error, TEXT("Monster Damaged"));
+			actualDamage = HitMonster->MonsterStatComponent->DamageTaken(resultDamage, UNormalDamageType::StaticClass(), HitInfo, nullptr, Shooter);
+			UE_LOG(LogTemp, Error, TEXT("Acture Damage = %f"), actualDamage);
 		}
 		else if (AEHCharacter *HitHero = Cast<AEHCharacter>(DamagedActor)) // 임시 슈터끼리 공격
 		{
-			HitHero->StatComponent->DamageTaken(resultDamage, UNormalDamageType::StaticClass(), HitInfo, nullptr, Shooter);
+			actualDamage = HitHero->StatComponent->DamageTaken(resultDamage, UNormalDamageType::StaticClass(), HitInfo, nullptr, Shooter);
+			UE_LOG(LogTemp, Error, TEXT("Acture Damage = %f"), actualDamage);
 		}
 	}
 }
 
 void UShooterStatComponent::ShooterGrenadeDamage_Implementation(AActor* DamagedActor)
 {
-	UStatCalculationLibrary::CalShooterGrenadeDamage(HeroStat, SH_GrenadeDamage);
-
+	float resultDamage = UStatCalculationLibrary::CalShooterGrenadeDamage(HeroStat, SH_GrenadeDamage);
+	float actualDamage = 0;
+	
 	if(AMonsterBase* HitMonster = Cast<AMonsterBase>(DamagedActor))
 	{
-		UE_LOG(LogTemp, Error, TEXT("Monster Damaged"));
+		static FHitResult DummyHitResult;
+		actualDamage = HitMonster->MonsterStatComponent->DamageTaken(resultDamage, UNormalDamageType::StaticClass(), DummyHitResult, nullptr, Shooter);
+		UE_LOG(LogTemp, Error, TEXT("Acture Damage = %f"), actualDamage);
 	}
 }
 

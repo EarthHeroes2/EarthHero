@@ -14,7 +14,7 @@ public:
 	static void CalNormalDamage(FStatStructure &HeroStat, float inDamage);
 
 	UFUNCTION()
-	static float CalShooterNormalDamage(FStatStructure &HeroStat, const FHitResult & HitInfo, int32 SH_HeadShot);
+	static float CalShooterNormalDamage(FStatStructure &HeroStat, const FHitResult & HitInfo, int32 SH_HeadShot, float SH_NormalDamage);
 
 	UFUNCTION()
 	static float CalShooterGrenadeDamage(FStatStructure &HeroStat, float SH_GrenadeDamage);

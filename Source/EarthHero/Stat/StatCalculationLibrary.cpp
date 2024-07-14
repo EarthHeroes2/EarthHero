@@ -50,24 +50,27 @@ void UStatCalculationLibrary::CalNormalDamage(FStatStructure& HeroStat, float in
 	}
 }
 
-float UStatCalculationLibrary::CalShooterNormalDamage(FStatStructure &HeroStat, const FHitResult & HitInfo, int32 SH_HeadShot)
+float UStatCalculationLibrary::CalShooterNormalDamage(FStatStructure &HeroStat, const FHitResult & HitInfo, int32 SH_HeadShot, float SH_NormalDamage)
 {
 	float resultDamage = 0.f;
 	if (HitInfo.BoneName == "head")
 	{
 		UE_LOG(LogClass, Warning, TEXT("HeadShot"));
-		resultDamage = 10 * HeroStat.NormalDamage * SH_HeadShot;
+		resultDamage = SH_NormalDamage * HeroStat.NormalDamage * SH_HeadShot;
 	}
 	else
 	{
-		resultDamage = 10 * HeroStat.NormalDamage;
+		resultDamage = SH_NormalDamage * HeroStat.NormalDamage;
 	}
 	return resultDamage;
 }
 
 float UStatCalculationLibrary::CalShooterGrenadeDamage(FStatStructure& HeroStat, float SH_GrenadeDamage)
 {
-	return SH_GrenadeDamage;
+	float resultDamage = 0.f;
+	resultDamage = SH_GrenadeDamage * HeroStat.SkillDamage;
+	
+	return resultDamage;
 }
 
 bool UStatCalculationLibrary::AddExp(FStatStructure& HeroStat, FStatStructure &BaseHeroStat, int32 ExpMount)
