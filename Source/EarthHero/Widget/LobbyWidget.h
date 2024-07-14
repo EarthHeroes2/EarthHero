@@ -9,6 +9,7 @@
 #include <steam/steamclientpublic.h>
 
 #include "Components/HorizontalBox.h"
+#include "Components/VerticalBox.h"
 #include "EarthHero/Enum/Enums.h"
 #include "LobbyWidget.generated.h"
 
@@ -69,7 +70,7 @@ private:
 
 	
 	UPROPERTY(meta = (BindWidget))
-	UHorizontalBox* Class_Hb;
+	UVerticalBox* Class_Vb;
 	
 	TArray<UButton*> ClassBtns;
 	UPROPERTY(meta = (BindWidget))

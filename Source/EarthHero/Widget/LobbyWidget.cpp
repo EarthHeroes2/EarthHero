@@ -152,7 +152,7 @@ void ULobbyWidget::HostAssignment(bool bHostAssignment)
 	if (bHost)
 		ReadyButton_Tb->SetText(FText::FromString("Game Start"));
 	else
-		ReadyButton_Tb->SetText(FText::FromString("Game Ready"));
+		ReadyButton_Tb->SetText(FText::FromString("Ready"));
 	
 	Ready_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::ReadyClicked);
 	
@@ -186,7 +186,7 @@ void ULobbyWidget::ReadyClicked()
 	UE_LOG(LogTemp, Log, TEXT("Ready Button Clicked"));
 
 	//방장이 아니면 레디 버튼으로 작동. 클래스 버튼 작동 on/off
-	if(!bHost) Class_Hb->SetIsEnabled(!(Class_Hb->GetIsEnabled()));
+	if(!bHost) Class_Vb->SetIsEnabled(!(Class_Vb->GetIsEnabled()));
 
 	APlayerController* PlayerController = GetOwningPlayer();
 	if (PlayerController)
