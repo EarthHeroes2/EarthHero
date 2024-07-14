@@ -49,7 +49,7 @@ void UShooterStatComponent::ShooterDamage_Implementation(AActor* DamagedActor, c
 		}
 		else if (AEHCharacter *HitHero = Cast<AEHCharacter>(DamagedActor)) // 임시 슈터끼리 공격
 		{
-			HitHero->StatComponent->DamageTaken(10, UNormalDamageType::StaticClass(), HitInfo, nullptr, Shooter);
+			HitHero->StatComponent->DamageTaken(resultDamage, UNormalDamageType::StaticClass(), HitInfo, nullptr, Shooter);
 		}
 	}
 }

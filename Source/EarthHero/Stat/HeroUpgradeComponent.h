@@ -25,7 +25,7 @@ public:
 	//PlayerState에서 호출할 스텟 컴포넌트 가져오는 함수 짜야 함
 	
 	// 업그레이드 배열 목록
-	UPROPERTY(ReplicatedUsing=OnRep_HeroUpgrades, EditAnywhere, BlueprintReadWrite, Category = "Upgrade")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Upgrade")
 	TArray<FHeroUpgradeStructure> HeroUpgrades;
 
 	UFUNCTION(Server, Reliable)
@@ -36,8 +36,11 @@ public:
 	
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
+	UFUNCTION(Client, Reliable)
+	void Update_TabHeroUpgrades(const TArray<FHeroUpgradeStructure> &ServerHeroUpgrades);
+	
 	UFUNCTION()
-	void OnRep_HeroUpgrades();
+	void OnRep_HeroUpgrades(const TArray<FHeroUpgradeStructure> &ServerHeroUpgrades);
 
 	UFUNCTION(Server, Reliable)
 	void ApplyHeroUpgrade(int index);

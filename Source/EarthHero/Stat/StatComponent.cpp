@@ -14,6 +14,7 @@
 #include "TimerManager.h"  // FTimerHandle과 TimerManager를 사용하기 위해 필요
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
+#include "EarthHero/GameMode/PlayingGameMode.h"
 #include "EarthHero/HUD/InGameHUD.h"
 #include "EarthHero/HUD/TabHUDWidget.h"
 
@@ -96,6 +97,11 @@ float UStatComponent::DamageTaken(float InDamage, TSubclassOf<UDamageType> Damag
 	if (HeroStat.Health <= 0.f)
 	{
 		FString Message = FString::Printf(TEXT("Dead"));
+		APlayingGameMode *GameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode());
+		if (GameMode)
+		{
+			GameMode->AddPlayerDead();
+		}
 		GEngine->AddOnScreenDebugMessage(-1, 1233223.f, FColor::Green, Message);
 	}
 
@@ -292,9 +298,9 @@ void UStatComponent::OnRep_HeroStat()
 			FText::Format(FText::FromString(TEXT("{0}%")),FText::AsNumber(HeroStat.NormalDamage * 100)),
 			FText::Format(FText::FromString(TEXT("{0}%")),FText::AsNumber(HeroStat.AttackSpeed * 100)),
 			FText::Format(FText::FromString(TEXT("{0}%")),FText::AsNumber(HeroStat.SkillDamage * 100)),
-			FText::Format(FText::FromString(TEXT("{0}%")),FText::AsNumber(HeroStat.SkillCoolTime * 100)),
-			FText::Format(FText::FromString(TEXT("{0}%")),FText::AsNumber(HeroStat.DashCoolTime * 100)),
-			FText::AsNumber(HeroStat.Health),
+			FText::Format(FText::FromString(TEXT("-{0}%")),FText::AsNumber(100 - HeroStat.SkillCoolTime * 100)),
+			FText::Format(FText::FromString(TEXT("-{0}%")),FText::AsNumber(100 - HeroStat.DashCoolTime * 100)),
+			FText::AsNumber(FMath::FloorToInt(HeroStat.Health)),
 			FText::AsNumber(HeroStat.DefensePower),
 			FText::AsNumber(HeroStat.MaxHealth),
 			FText::AsNumber(HeroStat.HealthRegeneration),

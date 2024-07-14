@@ -55,11 +55,11 @@ float UStatCalculationLibrary::CalShooterNormalDamage(FStatStructure &HeroStat, 
 	float resultDamage = 0.f;
 	if (HitInfo.BoneName == "head")
 	{
-		resultDamage = HeroStat.NormalDamage * SH_HeadShot;
+		resultDamage = 10 * HeroStat.NormalDamage * SH_HeadShot;
 	}
 	else
 	{
-		resultDamage = HeroStat.NormalDamage;
+		resultDamage = 10 * HeroStat.NormalDamage;
 	}
 	return resultDamage;
 }

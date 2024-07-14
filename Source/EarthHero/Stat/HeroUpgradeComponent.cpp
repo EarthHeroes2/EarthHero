@@ -21,7 +21,7 @@ void UHeroUpgradeComponent::SetInGameHUD(UInGameHUD* ControllerInGameHUD)
 void UHeroUpgradeComponent::SetTabHUD(UTabHUDWidget* ControllerTabHUD)
 {
 	TabHUD = ControllerTabHUD;
-	OnRep_HeroUpgrades(); //HeroUpgrades 가 이시점에선 없다... 확인해야함
+	OnRep_HeroUpgrades(HeroUpgrades);
 }
 
 void UHeroUpgradeComponent::SetStatComponent(int PlayerClass, UWarriorStatComponent *Wr, UMechanicStatComponent *Mc,
@@ -127,42 +127,44 @@ void UHeroUpgradeComponent::PushRandomHeroUpgrade_Implementation()
 //HeroUpgrades가 리플리케이트가 되긴 하지만, 더 빠른 선택을 위해 클라이언트 함수 호출
 void UHeroUpgradeComponent::PushHeroUpgrade_Implementation(const TArray<FHeroUpgradeStructure> &ServerHeroUpgrades)
 {
-	// 선택된 랜덤 업그레이드를 로그로 출력, UI쪽이 만들어지면 그쪽으로 보낼 예정
 	for (int32 i = 0; i < ServerHeroUpgrades.Num(); i++)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Selected Upgrade: %s"), *ServerHeroUpgrades[i].UpgradeName.ToString());
 		InGameHUD->SetIngameHUDHeroUpgrade(
 			i,
 			nullptr,
-			ServerHeroUpgrades[i].UpgradeLevel,
+			ServerHeroUpgrades[i].UpgradeLevel + 1,
 			ServerHeroUpgrades[i].UpgradeName,
-			ServerHeroUpgrades[i].Explanation[ServerHeroUpgrades[i].UpgradeLevel]
+			ServerHeroUpgrades[i].Explanation[ServerHeroUpgrades[i].UpgradeLevel + 1]
 			);
 	}
 }
 
-void UHeroUpgradeComponent::OnRep_HeroUpgrades()
+void UHeroUpgradeComponent::OnRep_HeroUpgrades(const TArray<FHeroUpgradeStructure> &ServerHeroUpgrades)
 {
 	UE_LOG(LogClass, Warning, TEXT("OnRep_HeroUpgrades"));
-	
-	if (GetNetMode() == NM_Client && TabHUD && !HeroUpgrades.IsEmpty() &&HeroUpgrades.Num() >= 12)
+	if (GetNetMode() == NM_Client && TabHUD && !ServerHeroUpgrades.IsEmpty() && ServerHeroUpgrades.Num() >= 12)
 	{
-		for (int32 i = 0; i < HeroUpgrades.Num(); i++)
+		for (int32 i = 0; i < ServerHeroUpgrades.Num(); i++)
 		{
+			//UE_LOG(LogClass, Warning, TEXT("HeroUpgrade : %s, Level : %d"), *ServerHeroUpgrades[i].UpgradeName.ToString(), ServerHeroUpgrades[i].UpgradeLevel)
 			TabHUD->SetHeroUpgradeWidgetValues(
 				i,
 				nullptr,
-				HeroUpgrades[i].UpgradeLevel,
-				HeroUpgrades[i].UpgradeName,
-				HeroUpgrades[i].Explanation[HeroUpgrades[i].UpgradeLevel]);
+				ServerHeroUpgrades[i].UpgradeLevel,
+				ServerHeroUpgrades[i].UpgradeName,
+				ServerHeroUpgrades[i].Explanation[ServerHeroUpgrades[i].UpgradeLevel]);
 		}
+	}
+	else
+	{
+		UE_LOG(LogClass, Error, TEXT("OnRep_HeroUpgrades : Update Tab failed"));
 	}
 }
 
 void UHeroUpgradeComponent::ApplyHeroUpgrade_Implementation(int index)
 {
 	FHeroUpgradeStructure &SelectHeroUpgrade = HeroUpgrades[RandomUpgradesIndex[index]];
-	UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
 
 	//InGameHUD -> 업그레이드 선택 비활성화
 	SetFalseHUReady();
@@ -170,27 +172,43 @@ void UHeroUpgradeComponent::ApplyHeroUpgrade_Implementation(int index)
 	switch (SelectHeroUpgrade.HeroUpgradeType)
 	{
 		case Pb_NormalAttackDamage :
+				UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
+
 				UHeroUpgradeLibrary::Pb_NormalAttackDamage(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat());
 				break;
 		case Pb_NormalAttackSpeed :
+				UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
+
 				UHeroUpgradeLibrary::Pb_NormalAttackSpeed(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat());
 				break;
 		case Pb_AttackSkillDamage :
+				UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
+
 				UHeroUpgradeLibrary::Pb_AttackSkillDamage(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat());
 				break;
 		case Pb_AttackSkillCooldown :
+				UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
+
 				UHeroUpgradeLibrary::Pb_AttackSkillCooldown(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat());
 				break;
 		case Pb_MovementSkillCooldown :
+				UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
+
 				UHeroUpgradeLibrary::Pb_MovementSkillCooldown(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat());
 				break;
 		case Pb_MaxHealth :
+				UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
+
 				UHeroUpgradeLibrary::Pb_MaxHealth(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat());
 				break;
 		case Pb_HealthRegenPerSecond :
+				UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
+		
 				UHeroUpgradeLibrary::Pb_HealthRegenPerSecond(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat());
 				break;
 		case Pb_MovementSpeed :
+				UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
+		
 				UHeroUpgradeLibrary::Pb_MovementSpeed(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat());
 				break;
 		case Wr_Berserker :
@@ -228,6 +246,8 @@ void UHeroUpgradeComponent::ApplyHeroUpgrade_Implementation(int index)
 		default :
 			UE_LOG(LogClass, Error, TEXT("HeroUpgradeComponent.ApplyHeroUpgrade : Not Valid Hero Upgrade"));
 	}
+	
+	Update_TabHeroUpgrades(HeroUpgrades);
 }
 
 void UHeroUpgradeComponent::SetFalseHUReady_Implementation()
@@ -238,8 +258,11 @@ void UHeroUpgradeComponent::SetFalseHUReady_Implementation()
 void UHeroUpgradeComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-	DOREPLIFETIME(UHeroUpgradeComponent, HeroUpgrades);
-	// DOREPLIFETIME(UHeroUpgradeComponent, RandomUpgrades);
+}
+
+void UHeroUpgradeComponent::Update_TabHeroUpgrades_Implementation(const TArray<FHeroUpgradeStructure> &ServerHeroUpgrades)
+{
+	OnRep_HeroUpgrades(ServerHeroUpgrades);
 }
 
 

@@ -16,7 +16,7 @@ struct FHeroUpgradeStructure : public FTableRowBase
 	FText UpgradeName;
 
 	UPROPERTY(EditAnywhere, Category = "HeroUpgrade")
-	FText Explanation[3];
+	FText Explanation[4];
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HeroUpgrade")
 	int32 UpgradeLevel = 0;
