@@ -26,8 +26,6 @@ public class EarthHero : ModuleRules
                 "Steamworks",
                 "Sockets",
                 "Networking",
-                "SQLiteCore",
-                "SQLiteSupport"
             }
         );
 
