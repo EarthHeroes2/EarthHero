@@ -43,7 +43,7 @@ void UGameOverWidget::ChatTextCommitted(const FText& Text, ETextCommit::Type Com
 				if (GameOverPlayerController)
 					GameOverPlayerController->Server_SendChatMessage(Text);
 			}
-			Chat_Etb->SetText(FText::GetEmpty());
+			if(Chat_Etb) Chat_Etb->SetText(FText::GetEmpty());
 		}
 		break;
 
@@ -51,7 +51,7 @@ void UGameOverWidget::ChatTextCommitted(const FText& Text, ETextCommit::Type Com
 	case ETextCommit::OnCleared:
 		break;
 	}
-	FSlateApplication::Get().SetKeyboardFocus(Chat_Etb->TakeWidget());
+	if(Chat_Etb) Chat_Etb->SetKeyboardFocus();
 }
 
 void UGameOverWidget::AddChatMessage(const FText& Text)

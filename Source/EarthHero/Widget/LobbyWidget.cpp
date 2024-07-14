@@ -344,7 +344,7 @@ void ULobbyWidget::ChatTextCommitted(const FText& Text, ETextCommit::Type Commit
 					if (LobbyPlayerController)
 						LobbyPlayerController->Server_SendChatMessage(Text);
 				}
-				Chat_Etb->SetText(FText::GetEmpty());
+				if(Chat_Etb) Chat_Etb->SetText(FText::GetEmpty());
 			}
 			break;
 
@@ -352,7 +352,7 @@ void ULobbyWidget::ChatTextCommitted(const FText& Text, ETextCommit::Type Commit
 		case ETextCommit::OnCleared:
 			break;
 	}
-	FSlateApplication::Get().SetKeyboardFocus(Chat_Etb->TakeWidget());
+	if(Chat_Etb) Chat_Etb->SetKeyboardFocus();
 }
 
 void ULobbyWidget::AddChatMessage(const FText& Text)

@@ -172,7 +172,7 @@ void UMainMenuWidget::CreateLobbyOKBtnClicked()
 	if(LobbyName.IsEmpty()) LobbyName = "Earth Hero"; //기본값
 	if(IsPrivate == "true" && Password.IsEmpty())
 	{
-		PasswordSetting_Etb->SetHintText(FText::FromString("No Blank")); //어차피 공개방이라 아무값이나 줌
+		PasswordSetting_Etb->SetHintText(FText::FromString("No Blank"));
 		SetButtonsEnabled(true);
 		return;
 	}
@@ -206,6 +206,13 @@ void UMainMenuWidget::PasswordOKBtnClicked()
 
 	//선택한 서버와 비번 비교
 	FString Password = Password_Etb->GetText().ToString();
+	if(Password.IsEmpty())
+	{
+		Password_Etb->SetHintText(FText::FromString("No Blank"));
+		SetButtonsEnabled(true);
+		return;
+	}
+	
 	FString ServerPort;
 	SelectedLobbyInfo.Session.SessionSettings.Get("PortNumber", ServerPort);
 	
@@ -351,15 +358,11 @@ void UMainMenuWidget::ServerRowClicked()
 		IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
 		if (Session.IsValid())
 		{
-			FString ConnectString2;
 			if (Session->GetResolvedConnectString(SelectedLobbyInfo, NAME_GamePort, ConnectString))
 			{
-				FOnlineSessionSearchResult* SessionToJoin2 = &SelectedLobbyInfo;
+				SessionToJoin = &SelectedLobbyInfo;
 				if (SessionToJoin)
 				{
-					ConnectString = ConnectString2;
-					SessionToJoin = SessionToJoin2;
-
 					LeaveSession("JoinSelectedLobby");
 				}
 			}
@@ -449,6 +452,12 @@ void UMainMenuWidget::HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRe
 
                     if (bKeyValueFound1 && bKeyValueFound2 && bKeyValueFound3 && bKeyValueFound4 && bKeyValueFound5)
                     {
+                    	if(bAdvertise)
+                    	{
+                    		UE_LOG(LogTemp, Log, TEXT("session? : %s, %s, %d, true"), *FindSessionReason, *PortNumber, NumberOfJoinedPlayers);
+                    	}
+                    	else UE_LOG(LogTemp, Log, TEXT("session? : %s, %s, %d, false"), *FindSessionReason, *PortNumber, NumberOfJoinedPlayers);
+                    	
                     	if (GameName == "EH2" &&
 								(
 									(FindSessionReason == "JoinLobby" && NumberOfJoinedPlayers > 0 && bAdvertise) ||

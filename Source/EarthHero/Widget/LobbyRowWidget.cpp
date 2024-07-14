@@ -27,9 +27,9 @@ void ULobbyRowWidget::UpdateLobbyInfo(FOnlineSessionSearchResult Lobby)
 
 	if(bKeyValueFound)
 	{
-		if(bAdvertise)
+		if(!bAdvertise)
 		{
-			SetColorAndOpacity(FLinearColor::Red);
+			SetColorAndOpacity(FLinearColor::Yellow);
 		}
 	}
 	
