@@ -44,4 +44,14 @@ public:
 	static void Pb_MovementSpeed(FHeroUpgradeStructure &SelectHeroUpgrade, FStatStructure &BaseHeroStat, FStatStructure &HeroStat);
 
 	//워리어 히어로 업그레이드
+
+	//메카닉 히어로 업그레이드
+
+	//슈터 히어로 업그레이드
+	UFUNCTION()
+	static void St_Headshot(FHeroUpgradeStructure &SelectHeroUpgrade, FStatStructure &BaseHeroStat, FStatStructure &HeroStat, class UShooterStatComponent *ShooterStatComponent);
+	static void St_IncreasedAmmoCapacity(FHeroUpgradeStructure &SelectHeroUpgrade, FStatStructure &BaseHeroStat, FStatStructure &HeroStat, class UShooterStatComponent *ShooterStatComponent);
+	static void St_GrenadeEnhancement(FHeroUpgradeStructure &SelectHeroUpgrade, FStatStructure &BaseHeroStat, FStatStructure &HeroStat, class UShooterStatComponent *ShooterStatComponent);
+	static void St_RocketBooster(FHeroUpgradeStructure &SelectHeroUpgrade, FStatStructure &BaseHeroStat, FStatStructure &HeroStat, class UShooterStatComponent *ShooterStatComponent);
+	
 };

@@ -18,6 +18,25 @@ public:
 	float SH_GrenadeRange = 200.f;
 	//수류탄 데미지
 	float SH_GrenadeDamage = 40.f;
+	//수류탄 적중 시 추가데미지
+	float SH_AdditionalDamage = 0.15f;
+
+	//헤드샷 피해
+	float SH_HeadShot = 1.f;
+	//장탄 수
+	int32 SH_Clips = 40;
+	bool SH_ClipsEternal = false;
+	
+	/*슈터 직업 증강 레벨*/
+	
+	//헤드샷
+	int32 HU_HeadShotLv = 0;
+	//장탄 수
+	int32 HU_ClipsLv = 0;
+	//수류탄 강화
+	int32 HU_EnhnacedGenerate = 0;
+	//부스터 로켓 강화
+	int32 HU_EnhancedBooster = 0;
 	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -34,24 +53,8 @@ protected:
 private:
 
 	virtual void InitializeStatData_Implementation() override;
-
-	/*슈터용 스텟*/
+	
 	UPROPERTY()
 	class AEHShooter *Shooter;
 	
-	//헤드샷 피해
-	float SH_HeadShot = 1.f;
-	//장탄 수
-	int32 SH_Clips = 40;
-	
-	/*슈터 직업 증강 레벨*/
-	
-	//헤드샷
-	int32 HU_HeadShotLv = 0;
-	//장탄 수
-	int32 HU_ClipsLv = 0;
-	//수류탄 강화
-	int32 HU_EnhnacedGenerate = 0;
-	//부스터 로켓 강화
-	int32 HU_EnhancedBooster = 0;
 };

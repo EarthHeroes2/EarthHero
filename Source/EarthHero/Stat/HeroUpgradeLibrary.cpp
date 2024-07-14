@@ -3,8 +3,10 @@
 
 #include "HeroUpgradeLibrary.h"
 
+#include "ShooterStatComponent.h"
+
 void UHeroUpgradeLibrary::Pb_NormalAttackDamage(FHeroUpgradeStructure& SelectHeroUpgrade, FStatStructure& BaseHeroStat,
-	FStatStructure& HeroStat)
+                                                FStatStructure& HeroStat)
 {
 	//선택한 히어로 업그레이드는 레벨 업
 	SelectHeroUpgrade.UpgradeLevel += 1;
@@ -201,4 +203,80 @@ void UHeroUpgradeLibrary::Pb_MovementSpeed(FHeroUpgradeStructure& SelectHeroUpgr
 		default:
 			UE_LOG(LogClass, Error, TEXT("UHeroUpgradeLibrary : 히어로 업그레이드 레벨이 1, 2, 3 이 아닌 다른값이 들어옴"));
 	}
+}
+
+void UHeroUpgradeLibrary::St_Headshot(FHeroUpgradeStructure& SelectHeroUpgrade, FStatStructure& BaseHeroStat,
+	FStatStructure& HeroStat, UShooterStatComponent* ShooterStatComponent)
+{
+	//선택한 히어로 업그레이드는 레벨 업
+	SelectHeroUpgrade.UpgradeLevel += 1;
+	ShooterStatComponent->HU_HeadShotLv += 1;
+
+	switch (SelectHeroUpgrade.UpgradeLevel)
+	{
+		case 1 :
+			ShooterStatComponent->SH_HeadShot = 1.3f;
+			break;
+		case 2 :
+			ShooterStatComponent->SH_HeadShot = 1.75f;
+			break;
+		case 3 :
+			ShooterStatComponent->SH_HeadShot = 2.5f;
+			break ;
+		default:
+			UE_LOG(LogClass, Error, TEXT("UHeroUpgradeLibrary : 히어로 업그레이드 레벨이 1, 2, 3 이 아닌 다른값이 들어옴"));
+	}
+}
+
+void UHeroUpgradeLibrary::St_IncreasedAmmoCapacity(FHeroUpgradeStructure& SelectHeroUpgrade,
+	FStatStructure& BaseHeroStat, FStatStructure& HeroStat, UShooterStatComponent* ShooterStatComponent)
+{
+	//선택한 히어로 업그레이드는 레벨 업
+	SelectHeroUpgrade.UpgradeLevel += 1;
+	ShooterStatComponent->HU_ClipsLv += 1;
+
+	switch (SelectHeroUpgrade.UpgradeLevel)
+	{
+		case 1 :
+			ShooterStatComponent->SH_Clips = 70;
+			break;
+		case 2 :
+			ShooterStatComponent->SH_Clips = 150;
+			break;
+		case 3 :
+			ShooterStatComponent->SH_ClipsEternal = true;
+			break ;
+		default:
+			UE_LOG(LogClass, Error, TEXT("UHeroUpgradeLibrary : 히어로 업그레이드 레벨이 1, 2, 3 이 아닌 다른값이 들어옴"));
+	}
+}
+
+void UHeroUpgradeLibrary::St_GrenadeEnhancement(FHeroUpgradeStructure& SelectHeroUpgrade, FStatStructure& BaseHeroStat,
+	FStatStructure& HeroStat, UShooterStatComponent* ShooterStatComponent)
+{
+	//선택한 히어로 업그레이드는 레벨 업
+	SelectHeroUpgrade.UpgradeLevel += 1;
+	ShooterStatComponent->HU_EnhnacedGenerate += 1;
+
+	switch (SelectHeroUpgrade.UpgradeLevel)
+	{
+		case 1 :
+			ShooterStatComponent->SH_GrenadeRange *= 2;
+			break;
+		case 2 :
+			ShooterStatComponent->SH_HeadShot = 150;
+			break;
+		case 3 :
+			ShooterStatComponent->SH_ClipsEternal = true;
+			break ;
+		default:
+			UE_LOG(LogClass, Error, TEXT("UHeroUpgradeLibrary : 히어로 업그레이드 레벨이 1, 2, 3 이 아닌 다른값이 들어옴"));
+	}
+}
+
+void UHeroUpgradeLibrary::St_RocketBooster(FHeroUpgradeStructure& SelectHeroUpgrade, FStatStructure& BaseHeroStat,
+	FStatStructure& HeroStat, UShooterStatComponent* ShooterStatComponent)
+{
+	//선택한 히어로 업그레이드는 레벨 업
+	SelectHeroUpgrade.UpgradeLevel += 1;
 }

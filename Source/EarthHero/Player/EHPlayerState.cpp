@@ -77,8 +77,8 @@ void AEHPlayerState::BeginPlay()
 	//{
 		UE_LOG(LogTemp, Log, TEXT("This instance is dedicated."));
 		//패키징 시 주석 처리해야 함
-		PlayerClass = Shooter; ////
-		IsCopyPropertiesEnd = true; ////
+		// PlayerClass = Shooter; ////
+		// IsCopyPropertiesEnd = true; ////
 		GetWorldTimerManager().SetTimer(SetStatComponentTimerHandle, this, &AEHPlayerState::SetStatComponent, 0.5f,true);  ////
 	//}
 }
@@ -149,14 +149,14 @@ UStatComponent* AEHPlayerState::GetStatComponent()
 {
 	switch (PlayerClass)
 	{
-	case Warrior:
-		return WarriorStatComponent;
-	case Mechanic:
-		return MechanicStatComponent;
-	case Shooter:
-		return ShooterStatComponent;
-	case Archer:
-		return ArcherStatComponent;
+		case Warrior:
+			return WarriorStatComponent;
+		case Mechanic:
+			return MechanicStatComponent;
+		case Shooter:
+			return ShooterStatComponent;
+		case Archer:
+			return ArcherStatComponent;
 	}
 	return nullptr;
 }
