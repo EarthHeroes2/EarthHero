@@ -264,10 +264,10 @@ void UHeroUpgradeLibrary::St_GrenadeEnhancement(FHeroUpgradeStructure& SelectHer
 			ShooterStatComponent->SH_GrenadeRange *= 2;
 			break;
 		case 2 :
-			ShooterStatComponent->SH_HeadShot = 150;
+			ShooterStatComponent->SH_AdditionalDamage = 0.3f;
 			break;
 		case 3 :
-			ShooterStatComponent->SH_ClipsEternal = true;
+			//적 이동 잠시 속박되고, 폭발 지점 중심으로 적들이 소폭 끌어당겨짐.
 			break ;
 		default:
 			UE_LOG(LogClass, Error, TEXT("UHeroUpgradeLibrary : 히어로 업그레이드 레벨이 1, 2, 3 이 아닌 다른값이 들어옴"));
@@ -279,4 +279,26 @@ void UHeroUpgradeLibrary::St_RocketBooster(FHeroUpgradeStructure& SelectHeroUpgr
 {
 	//선택한 히어로 업그레이드는 레벨 업
 	SelectHeroUpgrade.UpgradeLevel += 1;
+	ShooterStatComponent->HU_EnhancedBooster += 1;
+
+	switch (SelectHeroUpgrade.UpgradeLevel)
+	{
+		case 1 :
+			ShooterStatComponent->SH_FlightTime = 3.5f;
+			ShooterStatComponent->SH_FLightSpeed = 1.7f;
+			ShooterStatComponent->SH_FlightAttackSpeed = 0.55f;
+			break;
+		case 2 :
+			ShooterStatComponent->SH_FlightTime = 3.f;
+			ShooterStatComponent->SH_FLightSpeed = 2.f;
+			ShooterStatComponent->SH_FlightAttackSpeed = 1.11f;
+			break;
+		case 3 :
+			ShooterStatComponent->SH_FlightTime = 2.5f;
+			ShooterStatComponent->SH_FLightSpeed = 2.5f;
+			ShooterStatComponent->SH_FlightAttackSpeed = 2.22f;
+			break ;
+		default:
+			UE_LOG(LogClass, Error, TEXT("UHeroUpgradeLibrary : 히어로 업그레이드 레벨이 1, 2, 3 이 아닌 다른값이 들어옴"));
+	}
 }

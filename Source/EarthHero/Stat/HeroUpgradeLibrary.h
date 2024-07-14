@@ -50,8 +50,14 @@ public:
 	//슈터 히어로 업그레이드
 	UFUNCTION()
 	static void St_Headshot(FHeroUpgradeStructure &SelectHeroUpgrade, FStatStructure &BaseHeroStat, FStatStructure &HeroStat, class UShooterStatComponent *ShooterStatComponent);
+
+	UFUNCTION()
 	static void St_IncreasedAmmoCapacity(FHeroUpgradeStructure &SelectHeroUpgrade, FStatStructure &BaseHeroStat, FStatStructure &HeroStat, class UShooterStatComponent *ShooterStatComponent);
+
+	UFUNCTION()
 	static void St_GrenadeEnhancement(FHeroUpgradeStructure &SelectHeroUpgrade, FStatStructure &BaseHeroStat, FStatStructure &HeroStat, class UShooterStatComponent *ShooterStatComponent);
+
+	UFUNCTION()
 	static void St_RocketBooster(FHeroUpgradeStructure &SelectHeroUpgrade, FStatStructure &BaseHeroStat, FStatStructure &HeroStat, class UShooterStatComponent *ShooterStatComponent);
 	
 };

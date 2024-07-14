@@ -65,7 +65,11 @@ void UShooterCombatComponent::NetMulticast_GrenadeFire_Implementation()
 	UWorld* World = GetWorld();
 	UObject* GrenadeBPObject = StaticLoadObject(UObject::StaticClass(), nullptr, TEXT("/Game/Blueprints/Weapons/BP_Grenade.BP_Grenade"));
 	UBlueprint* GrenadeBP = Cast<UBlueprint>(GrenadeBPObject);
-	TSubclassOf<UObject> GrenadeBPClass = (UClass*)GrenadeBP->GeneratedClass;
+	TSubclassOf<UObject> GrenadeBPClass;
+	if (GrenadeBP)
+	{
+		GrenadeBPClass = (UClass*)GrenadeBP->GeneratedClass;
+	}
 	
 	if(World && GrenadeBPClass)
 	{
