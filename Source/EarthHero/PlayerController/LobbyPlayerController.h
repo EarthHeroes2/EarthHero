@@ -59,10 +59,16 @@ public:
 	UFUNCTION(Server, Reliable)
 	void Server_ChangeAdvertiseState(bool bAdvertise);
 
+	UFUNCTION(Server, Reliable)
+	void Server_SetDifficulty(int Difficulty);
+
+	UFUNCTION(Client, Reliable)
+	void Client_UpdateDifficulty(int Difficulty);
+
 protected:
 	void ShowLobbyWidget();
 	
-	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason);
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 	TSubclassOf<class UUserWidget> LobbyWidgetClass;
 

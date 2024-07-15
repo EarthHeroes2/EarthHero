@@ -221,8 +221,6 @@ void ALobbyPlayerController::Server_PlayerKick_Implementation(int PlayerNumber)
 	}
 }
 
-
-//열거형 리플리케이션이 안되네...
 void ALobbyPlayerController::Server_SetPlayerCharacter_Implementation(int ClassType)
 {
 	EClassType PlayerClass = static_cast<EClassType>(ClassType);
@@ -241,12 +239,28 @@ void ALobbyPlayerController::Server_SetPlayerCharacter_Implementation(int ClassT
 	}
 }
 
+void ALobbyPlayerController::Server_SetDifficulty_Implementation(int Difficulty)
+{
+	ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
+	if (LobbyGameMode)
+	{
+		LobbyGameMode->UpdateDifficulty(Difficulty);
+	}
+}
+
+void ALobbyPlayerController::Client_UpdateDifficulty_Implementation(int Difficulty)
+{
+	if(LobbyWidget)
+	{
+		//이런식으로
+		//LobbyWidget->UpdateDifficulty()
+	}
+}
 
 
 
 
 
-//����->Ŭ�� �޽��� ���� (�ӽ�)
 void ALobbyPlayerController::Client_SendToDebugMessage_Implementation(const FString& Message)
 {
 	if (GEngine)

@@ -2,33 +2,54 @@
 
 
 #include "GameOverPlayerState.h"
+
+#include "EarthHero/EHGameInstance.h"
 #include "EarthHero/GameMode/GameOverGameMode.h"
 #include "EarthHero/Socket/SocketClient.h"
 
 void AGameOverPlayerState::BeginPlay()
 {
 	Super::BeginPlay();
-	if(GetNetMode() != NM_Client)
-	{
-		
-		GetWorldTimerManager().SetTimer(SetStatComponentTimerHandle, this, &ThisClass::TestFunc, 4.5f,false);
-	}
 }
 
 
 //copy propertice가 끝나고 데이터를 서버에 저장해야함
 void AGameOverPlayerState::TestFunc()
 {
-	AGameModeBase* GameMode = GetWorld()->GetAuthGameMode<AGameModeBase>();
-	if (GameMode)
-	{
-		AGameOverGameMode* GameOverGameMode = Cast<AGameOverGameMode>(GameMode);
-		if(GameOverGameMode)
-		{
-			//플레이어 정보 저장
+	if(!IsRunningDedicatedServer()) UE_LOG(LogTemp, Error, TEXT("???????????????????????????????????????????"));
 
-			USocketClient* NewSocket = NewObject<USocketClient>(this);
-			if(NewSocket) NewSocket->CreateSocket("UpdateData", "54321");
+	FString ExtraInfo;
+	const FString SteamID = GetUniqueId().ToString();
+	
+	UE_LOG(LogTemp, Error, TEXT("id = %s"), *SteamID);
+
+	UEHGameInstance* EhGameInstance= Cast<UEHGameInstance>(GetGameInstance());
+	if(EhGameInstance)
+	{
+		switch (EhGameInstance->Difficulty)
+		{
+		case 1:
+			ExtraInfo = SteamID + "|" + FString::FromInt(2);
+			break;
+		case 2:
+			ExtraInfo = SteamID + "|" + FString::FromInt(4);
+			break;
+		case 3:
+			ExtraInfo = SteamID + "|" + FString::FromInt(10);
+			break;
+		case 4:
+			ExtraInfo = SteamID + "|" + FString::FromInt(30);
+			break;
+		case 5:
+			ExtraInfo = SteamID + "|" + FString::FromInt(100);
+			break;
+		default:
+			ExtraInfo = SteamID + "|0";
+			UE_LOG(LogTemp, Error, TEXT("Invalid Difficulty : %d"), EhGameInstance->Difficulty);
 		}
+		
 	}
+	
+	USocketClient* NewSocket = NewObject<USocketClient>(this);
+	if(NewSocket) NewSocket->CreateSocket("UpdatePlayerExp", ExtraInfo);
 }

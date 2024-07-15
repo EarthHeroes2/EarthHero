@@ -122,19 +122,6 @@ bool InsertPlayerData(string id)
     return true;
 }
 
-//해당 id의 점수 갱신 //예시
-bool UpdateData(string id, int new_score)
-{
-    string query = "UPDATE test_table SET score = " + to_string(new_score) + " WHERE id = " + id;
-
-    if (mysql_query(conn, query.c_str()))
-    {
-        fprintf(stderr, "UPDATE failed. Error: %s\n", mysql_error(conn));
-        return false;
-    }
-    return true;
-}
-
 //플레이어 id로 정보를 조회
 //성공 시 플레이어 데이터를, 실패 시 ""를 넘김
 string QueryPlayerData(string id)
@@ -150,7 +137,7 @@ string QueryPlayerData(string id)
     MYSQL_RES* result = mysql_store_result(conn);
     if (result == NULL)
     {
-        fprintf(stderr, "mysql_store_result() failed. Error: %s\n", mysql_error(conn));
+        fprintf(stderr, "mysql_store_result failed. Error: %s\n", mysql_error(conn));
         return "";
     }
     
@@ -175,15 +162,69 @@ string QueryPlayerData(string id)
     return "";
 }
 
+//해당 id의 exp 갱신
+bool UpdateExp(string id, int add_exp)
+{
+    string query = "SELECT level, exp FROM " + user_table + " WHERE id = " + id;
+
+    if (mysql_query(conn, query.c_str()))
+    {
+        fprintf(stderr, "UPDATE failed. Error: %s\n", mysql_error(conn));
+        return false;
+    }
+
+    MYSQL_RES* result = mysql_store_result(conn);
+    if (result == NULL)
+    {
+        fprintf(stderr, "mysql_store_result failed. Error: %s\n", mysql_error(conn));
+        return false;
+    }
+
+    if (result->row_count == 0)
+    {
+        fprintf(stderr, "No such user with id: %s\n", id.c_str());
+        return false;
+    }
+
+    MYSQL_ROW row = mysql_fetch_row(result);
+
+    int level = stoi(row[0]);
+    int exp = stoi(row[1]);
+
+    printf("ID: %s, level: %d, Exp: %d -> %d\n", id.c_str(), level, exp, exp + add_exp);
+
+    exp += add_exp;
+
+    //need_exp[i]는 i->i+1 레벨로 갈때 필요한 경험치를 의미함
+    int need_exp[10] = {0, 1, 2, 4, 8, 14, 24, 40, 60, 90};
+
+
+    for (; level < 10; level)
+    {
+        if (exp >= need_exp[level]) exp -= need_exp[level];
+        else break;
+    }
+
+    query = "UPDATE " + user_table + " SET level = " + to_string(level) + ", exp = " + to_string(exp) + " WHERE id = " + id;
+
+    if (mysql_query(conn, query.c_str()))
+    {
+        fprintf(stderr, "UPDATE failed. Error: %s\n", mysql_error(conn));
+        return false;
+    }
+
+    printf("Level(%d), Exp(%d) Update Success (%s)\n", level, exp, id.c_str());
+    return true;
+}
+
 
 int main()
 {
     MYSQL connection;
 
-    //자신의 설정에 맞게 수정
     const char* host = "localhost";
     const char* user = "root";
-    const char* passwd = "sql 비번";
+    const char* passwd = "비밀번호";
     const char* db = "main";
     
     if(mysql_init(&connection) == NULL)
@@ -319,11 +360,13 @@ int main()
                 const char* PlayerData = PlayerDataString.c_str();
                 send(ClientSocket, PlayerData, strlen(PlayerData) + 1, 0);
             }
-            else if (request == "UpdateData") // 미구현
+            else if (request == "UpdatePlayerExp" && numTokens == 3)
             {
-                printf("data : %s\n", tokens[1].c_str());
+                string id = tokens[1];
+                int add_exp = stoi(tokens[2]);
 
-
+                if (UpdateExp(id, add_exp)) printf("Update Exp(%d) Successs (%s)\n", add_exp, id.c_str());
+                else fprintf(stderr, "Update Exp(%d) Failed (%s)\n", add_exp, id.c_str());
             }
             else printf("Invalid request : %s     numTokens : %zu\n", request.c_str(), numTokens);
         }

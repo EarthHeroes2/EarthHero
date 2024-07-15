@@ -46,9 +46,8 @@ void AEHWarrior::PostInitializeComponents()
 void AEHWarrior::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
-
-	AEHPlayerState* NewPlayerState = Cast<AEHPlayerState>(NewController->PlayerState);
 	
+	AEHPlayerState* NewPlayerState = Cast<AEHPlayerState>(NewController->PlayerState);
 	if(NewPlayerState)
 	{
 		WarriorStatComponent = NewPlayerState->WarriorStatComponent;
