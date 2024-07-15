@@ -7,12 +7,6 @@
 #include <vector>
 #include <mysql.h>
 
-#include <jdbc/cppconn/driver.h>
-#include <jdbc/cppconn/exception.h>
-#include <jdbc/cppconn/resultset.h>
-#include <jdbc/cppconn/statement.h>
-#include <jdbc/cppconn/prepared_statement.h>
-
 #pragma comment(lib, "libmysql.lib")
 #pragma comment(lib, "mysqlcppconn.lib")
 #pragma comment(lib, "Ws2_32.lib")
@@ -25,6 +19,11 @@ using namespace std;
 
 int bLobbyExist[MAX_NUM_SERVERS] = { false, };
 string lobbyPassword[MAX_NUM_SERVERS];
+
+
+MYSQL* conn;
+string user_table = "user_table";
+
 
 vector<string> StringTokenizer(char* str)
 {
@@ -43,13 +42,13 @@ vector<string> StringTokenizer(char* str)
     return tokens;
 }
 
-//¼­¹ö ÀÎ½ºÅÏ½º ½ÇÇà¸¸ ½ÃÅ°°í ¸®ÅÏµÊ
+//ì„œë²„ ì¸ìŠ¤í„´ìŠ¤ ì‹¤í–‰ë§Œ ì‹œí‚¤ê³  ë¦¬í„´ë¨
 void CreateNewLobbyInstance(const wchar_t* Command, int LobbyNumber)
 {
     STARTUPINFO si;
     PROCESS_INFORMATION pi;
 
-    //ÃÊ±âÈ­
+    //ì´ˆê¸°í™”
     ZeroMemory(&si, sizeof(si));
     si.cb = sizeof(si);
     ZeroMemory(&pi, sizeof(pi));
@@ -79,15 +78,15 @@ void CreateNewLobbyInstance(const wchar_t* Command, int LobbyNumber)
 
 string CreateNewLobby(const string* lobbyName, const string* isPrivate, const string* password)
 {
-    string unrealPath = "C:\\UnrealEngine-5.1.1-release\\Engine\\Binaries\\Win64\\UnrealEditor.exe"; //¼Ò½ººôµå UnrealEditor.exe °æ·Î
-    string projectPath = "C:\\Git\\EarthHero\\EarthHero.uproject"; //¿ì¸® ÇÁ·ÎÁ§Æ® uproject °æ·Î
+    string unrealPath = "C:\\UnrealEngine-5.1.1-release\\Engine\\Binaries\\Win64\\UnrealEditor.exe"; //ì†ŒìŠ¤ë¹Œë“œ UnrealEditor.exe ê²½ë¡œ
+    string projectPath = "C:\\Git\\EarthHero\\EarthHero.uproject"; //ìš°ë¦¬ í”„ë¡œì íŠ¸ uproject ê²½ë¡œ
     string portNumber = "";
 
     for (int lobbyNumber = 0; lobbyNumber < MAX_NUM_SERVERS; lobbyNumber++)
     {
         if (!bLobbyExist[lobbyNumber])
         {
-            lobbyPassword[lobbyNumber] = *password; //ºñ¹ø ÇÒ´ç
+            lobbyPassword[lobbyNumber] = *password; //ë¹„ë²ˆ í• ë‹¹
 
             portNumber = to_string(lobbyNumber + 7778);
             string command = unrealPath + " " + projectPath + " Lobby -server -log"
@@ -96,7 +95,7 @@ string CreateNewLobby(const string* lobbyName, const string* isPrivate, const st
                 + " -LobbyName=" + *lobbyName
                 + " -Private=" + *isPrivate;
 
-            //¹®ÀÚ¿­ º¯È¯...
+            //ë¬¸ìì—´ ë³€í™˜...
             wstring wCommand(command.begin(), command.end());
             const wchar_t* wCharCommand = wCommand.c_str();
             CreateNewLobbyInstance(wCharCommand, lobbyNumber);
@@ -109,34 +108,83 @@ string CreateNewLobby(const string* lobbyName, const string* isPrivate, const st
 
 
 
-
-
-bool InsertData(MYSQL* connection, int id, int score)
+//ìƒˆë¡œìš´ í”Œë ˆì´ì–´ ì •ë³´ ë“±ë¡
+bool InsertPlayerData(string id)
 {
-    string query = "INSERT INTO test_table (id, score) VALUES (" +
-        to_string(id) + ", " +
-        to_string(score) + ")";
+    string query = "INSERT INTO " + user_table + " (id, level, exp) VALUES (" + id + ", 1, 0)";
 
-    if (mysql_query(connection, query.c_str()))
+    if (mysql_query(conn, query.c_str()))
     {
-        fprintf(stderr, "INSERT failed. Error: %s\n", mysql_error(connection));
+        fprintf(stderr, "INSERT failed. Error: %s\n", mysql_error(conn));
+        return false;
+    }
+
+    return true;
+}
+
+//í•´ë‹¹ idì˜ ì ìˆ˜ ê°±ì‹  //ì˜ˆì‹œ
+bool UpdateData(string id, int new_score)
+{
+    string query = "UPDATE test_table SET score = " + to_string(new_score) + " WHERE id = " + id;
+
+    if (mysql_query(conn, query.c_str()))
+    {
+        fprintf(stderr, "UPDATE failed. Error: %s\n", mysql_error(conn));
         return false;
     }
     return true;
 }
 
+//í”Œë ˆì´ì–´ idë¡œ ì •ë³´ë¥¼ ì¡°íšŒ
+//ì„±ê³µ ì‹œ í”Œë ˆì´ì–´ ë°ì´í„°ë¥¼, ì‹¤íŒ¨ ì‹œ ""ë¥¼ ë„˜ê¹€
+string QueryPlayerData(string id)
+{
+    string query = "SELECT level, exp FROM " + user_table + " WHERE id = " + id;
 
+    if (mysql_query(conn, query.c_str()))
+    {
+        fprintf(stderr, "SELECT failed. Error: %s\n", mysql_error(conn));
+        return "";
+    }
 
+    MYSQL_RES* result = mysql_store_result(conn);
+    if (result == NULL)
+    {
+        fprintf(stderr, "mysql_store_result() failed. Error: %s\n", mysql_error(conn));
+        return "";
+    }
+    
+    if (result->row_count == 0) //ì—†ìœ¼ë©´ ìƒì„± í›„ ê¸°ë³¸ ì •ë³´ ë¦¬í„´
+    {
+        if(InsertPlayerData(id)) printf("Insert Data Successs (%s)\n", id.c_str());
+        else fprintf(stderr, "Insert Data Failed (%s)\n", id.c_str());
+
+        return "1|0";
+    }
+    else //ìˆìœ¼ë©´ ì •ë³´ë“¤ ë¦¬í„´
+    {
+        MYSQL_ROW row = mysql_fetch_row(result);
+        
+        printf("ID: %s, level: %s, Exp: %s\n", id.c_str(), row[0], row[1]);
+        
+        return string(row[0]) + "|" + string(row[1]);
+    }
+
+    mysql_free_result(result);
+
+    return "";
+}
 
 
 int main()
 {
-    MYSQL* conn, connection;
+    MYSQL connection;
 
+    //ìì‹ ì˜ ì„¤ì •ì— ë§ê²Œ ìˆ˜ì •
     const char* host = "localhost";
     const char* user = "root";
-    const char* passwd = "ÀÚ½ÅÀÇ ºñ¹Ğ¹øÈ£";
-    const char* db = "test_schema";
+    const char* passwd = "sql ë¹„ë²ˆ";
+    const char* db = "main";
     
     if(mysql_init(&connection) == NULL)
     {
@@ -149,42 +197,12 @@ int main()
         mysql_close(&connection);
         return 1;
     }
-
-    if (InsertData(conn, 123, 100)) printf("Insert Data Successs\n");
-    else fprintf(stderr, "Insert Data Failed\n");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+   
 
     WSADATA wsaData;
     int iResult;
 
-    // Winsock ÃÊ±âÈ­
+    // Winsock ì´ˆê¸°í™”
     iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
     if (iResult != 0)
     {
@@ -192,7 +210,7 @@ int main()
         return 1;
     }
 
-    // ¼ÒÄÏ »ı¼º
+    // ì†Œì¼“ ìƒì„±
     SOCKET ListenSocket = INVALID_SOCKET;
     ListenSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (ListenSocket == INVALID_SOCKET)
@@ -202,14 +220,14 @@ int main()
         return 1;
     }
 
-    // ÁÖ¼Ò ¹× Æ÷Æ® ¼³Á¤
+    // ì£¼ì†Œ ë° í¬íŠ¸ ì„¤ì •
     sockaddr_in serverAddr;
     serverAddr.sin_family = AF_INET;
     serverAddr.sin_addr.s_addr = INADDR_ANY;
     serverAddr.sin_port = htons(SERVERPORT);
 
 
-    // ¼ÒÄÏ ¹ÙÀÎµå
+    // ì†Œì¼“ ë°”ì¸ë“œ
     iResult = ::bind(ListenSocket, (sockaddr*)&serverAddr, sizeof(serverAddr));
     if (iResult == SOCKET_ERROR) {
         fprintf(stderr, "Bind failed: %d", WSAGetLastError());
@@ -219,7 +237,7 @@ int main()
     }
 
 
-    // ¼ÒÄÏ ¸®½¼
+    // ì†Œì¼“ ë¦¬ìŠ¨
     iResult = listen(ListenSocket, SOMAXCONN);
     if (iResult == SOCKET_ERROR)
     {
@@ -233,7 +251,7 @@ int main()
 
     while (true)
     {
-        // Å¬¶óÀÌ¾ğÆ® ¿¬°á ¼ö¶ô
+        // í´ë¼ì´ì–¸íŠ¸ ì—°ê²° ìˆ˜ë½
         SOCKET ClientSocket;
         ClientSocket = accept(ListenSocket, NULL, NULL);
         if (ClientSocket == INVALID_SOCKET)
@@ -249,21 +267,20 @@ int main()
 
         if (iResult > 0)
         {
-            vector<string> tokens = StringTokenizer(buffer); //ÅäÅ«À¸·Î ÀÚ¸£°í
+            vector<string> tokens = StringTokenizer(buffer); //ìš”ì²­ì„ í† í°ìœ¼ë¡œ ìë¥´ê³ 
             size_t numTokens = tokens.size();
 
             string request = tokens[0];
 
             if (request == "CreateLobby" && numTokens == 4)
             {
-                //»õ·Î¿î ¼­¹ö ¿­°í ÇØ´ç Æ÷Æ® ¹øÈ£ ¸®ÅÏ
+                //ìƒˆë¡œìš´ ì„œë²„ ì—´ê³  í•´ë‹¹ í¬íŠ¸ ë²ˆí˜¸ ë¦¬í„´
                 string newServerPortString = CreateNewLobby(&tokens[1], &tokens[2], &tokens[3]);
                 const char* newServerPort = newServerPortString.c_str();
 
-                //ÇÃ·¹ÀÌ¾î¿¡°Ô Á¢¼ÓÇÒ Æ÷Æ® ¹øÈ£ ¾Ë·ÁÁÜ
-                send(ClientSocket, newServerPort, strlen(newServerPort) + 1, 0);
-
+                //í”Œë ˆì´ì–´ì—ê²Œ ì ‘ì†í•  í¬íŠ¸ ë²ˆí˜¸ ì•Œë ¤ì¤Œ
                 printf("Send new server port : %s\n", newServerPort);
+                send(ClientSocket, newServerPort, strlen(newServerPort) + 1, 0);
             }
             else if (request == "DestroyServer" && numTokens == 2)
             {
@@ -271,6 +288,7 @@ int main()
 
                 printf("Destroy server port : %s\n", destroyServerPort.c_str());
 
+                //í•´ë‹¹ ì„œë²„ ì •ë³´ë¥¼ ì •ë¦¬í•¨
                 int lobbyNumber = stoi(destroyServerPort) - 7778;
                 bLobbyExist[lobbyNumber] = false;
             }
@@ -279,31 +297,37 @@ int main()
                 int selectedLobbyNumber = stoi(tokens[1]) - 7778;
                 string password = tokens[2];
 
-                printf("Receive Password : %s         Correct Password : %s\n", password.c_str(), lobbyPassword[selectedLobbyNumber].c_str());
-
+                //ë¹„ë°€ë²ˆí˜¸ ë¹„êµ
                 string compareResultString;
                 if (password == lobbyPassword[selectedLobbyNumber]) compareResultString = "true";
                 else compareResultString = "false";
 
+                printf("Password Check : %s", compareResultString.c_str());
+
+                //í”Œë ˆì´ì–´ì—ê²Œ ì˜³ì€ ì§€ ê·¸ë¥¸ ì§€ ì•Œë ¤ì¤Œ
                 const char* compareResult = compareResultString.c_str();
                 send(ClientSocket, compareResult, strlen(compareResult) + 1, 0);
             }
-            else if (request == "UpdateData") // ¹Ì±¸Çö
+            else if (request == "GetPlayerData" && numTokens == 2)
+            {
+                string id = tokens[1];
+
+                //ìƒˆë¡œìš´ í”Œë ˆì´ì–´ë©´ ì •ë³´ ì¶”ê°€, ì•„ë‹ˆë¼ë©´ í•´ë‹¹ í”Œë ˆì´ì–´ì˜ ì •ë³´ë¥¼ ì°¾ìŒ
+                string PlayerDataString = QueryPlayerData(id);
+
+                //í”Œë ˆì´ì–´ì—ê²Œ ìì‹ ì˜ ì •ë³´ë¥¼ ì•Œë ¤ì¤Œ
+                const char* PlayerData = PlayerDataString.c_str();
+                send(ClientSocket, PlayerData, strlen(PlayerData) + 1, 0);
+            }
+            else if (request == "UpdateData") // ë¯¸êµ¬í˜„
             {
                 printf("data : %s\n", tokens[1].c_str());
 
 
-                //SavePlayerScore(con, playerID, score);
             }
-            else
-            {
-                printf("Invalid request : %s\n", request.c_str());
-            }
+            else printf("Invalid request : %s     numTokens : %zu\n", request.c_str(), numTokens);
         }
-        else
-        {
-            printf("Receive failed: %d\n", WSAGetLastError());
-        }
+        else printf("Receive failed: %d\n", WSAGetLastError());
 
         closesocket(ClientSocket);
     }
