@@ -9,6 +9,7 @@
 #include "MainMenuWidget.generated.h"
 
 
+class UTextBlock;
 class UEditableTextBox;
 class UScrollBox;
 class ULobbyRowWidget;
@@ -131,6 +132,14 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	UButton* FindLobby_Btn;
+
+
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* Lev_Tb;
+
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* Exp_Tb;
+	
 
 	UFUNCTION()
 	void LobbyListBtnClicked();
