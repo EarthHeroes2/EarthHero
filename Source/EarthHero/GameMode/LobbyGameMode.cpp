@@ -3,6 +3,8 @@
 
 #include "LobbyGameMode.h"
 #include <EarthHero/GameSession/LobbyGameSession.h>
+
+#include "EarthHero/EHGameInstance.h"
 #include "GameFramework/PlayerState.h"
 #include "EarthHero/Character/Shooter/EHShooter.h"
 #include "EarthHero/PlayerState/LobbyPlayerState.h"
@@ -141,7 +143,6 @@ void ALobbyGameMode::UpdatePlayerNameListAndReadyState()
 void ALobbyGameMode::UpdatePlayerReadyState()
 {
 	int32 NumberOfPlayers = LobbyPlayerControllerArray.Num();
-	//ALobbyPlayerController�� for���� �ȵǳ���...
 
 	UE_LOG(LogTemp, Log, TEXT("Send Ready state to client. (%d players)"), NumberOfPlayers);
 
@@ -253,4 +254,20 @@ int ALobbyGameMode::FindLobbyPlayerSpot(ALobbyPlayerController* NewLobbyPlayerCo
 		}
 	}
 	return 0;
+}
+
+void ALobbyGameMode::UpdateDifficulty(int Difficulty)
+{
+	UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(GetGameInstance());
+	if(EHGameInstance)
+	{
+		UE_LOG(LogTemp, Log, TEXT("Update difficulty : %d"), Difficulty);
+		EHGameInstance->Difficulty = Difficulty;
+	}
+
+	for(ALobbyPlayerController* LobbyPlayerController : LobbyPlayerControllerArray)
+	{
+		if(LobbyPlayerController && !LobbyPlayerController->bHost)
+			LobbyPlayerController->Client_UpdateDifficulty(Difficulty);
+	}
 }

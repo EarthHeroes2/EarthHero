@@ -54,4 +54,8 @@ public:
 
 	void UpdateCharacter(ALobbyPlayerController* LobbyPlayerController, EClassType ClassType);
 	int FindLobbyPlayerSpot(ALobbyPlayerController* NewLobbyPlayerController);
+
+
+
+	void UpdateDifficulty(int Difficulty);
 };
