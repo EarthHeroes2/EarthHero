@@ -62,7 +62,7 @@ void AEHCharacter::Tick(float DeltaSeconds)
     {
         FRotator NewRotator = Controller->GetControlRotation();
         float NewPitch;
-        if(NewRotator.Pitch < 180)
+        if(NewRotator.Pitch < 180.f)
         {
             NewPitch = FMath::Clamp(NewRotator.Pitch, MinPitchAngle, MaxPitchAngle);
         }
