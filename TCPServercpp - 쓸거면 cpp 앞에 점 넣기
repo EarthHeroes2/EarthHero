@@ -5,28 +5,35 @@
 #include <thread>
 #include <cstring>
 #include <vector>
+#include <mysql.h>
 
-using namespace std;
+#include <jdbc/cppconn/driver.h>
+#include <jdbc/cppconn/exception.h>
+#include <jdbc/cppconn/resultset.h>
+#include <jdbc/cppconn/statement.h>
+#include <jdbc/cppconn/prepared_statement.h>
 
+#pragma comment(lib, "libmysql.lib")
+#pragma comment(lib, "mysqlcppconn.lib")
 #pragma comment(lib, "Ws2_32.lib")
 
 #define SERVERPORT 7777
 #define MAX_NUM_SERVERS 10
 #define MAX_BUFFER_LENGTH 1000
 
+using namespace std;
 
-int bLobbyExist[MAX_NUM_SERVERS] = {false, };
+int bLobbyExist[MAX_NUM_SERVERS] = { false, };
 string lobbyPassword[MAX_NUM_SERVERS];
 
-
-vector<string> StringTokenizer(char *str)
+vector<string> StringTokenizer(char* str)
 {
     vector<string> tokens;
-    char *token;
-    char *context = NULL;
-    
+    char* token;
+    char* context = NULL;
+
     token = strtok_s(str, "|", &context);
-    
+
     while (token != NULL)
     {
         tokens.push_back(string(token));
@@ -36,17 +43,17 @@ vector<string> StringTokenizer(char *str)
     return tokens;
 }
 
-//ì„œë²„ ì¸ìŠ¤í„´ìŠ¤ ì‹¤í–‰ë§Œ ì‹œí‚¤ê³  ë¦¬í„´ë¨
+//¼­¹ö ÀÎ½ºÅÏ½º ½ÇÇà¸¸ ½ÃÅ°°í ¸®ÅÏµÊ
 void CreateNewLobbyInstance(const wchar_t* Command, int LobbyNumber)
 {
     STARTUPINFO si;
     PROCESS_INFORMATION pi;
 
-    //ì´ˆê¸°í™”
+    //ÃÊ±âÈ­
     ZeroMemory(&si, sizeof(si));
     si.cb = sizeof(si);
     ZeroMemory(&pi, sizeof(pi));
-    
+
     if (!CreateProcess(
         NULL,
         const_cast<wchar_t*>(Command),
@@ -57,43 +64,43 @@ void CreateNewLobbyInstance(const wchar_t* Command, int LobbyNumber)
         NULL,
         NULL,
         &si,
-        &pi )
-    )
+        &pi)
+        )
     {
-        printf("CreateProcess failed: %lu\n", GetLastError());
+        fprintf(stderr, "CreateProcess failed : % lu\n", GetLastError());
         return;
     }
-    
+
     bLobbyExist[LobbyNumber] = true;
-    
+
     CloseHandle(pi.hProcess);
     CloseHandle(pi.hThread);
 }
 
-string CreateNewLobby(const string *lobbyName, const string *isPrivate, const string *password)
+string CreateNewLobby(const string* lobbyName, const string* isPrivate, const string* password)
 {
-    string unrealPath = "C:\\UnrealEngine-5.1.1-release\\Engine\\Binaries\\Win64\\UnrealEditor.exe"; //ì†ŒìŠ¤ë¹Œë“œ UnrealEditor.exe ê²½ë¡œ
-    string projectPath = "C:\\Git\\EarthHero\\EarthHero.uproject"; //ìš°ë¦¬ í”„ë¡œì íŠ¸ uproject ê²½ë¡œ
+    string unrealPath = "C:\\UnrealEngine-5.1.1-release\\Engine\\Binaries\\Win64\\UnrealEditor.exe"; //¼Ò½ººôµå UnrealEditor.exe °æ·Î
+    string projectPath = "C:\\Git\\EarthHero\\EarthHero.uproject"; //¿ì¸® ÇÁ·ÎÁ§Æ® uproject °æ·Î
     string portNumber = "";
 
-    for(int lobbyNumber = 0; lobbyNumber < MAX_NUM_SERVERS; lobbyNumber++)
+    for (int lobbyNumber = 0; lobbyNumber < MAX_NUM_SERVERS; lobbyNumber++)
     {
-        if(!bLobbyExist[lobbyNumber])
+        if (!bLobbyExist[lobbyNumber])
         {
-            lobbyPassword[lobbyNumber] = *password; //ë¹„ë²ˆ í• ë‹¹
-            
+            lobbyPassword[lobbyNumber] = *password; //ºñ¹ø ÇÒ´ç
+
             portNumber = to_string(lobbyNumber + 7778);
             string command = unrealPath + " " + projectPath + " Lobby -server -log"
-                            + " -Port=" + portNumber
-                            + " -QueryPort=" + to_string(stoi(portNumber) + 19238)
-                            + " -LobbyName=" + *lobbyName
-                            + " -Private=" + *isPrivate;
-            
-            //ë¬¸ìì—´ ë³€í™˜...
-            std::wstring wCommand(command.begin(), command.end());
-            const wchar_t* wCharCommand = wCommand.c_str();   
+                + " -Port=" + portNumber
+                + " -QueryPort=" + to_string(stoi(portNumber) + 19238)
+                + " -LobbyName=" + *lobbyName
+                + " -Private=" + *isPrivate;
+
+            //¹®ÀÚ¿­ º¯È¯...
+            wstring wCommand(command.begin(), command.end());
+            const wchar_t* wCharCommand = wCommand.c_str();
             CreateNewLobbyInstance(wCharCommand, lobbyNumber);
-            
+
             return portNumber;
         }
     }
@@ -101,102 +108,173 @@ string CreateNewLobby(const string *lobbyName, const string *isPrivate, const st
 }
 
 
+
+
+
+bool InsertData(MYSQL* connection, int id, int score)
+{
+    string query = "INSERT INTO test_table (id, score) VALUES (" +
+        to_string(id) + ", " +
+        to_string(score) + ")";
+
+    if (mysql_query(connection, query.c_str()))
+    {
+        fprintf(stderr, "INSERT failed. Error: %s\n", mysql_error(connection));
+        return false;
+    }
+    return true;
+}
+
+
+
+
+
 int main()
 {
+    MYSQL* conn, connection;
+
+    const char* host = "localhost";
+    const char* user = "root";
+    const char* passwd = "ÀÚ½ÅÀÇ ºñ¹Ğ¹øÈ£";
+    const char* db = "test_schema";
+    
+    if(mysql_init(&connection) == NULL)
+    {
+        fprintf(stderr, "mysql_init failed\n");
+        return 1;
+    }
+    if ((conn = mysql_real_connect(&connection, host, user, passwd, db, 3306, NULL, 0)) == NULL)
+    {
+        fprintf(stderr, "mysql_real_connect failed : %s\n", mysql_error(&connection));
+        mysql_close(&connection);
+        return 1;
+    }
+
+    if (InsertData(conn, 123, 100)) printf("Insert Data Successs\n");
+    else fprintf(stderr, "Insert Data Failed\n");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     WSADATA wsaData;
     int iResult;
-    
-    // Winsock ì´ˆê¸°í™”
+
+    // Winsock ÃÊ±âÈ­
     iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
     if (iResult != 0)
     {
-        printf("WSAStartup failed: %d", iResult);
+        fprintf(stderr, "WSAStartup failed: %d", iResult);
         return 1;
     }
-    
-    // ì†Œì¼“ ìƒì„±
+
+    // ¼ÒÄÏ »ı¼º
     SOCKET ListenSocket = INVALID_SOCKET;
     ListenSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (ListenSocket == INVALID_SOCKET)
     {
-        printf("Socket creation failed: %d\n", WSAGetLastError());
+        fprintf(stderr, "Socket creation failed: %d\n", WSAGetLastError());
         WSACleanup();
         return 1;
     }
 
-    // ì£¼ì†Œ ë° í¬íŠ¸ ì„¤ì •
+    // ÁÖ¼Ò ¹× Æ÷Æ® ¼³Á¤
     sockaddr_in serverAddr;
     serverAddr.sin_family = AF_INET;
     serverAddr.sin_addr.s_addr = INADDR_ANY;
     serverAddr.sin_port = htons(SERVERPORT);
 
-    
-    // ì†Œì¼“ ë°”ì¸ë“œ
-    iResult = bind(ListenSocket, (sockaddr*)&serverAddr, sizeof(serverAddr));
+
+    // ¼ÒÄÏ ¹ÙÀÎµå
+    iResult = ::bind(ListenSocket, (sockaddr*)&serverAddr, sizeof(serverAddr));
     if (iResult == SOCKET_ERROR) {
-        printf("Bind failed: %d", WSAGetLastError());
+        fprintf(stderr, "Bind failed: %d", WSAGetLastError());
         closesocket(ListenSocket);
         WSACleanup();
         return 1;
     }
 
-    
-    // ì†Œì¼“ ë¦¬ìŠ¨
+
+    // ¼ÒÄÏ ¸®½¼
     iResult = listen(ListenSocket, SOMAXCONN);
     if (iResult == SOCKET_ERROR)
     {
-        printf("Listen failed: %d\n", WSAGetLastError());
+        fprintf(stderr, "Listen failed: %d\n", WSAGetLastError());
         closesocket(ListenSocket);
         WSACleanup();
         return 1;
     }
-    
+
     printf("Waiting for connections...\n");
 
     while (true)
     {
-        // í´ë¼ì´ì–¸íŠ¸ ì—°ê²° ìˆ˜ë½
+        // Å¬¶óÀÌ¾ğÆ® ¿¬°á ¼ö¶ô
         SOCKET ClientSocket;
         ClientSocket = accept(ListenSocket, NULL, NULL);
         if (ClientSocket == INVALID_SOCKET)
         {
-            printf("Accept failed: %d\n", WSAGetLastError());
+            fprintf(stderr, "Accept failed: %d\n", WSAGetLastError());
             closesocket(ListenSocket);
             WSACleanup();
             return 1;
         }
-        
-        char buffer[MAX_BUFFER_LENGTH] = {0};
+
+        char buffer[MAX_BUFFER_LENGTH] = { 0 };
         iResult = recv(ClientSocket, buffer, MAX_BUFFER_LENGTH, 0);
-        
+
         if (iResult > 0)
         {
-            vector<string> tokens = StringTokenizer(buffer); //í† í°ìœ¼ë¡œ ìë¥´ê³ 
-            int numTokens = tokens.size();
+            vector<string> tokens = StringTokenizer(buffer); //ÅäÅ«À¸·Î ÀÚ¸£°í
+            size_t numTokens = tokens.size();
 
             string request = tokens[0];
-            
-            if(request == "CreateLobby" && numTokens == 4)
+
+            if (request == "CreateLobby" && numTokens == 4)
             {
-                //ìƒˆë¡œìš´ ì„œë²„ ì—´ê³  í•´ë‹¹ í¬íŠ¸ ë²ˆí˜¸ ë¦¬í„´
-                string newServerPortString = CreateNewLobby(&tokens[1], &tokens[2], &tokens[3]); 
+                //»õ·Î¿î ¼­¹ö ¿­°í ÇØ´ç Æ÷Æ® ¹øÈ£ ¸®ÅÏ
+                string newServerPortString = CreateNewLobby(&tokens[1], &tokens[2], &tokens[3]);
                 const char* newServerPort = newServerPortString.c_str();
 
-                //í”Œë ˆì´ì–´ì—ê²Œ ì ‘ì†í•  í¬íŠ¸ ë²ˆí˜¸ ì•Œë ¤ì¤Œ
+                //ÇÃ·¹ÀÌ¾î¿¡°Ô Á¢¼ÓÇÒ Æ÷Æ® ¹øÈ£ ¾Ë·ÁÁÜ
                 send(ClientSocket, newServerPort, strlen(newServerPort) + 1, 0);
-                
-                printf("Send new server port : %s\n",  newServerPort);
+
+                printf("Send new server port : %s\n", newServerPort);
             }
-            else if(request == "DestroyServer" && numTokens == 2)
+            else if (request == "DestroyServer" && numTokens == 2)
             {
                 string destroyServerPort = tokens[1];
-                
+
                 printf("Destroy server port : %s\n", destroyServerPort.c_str());
-                
+
                 int lobbyNumber = stoi(destroyServerPort) - 7778;
                 bLobbyExist[lobbyNumber] = false;
             }
-            else if(request == "ComparePassword" && numTokens == 3)
+            else if (request == "ComparePassword" && numTokens == 3)
             {
                 int selectedLobbyNumber = stoi(tokens[1]) - 7778;
                 string password = tokens[2];
@@ -204,22 +282,18 @@ int main()
                 printf("Receive Password : %s         Correct Password : %s\n", password.c_str(), lobbyPassword[selectedLobbyNumber].c_str());
 
                 string compareResultString;
-                if(password == lobbyPassword[selectedLobbyNumber])
-                {
-                    printf("equal\n");
-                    compareResultString = "true";
-                }
-                else
-                {
-                    printf("not equal\n");
-                    compareResultString = "false";
-                }
+                if (password == lobbyPassword[selectedLobbyNumber]) compareResultString = "true";
+                else compareResultString = "false";
+
                 const char* compareResult = compareResultString.c_str();
                 send(ClientSocket, compareResult, strlen(compareResult) + 1, 0);
             }
-            else if(request == "UpdateData") // ë¯¸êµ¬í˜„
+            else if (request == "UpdateData") // ¹Ì±¸Çö
             {
                 printf("data : %s\n", tokens[1].c_str());
+
+
+                //SavePlayerScore(con, playerID, score);
             }
             else
             {
@@ -230,7 +304,7 @@ int main()
         {
             printf("Receive failed: %d\n", WSAGetLastError());
         }
-        
+
         closesocket(ClientSocket);
     }
     closesocket(ListenSocket);
