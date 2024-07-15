@@ -8,6 +8,7 @@
 #include "EarthHero/Character/Monster/MonsterBase.h"
 #include "EarthHero/Character/Shooter/EHShooter.h"
 #include "EarthHero/Character/Shooter/ShooterCombatComponent.h"
+#include "Effect/Ef_IncreaseDamageTaken.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Monster/MonsterStatComponent.h"
 
@@ -75,6 +76,16 @@ void UShooterStatComponent::ShooterGrenadeDamage_Implementation(AActor* DamagedA
 		static FHitResult DummyHitResult;
 		actualDamage = HitMonster->MonsterStatComponent->DamageTaken(resultDamage, UNormalDamageType::StaticClass(), DummyHitResult, nullptr, Shooter);
 		UE_LOG(LogTemp, Error, TEXT("Acture Damage = %f"), actualDamage);
+
+		UWorld* World = HitMonster->GetWorld();
+		if (World)
+		{
+			AEf_IncreaseDamageTaken* Ef_IncreaseDamageTaken = World->SpawnActor<AEf_IncreaseDamageTaken>();
+			if (Ef_IncreaseDamageTaken)
+			{
+				Ef_IncreaseDamageTaken->ApplyEffect(HitMonster, SH_AdditionalDamage, 3, false, false, true); // 중첩 불가능, 영구 아님, 지속 시간 갱신 가능
+			}
+		}
 	}
 }
 

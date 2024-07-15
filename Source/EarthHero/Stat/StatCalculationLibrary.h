@@ -11,7 +11,7 @@ class EARTHHERO_API UStatCalculationLibrary : public UBlueprintFunctionLibrary
 
 public:
 	UFUNCTION()
-	static void CalNormalDamage(FStatStructure &HeroStat, float inDamage);
+	static float CalNormalDamage(FStatStructure &HeroStat, float inDamage);
 
 	UFUNCTION()
 	static float CalShooterNormalDamage(FStatStructure &HeroStat, const FHitResult & HitInfo, float SH_HeadShot, float SH_NormalDamage);

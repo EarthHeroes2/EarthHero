@@ -17,6 +17,16 @@ UMonsterStatComponent::UMonsterStatComponent()
 	SetIsReplicatedByDefault(true);  // 컴포넌트가 네트워크에서 복제될 수 있도록 설정
 }
 
+FStatStructure& UMonsterStatComponent::GetBaseMonsterStat()
+{
+	return BaseMonsterStat;
+}
+
+FStatStructure& UMonsterStatComponent::GetMonsterStat()
+{
+	return MonsterStat;
+}
+
 
 void UMonsterStatComponent::BeginPlay()
 {
@@ -36,7 +46,7 @@ float UMonsterStatComponent::DamageTaken(float InDamage, TSubclassOf<UDamageType
 	const FHitResult& HitInfo, AController* Instigator, AEHCharacter* DamageCausor)
 {
 	//데미지 계산
-	UStatCalculationLibrary::CalNormalDamage(MonsterStat, InDamage);
+	float resultDamage = UStatCalculationLibrary::CalNormalDamage(MonsterStat, InDamage * MonsterStat.MoreDamageTaken);
 	
 	FString Message = FString::Printf(TEXT("Health : %f"), MonsterStat.Health);
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, Message);
@@ -52,7 +62,7 @@ float UMonsterStatComponent::DamageTaken(float InDamage, TSubclassOf<UDamageType
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, DeadMessage);
 	}
 
-	return InDamage;
+	return resultDamage;
 }
 
 

@@ -91,7 +91,7 @@ void UStatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 float UStatComponent::DamageTaken(float InDamage, TSubclassOf<UDamageType> DamageTypeClass, const FHitResult & HitInfo, AController* Instigator, AEHCharacter* DamageCausor)
 {
 	//데미지 계산
-	UStatCalculationLibrary::CalNormalDamage(HeroStat, InDamage);
+	float resultDammage = UStatCalculationLibrary::CalNormalDamage(HeroStat, InDamage * HeroStat.MoreDamageTaken);
 	
 	//FString Message = FString::Printf(TEXT("Health : %f"), HeroStat.Health);
 	//GEngine->AddOnScreenDebugMessage(-1, 1233223.f, FColor::Green, Message);
@@ -106,7 +106,7 @@ float UStatComponent::DamageTaken(float InDamage, TSubclassOf<UDamageType> Damag
 		GEngine->AddOnScreenDebugMessage(-1, 1233223.f, FColor::Green, Message);
 	}
 
-	return InDamage;
+	return resultDammage;
 }
 
 

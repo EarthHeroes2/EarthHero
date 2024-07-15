@@ -17,6 +17,9 @@ public:
 	// Sets default values for this component's properties
 	UMonsterStatComponent();
 
+	FStatStructure &GetBaseMonsterStat();
+
+	FStatStructure &GetMonsterStat();
 	
 
 protected:

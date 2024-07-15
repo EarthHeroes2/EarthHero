@@ -58,5 +58,8 @@ struct FStatStructure : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	float JumpPower = 1.f;					//점프력
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+	float MoreDamageTaken = 1.f;			//받는 데미지 증가
 	
 };

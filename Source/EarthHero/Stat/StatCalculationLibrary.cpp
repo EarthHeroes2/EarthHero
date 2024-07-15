@@ -4,11 +4,11 @@
 
 #include "Structure/StatStructure.h"
 
-void UStatCalculationLibrary::CalNormalDamage(FStatStructure& HeroStat, float inDamage)
+float UStatCalculationLibrary::CalNormalDamage(FStatStructure& HeroStat, float inDamage)
 {
 	//데미지 0이하 일 시 무시
 	if (inDamage <= 0)
-		return ;
+		return 0.f;
 
 	// 남는 방어력이 있으면,
 	if (HeroStat.DefensePower > 0)
@@ -24,15 +24,18 @@ void UStatCalculationLibrary::CalNormalDamage(FStatStructure& HeroStat, float in
 			if (RealDamage > 0)
 			{
 				HeroStat.Health -= leftDamage;
+				return leftDamage;
 			}
 			else
 			{
 				HeroStat.Health = 0;
+				return RealDamage;
 			}
 		}
 		else
 		{
 			HeroStat.DefensePower -= inDamage;
+			return inDamage;
 		}
 	}
 	else
@@ -42,10 +45,12 @@ void UStatCalculationLibrary::CalNormalDamage(FStatStructure& HeroStat, float in
 		if (RealDamage > 0)
 		{
 			HeroStat.Health -= inDamage;
+			return inDamage;
 		}
 		else
 		{
 			HeroStat.Health = 0;
+			return RealDamage;
 		}
 	}
 }
