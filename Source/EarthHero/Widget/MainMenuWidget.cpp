@@ -55,23 +55,27 @@ bool UMainMenuWidget::Initialize()
 				UE_LOG(LogTemp, Log, TEXT("My Steam ID: %s"), *SteamId);
 
 
-				FString PlayerData;
+				FString PlayerDataString;
 				//자신의 정보 요청
 				USocketClient* NewSocket = NewObject<USocketClient>(this);
-				if(NewSocket) PlayerData = NewSocket->CreateSocket("GetPlayerData", SteamId);
+				if(NewSocket) PlayerDataString = NewSocket->CreateSocket("GetPlayerData", SteamId);
 
-				if(PlayerData == "")
+				if(PlayerDataString == "")
 				{
-					UE_LOG(LogTemp, Error, TEXT("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"));
+					UE_LOG(LogTemp, Error, TEXT("Failed to GetPlayerData"));
+
+					if(Lev_Tb) Lev_Tb->SetText(FText::FromString("Error"));
+					if(Exp_Tb) Exp_Tb->SetText(FText::FromString("Error"));
 				}
 				else
 				{
-					//데이터 잘라서 확인.
-
-					if(Lev_Tb) Lev_Tb->SetText(FText::FromString(PlayerData));
-					if(Exp_Tb) Exp_Tb->SetText(FText::FromString(PlayerData));
+					//데이터 잘라서 확인
+					TArray<FString> PlayerData = NewSocket->StringTokenizer(PlayerDataString);
+					int num = PlayerData.Num();
+					
+					if(Lev_Tb && num > 0) Lev_Tb->SetText(FText::FromString(PlayerData[0]));
+					if(Exp_Tb && num > 1) Exp_Tb->SetText(FText::FromString(PlayerData[1]));
 				}
-				
 			}
 			else
 			{

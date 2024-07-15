@@ -3,7 +3,6 @@
 
 #include "SocketClient.h"
 
-#include "EarthHero/EHGameInstance.h"
 #include "Networking/Public/Networking.h"
 #include "Sockets/Public/Sockets.h"
 #include "Sockets/Public/SocketSubsystem.h"
@@ -65,4 +64,16 @@ FString USocketClient::CreateSocket(const FString& RequestMessage, const FString
 	ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->DestroySocket(Socket);
 
 	return FString();
+}
+
+TArray<FString> USocketClient::StringTokenizer(FString Str)
+{
+	TArray<FString> Tokens;
+	FString Token;
+	
+	while (Str.Split(TEXT("|"), &Token, &Str)) Tokens.Add(Token);
+
+	if (!Str.IsEmpty()) Tokens.Add(Str);
+	
+	return Tokens;
 }
