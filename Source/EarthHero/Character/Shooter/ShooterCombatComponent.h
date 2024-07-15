@@ -44,9 +44,12 @@ private:
 	AEHShooter* Shooter;
 
 	FTimerHandle ShootTimerHandle;
+
+	UPROPERTY()
 	bool bCanFire = true;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true), Category = "Fire")
-	float FireRate = 10.f;
+	float FireRate = 0.1f;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true), Category = "Particle")
 	UParticleSystem* FireParticle;
@@ -62,6 +65,7 @@ private:
 	
 public:
 	FORCEINLINE void SetShooter(AEHShooter* NewShooter) { Shooter = NewShooter; }
-	
-	FORCEINLINE void SetFireRate(float NewFireRate) { FireRate = NewFireRate; }
+
+	UFUNCTION(Client, Reliable)
+	void SetFireRate(float NewFireRate);
 };
