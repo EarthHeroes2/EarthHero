@@ -15,5 +15,6 @@ class EARTHHERO_API USocketClient : public UObject
 	
 public:
 	FString CreateSocket(const FString& RequestMessage, const FString& ExtraInfo);
+	TArray<FString> StringTokenizer(FString Str);
 	
 };

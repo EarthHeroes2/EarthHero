@@ -20,17 +20,21 @@ UShooterCombatComponent::UShooterCombatComponent()
 void UShooterCombatComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	Shooter = Cast<AEHShooter>(GetOwner());
+	while (!Shooter)
+	{
+		Shooter = Cast<AEHShooter>(GetOwner());
+		UE_LOG(LogClass, Warning, TEXT("No Shooters22"));
+	}
 }
 
 void UShooterCombatComponent::Fire()
 {
-	if (!Shooter) return;
+	if (!Shooter) {UE_LOG(LogClass, Warning, TEXT("No Shooters"));return;}
 	if(bCanFire)
 	{
 		bCanFire = false;
 
-		if (!GetOwner()->GetInstigatorController())
+		if (!Shooter->GetInstigatorController())
 		{
 			UE_LOG(LogClass, Warning, TEXT("No Shooters Controller"));
 			return;
@@ -42,7 +46,7 @@ void UShooterCombatComponent::Fire()
 		
 		Server_Fire(StartLocation, EndLocation, MuzzleLocation);
 		
-		Shooter->GetWorldTimerManager().SetTimer(ShootTimerHandle, this, &ThisClass::ResetFire, 1/FireRate, false);
+		Shooter->GetWorldTimerManager().SetTimer(ShootTimerHandle, this, &ThisClass::ResetFire, FireRate, false);
 	}
 }
 
@@ -135,7 +139,6 @@ void UShooterCombatComponent::NetMulticast_Fire_Implementation(FVector HitLocati
 {
 	if(FireParticle && BulletHitParticle)
 	{
-		
 		FVector MuzzleLocation = Shooter->GetEquippedWeapon()->GetSocketLocation(FName("FireSocket"));
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), FireParticle, MuzzleLocation);
 		if(HitLocation != FVector::Zero())
@@ -157,4 +160,10 @@ void UShooterCombatComponent::NetMulticast_Fire_Implementation(FVector HitLocati
 void UShooterCombatComponent::ResetFire()
 {
 	bCanFire = true;
+}
+
+//타이머가 client에서 돌아가므로 client의 FireRate 설정
+void UShooterCombatComponent::SetFireRate_Implementation(float NewFireRate)
+{
+	 FireRate = NewFireRate;
 }

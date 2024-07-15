@@ -50,12 +50,12 @@ void UStatCalculationLibrary::CalNormalDamage(FStatStructure& HeroStat, float in
 	}
 }
 
-float UStatCalculationLibrary::CalShooterNormalDamage(FStatStructure &HeroStat, const FHitResult & HitInfo, int32 SH_HeadShot, float SH_NormalDamage)
+float UStatCalculationLibrary::CalShooterNormalDamage(FStatStructure &HeroStat, const FHitResult & HitInfo, float SH_HeadShot, float SH_NormalDamage)
 {
 	float resultDamage = 0.f;
 	if (HitInfo.BoneName == "head")
 	{
-		UE_LOG(LogClass, Warning, TEXT("HeadShot"));
+		//UE_LOG(LogClass, Warning, TEXT("HeadShot, SH_HeadShot = %f"), SH_HeadShot);
 		resultDamage = SH_NormalDamage * HeroStat.NormalDamage * SH_HeadShot;
 	}
 	else

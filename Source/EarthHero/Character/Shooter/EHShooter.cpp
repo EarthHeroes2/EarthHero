@@ -9,12 +9,9 @@
 
 AEHShooter::AEHShooter()
 {
+	CombatComponent = CreateDefaultSubobject<UShooterCombatComponent>(TEXT("Shooter Combat Component"));
 	SetMaxPitchAngle(70.f);
 	SetMinPitchAngle(-60.f);
-
-	CombatComponent = CreateDefaultSubobject<UShooterCombatComponent>(TEXT("Shooter Combat Component"));
-	//승언 : ShooterCombatComponent에서 beginPlay에서 슈터 가져오도록 수정함
-	//CombatComponent->SetShooter(this);
 	
 }
 
@@ -58,6 +55,8 @@ void AEHShooter::PossessedBy(AController* NewController)
 		if (ShooterStatComponent)
 		{
 			UE_LOG(LogClass, Warning, TEXT("EHShooter: SUCCESS load ShooterStatComponent"));
+			CombatComponent->SetFireRate(ShooterStatComponent->CalFireRate());
+			ShooterStatComponent->Shooter = this;
 		}
 		else
 		{

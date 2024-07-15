@@ -17,11 +17,14 @@ AEHPlayerState::AEHPlayerState()
 	ShooterStatComponent = CreateDefaultSubobject<UShooterStatComponent>(TEXT("ShooterStatComponent"));
 	ArcherStatComponent = CreateDefaultSubobject<UArcherStatComponent>(TEXT("ArcherStatComponent"));
 
+	//히어로 업그레이드 컴포넌트
+	HeroUpgradeComponent = CreateDefaultSubobject<UHeroUpgradeComponent>(TEXT("HeroUpgradeComponent"));
 
 	WarriorStatComponent->SetIsReplicated(true);
 	MechanicStatComponent->SetIsReplicated(true);
 	ShooterStatComponent->SetIsReplicated(true);
 	ArcherStatComponent->SetIsReplicated(true);
+	HeroUpgradeComponent->SetIsReplicated(true);
 
 	static ConstructorHelpers::FObjectFinder<UDataTable> WarriorDataTable(TEXT("/Game/Data/HeroUpgrade/DT_WarriorHeroUpgrade.DT_WarriorHeroUpgrade"));
 	if (WarriorDataTable.Succeeded())
@@ -43,9 +46,6 @@ AEHPlayerState::AEHPlayerState()
 	{
 		ArcherHeroUpgradeDataTable = ArcherDataTable.Object;
 	}
-
-	//히어로 업그레이드 컴포넌트
-	HeroUpgradeComponent = CreateDefaultSubobject<UHeroUpgradeComponent>(TEXT("HeroUpgradeComponent"));
 	
 	//리플리케이트 가능하게 설정, 액터가 리플리케이트 되면 컴포넌트도 리플리케이트 된다.
 	bReplicates = true;
@@ -73,11 +73,10 @@ void AEHPlayerState::BeginPlay()
 {
 	Super::BeginPlay();
 	
-		UE_LOG(LogTemp, Log, TEXT("This instance is dedicated."));
-		//패키징 시 주석 처리해야 함
-		PlayerClass = Shooter; ////
-		IsCopyPropertiesEnd = true; ////
-		GetWorldTimerManager().SetTimer(SetStatComponentTimerHandle, this, &AEHPlayerState::SetStatComponent, 0.5f,true);  ////
+	//패키징 시 주석 처리해야 함
+	PlayerClass = Shooter; ////
+	IsCopyPropertiesEnd = true; ////
+	GetWorldTimerManager().SetTimer(SetStatComponentTimerHandle, this, &AEHPlayerState::SetStatComponent, 0.5f,true);  ////
 }
 
 void AEHPlayerState::SetStatComponent()
@@ -89,48 +88,48 @@ void AEHPlayerState::SetStatComponent()
 		//직업을 확인하고 나머지 StatComponent를 비활성화, 서버에서 파괴하면 클라이언트도 파괴
 		switch (PlayerClass)
 		{
-		case Warrior:
-			UE_LOG(LogTemp, Error, TEXT("EHPlayerState: Possesed Character is Warrior"));
-			DestroyComponent(MechanicStatComponent);
-			DestroyComponent(ShooterStatComponent);
-			DestroyComponent(ArcherStatComponent);
-			HeroUpgradeDataTable = WarriorHeroUpgradeDataTable;
+			case Warrior:
+				UE_LOG(LogTemp, Error, TEXT("EHPlayerState: Possesed Character is Warrior"));
+				DestroyComponent(MechanicStatComponent);
+				DestroyComponent(ShooterStatComponent);
+				DestroyComponent(ArcherStatComponent);
+				HeroUpgradeDataTable = WarriorHeroUpgradeDataTable;
 
-			WarriorStatComponent->SetHeroUpgradeStComp(HeroUpgradeComponent);
-			break;
-		
-		case Mechanic:
-			UE_LOG(LogTemp, Error, TEXT("EHPlayerState: Possesed Character is Mechanic"));
-			DestroyComponent(WarriorStatComponent);
-			DestroyComponent(ShooterStatComponent);
-			DestroyComponent(ArcherStatComponent);
-			HeroUpgradeDataTable = MechanicHeroUpgradeDataTable;
-
-			MechanicStatComponent->SetHeroUpgradeStComp(HeroUpgradeComponent);
-			break;
-		
-		case Shooter:
-			UE_LOG(LogTemp, Error, TEXT("EHPlayerState: Possesed Character is Shooter"));
-			DestroyComponent(MechanicStatComponent); //
-			DestroyComponent(WarriorStatComponent); //
-			DestroyComponent(ArcherStatComponent); //
-			HeroUpgradeDataTable = ShooterHeroUpgradeDataTable;
-			ShooterStatComponent->SetHeroUpgradeStComp(HeroUpgradeComponent);
-			break;
-		
-		case Archer:
-			UE_LOG(LogTemp, Error, TEXT("EHPlayerState: Possesed Character is Archer"));
-			DestroyComponent(MechanicStatComponent);
-			DestroyComponent(WarriorStatComponent);
-			DestroyComponent(ShooterStatComponent);
-			HeroUpgradeDataTable = ArcherHeroUpgradeDataTable;
-
-			ArcherStatComponent->SetHeroUpgradeStComp(HeroUpgradeComponent);
-			break;
+				WarriorStatComponent->SetHeroUpgradeStComp(HeroUpgradeComponent);
+				break;
 			
-		default:
-			UE_LOG(LogTemp, Error, TEXT("Invalid Player Class"));
-			return;
+			case Mechanic:
+				UE_LOG(LogTemp, Error, TEXT("EHPlayerState: Possesed Character is Mechanic"));
+				DestroyComponent(WarriorStatComponent);
+				DestroyComponent(ShooterStatComponent);
+				DestroyComponent(ArcherStatComponent);
+				HeroUpgradeDataTable = MechanicHeroUpgradeDataTable;
+
+				MechanicStatComponent->SetHeroUpgradeStComp(HeroUpgradeComponent);
+				break;
+			
+			case Shooter:
+				UE_LOG(LogTemp, Error, TEXT("EHPlayerState: Possesed Character is Shooter"));
+				DestroyComponent(MechanicStatComponent);
+				DestroyComponent(WarriorStatComponent);
+				DestroyComponent(ArcherStatComponent);
+				HeroUpgradeDataTable = ShooterHeroUpgradeDataTable;
+				ShooterStatComponent->SetHeroUpgradeStComp(HeroUpgradeComponent);
+				break;
+			
+			case Archer:
+				UE_LOG(LogTemp, Error, TEXT("EHPlayerState: Possesed Character is Archer"));
+				DestroyComponent(MechanicStatComponent);
+				DestroyComponent(WarriorStatComponent);
+				DestroyComponent(ShooterStatComponent);
+				HeroUpgradeDataTable = ArcherHeroUpgradeDataTable;
+
+				ArcherStatComponent->SetHeroUpgradeStComp(HeroUpgradeComponent);
+				break;
+				
+			default:
+				UE_LOG(LogTemp, Error, TEXT("Invalid Player Class"));
+				return;
 		}
 
 		HeroUpgradeComponent->SetStatComponent(PlayerClass, WarriorStatComponent, MechanicStatComponent, ShooterStatComponent, ArcherStatComponent);

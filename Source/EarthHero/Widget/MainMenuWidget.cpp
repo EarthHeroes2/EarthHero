@@ -4,7 +4,6 @@
 #include "Components/Button.h"
 #include "Components/CheckBox.h"
 #include "LobbyRowWidget.h"
-#include "../EHGameInstance.h"
 #include "OnlineSessionSettings.h"
 #include "OnlineSubsystem.h"
 #include "Components/Border.h"
@@ -15,6 +14,7 @@
 #include "Components/EditableTextBox.h"
 #include "Components/ScrollBox.h"
 #include "../Socket/SocketClient.h"
+#include "Components/TextBlock.h"
 
 
 UMainMenuWidget::UMainMenuWidget(const FObjectInitializer &ObjectInitializer)
@@ -42,6 +42,49 @@ bool UMainMenuWidget::Initialize()
 		return false;
 	}
 
+	IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
+	if (Subsystem)
+	{
+		IOnlineIdentityPtr Identity = Subsystem->GetIdentityInterface();
+		if (Identity.IsValid())
+		{
+			TSharedPtr<const FUniqueNetId> UserId = Identity->GetUniquePlayerId(0);
+			if (UserId.IsValid())
+			{
+				FString SteamId = UserId->ToString();
+				UE_LOG(LogTemp, Log, TEXT("My Steam ID: %s"), *SteamId);
+
+
+				FString PlayerDataString;
+				//자신의 정보 요청
+				USocketClient* NewSocket = NewObject<USocketClient>(this);
+				if(NewSocket) PlayerDataString = NewSocket->CreateSocket("GetPlayerData", SteamId);
+
+				if(PlayerDataString == "")
+				{
+					UE_LOG(LogTemp, Error, TEXT("Failed to GetPlayerData"));
+
+					if(Lev_Tb) Lev_Tb->SetText(FText::FromString("Error"));
+					if(Exp_Tb) Exp_Tb->SetText(FText::FromString("Error"));
+				}
+				else
+				{
+					//데이터 잘라서 확인
+					TArray<FString> PlayerData = NewSocket->StringTokenizer(PlayerDataString);
+					int num = PlayerData.Num();
+					
+					if(Lev_Tb && num > 0) Lev_Tb->SetText(FText::FromString(PlayerData[0]));
+					if(Exp_Tb && num > 1) Exp_Tb->SetText(FText::FromString(PlayerData[1]));
+				}
+			}
+			else
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Failed to get Steam ID."));
+				UE_LOG(LogTemp, Error, TEXT("Failed to get Steam ID."));
+			}
+		}
+	}
+	
 	if (Play_Btn)
 	{
 		Play_Btn->OnClicked.AddDynamic(this, &ThisClass::Play_BtnClicked);

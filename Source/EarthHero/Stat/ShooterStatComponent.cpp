@@ -7,6 +7,7 @@
 #include "EarthHero/Character/EHCharacter.h"
 #include "EarthHero/Character/Monster/MonsterBase.h"
 #include "EarthHero/Character/Shooter/EHShooter.h"
+#include "EarthHero/Character/Shooter/ShooterCombatComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Monster/MonsterStatComponent.h"
 
@@ -17,18 +18,25 @@ void UShooterStatComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
+float UShooterStatComponent::CalFireRate()
+{
+	return 0.1f / HeroStat.AttackSpeed;
+}
+
 void UShooterStatComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	Shooter = Cast<AEHShooter>(GetOwner());
 }
 
-
-//슈터 스텟 초기화 함수(오버라이드)
-void UShooterStatComponent::InitializeStatData_Implementation()
+void UShooterStatComponent::OnRep_HeroStat()
 {
-	Super::InitializeStatData_Implementation();
+	Super::OnRep_HeroStat();
+	if (GetNetMode() != NM_Client && Shooter && Shooter->CombatComponent)
+	{
+		Shooter->CombatComponent->SetFireRate(CalFireRate());
+	}
 }
+
 
 ////////////////
 //*슈터 용 함수*//

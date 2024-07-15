@@ -5,28 +5,34 @@
 #include <thread>
 #include <cstring>
 #include <vector>
+#include <mysql.h>
 
-using namespace std;
-
+#pragma comment(lib, "libmysql.lib")
+#pragma comment(lib, "mysqlcppconn.lib")
 #pragma comment(lib, "Ws2_32.lib")
 
 #define SERVERPORT 7777
 #define MAX_NUM_SERVERS 10
 #define MAX_BUFFER_LENGTH 1000
 
+using namespace std;
 
-int bLobbyExist[MAX_NUM_SERVERS] = {false, };
+int bLobbyExist[MAX_NUM_SERVERS] = { false, };
 string lobbyPassword[MAX_NUM_SERVERS];
 
 
-vector<string> StringTokenizer(char *str)
+MYSQL* conn;
+string user_table = "user_table";
+
+
+vector<string> StringTokenizer(char* str)
 {
     vector<string> tokens;
-    char *token;
-    char *context = NULL;
-    
+    char* token;
+    char* context = NULL;
+
     token = strtok_s(str, "|", &context);
-    
+
     while (token != NULL)
     {
         tokens.push_back(string(token));
@@ -46,7 +52,7 @@ void CreateNewLobbyInstance(const wchar_t* Command, int LobbyNumber)
     ZeroMemory(&si, sizeof(si));
     si.cb = sizeof(si);
     ZeroMemory(&pi, sizeof(pi));
-    
+
     if (!CreateProcess(
         NULL,
         const_cast<wchar_t*>(Command),
@@ -57,43 +63,43 @@ void CreateNewLobbyInstance(const wchar_t* Command, int LobbyNumber)
         NULL,
         NULL,
         &si,
-        &pi )
-    )
+        &pi)
+        )
     {
-        printf("CreateProcess failed: %lu\n", GetLastError());
+        fprintf(stderr, "CreateProcess failed : % lu\n", GetLastError());
         return;
     }
-    
+
     bLobbyExist[LobbyNumber] = true;
-    
+
     CloseHandle(pi.hProcess);
     CloseHandle(pi.hThread);
 }
 
-string CreateNewLobby(const string *lobbyName, const string *isPrivate, const string *password)
+string CreateNewLobby(const string* lobbyName, const string* isPrivate, const string* password)
 {
     string unrealPath = "C:\\UnrealEngine-5.1.1-release\\Engine\\Binaries\\Win64\\UnrealEditor.exe"; //소스빌드 UnrealEditor.exe 경로
     string projectPath = "C:\\Git\\EarthHero\\EarthHero.uproject"; //우리 프로젝트 uproject 경로
     string portNumber = "";
 
-    for(int lobbyNumber = 0; lobbyNumber < MAX_NUM_SERVERS; lobbyNumber++)
+    for (int lobbyNumber = 0; lobbyNumber < MAX_NUM_SERVERS; lobbyNumber++)
     {
-        if(!bLobbyExist[lobbyNumber])
+        if (!bLobbyExist[lobbyNumber])
         {
             lobbyPassword[lobbyNumber] = *password; //비번 할당
-            
+
             portNumber = to_string(lobbyNumber + 7778);
             string command = unrealPath + " " + projectPath + " Lobby -server -log"
-                            + " -Port=" + portNumber
-                            + " -QueryPort=" + to_string(stoi(portNumber) + 19238)
-                            + " -LobbyName=" + *lobbyName
-                            + " -Private=" + *isPrivate;
-            
+                + " -Port=" + portNumber
+                + " -QueryPort=" + to_string(stoi(portNumber) + 19238)
+                + " -LobbyName=" + *lobbyName
+                + " -Private=" + *isPrivate;
+
             //문자열 변환...
-            std::wstring wCommand(command.begin(), command.end());
-            const wchar_t* wCharCommand = wCommand.c_str();   
+            wstring wCommand(command.begin(), command.end());
+            const wchar_t* wCharCommand = wCommand.c_str();
             CreateNewLobbyInstance(wCharCommand, lobbyNumber);
-            
+
             return portNumber;
         }
     }
@@ -101,25 +107,115 @@ string CreateNewLobby(const string *lobbyName, const string *isPrivate, const st
 }
 
 
+
+//새로운 플레이어 정보 등록
+bool InsertPlayerData(string id)
+{
+    string query = "INSERT INTO " + user_table + " (id, level, exp) VALUES (" + id + ", 1, 0)";
+
+    if (mysql_query(conn, query.c_str()))
+    {
+        fprintf(stderr, "INSERT failed. Error: %s\n", mysql_error(conn));
+        return false;
+    }
+
+    return true;
+}
+
+//해당 id의 점수 갱신 //예시
+bool UpdateData(string id, int new_score)
+{
+    string query = "UPDATE test_table SET score = " + to_string(new_score) + " WHERE id = " + id;
+
+    if (mysql_query(conn, query.c_str()))
+    {
+        fprintf(stderr, "UPDATE failed. Error: %s\n", mysql_error(conn));
+        return false;
+    }
+    return true;
+}
+
+//플레이어 id로 정보를 조회
+//성공 시 플레이어 데이터를, 실패 시 ""를 넘김
+string QueryPlayerData(string id)
+{
+    string query = "SELECT level, exp FROM " + user_table + " WHERE id = " + id;
+
+    if (mysql_query(conn, query.c_str()))
+    {
+        fprintf(stderr, "SELECT failed. Error: %s\n", mysql_error(conn));
+        return "";
+    }
+
+    MYSQL_RES* result = mysql_store_result(conn);
+    if (result == NULL)
+    {
+        fprintf(stderr, "mysql_store_result() failed. Error: %s\n", mysql_error(conn));
+        return "";
+    }
+    
+    if (result->row_count == 0) //없으면 생성 후 기본 정보 리턴
+    {
+        if(InsertPlayerData(id)) printf("Insert Data Successs (%s)\n", id.c_str());
+        else fprintf(stderr, "Insert Data Failed (%s)\n", id.c_str());
+
+        return "1|0";
+    }
+    else //있으면 정보들 리턴
+    {
+        MYSQL_ROW row = mysql_fetch_row(result);
+        
+        printf("ID: %s, level: %s, Exp: %s\n", id.c_str(), row[0], row[1]);
+        
+        return string(row[0]) + "|" + string(row[1]);
+    }
+
+    mysql_free_result(result);
+
+    return "";
+}
+
+
 int main()
 {
+    MYSQL connection;
+
+    //자신의 설정에 맞게 수정
+    const char* host = "localhost";
+    const char* user = "root";
+    const char* passwd = "sql 비번";
+    const char* db = "main";
+    
+    if(mysql_init(&connection) == NULL)
+    {
+        fprintf(stderr, "mysql_init failed\n");
+        return 1;
+    }
+    if ((conn = mysql_real_connect(&connection, host, user, passwd, db, 3306, NULL, 0)) == NULL)
+    {
+        fprintf(stderr, "mysql_real_connect failed : %s\n", mysql_error(&connection));
+        mysql_close(&connection);
+        return 1;
+    }
+   
+
     WSADATA wsaData;
     int iResult;
-    
+
     // Winsock 초기화
     iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
     if (iResult != 0)
     {
-        printf("WSAStartup failed: %d", iResult);
+        fprintf(stderr, "WSAStartup failed: %d", iResult);
         return 1;
     }
-    
+
     // 소켓 생성
     SOCKET ListenSocket = INVALID_SOCKET;
     ListenSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (ListenSocket == INVALID_SOCKET)
     {
-        printf("Socket creation failed: %d\n", WSAGetLastError());
+        fprintf(stderr, "Socket creation failed: %d\n", WSAGetLastError());
         WSACleanup();
         return 1;
     }
@@ -130,27 +226,27 @@ int main()
     serverAddr.sin_addr.s_addr = INADDR_ANY;
     serverAddr.sin_port = htons(SERVERPORT);
 
-    
+
     // 소켓 바인드
-    iResult = bind(ListenSocket, (sockaddr*)&serverAddr, sizeof(serverAddr));
+    iResult = ::bind(ListenSocket, (sockaddr*)&serverAddr, sizeof(serverAddr));
     if (iResult == SOCKET_ERROR) {
-        printf("Bind failed: %d", WSAGetLastError());
+        fprintf(stderr, "Bind failed: %d", WSAGetLastError());
         closesocket(ListenSocket);
         WSACleanup();
         return 1;
     }
 
-    
+
     // 소켓 리슨
     iResult = listen(ListenSocket, SOMAXCONN);
     if (iResult == SOCKET_ERROR)
     {
-        printf("Listen failed: %d\n", WSAGetLastError());
+        fprintf(stderr, "Listen failed: %d\n", WSAGetLastError());
         closesocket(ListenSocket);
         WSACleanup();
         return 1;
     }
-    
+
     printf("Waiting for connections...\n");
 
     while (true)
@@ -160,77 +256,79 @@ int main()
         ClientSocket = accept(ListenSocket, NULL, NULL);
         if (ClientSocket == INVALID_SOCKET)
         {
-            printf("Accept failed: %d\n", WSAGetLastError());
+            fprintf(stderr, "Accept failed: %d\n", WSAGetLastError());
             closesocket(ListenSocket);
             WSACleanup();
             return 1;
         }
-        
-        char buffer[MAX_BUFFER_LENGTH] = {0};
+
+        char buffer[MAX_BUFFER_LENGTH] = { 0 };
         iResult = recv(ClientSocket, buffer, MAX_BUFFER_LENGTH, 0);
-        
+
         if (iResult > 0)
         {
-            vector<string> tokens = StringTokenizer(buffer); //토큰으로 자르고
-            int numTokens = tokens.size();
+            vector<string> tokens = StringTokenizer(buffer); //요청을 토큰으로 자르고
+            size_t numTokens = tokens.size();
 
             string request = tokens[0];
-            
-            if(request == "CreateLobby" && numTokens == 4)
+
+            if (request == "CreateLobby" && numTokens == 4)
             {
                 //새로운 서버 열고 해당 포트 번호 리턴
-                string newServerPortString = CreateNewLobby(&tokens[1], &tokens[2], &tokens[3]); 
+                string newServerPortString = CreateNewLobby(&tokens[1], &tokens[2], &tokens[3]);
                 const char* newServerPort = newServerPortString.c_str();
 
                 //플레이어에게 접속할 포트 번호 알려줌
+                printf("Send new server port : %s\n", newServerPort);
                 send(ClientSocket, newServerPort, strlen(newServerPort) + 1, 0);
-                
-                printf("Send new server port : %s\n",  newServerPort);
             }
-            else if(request == "DestroyServer" && numTokens == 2)
+            else if (request == "DestroyServer" && numTokens == 2)
             {
                 string destroyServerPort = tokens[1];
-                
+
                 printf("Destroy server port : %s\n", destroyServerPort.c_str());
-                
+
+                //해당 서버 정보를 정리함
                 int lobbyNumber = stoi(destroyServerPort) - 7778;
                 bLobbyExist[lobbyNumber] = false;
             }
-            else if(request == "ComparePassword" && numTokens == 3)
+            else if (request == "ComparePassword" && numTokens == 3)
             {
                 int selectedLobbyNumber = stoi(tokens[1]) - 7778;
                 string password = tokens[2];
 
-                printf("Receive Password : %s         Correct Password : %s\n", password.c_str(), lobbyPassword[selectedLobbyNumber].c_str());
-
+                //비밀번호 비교
                 string compareResultString;
-                if(password == lobbyPassword[selectedLobbyNumber])
-                {
-                    printf("equal\n");
-                    compareResultString = "true";
-                }
-                else
-                {
-                    printf("not equal\n");
-                    compareResultString = "false";
-                }
+                if (password == lobbyPassword[selectedLobbyNumber]) compareResultString = "true";
+                else compareResultString = "false";
+
+                printf("Password Check : %s", compareResultString.c_str());
+
+                //플레이어에게 옳은 지 그른 지 알려줌
                 const char* compareResult = compareResultString.c_str();
                 send(ClientSocket, compareResult, strlen(compareResult) + 1, 0);
             }
-            else if(request == "UpdateData") // 미구현
+            else if (request == "GetPlayerData" && numTokens == 2)
+            {
+                string id = tokens[1];
+
+                //새로운 플레이어면 정보 추가, 아니라면 해당 플레이어의 정보를 찾음
+                string PlayerDataString = QueryPlayerData(id);
+
+                //플레이어에게 자신의 정보를 알려줌
+                const char* PlayerData = PlayerDataString.c_str();
+                send(ClientSocket, PlayerData, strlen(PlayerData) + 1, 0);
+            }
+            else if (request == "UpdateData") // 미구현
             {
                 printf("data : %s\n", tokens[1].c_str());
+
+
             }
-            else
-            {
-                printf("Invalid request : %s\n", request.c_str());
-            }
+            else printf("Invalid request : %s     numTokens : %zu\n", request.c_str(), numTokens);
         }
-        else
-        {
-            printf("Receive failed: %d\n", WSAGetLastError());
-        }
-        
+        else printf("Receive failed: %d\n", WSAGetLastError());
+
         closesocket(ClientSocket);
     }
     closesocket(ListenSocket);
