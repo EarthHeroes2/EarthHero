@@ -2,6 +2,8 @@
 
 
 #include "PlayingGameMode.h"
+
+#include "EarthHero/ForceField/ForceField.h"
 #include "EarthHero/GameSession/PlayingGameSession.h"
 #include "EarthHero/GameState/PlayingGameState.h"
 #include "EarthHero/Player/EHPlayerController.h"
@@ -13,6 +15,63 @@ void APlayingGameMode::BeginPlay()
 	Super::BeginPlay();
 
 	bUseSeamlessTravel = true;
+	
+	SpawnForceFields();
+}
+
+void APlayingGameMode::SpawnForceFields()
+{
+	float MinX = -100800.0f;
+	float MaxX = 75600.0f;
+	float MinY = -100800.0f;
+	float MaxY = 75600.0f;
+
+	UWorld* World = GetWorld();
+	if (World)
+	{
+		// Top side (Y = MaxY)
+		FVector TopLocation = FVector(FMath::RandRange(MinX, MaxX), MaxY, 0.0f);
+		SpawnForceFieldAtLocation(TopLocation);
+
+		// Bottom side (Y = MinY)
+		FVector BottomLocation = FVector(FMath::RandRange(MinX, MaxX), MinY, 0.0f);
+		SpawnForceFieldAtLocation(BottomLocation);
+
+		// Right side (X = MaxX)
+		FVector RightLocation = FVector(MaxX, FMath::RandRange(MinY, MaxY), 0.0f);
+		SpawnForceFieldAtLocation(RightLocation);
+
+		// Left side (X = MinX)
+		FVector LeftLocation = FVector(MinX, FMath::RandRange(MinY, MaxY), 0.0f);
+		SpawnForceFieldAtLocation(LeftLocation);
+	}
+}
+
+void APlayingGameMode::SpawnForceFieldAtLocation(FVector Location)
+{
+	UWorld* World = GetWorld();
+	if (World)
+	{
+		FString AssetPath = TEXT("Blueprint'/Game/Blueprints/ForceField/BP_ForceField.BP_ForceField_C'");
+		UClass* ForceFieldClass = StaticLoadClass(AActor::StaticClass(), nullptr, *AssetPath);
+		if (ForceFieldClass)
+		{
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.Owner = this;
+			SpawnParams.Instigator = GetInstigator();
+
+			FRotator SpawnRotation = FRotator::ZeroRotator;
+			AActor* SpawnedForceField = World->SpawnActor<AActor>(ForceFieldClass, Location, SpawnRotation, SpawnParams);
+			if (SpawnedForceField)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Spawned ForceField at location: %s"), *Location.ToString());
+			}
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("Could not load ForceField Blueprint class"));
+		}
+	}
 }
 
 //심레스 트래블 이후 새로운 컨트롤러 생김
