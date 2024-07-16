@@ -257,6 +257,28 @@ void ALobbyPlayerController::Client_UpdateDifficulty_Implementation(int Difficul
 
 
 
+void ALobbyPlayerController::Server_UpdateLobbyPassword_Implementation(const FString& Password)
+{
+	if (bHost)
+	{
+		ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
+		if (LobbyGameMode)
+		{
+			ALobbyGameSession* LobbyGameSession = Cast<ALobbyGameSession>(LobbyGameMode->GameSession);
+			if (LobbyGameSession)
+			{	
+				LobbyGameSession->UpdateLobbyPassword(Password);
+			}
+		}
+	}
+}
+
+
+
+
+
+
+
 
 
 void ALobbyPlayerController::Client_SendToDebugMessage_Implementation(const FString& Message)

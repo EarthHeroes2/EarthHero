@@ -56,6 +56,8 @@ bool ULobbyWidget::Initialize()
 
 	Private_Cb->OnCheckStateChanged.AddDynamic(this, &ULobbyWidget::ChangePrivateState);
 
+	PasswordUpdate_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::PasswordUpdateBtnClicked);
+
 	Exit_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::ExitClicked);
 
 
@@ -498,6 +500,22 @@ void ULobbyWidget::UpdateDifficulty(const int Difficulty)
 		DifficultyBtn->SetColorAndOpacity(FLinearColor::Gray);
 	
 	DifficultyBtns[Difficulty - 1]->SetColorAndOpacity(FLinearColor::Green);
+}
+
+
+void ULobbyWidget::PasswordUpdateBtnClicked()
+{
+	if(Password_Etb)
+	{
+		FString Password = Password_Etb->GetText().ToString();
+		APlayerController* PlayerController = GetOwningPlayer();
+		if (PlayerController)
+		{
+			ALobbyPlayerController* LobbyPlayerController = Cast<ALobbyPlayerController>(PlayerController);
+			if (LobbyPlayerController)
+				LobbyPlayerController->Server_UpdateLobbyPassword(Password);
+		}
+	}
 }
 
 

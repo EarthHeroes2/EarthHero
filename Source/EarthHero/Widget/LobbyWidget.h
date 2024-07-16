@@ -105,12 +105,19 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	class UEditableTextBox* Chat_Etb;
 
+	
+
 	UPROPERTY(meta = (BindWidget))
 	UHorizontalBox* Private_Hb;
 public:
 	UPROPERTY(meta = (BindWidget))
 	class UCheckBox* Private_Cb;
 private:
+	UPROPERTY(meta = (BindWidget))
+	UEditableTextBox* Password_Etb;
+	UPROPERTY(meta = (BindWidget))
+	UButton* PasswordUpdate_Btn;
+	
 	UPROPERTY(meta = (BindWidget))
 	class UButton* Exit_Btn;
 
@@ -190,11 +197,15 @@ protected:
 	void SetPlayerCharacter(EClassType ClassType);
 	UFUNCTION()
 	void ChatTextCommitted(const FText& Text, ETextCommit::Type CommitMethod);
+
+	UFUNCTION()
+	void PasswordUpdateBtnClicked();
 	
 public:
 	void UpdatePlayerNameList(const TArray<FString>& PlayerNameList);
 	void UpdateReadyState(const TArray<bool>& PlayerReadyStateArray);
 	void UpdateDifficulty(const int Difficulty);
+	
 	void AddChatMessage(const FText& Text);
 
 

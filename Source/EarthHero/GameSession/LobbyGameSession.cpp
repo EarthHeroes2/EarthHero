@@ -346,42 +346,11 @@ void ALobbyGameSession::ChangeAdvertiseState(bool bAdvertise)
     }
 }
 
-void ALobbyGameSession::ChangeLobbyName(FString LobbyName)
+
+void ALobbyGameSession::UpdateLobbyPassword(FString Password)
 {
-    IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
-    if (Subsystem)
-    {
-        IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
-        if (Session.IsValid())
-        {
-            //기존 세션 정보 받아오고
-            FOnlineSessionSettings* SessionSettings = Session->GetSessionSettings(SessionName);
-            if (SessionSettings)
-            {
-                //로비(세션)이름 재설정
-                SessionSettings->Set("LobbyName", LobbyName, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
-
-                UE_LOG(LogTemp, Log, TEXT("Change lobby name : %s"), *LobbyName);
-
-                UpdateSessionDelegateHandle =
-                    Session->AddOnUpdateSessionCompleteDelegate_Handle(FOnUpdateSessionCompleteDelegate::CreateUObject(
-                        this,
-                        &ThisClass::HandleUpdateSessionCompleted));
-
-                // 세션 정보 업데이트
-                if (!Session->UpdateSession(SessionName, *SessionSettings, true))
-                {
-                    UE_LOG(LogTemp, Warning, TEXT("Failed to update Lobby"));
-                    Session->ClearOnUpdateSessionCompleteDelegate_Handle(UpdateSessionDelegateHandle);
-                    UpdateSessionDelegateHandle.Reset();
-                }
-            }
-            else
-            {
-                UE_LOG(LogTemp, Warning, TEXT("No session settings found for session: %s"), *SessionName.ToString());
-            }
-        }
-    }
+    //소켓 서버에게 비번변경을 요청해야함
+    
 }
 
 
