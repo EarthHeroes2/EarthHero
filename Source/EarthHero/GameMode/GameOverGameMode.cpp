@@ -14,6 +14,12 @@ AGameOverGameMode::AGameOverGameMode()
 	GameSessionClass = AEHGameSession::StaticClass();
 }
 
+void AGameOverGameMode::BeginPlay()
+{
+	Super::BeginPlay();
+	bUseSeamlessTravel = true;
+}
+
 
 //심레스 트래블 이후 새로운 컨트롤러 생김
 void AGameOverGameMode::InitSeamlessTravelPlayer(AController* NewController)
