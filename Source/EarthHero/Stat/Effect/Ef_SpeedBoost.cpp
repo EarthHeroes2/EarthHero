@@ -6,6 +6,7 @@
 #include "EarthHero/Character/EHCharacter.h"
 #include "EarthHero/Character/Monster/MonsterBase.h"
 #include "EarthHero/Stat/StatComponent.h"
+#include "EarthHero/Stat/Monster/MonsterStatComponent.h"
 
 void AEf_SpeedBoost::ApplyEffect(AActor* InTargetActor, float InEffectValue, float InDuration, bool InbIsStackable, bool InbIsPermanent, bool InbShouldRefreshDuration)
 {
@@ -22,7 +23,8 @@ void AEf_SpeedBoost::ApplyEffect(AActor* InTargetActor, float InEffectValue, flo
 	else if (AMonsterBase* Monster = Cast<AMonsterBase>(TargetActor))
 	{
 		//몬스터 이동속도 증가 구현
-
+		Monster->MonsterStatComponent->GetMonsterStat().MovementSpeed += InEffectValue;
+		
 		AttachToActor(TargetActor, FAttachmentTransformRules::KeepRelativeTransform);
 	}
 }
@@ -31,6 +33,12 @@ void AEf_SpeedBoost::UpgradeEffect(float InEffectValue)
 {
 	Super::UpgradeEffect(InEffectValue);
 
+	if (bRefresh && !bIsStackable)
+	{
+		bRefresh = false;
+		return;
+	}
+	
 	//적용 수치 갱신
 	AppliedEffectValue += InEffectValue;
 	
@@ -42,6 +50,7 @@ void AEf_SpeedBoost::UpgradeEffect(float InEffectValue)
 	else if (AMonsterBase* Monster = Cast<AMonsterBase>(TargetActor))
 	{
 		//몬스터 이동속도 증가 구현
+		Monster->MonsterStatComponent->GetMonsterStat().MovementSpeed += InEffectValue;
 	}
 }
 
@@ -53,7 +62,7 @@ void AEf_SpeedBoost::ResetEffect()
 	}
 	else if (AMonsterBase* Monster = Cast<AMonsterBase>(TargetActor))
 	{
-		//몬스터 이동 속도 리셋
+		Monster->MonsterStatComponent->GetMonsterStat().MovementSpeed -= AppliedEffectValue;
 	}
 	
 	Super::ResetEffect();

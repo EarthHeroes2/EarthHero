@@ -51,6 +51,9 @@ protected:
 	// 지속 시간 갱신 여부
 	bool bShouldRefreshDuration;
 
+	// 갱신 여부
+	bool bRefresh = false;
+
 	// 동일한 대상에 적용된 효과를 관리하기 위한 맵 액터 -> 적용 효과 -> 효과 객체 주소
 	static TMap<AActor*, TMap<TSubclassOf<AEffectBase>, AEffectBase*>> EffectMap;
 

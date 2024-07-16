@@ -29,4 +29,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
 	class UMonsterStatComponent *MonsterStatComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Type")
+	int MonsterType;
+
 };

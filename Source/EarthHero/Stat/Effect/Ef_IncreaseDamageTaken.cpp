@@ -14,6 +14,11 @@ void AEf_IncreaseDamageTaken::ApplyEffect(AActor* InTargetActor, float InEffectV
 	Super::ApplyEffect(InTargetActor, InEffectValue, InDuration, InbIsStackable, InbIsPermanent,
 	                   InbShouldRefreshDuration);
 
+	if (bRefresh && !bIsStackable)
+	{
+		bRefresh = false;
+		return;
+	}
 	//적용 대상이 캐릭터이면..
 	if (AEHCharacter* Character = Cast<AEHCharacter>(TargetActor))
 	{
@@ -49,6 +54,7 @@ void AEf_IncreaseDamageTaken::ResetEffect()
 	if (AEHCharacter* Character = Cast<AEHCharacter>(TargetActor))
 	{
 		Character->StatComponent->GetHeroStat().MoreDamageTaken -= AppliedEffectValue;
+		//UE_LOG(LogClass, Warning, TEXT("MorDamageTaken : %f"), Character->StatComponent->GetHeroStat().MoreDamageTaken);
 	}
 	else if (AMonsterBase* Monster = Cast<AMonsterBase>(TargetActor))
 	{
