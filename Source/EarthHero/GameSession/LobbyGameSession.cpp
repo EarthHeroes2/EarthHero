@@ -10,6 +10,7 @@
 #include <EarthHero/GameMode/LobbyGameMode.h>
 
 #include "EarthHero/EHGameInstance.h"
+#include "EarthHero/Socket/SocketClient.h"
 
 
 void ALobbyGameSession::BeginPlay()
@@ -347,10 +348,19 @@ void ALobbyGameSession::ChangeAdvertiseState(bool bAdvertise)
 }
 
 
-void ALobbyGameSession::UpdateLobbyPassword(FString Password)
+bool ALobbyGameSession::UpdateLobbyPassword(FString Password)
 {
     //소켓 서버에게 비번변경을 요청해야함
     
+    FString ExtraInfo = GetServerPort() + "|" + Password;
+    
+    USocketClient* NewSocket = NewObject<USocketClient>(this);
+    if(NewSocket)
+    {
+        NewSocket->CreateSocket("UpdatePassword", ExtraInfo);
+        return true;
+    }
+    return false;
 }
 
 

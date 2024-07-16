@@ -42,13 +42,13 @@ vector<string> StringTokenizer(char* str)
     return tokens;
 }
 
-//ì„œë²„ ì¸ìŠ¤í„´ìŠ¤ ì‹¤í–‰ë§Œ ì‹œí‚¤ê³  ë¦¬í„´ë¨
+//¼­¹ö ÀÎ½ºÅÏ½º ½ÇÇà¸¸ ½ÃÅ°°í ¸®ÅÏµÊ
 void CreateNewLobbyInstance(const wchar_t* Command, int LobbyNumber)
 {
     STARTUPINFO si;
     PROCESS_INFORMATION pi;
 
-    //ì´ˆê¸°í™”
+    //ÃÊ±âÈ­
     ZeroMemory(&si, sizeof(si));
     si.cb = sizeof(si);
     ZeroMemory(&pi, sizeof(pi));
@@ -78,15 +78,15 @@ void CreateNewLobbyInstance(const wchar_t* Command, int LobbyNumber)
 
 string CreateNewLobby(const string* lobbyName, const string* isPrivate, const string* password)
 {
-    string unrealPath = "C:\\UnrealEngine-5.1.1-release\\Engine\\Binaries\\Win64\\UnrealEditor.exe"; //ì†ŒìŠ¤ë¹Œë“œ UnrealEditor.exe ê²½ë¡œ
-    string projectPath = "C:\\Git\\EarthHero\\EarthHero.uproject"; //ìš°ë¦¬ í”„ë¡œì íŠ¸ uproject ê²½ë¡œ
+    string unrealPath = "C:\\UnrealEngine-5.1.1-release\\Engine\\Binaries\\Win64\\UnrealEditor.exe"; //¼Ò½ººôµå UnrealEditor.exe °æ·Î
+    string projectPath = "C:\\Git\\EarthHero\\EarthHero.uproject"; //¿ì¸® ÇÁ·ÎÁ§Æ® uproject °æ·Î
     string portNumber = "";
 
     for (int lobbyNumber = 0; lobbyNumber < MAX_NUM_SERVERS; lobbyNumber++)
     {
         if (!bLobbyExist[lobbyNumber])
         {
-            lobbyPassword[lobbyNumber] = *password; //ë¹„ë²ˆ í• ë‹¹
+            lobbyPassword[lobbyNumber] = *password; //ºñ¹ø ÇÒ´ç
 
             portNumber = to_string(lobbyNumber + 7778);
             string command = unrealPath + " " + projectPath + " Lobby -server -log"
@@ -95,7 +95,7 @@ string CreateNewLobby(const string* lobbyName, const string* isPrivate, const st
                 + " -LobbyName=" + *lobbyName
                 + " -Private=" + *isPrivate;
 
-            //ë¬¸ìì—´ ë³€í™˜...
+            //¹®ÀÚ¿­ º¯È¯...
             wstring wCommand(command.begin(), command.end());
             const wchar_t* wCharCommand = wCommand.c_str();
             CreateNewLobbyInstance(wCharCommand, lobbyNumber);
@@ -108,7 +108,7 @@ string CreateNewLobby(const string* lobbyName, const string* isPrivate, const st
 
 
 
-//ìƒˆë¡œìš´ í”Œë ˆì´ì–´ ì •ë³´ ë“±ë¡
+//»õ·Î¿î ÇÃ·¹ÀÌ¾î Á¤º¸ µî·Ï
 bool InsertPlayerData(string id)
 {
     string query = "INSERT INTO " + user_table + " (id, level, exp) VALUES (" + id + ", 1, 0)";
@@ -122,8 +122,8 @@ bool InsertPlayerData(string id)
     return true;
 }
 
-//í”Œë ˆì´ì–´ idë¡œ ì •ë³´ë¥¼ ì¡°íšŒ
-//ì„±ê³µ ì‹œ í”Œë ˆì´ì–´ ë°ì´í„°ë¥¼, ì‹¤íŒ¨ ì‹œ ""ë¥¼ ë„˜ê¹€
+//ÇÃ·¹ÀÌ¾î id·Î Á¤º¸¸¦ Á¶È¸
+//¼º°ø ½Ã ÇÃ·¹ÀÌ¾î µ¥ÀÌÅÍ¸¦, ½ÇÆĞ ½Ã ""¸¦ ³Ñ±è
 string QueryPlayerData(string id)
 {
     string query = "SELECT level, exp FROM " + user_table + " WHERE id = " + id;
@@ -141,14 +141,14 @@ string QueryPlayerData(string id)
         return "";
     }
     
-    if (result->row_count == 0) //ì—†ìœ¼ë©´ ìƒì„± í›„ ê¸°ë³¸ ì •ë³´ ë¦¬í„´
+    if (result->row_count == 0) //¾øÀ¸¸é »ı¼º ÈÄ ±âº» Á¤º¸ ¸®ÅÏ
     {
         if(InsertPlayerData(id)) printf("Insert Data Successs (%s)\n", id.c_str());
         else fprintf(stderr, "Insert Data Failed (%s)\n", id.c_str());
 
         return "1|0";
     }
-    else //ìˆìœ¼ë©´ ì •ë³´ë“¤ ë¦¬í„´
+    else //ÀÖÀ¸¸é Á¤º¸µé ¸®ÅÏ
     {
         MYSQL_ROW row = mysql_fetch_row(result);
         
@@ -162,7 +162,7 @@ string QueryPlayerData(string id)
     return "";
 }
 
-//í•´ë‹¹ idì˜ exp ê°±ì‹ 
+//ÇØ´ç idÀÇ exp °»½Å
 bool UpdateExp(string id, int add_exp)
 {
     string query = "SELECT level, exp FROM " + user_table + " WHERE id = " + id;
@@ -195,11 +195,11 @@ bool UpdateExp(string id, int add_exp)
 
     exp += add_exp;
 
-    //need_exp[i]ëŠ” i->i+1 ë ˆë²¨ë¡œ ê°ˆë•Œ í•„ìš”í•œ ê²½í—˜ì¹˜ë¥¼ ì˜ë¯¸í•¨
+    //need_exp[i]´Â i->i+1 ·¹º§·Î °¥¶§ ÇÊ¿äÇÑ °æÇèÄ¡¸¦ ÀÇ¹ÌÇÔ
     int need_exp[10] = {0, 1, 2, 4, 8, 14, 24, 40, 60, 90};
 
 
-    for (; level < 10; level)
+    for (; level < 10; level++)
     {
         if (exp >= need_exp[level]) exp -= need_exp[level];
         else break;
@@ -224,7 +224,7 @@ int main()
 
     const char* host = "localhost";
     const char* user = "root";
-    const char* passwd = "ë¹„ë°€ë²ˆí˜¸";
+    const char* passwd = "ºñ¹Ğ¹øÈ£";
     const char* db = "main";
     
     if(mysql_init(&connection) == NULL)
@@ -243,7 +243,7 @@ int main()
     WSADATA wsaData;
     int iResult;
 
-    // Winsock ì´ˆê¸°í™”
+    // Winsock ÃÊ±âÈ­
     iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
     if (iResult != 0)
     {
@@ -251,7 +251,7 @@ int main()
         return 1;
     }
 
-    // ì†Œì¼“ ìƒì„±
+    // ¼ÒÄÏ »ı¼º
     SOCKET ListenSocket = INVALID_SOCKET;
     ListenSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (ListenSocket == INVALID_SOCKET)
@@ -261,14 +261,14 @@ int main()
         return 1;
     }
 
-    // ì£¼ì†Œ ë° í¬íŠ¸ ì„¤ì •
+    // ÁÖ¼Ò ¹× Æ÷Æ® ¼³Á¤
     sockaddr_in serverAddr;
     serverAddr.sin_family = AF_INET;
     serverAddr.sin_addr.s_addr = INADDR_ANY;
     serverAddr.sin_port = htons(SERVERPORT);
 
 
-    // ì†Œì¼“ ë°”ì¸ë“œ
+    // ¼ÒÄÏ ¹ÙÀÎµå
     iResult = ::bind(ListenSocket, (sockaddr*)&serverAddr, sizeof(serverAddr));
     if (iResult == SOCKET_ERROR) {
         fprintf(stderr, "Bind failed: %d", WSAGetLastError());
@@ -278,7 +278,7 @@ int main()
     }
 
 
-    // ì†Œì¼“ ë¦¬ìŠ¨
+    // ¼ÒÄÏ ¸®½¼
     iResult = listen(ListenSocket, SOMAXCONN);
     if (iResult == SOCKET_ERROR)
     {
@@ -292,7 +292,7 @@ int main()
 
     while (true)
     {
-        // í´ë¼ì´ì–¸íŠ¸ ì—°ê²° ìˆ˜ë½
+        // Å¬¶óÀÌ¾ğÆ® ¿¬°á ¼ö¶ô
         SOCKET ClientSocket;
         ClientSocket = accept(ListenSocket, NULL, NULL);
         if (ClientSocket == INVALID_SOCKET)
@@ -308,18 +308,18 @@ int main()
 
         if (iResult > 0)
         {
-            vector<string> tokens = StringTokenizer(buffer); //ìš”ì²­ì„ í† í°ìœ¼ë¡œ ìë¥´ê³ 
+            vector<string> tokens = StringTokenizer(buffer); //¿äÃ»À» ÅäÅ«À¸·Î ÀÚ¸£°í
             size_t numTokens = tokens.size();
 
             string request = tokens[0];
 
             if (request == "CreateLobby" && numTokens == 4)
             {
-                //ìƒˆë¡œìš´ ì„œë²„ ì—´ê³  í•´ë‹¹ í¬íŠ¸ ë²ˆí˜¸ ë¦¬í„´
+                //»õ·Î¿î ¼­¹ö ¿­°í ÇØ´ç Æ÷Æ® ¹øÈ£ ¸®ÅÏ
                 string newServerPortString = CreateNewLobby(&tokens[1], &tokens[2], &tokens[3]);
                 const char* newServerPort = newServerPortString.c_str();
 
-                //í”Œë ˆì´ì–´ì—ê²Œ ì ‘ì†í•  í¬íŠ¸ ë²ˆí˜¸ ì•Œë ¤ì¤Œ
+                //ÇÃ·¹ÀÌ¾î¿¡°Ô Á¢¼ÓÇÒ Æ÷Æ® ¹øÈ£ ¾Ë·ÁÁÜ
                 printf("Send new server port : %s\n", newServerPort);
                 send(ClientSocket, newServerPort, strlen(newServerPort) + 1, 0);
             }
@@ -329,7 +329,7 @@ int main()
 
                 printf("Destroy server port : %s\n", destroyServerPort.c_str());
 
-                //í•´ë‹¹ ì„œë²„ ì •ë³´ë¥¼ ì •ë¦¬í•¨
+                //ÇØ´ç ¼­¹ö Á¤º¸¸¦ Á¤¸®ÇÔ
                 int lobbyNumber = stoi(destroyServerPort) - 7778;
                 bLobbyExist[lobbyNumber] = false;
             }
@@ -338,14 +338,14 @@ int main()
                 int selectedLobbyNumber = stoi(tokens[1]) - 7778;
                 string password = tokens[2];
 
-                //ë¹„ë°€ë²ˆí˜¸ ë¹„êµ
+                //ºñ¹Ğ¹øÈ£ ºñ±³
                 string compareResultString;
                 if (password == lobbyPassword[selectedLobbyNumber]) compareResultString = "true";
                 else compareResultString = "false";
 
-                printf("Password Check : %s", compareResultString.c_str());
+                printf("Password Check : %s\n", compareResultString.c_str());
 
-                //í”Œë ˆì´ì–´ì—ê²Œ ì˜³ì€ ì§€ ê·¸ë¥¸ ì§€ ì•Œë ¤ì¤Œ
+                //ÇÃ·¹ÀÌ¾î¿¡°Ô ¿ÇÀº Áö ±×¸¥ Áö ¾Ë·ÁÁÜ
                 const char* compareResult = compareResultString.c_str();
                 send(ClientSocket, compareResult, strlen(compareResult) + 1, 0);
             }
@@ -353,20 +353,30 @@ int main()
             {
                 string id = tokens[1];
 
-                //ìƒˆë¡œìš´ í”Œë ˆì´ì–´ë©´ ì •ë³´ ì¶”ê°€, ì•„ë‹ˆë¼ë©´ í•´ë‹¹ í”Œë ˆì´ì–´ì˜ ì •ë³´ë¥¼ ì°¾ìŒ
+                //»õ·Î¿î ÇÃ·¹ÀÌ¾î¸é Á¤º¸ Ãß°¡, ¾Æ´Ï¶ó¸é ÇØ´ç ÇÃ·¹ÀÌ¾îÀÇ Á¤º¸¸¦ Ã£À½
                 string PlayerDataString = QueryPlayerData(id);
 
-                //í”Œë ˆì´ì–´ì—ê²Œ ìì‹ ì˜ ì •ë³´ë¥¼ ì•Œë ¤ì¤Œ
+                //ÇÃ·¹ÀÌ¾î¿¡°Ô ÀÚ½ÅÀÇ Á¤º¸¸¦ ¾Ë·ÁÁÜ
                 const char* PlayerData = PlayerDataString.c_str();
                 send(ClientSocket, PlayerData, strlen(PlayerData) + 1, 0);
             }
             else if (request == "UpdatePlayerExp" && numTokens == 3)
             {
                 string id = tokens[1];
-                int add_exp = stoi(tokens[2]);
+                int addExp = stoi(tokens[2]);
 
-                if (UpdateExp(id, add_exp)) printf("Update Exp(%d) Successs (%s)\n", add_exp, id.c_str());
-                else fprintf(stderr, "Update Exp(%d) Failed (%s)\n", add_exp, id.c_str());
+                if (UpdateExp(id, addExp)) printf("Update Exp(%d) Successs (%s)\n", addExp, id.c_str());
+                else fprintf(stderr, "Update Exp(%d) Failed (%s)\n", addExp, id.c_str());
+            }
+            else if (request == "UpdatePassword" && numTokens == 3)
+            {
+                int lobbyNumber = stoi(tokens[1]) - 7888;
+                string password = tokens[2];
+
+                printf("Update Password  %s  ->  %s\n", lobbyPassword[lobbyNumber], password);
+
+                //ÆĞ½º¿öµå ¾÷µ¥ÀÌÆ®
+                lobbyPassword[lobbyNumber] = password;
             }
             else printf("Invalid request : %s     numTokens : %zu\n", request.c_str(), numTokens);
         }

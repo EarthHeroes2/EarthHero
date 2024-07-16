@@ -160,17 +160,7 @@ void AEHGameSession::HandleDestroySessionCompleted(FName EOSSessionName, bool bW
         }
     }
 
-    FString PortNumber;
-    UWorld* World = GetWorld();
-    if (World)
-    {
-        UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(World->GetGameInstance());
-        if(EHGameInstance)
-        {
-            PortNumber = EHGameInstance->ServerPortNumber;
-            UE_LOG(LogTemp, Log, TEXT("Server port: %s"), *PortNumber);
-        }
-    }
+    FString PortNumber = GetServerPort();
     
     //프로세스 종료
     USocketClient* NewSocket = NewObject<USocketClient>(this);
@@ -237,4 +227,22 @@ void AEHGameSession::HandleUpdateSessionCompleted(FName EOSSessionName, bool bWa
             UpdateSessionDelegateHandle.Reset();
         }
     }
+}
+
+
+
+FString AEHGameSession::GetServerPort()
+{
+    FString PortNumber;
+    UWorld* World = GetWorld();
+    if (World)
+    {
+        UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(World->GetGameInstance());
+        if(EHGameInstance)
+        {
+            PortNumber = EHGameInstance->ServerPortNumber;
+            UE_LOG(LogTemp, Log, TEXT("Server port: %s"), *PortNumber);
+        }
+    }
+    return PortNumber;
 }

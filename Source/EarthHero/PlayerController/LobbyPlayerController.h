@@ -69,8 +69,12 @@ public:
 	UFUNCTION(Server, Reliable)
 	void Server_UpdateLobbyPassword(const FString& Password);
 
+	UFUNCTION(Client, Reliable)
+	void Client_UpdateLobbyPasswordResult(bool bSuccess);
+
 protected:
 	void ShowLobbyWidget();
+
 	
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 

@@ -267,12 +267,23 @@ void ALobbyPlayerController::Server_UpdateLobbyPassword_Implementation(const FSt
 			ALobbyGameSession* LobbyGameSession = Cast<ALobbyGameSession>(LobbyGameMode->GameSession);
 			if (LobbyGameSession)
 			{	
-				LobbyGameSession->UpdateLobbyPassword(Password);
+				Client_UpdateLobbyPasswordResult(LobbyGameSession->UpdateLobbyPassword(Password));
 			}
 		}
 	}
 }
 
+void ALobbyPlayerController::Client_UpdateLobbyPasswordResult_Implementation(bool bSuccess)
+{
+	if (bHost)
+	{
+		if(LobbyWidget && LobbyWidget->Password_Etb)
+		{
+			if(bSuccess) LobbyWidget->Password_Etb->SetHintText(FText::FromString("Success!"));
+			else LobbyWidget->Password_Etb->SetHintText(FText::FromString("Fail..."));
+		}
+	}
+}
 
 
 

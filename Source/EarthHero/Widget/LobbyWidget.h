@@ -115,8 +115,10 @@ public:
 private:
 	UPROPERTY(meta = (BindWidget))
 	UHorizontalBox* PasswordSetting_Hb;
+public:
 	UPROPERTY(meta = (BindWidget))
 	UEditableTextBox* Password_Etb;
+private:
 	UPROPERTY(meta = (BindWidget))
 	UButton* PasswordUpdate_Btn;
 

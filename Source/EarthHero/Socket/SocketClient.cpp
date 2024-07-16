@@ -21,7 +21,8 @@ FString USocketClient::CreateSocket(const FString& RequestMessage, const FString
 		RequestMessage.Equals("ComparePassword") ||
 		RequestMessage.Equals("GetPlayerData")) FIPv4Address::Parse("116.121.57.64", IP); //뭘로 감출까
 	else if(RequestMessage.Equals("DestroyServer") ||
-			RequestMessage.Equals("UpdatePlayerExp")) FIPv4Address::Parse("127.0.0.1", IP);
+			RequestMessage.Equals("UpdatePlayerExp") ||
+			RequestMessage.Equals("UpdatePassword")) FIPv4Address::Parse("127.0.0.1", IP);
 
 	
 	TSharedRef<FInternetAddr> Address = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateInternetAddr();
