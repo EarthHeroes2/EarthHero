@@ -22,9 +22,9 @@ void APlayingGameMode::BeginPlay()
 void APlayingGameMode::SpawnForceFields()
 {
 	float MinX = -100800.0f;
-	float MaxX = 75600.0f;
+	float MaxX = 100800.0f;
 	float MinY = -100800.0f;
-	float MaxY = 75600.0f;
+	float MaxY = 100800.0f;
 
 	UWorld* World = GetWorld();
 	if (World)

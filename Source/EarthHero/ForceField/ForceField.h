@@ -39,13 +39,9 @@ public:
 private:
 	FVector InitialScale;
 	FVector CurrentScale;
-	FVector ExpansionRate; // Continuous expansion rate
 
-	TArray<FVector> Vertices;
-	TArray<int32> Indices;
-	TArray<FVector> Normals;
+	UFUNCTION()
+	void ExpandForceField(float Value);
 
-	void ExpandForceField(float DeltaTime);
-	void UpdateMesh();
-	void HandleCollision(FVector& Vertex);
+	void SetupTimeline();
 };
