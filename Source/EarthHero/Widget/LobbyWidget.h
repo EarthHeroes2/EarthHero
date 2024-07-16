@@ -23,7 +23,9 @@ class EARTHHERO_API ULobbyWidget : public UUserWidget
 	ULobbyWidget(const FObjectInitializer &ObjectInitializer);
 	TSubclassOf<class UUserWidget> FriendRowWidgetClass;
 	
-	virtual bool Initialize();
+	virtual bool Initialize() override;
+	void ReadFriendsList();
+
 public:
 	void HostAssignment(bool bHostAssignment);
 
@@ -152,9 +154,6 @@ private:
 	UFUNCTION()
 	void ExitClicked();
 
-
-	
-
 	int NumberOfClass = 4;
 public:
 	void ChangeSelectedButton(EClassType ClassType);
@@ -167,7 +166,9 @@ public:
 	void UpdatePlayerNameList(const TArray<FString>& PlayerNameList);
 	void UpdateReadyState(const TArray<bool>& PlayerReadyStateArray);
 	void AddChatMessage(const FText& Text);
-	
+
+
+	FTimerHandle ReadFriendsListTimerHandle;
 
 	protected:
 	void ReadFriendsListCompleted(int32 LocalUserNum, bool bWasSuccessful, const FString& ListName, const FString& ErrorStr);
@@ -175,6 +176,8 @@ public:
 	
 	TArray<CSteamID> FriendSteamIds;
 	TArray<UFriendRowWidget*> FriendRowWidgets;
+	
+	
 
 	
 };

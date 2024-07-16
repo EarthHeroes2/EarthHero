@@ -50,7 +50,20 @@ bool ULobbyWidget::Initialize()
 	Private_Cb->OnCheckStateChanged.AddDynamic(this, &ULobbyWidget::ChangePrivateState);
 
 	Exit_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::ExitClicked);
-	
+
+
+	UWorld* World = GetWorld();
+	if (World)
+	{
+		
+		World->GetTimerManager().SetTimer(ReadFriendsListTimerHandle, this, &ThisClass::ReadFriendsList, 4.0f, true);
+	}
+
+	return true;
+}
+
+void ULobbyWidget::ReadFriendsList()
+{
 	IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
 	if (Subsystem)
 	{
@@ -64,8 +77,6 @@ bool ULobbyWidget::Initialize()
 			);
 		}
 	}
-	
-	return true;
 }
 
 void ULobbyWidget::ReadFriendsListCompleted(int32 LocalUserNum, bool bWasSuccessful, const FString& ListName, const FString& ErrorStr)

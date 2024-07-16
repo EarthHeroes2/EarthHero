@@ -13,8 +13,7 @@
 bool UFriendRowWidget::Initialize()
 {
 	Super::Initialize();
-
-	//너무빨리 버튼을 생성해주나?
+	
 	FriendInvite_Btn->OnClicked.AddDynamic(this, &UFriendRowWidget::InviteClicked);
 	
 	return true;

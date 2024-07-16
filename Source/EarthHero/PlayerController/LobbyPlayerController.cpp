@@ -276,11 +276,8 @@ void ALobbyPlayerController::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	if (LobbyWidget)
 	{
+		GetWorldTimerManager().ClearTimer(LobbyWidget->ReadFriendsListTimerHandle);
 		LobbyWidget->RemoveFromParent();
-		bShowMouseCursor = false;
-		
-		FInputModeGameOnly InputMode;
-		SetInputMode(InputMode);
 	}
 	Super::EndPlay(EndPlayReason);
 }
