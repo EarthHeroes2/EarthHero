@@ -27,6 +27,8 @@ protected:
 	int ReadyCount = 0;
 	
 	TArray<FVector> SpawnLocations;
+
+	TArray<AController*> ControllerArray;
 	
 	TArray<FString> PlayerNameArray;
 	TArray<bool> PlayerReadyStateArray;
@@ -57,7 +59,7 @@ public:
 	void SendChatMessage(const FText& Text);
 
 	void UpdateCharacter(ALobbyPlayerController* LobbyPlayerController, EClassType ClassType);
-	int FindLobbyPlayerSpot(ALobbyPlayerController* NewLobbyPlayerController);
+	int FindLobbyPlayerSpot();
 
 
 

@@ -26,6 +26,9 @@ ALobbyGameMode::ALobbyGameMode()
 		CharacterClasses[Shooter] = EHShooterClass = EHShooterAsset.Class;
 	}
 	//Archor
+
+	for(int i = 0; i < 4; i++)
+		bSpotUsedArray.Add(false);
 }
 
 void ALobbyGameMode::BeginPlay()
@@ -38,47 +41,64 @@ void ALobbyGameMode::BeginPlay()
 	SpawnLocations.Add(FVector(500.0f, -50.0f, 0.0f));
 	SpawnLocations.Add(FVector(500.0f, 50.0f, 0.0f));
 	SpawnLocations.Add(FVector(500.0f, 150.0f, 0.0f));
-
-	for(int i = 0; i < 4; i++) //임시
-	{
-		bSpotUsedArray.Add(false);
-	}
 }
 
 //특정 스폰 지점 설정
 AActor* ALobbyGameMode::FindPlayerStart_Implementation(AController* Player, const FString& IncomingName)
 {
-	return Super::FindPlayerStart_Implementation(Player, "");
+	int32 PlayerIndex = ControllerArray.IndexOfByKey(Player);
+	
+	if (PlayerIndex != INDEX_NONE)
+	{
+		ControllerArray.RemoveAt(PlayerIndex);
+		LobbyPlayerControllerArray.RemoveAt(PlayerIndex);
+		PlayerNameArray.RemoveAt(PlayerIndex);
+		PlayerReadyStateArray.RemoveAt(PlayerIndex);
+		PlayerClassArray.RemoveAt(PlayerIndex);
+		PlayerSpotArray.RemoveAt(PlayerIndex);
+	}
+
+	int PlayerStart = FindLobbyPlayerSpot();
+
+	ControllerArray.Add(Player);
+	LobbyPlayerControllerArray.Add(Cast<ALobbyPlayerController>(Player)); //...?
+	PlayerNameArray.Add(Player->PlayerState->GetPlayerName());
+	PlayerReadyStateArray.Add(false);
+	PlayerClassArray.Add(Shooter); //임시
+	PlayerSpotArray.Add(PlayerStart);
+	
+	return Super::FindPlayerStart_Implementation(Player, FString::FromInt(PlayerStart));
 }
 
 void ALobbyGameMode::AddPlayerInfo(ALobbyPlayerController* NewLobbyPlayerController)
 {
-	if(NewLobbyPlayerController)
-	{
-		int32 PlayerIndex = LobbyPlayerControllerArray.IndexOfByKey(NewLobbyPlayerController);
-
-		if (PlayerIndex != INDEX_NONE)
-		{
-			LobbyPlayerControllerArray.RemoveAt(PlayerIndex);
-			PlayerNameArray.RemoveAt(PlayerIndex);
-			PlayerReadyStateArray.RemoveAt(PlayerIndex);
-			PlayerClassArray.RemoveAt(PlayerIndex);
-			PlayerSpotArray.RemoveAt(PlayerIndex);
-		}
-		
-		LobbyPlayerControllerArray.Add(NewLobbyPlayerController);
-		PlayerNameArray.Add(NewLobbyPlayerController->PlayerState->GetPlayerName());
-		PlayerReadyStateArray.Add(false);
-		PlayerClassArray.Add(Shooter); //임시
-		PlayerSpotArray.Add(FindLobbyPlayerSpot(NewLobbyPlayerController));
-
-		//정보를 등록했으니 클라이언트에게 기본 캐릭터를 골라주고
-		//이름과 레디 리스트를 보내줌
-		NewLobbyPlayerController->Client_SelectDefaultCharacter();
-		UpdatePlayerNameListAndReadyState();
-	}
-	else UE_LOG(LogTemp, Error, TEXT("Invaild ExitingLobbyPlayerController"));
+	//클라이언트에게 기본 캐릭터를 골라주고
+	//이름과 레디 리스트를 보내줌
+	NewLobbyPlayerController->Client_SelectDefaultCharacter();
+	UpdatePlayerNameListAndReadyState();
 }
+
+int ALobbyGameMode::FindLobbyPlayerSpot()
+{
+	ALobbyGameSession* LobbyGameSession = Cast<ALobbyGameSession>(GameSession);
+	if (LobbyGameSession)
+	{
+		int MaxNumberOfPlayers = LobbyGameSession->MaxNumberOfPlayersInSession;
+		
+		UE_LOG(LogTemp, Error, TEXT("Max n o p = %d"), MaxNumberOfPlayers);
+		
+		for(int i = 0; i < MaxNumberOfPlayers; i++)
+		{
+			if(!bSpotUsedArray[i])
+			{
+				bSpotUsedArray[i] = true;
+				return i;
+			}
+		}
+	}
+	return 0;
+}
+
 
 void ALobbyGameMode::RemovePlayerInfo(const ALobbyPlayerController* ExitingLobbyPlayerController)
 {
@@ -93,7 +113,8 @@ void ALobbyGameMode::RemovePlayerInfo(const ALobbyPlayerController* ExitingLobby
 			bSpotUsedArray[PlayerSpotArray[PlayerIndex]] = false;
 			
 			ExitingLobbyPlayerController->LobbyCharacter->Destroy();
-			
+
+			ControllerArray.RemoveAt(PlayerIndex);
 			LobbyPlayerControllerArray.RemoveAt(PlayerIndex);
 			PlayerNameArray.RemoveAt(PlayerIndex);
 			PlayerReadyStateArray.RemoveAt(PlayerIndex);
@@ -241,25 +262,6 @@ void ALobbyGameMode::UpdateCharacter(ALobbyPlayerController* LobbyPlayerControll
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Failed to spawn character : %s"), *SpawnLocations[SpawnSpotIndex].ToString());
 	}
-}
-
-int ALobbyGameMode::FindLobbyPlayerSpot(ALobbyPlayerController* NewLobbyPlayerController)
-{
-	ALobbyGameSession* LobbyGameSession = Cast<ALobbyGameSession>(GameSession);
-	if (LobbyGameSession)
-	{
-		int MaxNumberOfPlayers = LobbyGameSession->MaxNumberOfPlayersInSession;
-		
-		for(int i = 0; i < MaxNumberOfPlayers; i++)
-		{
-			if(!bSpotUsedArray[i])
-			{
-				bSpotUsedArray[i] = true;
-				return i;
-			}
-		}
-	}
-	return 0;
 }
 
 void ALobbyGameMode::UpdateDifficulty(int Difficulty)
