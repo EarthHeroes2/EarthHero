@@ -163,7 +163,7 @@ void ULobbyWidget::ReadFriendsListCompleted(int32 LocalUserNum, bool bWasSuccess
 	else UE_LOG(LogTemp, Warning, TEXT("Failed to read Firends list"));
 }
 
-void ULobbyWidget::HostAssignment(bool bHostAssignment)
+void ULobbyWidget::HostAssignment(bool bHostAssignment, bool bAdvertise, int Difficulty)
 {
 	bHost = bHostAssignment;
 	
@@ -176,6 +176,13 @@ void ULobbyWidget::HostAssignment(bool bHostAssignment)
 	
 	if (bHost)
 	{
+		//현재 비밀방 여부
+		if(bAdvertise) Private_Cb->SetCheckedState(ECheckBoxState::Unchecked);
+		else Private_Cb->SetCheckedState(ECheckBoxState::Checked);
+		//현재 난이도 선택
+		SelectDifficulty = Difficulty;
+		DifficultyBtns[SelectDifficulty - 1]->SetIsEnabled(false);
+		
 		Player1_Btn->OnHovered.AddDynamic(this, &ULobbyWidget::Player1Hovered);
 		Player2_Btn->OnHovered.AddDynamic(this, &ULobbyWidget::Player2Hovered);
 		Player3_Btn->OnHovered.AddDynamic(this, &ULobbyWidget::Player3Hovered);
@@ -200,12 +207,13 @@ void ULobbyWidget::HostAssignment(bool bHostAssignment)
 		Difficulty3_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::Difficulty3BtnClicked);
 		Difficulty4_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::Difficulty4BtnClicked);
 		Difficulty5_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::Difficulty5BtnClicked);
-
-		//기본 선택 난이도 1
-		SelectDifficulty = 1;
-		Difficulty1_Btn->SetIsEnabled(false);
-
+		
 		Private_Hb->SetVisibility(ESlateVisibility::Visible);
+	}
+	else
+	{
+		//현재 난이도 선택
+		UpdateDifficulty(Difficulty);
 	}
 }
 

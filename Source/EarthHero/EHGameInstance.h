@@ -19,7 +19,7 @@ public:
 	FStatStructure* GetStatStructure(FName HeroName) const;
 	FString ServerPortNumber;
 
-	int Difficulty;
+	int Difficulty = 1; //기본 값 1
 	
 protected:
 	UEHGameInstance();
