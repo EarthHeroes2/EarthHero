@@ -493,6 +493,13 @@ void UMainMenuWidget::HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRe
                 	FString LobbyName;
                 	bool bKeyValueFound5 = SessionInSearchResult.Session.SessionSettings.Get("LobbyName", LobbyName);
 
+                	if(bAdvertise)
+                	{
+                		UE_LOG(LogTemp, Log, TEXT("session... : %s, %s, %d, true, %s"), *FindSessionReason, *PortNumber, NumberOfJoinedPlayers, *LobbyName);
+                	}
+                	else UE_LOG(LogTemp, Log, TEXT("session... : %s, %s, %d, false, %s"), *FindSessionReason, *PortNumber, NumberOfJoinedPlayers, *LobbyName);
+                	
+
                     if (bKeyValueFound1 && bKeyValueFound2 && bKeyValueFound3 && bKeyValueFound4 && bKeyValueFound5)
                     {
                     	if(bAdvertise)

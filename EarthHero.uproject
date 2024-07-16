@@ -25,6 +25,10 @@
 		{
 			"Name": "MultiplayerSessions",
 			"Enabled": false
+		},
+		{
+			"Name": "OnlineSubsystemSteam",
+			"Enabled": true
 		}
 	]
 }
