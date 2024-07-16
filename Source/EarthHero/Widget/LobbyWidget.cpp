@@ -182,6 +182,7 @@ void ULobbyWidget::HostAssignment(bool bHostAssignment, bool bAdvertise, int Dif
 		//현재 난이도 선택
 		SelectDifficulty = Difficulty;
 		DifficultyBtns[SelectDifficulty - 1]->SetIsEnabled(false);
+		UpdateDifficulty(SelectDifficulty);
 		
 		Player1_Btn->OnHovered.AddDynamic(this, &ULobbyWidget::Player1Hovered);
 		Player2_Btn->OnHovered.AddDynamic(this, &ULobbyWidget::Player2Hovered);
@@ -338,6 +339,7 @@ void ULobbyWidget::SetDifficulty(const int Difficulty)
 	DifficultyBtns[SelectDifficulty - 1]->SetIsEnabled(true);
 	SelectDifficulty = Difficulty;
 	DifficultyBtns[SelectDifficulty - 1]->SetIsEnabled(false);
+	UpdateDifficulty(SelectDifficulty);
 	
 	APlayerController* PlayerController = GetOwningPlayer();
 	if (PlayerController)
@@ -493,9 +495,9 @@ void ULobbyWidget::UpdateReadyState(const TArray<bool>& PlayerReadyStateArray)
 void ULobbyWidget::UpdateDifficulty(const int Difficulty)
 {
 	for(UButton* DifficultyBtn : DifficultyBtns)
-		DifficultyBtn->SetIsEnabled(false);
+		DifficultyBtn->SetColorAndOpacity(FLinearColor::Gray);
 	
-	DifficultyBtns[Difficulty - 1]->SetIsEnabled(true);
+	DifficultyBtns[Difficulty - 1]->SetColorAndOpacity(FLinearColor::Green);
 }
 
 
