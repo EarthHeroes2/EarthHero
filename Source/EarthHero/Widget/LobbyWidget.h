@@ -114,9 +114,13 @@ public:
 	class UCheckBox* Private_Cb;
 private:
 	UPROPERTY(meta = (BindWidget))
+	UHorizontalBox* PasswordSetting_Hb;
+	UPROPERTY(meta = (BindWidget))
 	UEditableTextBox* Password_Etb;
 	UPROPERTY(meta = (BindWidget))
 	UButton* PasswordUpdate_Btn;
+
+	
 	
 	UPROPERTY(meta = (BindWidget))
 	class UButton* Exit_Btn;

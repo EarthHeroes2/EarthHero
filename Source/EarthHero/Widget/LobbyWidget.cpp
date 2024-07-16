@@ -212,6 +212,7 @@ void ULobbyWidget::HostAssignment(bool bHostAssignment, bool bAdvertise, int Dif
 		Difficulty5_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::Difficulty5BtnClicked);
 		
 		Private_Hb->SetVisibility(ESlateVisibility::Visible);
+		PasswordSetting_Hb->SetVisibility(ESlateVisibility::Visible);
 	}
 	else
 	{
