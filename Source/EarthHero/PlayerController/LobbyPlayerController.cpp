@@ -6,8 +6,6 @@
 #include "GameFramework/PlayerState.h"
 #include <EarthHero/GameSession/LobbyGameSession.h>
 #include <EarthHero/GameMode/LobbyGameMode.h>
-
-#include "Components/CheckBox.h"
 #include "EarthHero/EHGameInstance.h"
 #include "EarthHero/PlayerState/LobbyPlayerState.h"
 

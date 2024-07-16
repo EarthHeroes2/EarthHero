@@ -45,6 +45,12 @@ void ALobbyGameMode::BeginPlay()
 	}
 }
 
+//특정 스폰 지점 설정
+AActor* ALobbyGameMode::FindPlayerStart_Implementation(AController* Player, const FString& IncomingName)
+{
+	return Super::FindPlayerStart_Implementation(Player, "");
+}
+
 void ALobbyGameMode::AddPlayerInfo(ALobbyPlayerController* NewLobbyPlayerController)
 {
 	if(NewLobbyPlayerController)

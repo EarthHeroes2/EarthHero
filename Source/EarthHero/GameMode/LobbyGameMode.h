@@ -19,7 +19,11 @@ class EARTHHERO_API ALobbyGameMode : public AGameModeBase
 
 protected:
 	virtual void BeginPlay() override;
+	
+	//virtual AActor* ChoosePlayerStart_Implementation(AController* Player) override;
+	virtual AActor* FindPlayerStart_Implementation(AController* Player, const FString& IncomingName) override;
 
+	
 	int ReadyCount = 0;
 	
 	TArray<FVector> SpawnLocations;
