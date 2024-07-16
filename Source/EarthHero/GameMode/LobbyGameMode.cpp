@@ -168,7 +168,6 @@ void ALobbyGameMode::UpdatePlayerNameListAndReadyState()
 	UpdatePlayerReadyState();
 }
 
-//��� Ŭ���̾�Ʈ���� �ٲ� ���� ���� �迭 ����
 void ALobbyGameMode::UpdatePlayerReadyState()
 {
 	int32 NumberOfPlayers = LobbyPlayerControllerArray.Num();

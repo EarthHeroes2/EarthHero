@@ -56,13 +56,15 @@ bool ULobbyWidget::Initialize()
 
 	Private_Cb->OnCheckStateChanged.AddDynamic(this, &ULobbyWidget::ChangePrivateState);
 
+	PasswordUpdate_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::PasswordUpdateBtnClicked);
+
 	Exit_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::ExitClicked);
 
 
 	UWorld* World = GetWorld();
 	if (World)
 	{
-		
+		ReadFriendsList();
 		World->GetTimerManager().SetTimer(ReadFriendsListTimerHandle, this, &ThisClass::ReadFriendsList, 4.0f, true);
 	}
 
@@ -182,6 +184,7 @@ void ULobbyWidget::HostAssignment(bool bHostAssignment, bool bAdvertise, int Dif
 		//현재 난이도 선택
 		SelectDifficulty = Difficulty;
 		DifficultyBtns[SelectDifficulty - 1]->SetIsEnabled(false);
+		UpdateDifficulty(SelectDifficulty);
 		
 		Player1_Btn->OnHovered.AddDynamic(this, &ULobbyWidget::Player1Hovered);
 		Player2_Btn->OnHovered.AddDynamic(this, &ULobbyWidget::Player2Hovered);
@@ -209,6 +212,7 @@ void ULobbyWidget::HostAssignment(bool bHostAssignment, bool bAdvertise, int Dif
 		Difficulty5_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::Difficulty5BtnClicked);
 		
 		Private_Hb->SetVisibility(ESlateVisibility::Visible);
+		PasswordSetting_Hb->SetVisibility(ESlateVisibility::Visible);
 	}
 	else
 	{
@@ -338,6 +342,7 @@ void ULobbyWidget::SetDifficulty(const int Difficulty)
 	DifficultyBtns[SelectDifficulty - 1]->SetIsEnabled(true);
 	SelectDifficulty = Difficulty;
 	DifficultyBtns[SelectDifficulty - 1]->SetIsEnabled(false);
+	UpdateDifficulty(SelectDifficulty);
 	
 	APlayerController* PlayerController = GetOwningPlayer();
 	if (PlayerController)
@@ -493,9 +498,25 @@ void ULobbyWidget::UpdateReadyState(const TArray<bool>& PlayerReadyStateArray)
 void ULobbyWidget::UpdateDifficulty(const int Difficulty)
 {
 	for(UButton* DifficultyBtn : DifficultyBtns)
-		DifficultyBtn->SetIsEnabled(false);
+		DifficultyBtn->SetColorAndOpacity(FLinearColor::Gray);
 	
-	DifficultyBtns[Difficulty - 1]->SetIsEnabled(true);
+	DifficultyBtns[Difficulty - 1]->SetColorAndOpacity(FLinearColor::Green);
+}
+
+
+void ULobbyWidget::PasswordUpdateBtnClicked()
+{
+	if(Password_Etb)
+	{
+		FString Password = Password_Etb->GetText().ToString();
+		APlayerController* PlayerController = GetOwningPlayer();
+		if (PlayerController)
+		{
+			ALobbyPlayerController* LobbyPlayerController = Cast<ALobbyPlayerController>(PlayerController);
+			if (LobbyPlayerController)
+				LobbyPlayerController->Server_UpdateLobbyPassword(Password);
+		}
+	}
 }
 
 

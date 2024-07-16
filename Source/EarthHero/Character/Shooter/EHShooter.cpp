@@ -23,13 +23,19 @@ void AEHShooter::Tick(float DeltaSeconds)
 void AEHShooter::Shoot()
 {
 	Super::Shoot();
-	CombatComponent->Fire();
+	if(CombatComponent)
+	{
+		CombatComponent->Fire();
+	}
 }
 
 void AEHShooter::Skill()
 {
 	Super::Skill();
-	CombatComponent->GrenadeFire();
+	if(CombatComponent)
+	{
+		CombatComponent->GrenadeFire();
+	}
 }
 
 void AEHShooter::BeginPlay()

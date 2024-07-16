@@ -65,6 +65,10 @@ public:
 	UFUNCTION(Client, Reliable)
 	void Client_UpdateDifficulty(int Difficulty);
 
+
+	UFUNCTION(Server, Reliable)
+	void Server_UpdateLobbyPassword(const FString& Password);
+
 protected:
 	void ShowLobbyWidget();
 	
