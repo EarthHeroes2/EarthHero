@@ -62,7 +62,7 @@ bool ULobbyWidget::Initialize()
 	UWorld* World = GetWorld();
 	if (World)
 	{
-		
+		ReadFriendsList();
 		World->GetTimerManager().SetTimer(ReadFriendsListTimerHandle, this, &ThisClass::ReadFriendsList, 4.0f, true);
 	}
 

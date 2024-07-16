@@ -140,6 +140,11 @@ bool UMainMenuWidget::Initialize()
 		ButtonArray.Add(FindLobby_Btn);
 	}
 
+	if(Private_Cb)
+	{
+		Private_Cb->OnCheckStateChanged.AddDynamic(this, &ThisClass::PrivateCbChanged);
+	}
+
 	return true;
 }
 
@@ -201,6 +206,27 @@ void UMainMenuWidget::Exit_BtnClicked()
 	}
 }
 
+
+void UMainMenuWidget::PrivateCbChanged(bool bChecked)
+{
+	if (PasswordSetting_Etb)
+	{
+		if(bChecked)
+		{
+			PasswordSetting_Etb->SetIsEnabled(true);
+		}
+		else
+		{
+			PasswordSetting_Etb->SetIsEnabled(false);
+			PasswordSetting_Etb->SetText(FText());
+		}
+	}
+}
+
+
+
+
+
 void UMainMenuWidget::CreateLobbyOKBtnClicked()
 {
 	SetButtonsEnabled(false);
@@ -241,6 +267,10 @@ void UMainMenuWidget::CreateLobbyCancleBtnClicked()
 {
 	LobbySetting_Bd->SetVisibility(ESlateVisibility::Collapsed);
 }
+
+
+
+
 
 
 void UMainMenuWidget::PasswordOKBtnClicked()
@@ -493,21 +523,8 @@ void UMainMenuWidget::HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRe
                 	FString LobbyName;
                 	bool bKeyValueFound5 = SessionInSearchResult.Session.SessionSettings.Get("LobbyName", LobbyName);
 
-                	if(bAdvertise)
-                	{
-                		UE_LOG(LogTemp, Log, TEXT("session... : %s, %s, %d, true, %s"), *FindSessionReason, *PortNumber, NumberOfJoinedPlayers, *LobbyName);
-                	}
-                	else UE_LOG(LogTemp, Log, TEXT("session... : %s, %s, %d, false, %s"), *FindSessionReason, *PortNumber, NumberOfJoinedPlayers, *LobbyName);
-                	
-
                     if (bKeyValueFound1 && bKeyValueFound2 && bKeyValueFound3 && bKeyValueFound4 && bKeyValueFound5)
                     {
-                    	if(bAdvertise)
-                    	{
-                    		UE_LOG(LogTemp, Log, TEXT("session? : %s, %s, %d, true"), *FindSessionReason, *PortNumber, NumberOfJoinedPlayers);
-                    	}
-                    	else UE_LOG(LogTemp, Log, TEXT("session? : %s, %s, %d, false"), *FindSessionReason, *PortNumber, NumberOfJoinedPlayers);
-                    	
                     	if (GameName == "EH2" &&
 								(
 									(FindSessionReason == "JoinLobby" && NumberOfJoinedPlayers > 0 && bAdvertise) ||
@@ -516,12 +533,6 @@ void UMainMenuWidget::HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRe
 								)
 							)
                     	{
-                    		if(bAdvertise)
-                    		{
-                    			UE_LOG(LogTemp, Log, TEXT("Valid session : %s, %s, %d, true"), *FindSessionReason, *PortNumber, NumberOfJoinedPlayers);
-                    		}
-                    		else UE_LOG(LogTemp, Log, TEXT("Valid session : %s, %s, %d, false"), *FindSessionReason, *PortNumber, NumberOfJoinedPlayers);
-                    		
                         	if(FindSessionReason == "FindLobby")
                         	{
                         		bIsFind = true;

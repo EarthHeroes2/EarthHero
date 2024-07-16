@@ -70,7 +70,12 @@ private:
 
 	UFUNCTION()
 	void Exit_BtnClicked();
-	
+
+
+
+	UFUNCTION()
+	void PrivateCbChanged(bool bChecked);
+
 
 	UFUNCTION()
 	void CreateLobbyOKBtnClicked();
