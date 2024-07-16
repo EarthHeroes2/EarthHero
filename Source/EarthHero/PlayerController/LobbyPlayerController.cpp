@@ -70,7 +70,6 @@ void ALobbyPlayerController::Server_InitSetup_Implementation()
 		}
 	}
 	
-
 	//게임모드에 플레이어 정보 등록
 	if (LobbyGameMode) LobbyGameMode->AddPlayerInfo(this);
 }
@@ -241,20 +240,20 @@ void ALobbyPlayerController::Server_SetPlayerCharacter_Implementation(int ClassT
 
 void ALobbyPlayerController::Server_SetDifficulty_Implementation(int Difficulty)
 {
-	ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
-	if (LobbyGameMode)
+	if(bHost)
 	{
-		LobbyGameMode->UpdateDifficulty(Difficulty);
+		ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
+		if (LobbyGameMode)
+		{
+			LobbyGameMode->UpdateDifficulty(Difficulty);
+		}
 	}
 }
 
 void ALobbyPlayerController::Client_UpdateDifficulty_Implementation(int Difficulty)
 {
 	if(LobbyWidget)
-	{
-		//이런식으로
-		//LobbyWidget->UpdateDifficulty()
-	}
+		LobbyWidget->UpdateDifficulty(Difficulty);
 }
 
 

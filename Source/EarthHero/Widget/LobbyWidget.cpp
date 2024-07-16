@@ -12,6 +12,7 @@
 #include "Components/CheckBox.h"
 #include "Components/Image.h"
 #include "EarthHero/EHGameInstance.h"
+#include "Kismet/ImportanceSamplingLibrary.h"
 
 #include "steam/steam_api.h"
 
@@ -34,6 +35,12 @@ bool ULobbyWidget::Initialize()
 	PlayerTexts.Add(Player2_Txt);
 	PlayerTexts.Add(Player3_Txt);
 	PlayerTexts.Add(Player4_Txt);
+
+	DifficultyBtns.Add(Difficulty1_Btn);
+	DifficultyBtns.Add(Difficulty2_Btn);
+	DifficultyBtns.Add(Difficulty3_Btn);
+	DifficultyBtns.Add(Difficulty4_Btn);
+	DifficultyBtns.Add(Difficulty5_Btn);
 
 	ClassBtns.Add(Warrior_Btn);
 	ClassBtns.Add(Mechanic_Btn);
@@ -187,6 +194,16 @@ void ULobbyWidget::HostAssignment(bool bHostAssignment)
 		Kick2_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::Kick2Clicked);
 		Kick3_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::Kick3Clicked);
 		Kick4_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::Kick4Clicked);
+		
+		Difficulty1_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::Difficulty1BtnClicked);
+		Difficulty2_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::Difficulty2BtnClicked);
+		Difficulty3_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::Difficulty3BtnClicked);
+		Difficulty4_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::Difficulty4BtnClicked);
+		Difficulty5_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::Difficulty5BtnClicked);
+
+		//기본 선택 난이도 1
+		SelectDifficulty = 1;
+		Difficulty1_Btn->SetIsEnabled(false);
 
 		Private_Hb->SetVisibility(ESlateVisibility::Visible);
 	}
@@ -287,6 +304,40 @@ void ULobbyWidget::PlayerKick(int PlayerNumber)
 	}
 }
 
+//이런거 정리하려면 버튼 하나하나 따로 만들어주는편이...
+void ULobbyWidget::Difficulty1BtnClicked()
+{
+	SetDifficulty(1);		
+}
+void ULobbyWidget::Difficulty2BtnClicked()
+{
+	SetDifficulty(2);		
+}
+void ULobbyWidget::Difficulty3BtnClicked()
+{
+	SetDifficulty(3);	
+}
+void ULobbyWidget::Difficulty4BtnClicked()
+{
+	SetDifficulty(4);	
+}
+void ULobbyWidget::Difficulty5BtnClicked()
+{
+	SetDifficulty(5);
+}
+void ULobbyWidget::SetDifficulty(const int Difficulty)
+{
+	DifficultyBtns[SelectDifficulty - 1]->SetIsEnabled(true);
+	SelectDifficulty = Difficulty;
+	DifficultyBtns[SelectDifficulty - 1]->SetIsEnabled(false);
+	
+	APlayerController* PlayerController = GetOwningPlayer();
+	if (PlayerController)
+	{
+		ALobbyPlayerController* LobbyPlayerController = Cast<ALobbyPlayerController>(PlayerController);
+		if (LobbyPlayerController) LobbyPlayerController->Server_SetDifficulty(Difficulty);
+	}
+}
 
 void ULobbyWidget::WarriorClicked()
 {
@@ -430,13 +481,21 @@ void ULobbyWidget::UpdateReadyState(const TArray<bool>& PlayerReadyStateArray)
 	}
 }
 
+//수정 필요
+void ULobbyWidget::UpdateDifficulty(const int Difficulty)
+{
+	for(UButton* DifficultyBtn : DifficultyBtns)
+		DifficultyBtn->SetIsEnabled(false);
+	
+	DifficultyBtns[Difficulty - 1]->SetIsEnabled(true);
+}
+
 
 void ULobbyWidget::ExitClicked()
 {
 	APlayerController* PlayerController = GetOwningPlayer();
 	if (PlayerController)
 	{
-		//이것을 이용하여 바로 나감
 		PlayerController->ClientTravel("/Game/Maps/StartupMap", ETravelType::TRAVEL_Absolute);
 	}
 }

@@ -34,6 +34,7 @@ private:
 	int NumberOfPlayers;
 	int bHost = false;
 	EClassType SelectClass = Warrior;
+	int SelectDifficulty = 1;
 
 	UPROPERTY(meta = (BindWidget))
 	class UButton* Ready_Btn;
@@ -83,6 +84,20 @@ private:
 	UButton* Shooter_Btn;
 	UPROPERTY(meta = (BindWidget))
 	UButton* Archor_Btn;
+
+
+
+	TArray<UButton*> DifficultyBtns;
+	UPROPERTY(meta = (BindWidget))
+	UButton* Difficulty1_Btn;
+	UPROPERTY(meta = (BindWidget))
+	UButton* Difficulty2_Btn;
+	UPROPERTY(meta = (BindWidget))
+	UButton* Difficulty3_Btn;
+	UPROPERTY(meta = (BindWidget))
+	UButton* Difficulty4_Btn;
+	UPROPERTY(meta = (BindWidget))
+	UButton* Difficulty5_Btn;
 
 
 	UPROPERTY(meta = (BindWidget))
@@ -139,6 +154,20 @@ private:
 	void PlayerKick(int PlayerNumber);
 
 	UFUNCTION()
+	void Difficulty1BtnClicked();
+	UFUNCTION()
+	void Difficulty2BtnClicked();
+	UFUNCTION()
+	void Difficulty3BtnClicked();
+	UFUNCTION()
+	void Difficulty4BtnClicked();
+	UFUNCTION()
+	void Difficulty5BtnClicked();
+	
+	void SetDifficulty(int Difficulty);
+
+
+	UFUNCTION()
 	void WarriorClicked();
 	UFUNCTION()
 	void MechanicClicked();
@@ -165,6 +194,7 @@ protected:
 public:
 	void UpdatePlayerNameList(const TArray<FString>& PlayerNameList);
 	void UpdateReadyState(const TArray<bool>& PlayerReadyStateArray);
+	void UpdateDifficulty(const int Difficulty);
 	void AddChatMessage(const FText& Text);
 
 
