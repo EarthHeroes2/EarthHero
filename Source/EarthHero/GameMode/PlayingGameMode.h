@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -46,4 +44,7 @@ public:
 
 	void PlayerControllerReady();
 	void EnableAllInput();
+
+	void SpawnForceFields();
+	void SpawnForceFieldAtLocation(FVector Location);
 };
