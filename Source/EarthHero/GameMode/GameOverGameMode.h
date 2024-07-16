@@ -15,6 +15,8 @@ class EARTHHERO_API AGameOverGameMode : public AGameModeBase
 	GENERATED_BODY()
 
 	AGameOverGameMode();
+	virtual void InitSeamlessTravelPlayer(AController* NewController) override;
+	virtual void Logout(AController* Exiting) override;
 
 private:
 	TSharedPtr<FSharedContentHandle> TestSharedHandle;
