@@ -7,22 +7,48 @@
 #include "WarriorCombatComponent.generated.h"
 
 
+class AEHWarrior;
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class EARTHHERO_API UWarriorCombatComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
-	// Sets default values for this component's properties
 	UWarriorCombatComponent();
 
+	void Attack();
+
+	void Whirlwind();
+
 protected:
-	// Called when the game starts
 	virtual void BeginPlay() override;
+	
+	UFUNCTION(Server, Reliable)
+	void Server_Attack();
 
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	UFUNCTION(NetMulticast, Reliable)
+	void NetMulticast_Attack();
 
-		
+	UFUNCTION(Server, Reliable)
+	void Server_Whirlwind();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void NetMulticast_Whirlwind();
+
+private:
+	UPROPERTY()
+	AEHWarrior* Warrior;
+
+	FTimerHandle WarriorTimerHandle;
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true), Category = "Animation");
+	UAnimMontage* TPS_AttackAnimMontage;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true), Category = "Animation");
+	UAnimMontage* FPS_AttackAnimMontage;
+
+public:
+	FORCEINLINE void SetWarrior(AEHWarrior* NewWarrior) { Warrior = NewWarrior; }
+	
 };

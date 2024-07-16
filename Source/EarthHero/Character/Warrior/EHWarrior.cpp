@@ -8,10 +8,9 @@
 
 AEHWarrior::AEHWarrior()
 {
+	CombatComponent = CreateDefaultSubobject<UWarriorCombatComponent>(TEXT("Warrior Combat Component"));
 	SetMaxPitchAngle(70.f);
 	SetMinPitchAngle(-60.f);
-
-	CombatComponent = CreateDefaultSubobject<UWarriorCombatComponent>(TEXT("Warrior Combat Component"));
 }
 
 void AEHWarrior::Tick(float DeltaTime)
@@ -22,6 +21,10 @@ void AEHWarrior::Tick(float DeltaTime)
 void AEHWarrior::Shoot()
 {
 	Super::Shoot();
+	if(CombatComponent)
+	{
+		CombatComponent->Attack();
+	}
 }
 
 void AEHWarrior::Skill()
