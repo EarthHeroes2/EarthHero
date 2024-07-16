@@ -61,7 +61,9 @@ AActor* ALobbyGameMode::FindPlayerStart_Implementation(AController* Player, cons
 	int PlayerStart = FindLobbyPlayerSpot();
 
 	ControllerArray.Add(Player);
-	LobbyPlayerControllerArray.Add(Cast<ALobbyPlayerController>(Player)); //...?
+	ALobbyPlayerController* LobbyPlayerController = Cast<ALobbyPlayerController>(Player);
+	if (LobbyPlayerController) LobbyPlayerControllerArray.Add(LobbyPlayerController);
+	else  UE_LOG(LogGameMode, Error, TEXT("Failed to cast Player to ALobbyPlayerController.")); //임시
 	PlayerNameArray.Add(Player->PlayerState->GetPlayerName());
 	PlayerReadyStateArray.Add(false);
 	PlayerClassArray.Add(Shooter); //임시
