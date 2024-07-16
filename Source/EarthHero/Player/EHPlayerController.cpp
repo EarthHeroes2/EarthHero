@@ -77,6 +77,10 @@ void AEHPlayerController::InitializeHUD()
 			MyPlayerState->GetHeroUpgradeComponent()->SetTabHUD(TabHUD);
 		}
 
+		bShowMouseCursor = false;
+		FInputModeGameOnly InputMode;
+		SetInputMode(InputMode);
+
 		//준비가 다 되었으니 서버에게 이 사실을 알림
 		Server_PlayerControllerReady();
 	}
@@ -112,9 +116,6 @@ void AEHPlayerController::SetupInputComponent()
 	EnhancedInputComponent->BindAction(SelectHUAction_1, ETriggerEvent::Started, this, &ThisClass::SelectHU_1);
 	EnhancedInputComponent->BindAction(SelectHUAction_2, ETriggerEvent::Started, this, &ThisClass::SelectHU_2);
 	EnhancedInputComponent->BindAction(SelectHUAction_3, ETriggerEvent::Started, this, &ThisClass::SelectHU_3);
-
-	FInputModeGameOnly InputMode;
-	SetInputMode(InputMode);
 }
 
 void AEHPlayerController::Jump()

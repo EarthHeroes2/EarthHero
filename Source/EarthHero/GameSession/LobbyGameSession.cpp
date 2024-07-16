@@ -162,7 +162,7 @@ void ALobbyGameSession::HandleRegisterPlayerCompleted(FName EOSSessionName, cons
                 //첫플레이어 = 방장
                 if (NumberOfPlayersInSession == 1)
                 {
-                    HostPlayerId = PlayerIds[0]; //이거 플레이어 컨트롤러 저장으로 변경 필요
+                    HostPlayerId = PlayerIds[0];
                     UE_LOG(LogTemp, Log, TEXT("Host Assigment..."));
 
                     //클라이언트에게 방장 권한을 부여
@@ -423,17 +423,7 @@ void ALobbyGameSession::NewHostFind()
 //한 클라이언트에게 방장 할당
 void ALobbyGameSession::HostAssignment(APlayerController* HostPlayer)
 {
-    bool bAdvertise = true;
-    
-    ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
-    if (LobbyGameMode)
-    {
-        ALobbyGameSession* LobbyGameSession = Cast<ALobbyGameSession>(LobbyGameMode->GameSession);
-        if (LobbyGameSession)
-        {
-            bAdvertise = LobbyGameSession->GetAdvertiseState();
-        }
-    }
+    bool bAdvertise = GetAdvertiseState();
     
     if (HostPlayer)
     {
@@ -442,8 +432,12 @@ void ALobbyGameSession::HostAssignment(APlayerController* HostPlayer)
         {
             UE_LOG(LogTemp, Log, TEXT("Host Assignment : %s"), *HostPlayerId->ToString());
 
+            int Difficulty = 1;
+            UEHGameInstance* EHGameinstance = Cast<UEHGameInstance>(GetGameInstance());
+            if(EHGameinstance) Difficulty = EHGameinstance->Difficulty;
+
             LobbyPlayerController->bHost = true;
-            LobbyPlayerController->Client_HostAssignment(true, bAdvertise);
+            LobbyPlayerController->Client_HostAssignment(true, bAdvertise, Difficulty);
         }
     }
 }

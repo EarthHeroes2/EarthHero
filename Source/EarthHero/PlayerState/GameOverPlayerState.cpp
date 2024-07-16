@@ -4,7 +4,6 @@
 #include "GameOverPlayerState.h"
 
 #include "EarthHero/EHGameInstance.h"
-#include "EarthHero/GameMode/GameOverGameMode.h"
 #include "EarthHero/Socket/SocketClient.h"
 
 void AGameOverPlayerState::BeginPlay()
@@ -47,7 +46,6 @@ void AGameOverPlayerState::TestFunc()
 			ExtraInfo = SteamID + "|0";
 			UE_LOG(LogTemp, Error, TEXT("Invalid Difficulty : %d"), EhGameInstance->Difficulty);
 		}
-		
 	}
 	
 	USocketClient* NewSocket = NewObject<USocketClient>(this);

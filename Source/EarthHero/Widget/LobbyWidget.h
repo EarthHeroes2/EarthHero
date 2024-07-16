@@ -23,15 +23,18 @@ class EARTHHERO_API ULobbyWidget : public UUserWidget
 	ULobbyWidget(const FObjectInitializer &ObjectInitializer);
 	TSubclassOf<class UUserWidget> FriendRowWidgetClass;
 	
-	virtual bool Initialize();
+	virtual bool Initialize() override;
+	void ReadFriendsList();
+
 public:
-	void HostAssignment(bool bHostAssignment);
+	void HostAssignment(bool bHostAssignment, bool bAdvertise, int Difficulty);
 
 private:
 	int MaxNumberOfPlayers = 4; //원래 로비 게임 세션에도 있지만... 어차피 4명 고정게임이라 
 	int NumberOfPlayers;
 	int bHost = false;
 	EClassType SelectClass = Warrior;
+	int SelectDifficulty = 1;
 
 	UPROPERTY(meta = (BindWidget))
 	class UButton* Ready_Btn;
@@ -81,6 +84,20 @@ private:
 	UButton* Shooter_Btn;
 	UPROPERTY(meta = (BindWidget))
 	UButton* Archor_Btn;
+
+
+
+	TArray<UButton*> DifficultyBtns;
+	UPROPERTY(meta = (BindWidget))
+	UButton* Difficulty1_Btn;
+	UPROPERTY(meta = (BindWidget))
+	UButton* Difficulty2_Btn;
+	UPROPERTY(meta = (BindWidget))
+	UButton* Difficulty3_Btn;
+	UPROPERTY(meta = (BindWidget))
+	UButton* Difficulty4_Btn;
+	UPROPERTY(meta = (BindWidget))
+	UButton* Difficulty5_Btn;
 
 
 	UPROPERTY(meta = (BindWidget))
@@ -137,6 +154,20 @@ private:
 	void PlayerKick(int PlayerNumber);
 
 	UFUNCTION()
+	void Difficulty1BtnClicked();
+	UFUNCTION()
+	void Difficulty2BtnClicked();
+	UFUNCTION()
+	void Difficulty3BtnClicked();
+	UFUNCTION()
+	void Difficulty4BtnClicked();
+	UFUNCTION()
+	void Difficulty5BtnClicked();
+	
+	void SetDifficulty(int Difficulty);
+
+
+	UFUNCTION()
 	void WarriorClicked();
 	UFUNCTION()
 	void MechanicClicked();
@@ -152,9 +183,6 @@ private:
 	UFUNCTION()
 	void ExitClicked();
 
-
-	
-
 	int NumberOfClass = 4;
 public:
 	void ChangeSelectedButton(EClassType ClassType);
@@ -166,8 +194,11 @@ protected:
 public:
 	void UpdatePlayerNameList(const TArray<FString>& PlayerNameList);
 	void UpdateReadyState(const TArray<bool>& PlayerReadyStateArray);
+	void UpdateDifficulty(const int Difficulty);
 	void AddChatMessage(const FText& Text);
-	
+
+
+	FTimerHandle ReadFriendsListTimerHandle;
 
 	protected:
 	void ReadFriendsListCompleted(int32 LocalUserNum, bool bWasSuccessful, const FString& ListName, const FString& ErrorStr);
@@ -175,6 +206,8 @@ public:
 	
 	TArray<CSteamID> FriendSteamIds;
 	TArray<UFriendRowWidget*> FriendRowWidgets;
+	
+	
 
 	
 };

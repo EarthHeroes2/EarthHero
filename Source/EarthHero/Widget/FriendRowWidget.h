@@ -15,7 +15,7 @@ class EARTHHERO_API UFriendRowWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
-	virtual bool Initialize();
+	virtual bool Initialize() override;
 
 public:
 	void UpdateFriendInfo(TSharedRef<FOnlineFriend> Friend, bool bOnline);

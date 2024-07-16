@@ -16,7 +16,7 @@ class EARTHHERO_API ALobbyPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 
-	virtual void BeginPlay();
+	virtual void BeginPlay() override;
 
 	ALobbyPlayerController();
 
@@ -28,7 +28,7 @@ public:
 	bool bHost = false;
 
 	UFUNCTION(Client, Reliable)
-	void Client_HostAssignment(bool bHostAssignment, bool bAdvertise);
+	void Client_HostAssignment(bool bHostAssignment, bool bAdvertise, int Difficulty);
 
 	UFUNCTION(Server, Reliable)
 	void Server_ClientReadyButtonClicked();

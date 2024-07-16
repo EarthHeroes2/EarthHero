@@ -6,8 +6,7 @@
 #include "GameFramework/PlayerState.h"
 #include <EarthHero/GameSession/LobbyGameSession.h>
 #include <EarthHero/GameMode/LobbyGameMode.h>
-
-#include "Components/CheckBox.h"
+#include "EarthHero/EHGameInstance.h"
 #include "EarthHero/PlayerState/LobbyPlayerState.h"
 
 
@@ -29,11 +28,8 @@ void ALobbyPlayerController::BeginPlay()
 
 	if (!IsRunningDedicatedServer())
 	{
-		//로비 위젯 생성
-		ShowLobbyWidget();
-		
-		//비밀방 여부 서버에게 알려줌 (최대한 빨리)
-		Server_InitSetup();
+		ShowLobbyWidget(); //로비 위젯 생성
+		Server_InitSetup(); //서버에게 자신이 준비됨을 알림
 	}
 }
 
@@ -62,31 +58,33 @@ void ALobbyPlayerController::Server_InitSetup_Implementation()
 	{
 		ALobbyGameSession* LobbyGameSession = Cast<ALobbyGameSession>(LobbyGameMode->GameSession);
 		if (LobbyGameSession)
-		{	//클라이언트에게 방장 유무와 현재 광고 상태를 알림
+		{	
 			bool bAdvertise = LobbyGameSession->GetAdvertiseState();
+			int Difficulty = 1;
+
+			UEHGameInstance* EHGameinstance = Cast<UEHGameInstance>(GetGameInstance());
+			if(EHGameinstance) Difficulty = EHGameinstance->Difficulty;
 			
-			if (bHost) Client_HostAssignment(true, bAdvertise); 
-			else Client_HostAssignment(false, bAdvertise);
+
+			//클라이언트에게 방장 유무와 현재 광고 상태를 알림
+			if (bHost) Client_HostAssignment(true, bAdvertise, Difficulty); 
+			else Client_HostAssignment(false, bAdvertise, Difficulty);
 		}
 	}
 	
-
 	//게임모드에 플레이어 정보 등록
 	if (LobbyGameMode) LobbyGameMode->AddPlayerInfo(this);
 }
 
-//서버에게서 방장 유무를 받음
-void ALobbyPlayerController::Client_HostAssignment_Implementation(bool bHostAssignment, bool bAdvertise)
+//서버에게서 방장 유무를 받음 (Server_InitSetup에서 불리거나 게임 세션에서 새로운 방장 할당 후에 불림)
+void ALobbyPlayerController::Client_HostAssignment_Implementation(bool bHostAssignment, bool bAdvertise, int Difficulty)
 {
+	UE_LOG(LogTemp, Error, TEXT("Client_HostAssignment!!!"));
+	
 	bHost = bHostAssignment; //클라이언트도 방장 유무는 알고 있지만, 서버에서 항상 확인해주기
 	
-	if (LobbyWidget)
-	{
-		if(bAdvertise) LobbyWidget->Private_Cb->SetCheckedState(ECheckBoxState::Unchecked);
-		else LobbyWidget->Private_Cb->SetCheckedState(ECheckBoxState::Checked);
-		
-		LobbyWidget->HostAssignment(bHost);
-	}
+	if (LobbyWidget) LobbyWidget->HostAssignment(bHost, bAdvertise, Difficulty);
+	else UE_LOG(LogTemp, Error, TEXT("Client_HostAssignment (Invalid LobbyWidget)"));
 	
 	if (bHost)
 	{
@@ -241,20 +239,20 @@ void ALobbyPlayerController::Server_SetPlayerCharacter_Implementation(int ClassT
 
 void ALobbyPlayerController::Server_SetDifficulty_Implementation(int Difficulty)
 {
-	ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
-	if (LobbyGameMode)
+	if(bHost)
 	{
-		LobbyGameMode->UpdateDifficulty(Difficulty);
+		ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
+		if (LobbyGameMode)
+		{
+			LobbyGameMode->UpdateDifficulty(Difficulty);
+		}
 	}
 }
 
 void ALobbyPlayerController::Client_UpdateDifficulty_Implementation(int Difficulty)
 {
 	if(LobbyWidget)
-	{
-		//이런식으로
-		//LobbyWidget->UpdateDifficulty()
-	}
+		LobbyWidget->UpdateDifficulty(Difficulty);
 }
 
 
@@ -276,11 +274,8 @@ void ALobbyPlayerController::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	if (LobbyWidget)
 	{
+		GetWorldTimerManager().ClearTimer(LobbyWidget->ReadFriendsListTimerHandle);
 		LobbyWidget->RemoveFromParent();
-		bShowMouseCursor = false;
-		
-		FInputModeGameOnly InputMode;
-		SetInputMode(InputMode);
 	}
 	Super::EndPlay(EndPlayReason);
 }
