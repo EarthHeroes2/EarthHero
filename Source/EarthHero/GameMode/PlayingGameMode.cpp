@@ -276,7 +276,8 @@ void APlayingGameMode::UpdateGameStateHealths()
 {
 	TArray<float> PlayerMaxHealths;
 	TArray<float> PlayerCurrentHealths;
-	
+
+	//UE_LOG(LogClass, Warning, TEXT("UpdateGameStateHealths::EHPlayerControllers count = %d"), EHPlayerControllers.Num());
 	for(AEHPlayerController* EHPlayerController : EHPlayerControllers)
 	{
 		if(EHPlayerController && EHPlayerController->PlayerState)
