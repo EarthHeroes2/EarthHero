@@ -33,4 +33,7 @@ protected:
 
 	UPROPERTY()
 	AController* PlayerController;
+
+public:
+	FORCEINLINE UWarriorCombatComponent* GetCombatComponent() { return CombatComponent; }
 };

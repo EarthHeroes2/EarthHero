@@ -18,6 +18,8 @@ class EARTHHERO_API UTPSWarriorAnimInstance : public UEHAnimInstanceBase
 public:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
-private:
+protected:
+	UFUNCTION()
+	void AnimNotify_SwordHit();
 	
 };

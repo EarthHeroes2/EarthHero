@@ -50,47 +50,6 @@ void UShooterCombatComponent::Fire()
 	}
 }
 
-void UShooterCombatComponent::GrenadeFire()
-{
-	if(Shooter)
-	{
-		Server_GrenadeFire();
-	}
-}
-
-
-void UShooterCombatComponent::Server_GrenadeFire_Implementation()
-{
-	NetMulticast_GrenadeFire();
-}
-
-void UShooterCombatComponent::NetMulticast_GrenadeFire_Implementation()
-{
-	UWorld* World = GetWorld();
-	
-	if(World && GrenadeClass)
-	{
-		if(Shooter && Shooter->GetEquippedWeapon() && Shooter->GetController())
-		{
-			FVector SpawnLocation = Shooter->GetEquippedWeapon()->GetSocketLocation(FName("FireSocket"));
-			FRotator SpawnRotation = Shooter->GetController()->GetControlRotation();
-			SpawnRotation += FRotator(3.f,0.f,0.f);
-			AActor* SpawnGrenade = World->SpawnActor<AActor>(GrenadeClass, SpawnLocation, SpawnRotation);
-			AGrenade* Grenade = Cast<AGrenade>(SpawnGrenade);
-			if(Grenade)
-			{
-				Grenade->GetProjectileMovementComponent()->InitialSpeed = 4000.f;
-				Grenade->SetOwner(Shooter);
-				
-				//승언 : Grenade에 ShooterStatComponent 참조 추가
-				Grenade->ShooterStatComponent = Shooter->ShooterStatComponent;
-			}
-		}
-	}
-
-}
-
-
 void UShooterCombatComponent::Server_Fire_Implementation(FVector TraceStartVector, FVector TraceEndVector,
                                                          FVector MuzzleVector)
 {
@@ -156,11 +115,51 @@ void UShooterCombatComponent::NetMulticast_Fire_Implementation(FVector HitLocati
 	}
 }
 
-
 void UShooterCombatComponent::ResetFire()
 {
 	bCanFire = true;
 }
+
+
+void UShooterCombatComponent::GrenadeFire()
+{
+	if(Shooter)
+	{
+		Server_GrenadeFire();
+	}
+}
+
+void UShooterCombatComponent::Server_GrenadeFire_Implementation()
+{
+	NetMulticast_GrenadeFire();
+}
+
+void UShooterCombatComponent::NetMulticast_GrenadeFire_Implementation()
+{
+	UWorld* World = GetWorld();
+	
+	if(World && GrenadeClass)
+	{
+		if(Shooter && Shooter->GetEquippedWeapon() && Shooter->GetController())
+		{
+			FVector SpawnLocation = Shooter->GetEquippedWeapon()->GetSocketLocation(FName("FireSocket"));
+			FRotator SpawnRotation = Shooter->GetController()->GetControlRotation();
+			SpawnRotation += FRotator(3.f,0.f,0.f);
+			AActor* SpawnGrenade = World->SpawnActor<AActor>(GrenadeClass, SpawnLocation, SpawnRotation);
+			AGrenade* Grenade = Cast<AGrenade>(SpawnGrenade);
+			if(Grenade)
+			{
+				Grenade->GetProjectileMovementComponent()->InitialSpeed = 4000.f;
+				Grenade->SetOwner(Shooter);
+				
+				//승언 : Grenade에 ShooterStatComponent 참조 추가
+				Grenade->ShooterStatComponent = Shooter->ShooterStatComponent;
+			}
+		}
+	}
+
+}
+
 
 //타이머가 client에서 돌아가므로 client의 FireRate 설정
 void UShooterCombatComponent::SetFireRate_Implementation(float NewFireRate)
