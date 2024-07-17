@@ -3,6 +3,7 @@
 
 #include "MonsterBase.h"
 
+#include "MyAIController.h"
 #include "EarthHero/Stat/Monster/MonsterStatComponent.h"
 
 // Sets default values
@@ -13,6 +14,10 @@ AMonsterBase::AMonsterBase()
 	MonsterStatComponent = CreateDefaultSubobject<UMonsterStatComponent>(TEXT("MonsterStatComponent"));
 	
 	MonsterStatComponent->SetIsReplicated(true);
+
+	//테스트용 AIController 추가
+	AutoPossessAI = EAutoPossessAI::PlacedInWorld;
+	AIControllerClass = AMyAIController::StaticClass();
 }
 
 // Called when the game starts or when spawned

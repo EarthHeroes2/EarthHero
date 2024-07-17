@@ -82,10 +82,10 @@ void AGrenade::Server_GrenadeHit_Implementation(FVector HitLocation)
 
 			if (ShooterStatComponent->HU_EnhnacedGenerate == 3)
 			{
-				AEf_PointImpulse* PointImpulse =Cast<AEf_PointImpulse>(World->SpawnActor<AActor>(AEf_PointImpulse::StaticClass(), GetActorLocation(), GetActorRotation()));
+				AEf_PointImpulse* PointImpulse =Cast<AEf_PointImpulse>(World->SpawnActor<AActor>(AEf_PointImpulse::StaticClass(), HitLocation, FRotator(0, 0, 0)));
 				if (PointImpulse)
 				{
-					PointImpulse->Strength = -500000;
+					PointImpulse->Strength = -1500;
 					PointImpulse->Radius = GrenadeRange;
 					PointImpulse->Attacker = GetInstigator();
 					PointImpulse->HitActors = UniqueActors;

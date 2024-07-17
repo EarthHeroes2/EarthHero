@@ -35,6 +35,8 @@ void AEf_PointImpulse::BeginPlay()
 		RadialForceComponent->ImpulseStrength = Strength;
 		RadialForceComponent->Radius = Radius;
 		RadialForceComponent->bImpulseVelChange = true;
+		RadialForceComponent->bAutoActivate = true;
+		RadialForceComponent->AddObjectTypeToAffect(ObjectTypeQuery3);
 		GetWorldTimerManager().SetTimer(ImpulseHandle, this, &ThisClass::PointImpulse, Delay, true);
 	}
 }
@@ -44,7 +46,7 @@ void AEf_PointImpulse::PointImpulse()
 	if (Duration < Time)
 	{
 		GetWorldTimerManager().ClearTimer(ImpulseHandle);
-		GetWorldTimerManager().SetTimer(SetFalseSimulatePhysicsHandle, this, &ThisClass::SetFalseSimulatePhysics, 1.5, false);
+		GetWorldTimerManager().SetTimer(SetFalseSimulatePhysicsHandle, this, &ThisClass::SetFalseSimulatePhysics, 1.0, false);
 	}
 	
 	for (auto HitActor : HitActors)
@@ -68,7 +70,7 @@ void AEf_PointImpulse::PointImpulse()
 		}
 	}
 	Time += Delay;
-	GetWorldTimerManager().SetTimer(DelayHandle, this, &ThisClass::Impulse, 0.1, false);
+	GetWorldTimerManager().SetTimer(DelayHandle, this, &ThisClass::Impulse, 0.01, false);
 }
 
 void AEf_PointImpulse::Impulse() const

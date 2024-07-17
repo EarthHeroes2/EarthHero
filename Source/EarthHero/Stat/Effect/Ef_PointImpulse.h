@@ -33,7 +33,7 @@ public:
 	UPROPERTY()
 	float Time = 0.f;
 
-	float Delay = 0.2f;
+	float Delay = 0.02f;
 	
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
