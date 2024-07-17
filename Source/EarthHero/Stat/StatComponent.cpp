@@ -310,6 +310,7 @@ void UStatComponent::OnRep_HeroStat_Server_Implementation()
 {
 	if (APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode()))
 	{
+		UE_LOG(LogClass, Warning, TEXT("UpdateGameStateHealths"));
 		PlayingGameMode->UpdateGameStateHealths();
 	}
 	else
