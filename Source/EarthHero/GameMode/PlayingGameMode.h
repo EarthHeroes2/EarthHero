@@ -5,9 +5,7 @@
 #include "PlayingGameMode.generated.h"
 
 class AEHPlayerController;
-/**
- * 
- */
+
 UCLASS()
 class EARTHHERO_API APlayingGameMode : public AGameModeBase
 {
@@ -15,22 +13,20 @@ class EARTHHERO_API APlayingGameMode : public AGameModeBase
 
 	virtual void BeginPlay() override;
 	virtual void InitSeamlessTravelPlayer(AController* NewController) override;
-	//플레이어 나간 것은 게임 세션에서 처리?
-	
+
 	void InitLevelSetting();
 	void GameTimerCount();
 
 	TArray<AEHPlayerController*> EHPlayerControllers;
 
 	int NumPlayerControllerReady = 0;
-
 	int NumDeadPlayers = 0;
-	
 	const FString GameOverMap = TEXT("/Game/Maps/GameOverMap");
 
 public:
 	int NumPlayersInSession;
 	int GameTimer = 0;
+
 	void PlayerLogOut(const AEHPlayerController* ExitingEHPlayerController);
 	void SendChatMessage(const FText& Text);
 	void AddPlayerDead();
@@ -46,7 +42,7 @@ public:
 	void EnableAllInput();
 
 	void SpawnForceFields();
-	void SpawnForceFieldAtLocation(FVector Location);
+	void SpawnForceFieldAtLocation(FVector Location, float ExpansionDuration);
 
 	bool IsValidForceFieldDistance(const TArray<FVector>& Locations, float MinDistance, float MaxDistance);
 };

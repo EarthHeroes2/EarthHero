@@ -14,8 +14,8 @@ AForceField::AForceField()
     ForceFieldMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ForceFieldMesh"));
     RootComponent = ForceFieldMesh;
     
-    ExpansionDuration = 20.0f; // Adjust as needed
-    InitialScale = FVector(0.1f, 0.1f, 100.f); // Starting small
+    ExpansionDuration = 1.f;
+    InitialScale = FVector(0.1f, 0.1f, 100.f);
 
     static ConstructorHelpers::FObjectFinder<UCurveFloat> Curve(TEXT("/Game/Blueprints/ForceField/FC_ExpansionCurve.FC_ExpansionCurve"));
     if (Curve.Succeeded())
@@ -87,5 +87,34 @@ void AForceField::OnOverlapEnd(AActor* OverlappedActor, AActor* OtherActor)
             Character->SetIsInForceField(false);
             UE_LOG(LogTemp, Warning, TEXT("In force field: false"));
         }
+    }
+}
+
+void AForceField::SetExpansionDuration(float NewDuration)
+{
+    if (NewDuration != ExpansionDuration)
+    {
+        ExpansionDuration = NewDuration;
+        RestartTimeline();
+        UE_LOG(LogTemp, Warning, TEXT("ExpansionDuration set to: %f"), ExpansionDuration);
+    }
+}
+
+void AForceField::RestartTimeline()
+{
+    if (ForceFieldTimeline.IsPlaying())
+    {
+        ForceFieldTimeline.Stop();
+    }
+    SetupTimeline();
+}
+
+void AForceField::SetCustomCurve(UCurveFloat* NewCurve)
+{
+    if (NewCurve)
+    {
+        ExpansionCurve = NewCurve;
+        RestartTimeline();
+        UE_LOG(LogTemp, Warning, TEXT("CustomCurve set for ForceField"));
     }
 }

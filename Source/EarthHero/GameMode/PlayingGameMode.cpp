@@ -79,10 +79,13 @@ void APlayingGameMode::SpawnForceFields()
         ForceFieldLocations.Add(LeftLocation);
     }
 
-    // Spawn the force fields at the calculated locations
-    for (const FVector& Location : ForceFieldLocations)
+    // Define different durations for each force field
+    TArray<float> ExpansionDurations = { 10.0f, 15.0f, 20.0f, 25.0f };
+
+    // Spawn the force fields at the calculated locations with different durations
+    for (int i = 0; i < ForceFieldLocations.Num(); ++i)
     {
-        SpawnForceFieldAtLocation(Location);
+        SpawnForceFieldAtLocation(ForceFieldLocations[i], ExpansionDurations[i]);
     }
 }
 
@@ -102,7 +105,7 @@ bool APlayingGameMode::IsValidForceFieldDistance(const TArray<FVector>& Location
     return true;
 }
 
-void APlayingGameMode::SpawnForceFieldAtLocation(FVector Location)
+void APlayingGameMode::SpawnForceFieldAtLocation(FVector Location, float ExpansionDuration)
 {
     UWorld* World = GetWorld();
     if (World)
@@ -119,7 +122,18 @@ void APlayingGameMode::SpawnForceFieldAtLocation(FVector Location)
             AActor* SpawnedForceField = World->SpawnActor<AActor>(ForceFieldClass, Location, SpawnRotation, SpawnParams);
             if (SpawnedForceField)
             {
-                UE_LOG(LogTemp, Warning, TEXT("Spawned ForceField at location: %s"), *Location.ToString());
+                AForceField* ForceField = Cast<AForceField>(SpawnedForceField);
+                if (ForceField)
+                {
+                    // Create a new curve for each force field
+                    UCurveFloat* NewCurve = NewObject<UCurveFloat>();
+                    NewCurve->FloatCurve.AddKey(0.0f, 0.0f);
+                    NewCurve->FloatCurve.AddKey(ExpansionDuration, 1.0f);
+                    ForceField->SetCustomCurve(NewCurve);
+                    ForceField->SetExpansionDuration(ExpansionDuration);
+
+                    UE_LOG(LogTemp, Warning, TEXT("Spawned ForceField at location: %s with duration: %f"), *Location.ToString(), ExpansionDuration);
+                }
             }
         }
         else
