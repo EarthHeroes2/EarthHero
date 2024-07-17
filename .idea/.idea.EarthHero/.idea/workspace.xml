@@ -79,12 +79,7 @@
   <component name="ChangeListManager">
     <list default="true" id="4591bad7-fd9f-4860-903f-8700cd913377" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/ForceField/BP_ForceField.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/ForceField/BP_ForceField.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/ForceFieldTestMap/B/98/H6DWZ52G66P80Y74UNGZNE.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/ForceField/ForceField.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/ForceField/ForceField.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/ForceField/ForceField.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/ForceField/ForceField.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/GameMode/PlayingGameMode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/GameMode/PlayingGameMode.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/GameMode/PlayingGameMode.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/GameMode/PlayingGameMode.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/HUD/TabHUDWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/TabHUDWidget.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
