@@ -47,4 +47,6 @@ public:
 
 	void SpawnForceFields();
 	void SpawnForceFieldAtLocation(FVector Location);
+
+	bool IsValidForceFieldDistance(const TArray<FVector>& Locations, float MinDistance, float MaxDistance);
 };

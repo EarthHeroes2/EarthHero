@@ -16,6 +16,7 @@ class EARTHHERO_API ALobbyGameSession : public AEHGameSession
 
 	virtual void BeginPlay() override;
 	
+	
 protected:
 	FUniqueNetIdRepl HostPlayerId;
 	APlayerController* NewPlayerPlayerController;
