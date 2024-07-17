@@ -290,6 +290,8 @@ void APlayingGameMode::UpdateGameStateHealths()
 				{
 					PlayerMaxHealths.Add(StatComponent->GetHealth());
 					PlayerCurrentHealths.Add(StatComponent->GetMaxHealth());
+
+					 UE_LOG(LogTemp, Warning, TEXT("statcom->get : %lf"), StatComponent->GetMaxHealth());
 				}
 			}
 		}
