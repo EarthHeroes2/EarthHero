@@ -180,7 +180,7 @@ void UMainMenuWidget::OptionsBtnClicked()
 	}
 	else
 	{
-		OptionsWidget = Cast<UUserWidget>(CreateWidget(GetWorld(), OptionsWidgetClass));
+		OptionsWidget = Cast<UUserWidget>(CreateWidget(this, OptionsWidgetClass));
 		if (OptionsWidget)
 		{
 			OptionsWidget->AddToViewport();
@@ -366,7 +366,7 @@ void UMainMenuWidget::UpdateLobbyList(TArray<FOnlineSessionSearchResult> FindLob
 		if(LobbyIndex != INDEX_NONE) LobbyRowList[LobbyIndex]->UpdateLobbyInfo(FindLobby);
 		else //아니라면 새로 추가
 		{
-			ULobbyRowWidget* LobbyRowWidget = Cast<ULobbyRowWidget>(CreateWidget(GetWorld(), LobbyRowWidgetClass));
+			ULobbyRowWidget* LobbyRowWidget = Cast<ULobbyRowWidget>(CreateWidget(this, LobbyRowWidgetClass));
 			if(LobbyRowWidget)
 			{
 				LobbyIdList.Add(FindLobby.GetSessionIdStr());

@@ -27,8 +27,12 @@ ALobbyGameMode::ALobbyGameMode()
 	}
 	//Archor
 
-	for(int i = 0; i < 4; i++)
-		bSpotUsedArray.Add(false);
+	for(int i = 0; i < 4; i++) bSpotUsedArray.Add(false);
+
+	SpawnLocations.Add(FVector(500.0f, -150.0f, 0.0f));
+	SpawnLocations.Add(FVector(500.0f, -50.0f, 0.0f));
+	SpawnLocations.Add(FVector(500.0f, 50.0f, 0.0f));
+	SpawnLocations.Add(FVector(500.0f, 150.0f, 0.0f));
 }
 
 void ALobbyGameMode::BeginPlay()
@@ -37,10 +41,7 @@ void ALobbyGameMode::BeginPlay()
 	
 	bUseSeamlessTravel = true;
 
-	SpawnLocations.Add(FVector(500.0f, -150.0f, 0.0f));
-	SpawnLocations.Add(FVector(500.0f, -50.0f, 0.0f));
-	SpawnLocations.Add(FVector(500.0f, 50.0f, 0.0f));
-	SpawnLocations.Add(FVector(500.0f, 150.0f, 0.0f));
+	
 }
 
 //특정 스폰 지점 설정
@@ -114,7 +115,7 @@ void ALobbyGameMode::RemovePlayerInfo(const ALobbyPlayerController* ExitingLobby
 
 			bSpotUsedArray[PlayerSpotArray[PlayerIndex]] = false;
 			
-			ExitingLobbyPlayerController->LobbyCharacter->Destroy();
+			ExitingLobbyPlayerController->DestroyCharacter();
 
 			ControllerArray.RemoveAt(PlayerIndex);
 			LobbyPlayerControllerArray.RemoveAt(PlayerIndex);
@@ -223,16 +224,8 @@ void ALobbyGameMode::UpdateCharacter(ALobbyPlayerController* LobbyPlayerControll
 
 	PlayerClassArray[PlayerNumber] = ClassType;
 
-	//첫 생성이면 스폰 장소 찾기
-	if(!(LobbyPlayerController->LobbyCharacter))
-	{
-		UE_LOG(LogTemp, Log, TEXT("First Spawn"));
-	}
-	else //아니라면 기존 캐릭터 제거
-	{
-		UE_LOG(LogTemp, Log, TEXT("Respawn"));
-		LobbyPlayerController->LobbyCharacter->Destroy();
-	}
+	//이전 캐릭터 있으면 지움
+	LobbyPlayerController->DestroyCharacter();
 	
 	int SpawnSpotIndex = PlayerSpotArray[PlayerNumber];
 	
@@ -247,21 +240,12 @@ void ALobbyGameMode::UpdateCharacter(ALobbyPlayerController* LobbyPlayerControll
 		case Mechanic:
 			break;
 		case Shooter:
-			LobbyPlayerController->LobbyCharacter = GetWorld()->SpawnActor<AEHShooter>(EHShooterClass, SpawnLocations[SpawnSpotIndex], FRotator(0.0f, 180.0f, 0.0f), SpawnParams);
+			LobbyPlayerController->SetCharacter(GetWorld()->SpawnActor<AEHShooter>(EHShooterClass, SpawnLocations[SpawnSpotIndex], FRotator(0.0f, 180.0f, 0.0f), SpawnParams));
 			break;
 		case Archer:
 			break;
 		default:
 			break;
-	}
-	
-	if (LobbyPlayerController->LobbyCharacter)
-	{
-		UE_LOG(LogTemp, Log, TEXT("Spawned character : %s"), *SpawnLocations[SpawnSpotIndex].ToString());
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Failed to spawn character : %s"), *SpawnLocations[SpawnSpotIndex].ToString());
 	}
 }
 
@@ -276,7 +260,7 @@ void ALobbyGameMode::UpdateDifficulty(int Difficulty)
 
 	for(ALobbyPlayerController* LobbyPlayerController : LobbyPlayerControllerArray)
 	{
-		if(LobbyPlayerController && !LobbyPlayerController->bHost)
+		if(LobbyPlayerController)
 			LobbyPlayerController->Client_UpdateDifficulty(Difficulty);
 	}
 }

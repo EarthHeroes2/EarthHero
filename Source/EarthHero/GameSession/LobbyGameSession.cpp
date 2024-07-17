@@ -415,7 +415,7 @@ void ALobbyGameSession::HostAssignment(APlayerController* HostPlayer)
             UEHGameInstance* EHGameinstance = Cast<UEHGameInstance>(GetGameInstance());
             if(EHGameinstance) Difficulty = EHGameinstance->Difficulty;
 
-            LobbyPlayerController->bHost = true;
+            LobbyPlayerController->SetHost();
             LobbyPlayerController->Client_HostAssignment(true, bAdvertise, Difficulty);
         }
     }

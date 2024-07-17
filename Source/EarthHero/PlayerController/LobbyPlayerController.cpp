@@ -7,6 +7,7 @@
 #include <EarthHero/GameSession/LobbyGameSession.h>
 #include <EarthHero/GameMode/LobbyGameMode.h>
 #include "EarthHero/EHGameInstance.h"
+#include "EarthHero/Character/EHCharacter.h"
 #include "EarthHero/PlayerState/LobbyPlayerState.h"
 
 
@@ -49,6 +50,30 @@ void ALobbyPlayerController::ShowLobbyWidget()
 		}
 	}
 }
+
+void ALobbyPlayerController::DestroyCharacter() const
+{
+	if(LobbyCharacter) LobbyCharacter->Destroy();
+}
+
+void ALobbyPlayerController::SetCharacter(AEHCharacter* SpawnedCharacter)
+{
+	LobbyCharacter = SpawnedCharacter;
+}
+
+void ALobbyPlayerController::SetHost()
+{
+	bHost = true;
+}
+
+void ALobbyPlayerController::UpdateDifficulty(int Difficulty)
+{
+	if(!bHost) Client_UpdateDifficulty(Difficulty);
+}
+
+
+
+
 
 //클라이언트가 서버에게 준비됨을 알리며 실행되는 함수
 void ALobbyPlayerController::Server_InitSetup_Implementation()
@@ -121,7 +146,7 @@ void ALobbyPlayerController::Client_SelectDefaultCharacter_Implementation()
 {
 	if (LobbyWidget)
 	{
-		LobbyWidget->ChangeSelectedButton(Shooter);
+		//LobbyWidget->ChangeSelectedButton(Shooter);
 	}
 	else UE_LOG(LogTemp, Log, TEXT("invalid LobbyWidget"));
 }
@@ -131,23 +156,12 @@ void ALobbyPlayerController::Server_ClientReadyButtonClicked_Implementation()
 	ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
 	if (LobbyGameMode)
 	{
-		//호스트 용
 		if (bHost)
 		{
-			if (LobbyGameMode->PressGameStartButton())
-			{
-				Client_SendToDebugMessage("Game Start!");
-			}
-			else
-			{
-				Client_SendToDebugMessage("All players should be ready!");
-			}
+			if (LobbyGameMode->PressGameStartButton()) Client_SendToDebugMessage("Game Start!");
+			else  Client_SendToDebugMessage("All players should be ready!");
 		}
-		// 일반 플레이어 용
-		else
-		{
-			LobbyGameMode->TogglePlayerReady(this);
-		}
+		else LobbyGameMode->TogglePlayerReady(this);
 	}
 }
 
@@ -226,15 +240,11 @@ void ALobbyPlayerController::Server_SetPlayerCharacter_Implementation(int ClassT
 	//서버에서 선택한 클래스 캐릭터 자신의 위치에 생성
 	ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
 	if (LobbyGameMode)
-	{
 		LobbyGameMode->UpdateCharacter(this, PlayerClass);
-	}
 
 	ALobbyPlayerState* LobbyPlayerState = Cast<ALobbyPlayerState>(PlayerState);
 	if (LobbyPlayerState)
-	{
 		LobbyPlayerState->PlayerClass = PlayerClass;
-	}
 }
 
 void ALobbyPlayerController::Server_SetDifficulty_Implementation(int Difficulty)
@@ -251,8 +261,7 @@ void ALobbyPlayerController::Server_SetDifficulty_Implementation(int Difficulty)
 
 void ALobbyPlayerController::Client_UpdateDifficulty_Implementation(int Difficulty)
 {
-	if(LobbyWidget)
-		LobbyWidget->UpdateDifficulty(Difficulty);
+	if(!bHost && LobbyWidget) LobbyWidget->UpdateDifficulty(Difficulty);
 }
 
 
