@@ -98,7 +98,7 @@ void ALobbyPlayerController::Server_InitSetup_Implementation()
 	}
 	
 	//게임모드에 플레이어 정보 등록
-	if (LobbyGameMode) LobbyGameMode->AddPlayerInfo(this);
+	if (LobbyGameMode) LobbyGameMode->JoinedPlayerInitSetup(this);
 }
 
 //서버에게서 방장 유무를 받음 (Server_InitSetup에서 불리거나 게임 세션에서 새로운 방장 할당 후에 불림)
@@ -146,7 +146,7 @@ void ALobbyPlayerController::Client_SelectDefaultCharacter_Implementation()
 {
 	if (LobbyWidget)
 	{
-		//LobbyWidget->ChangeSelectedButton(Shooter);
+		LobbyWidget->ChangeSelectedButton(Shooter);
 	}
 	else UE_LOG(LogTemp, Log, TEXT("invalid LobbyWidget"));
 }
@@ -222,13 +222,7 @@ void ALobbyPlayerController::Server_PlayerKick_Implementation(int PlayerNumber)
 		ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
 		if (LobbyGameMode)
 		{
-			//킥할 플레이어에게 ClientTravel를 하도록 강요함
-			ALobbyPlayerController* TargetLobbyPlayerController = LobbyGameMode->LobbyPlayerControllerArray[PlayerNumber];
-			{
-				UE_LOG(LogTemp, Log, TEXT("Player %d ClientTravel"), PlayerNumber);
-
-				TargetLobbyPlayerController->ClientTravel("/Game/Maps/StartupMap", ETravelType::TRAVEL_Absolute);
-			}
+			LobbyGameMode->Kick(PlayerNumber);
 		}
 	}
 }

@@ -40,13 +40,13 @@ void ALobbyGameMode::BeginPlay()
 	Super::BeginPlay();
 	
 	bUseSeamlessTravel = true;
-
-	
 }
 
 //특정 스폰 지점 설정
 AActor* ALobbyGameMode::FindPlayerStart_Implementation(AController* Player, const FString& IncomingName)
 {
+	UE_LOG(LogGameMode, Error, TEXT("FindPlayerStart  FindPlayerStart   FindPlayerStart"));
+	
 	int32 PlayerIndex = ControllerArray.IndexOfByKey(Player);
 	
 	if (PlayerIndex != INDEX_NONE)
@@ -64,7 +64,7 @@ AActor* ALobbyGameMode::FindPlayerStart_Implementation(AController* Player, cons
 	ControllerArray.Add(Player);
 	ALobbyPlayerController* LobbyPlayerController = Cast<ALobbyPlayerController>(Player);
 	if (LobbyPlayerController) LobbyPlayerControllerArray.Add(LobbyPlayerController);
-	else  UE_LOG(LogGameMode, Error, TEXT("Failed to cast Player to ALobbyPlayerController.")); //임시
+	else UE_LOG(LogGameMode, Error, TEXT("Failed to cast Player to ALobbyPlayerController.")); //임시
 	PlayerNameArray.Add(Player->PlayerState->GetPlayerName());
 	PlayerReadyStateArray.Add(false);
 	PlayerClassArray.Add(Shooter); //임시
@@ -73,7 +73,7 @@ AActor* ALobbyGameMode::FindPlayerStart_Implementation(AController* Player, cons
 	return Super::FindPlayerStart_Implementation(Player, FString::FromInt(PlayerStart));
 }
 
-void ALobbyGameMode::AddPlayerInfo(ALobbyPlayerController* NewLobbyPlayerController)
+void ALobbyGameMode::JoinedPlayerInitSetup(ALobbyPlayerController* NewLobbyPlayerController)
 {
 	//클라이언트에게 기본 캐릭터를 골라주고
 	//이름과 레디 리스트를 보내줌
@@ -100,6 +100,16 @@ int ALobbyGameMode::FindLobbyPlayerSpot()
 		}
 	}
 	return 0;
+}
+
+void ALobbyGameMode::Kick(int PlayerNumber)
+{
+	if(LobbyPlayerControllerArray[PlayerNumber])
+	{
+		UE_LOG(LogTemp, Log, TEXT("Player %d Kicked"), PlayerNumber);
+		LobbyPlayerControllerArray[PlayerNumber]->ClientTravel("/Game/Maps/StartupMap", ETravelType::TRAVEL_Absolute);
+	}
+	else UE_LOG(LogTemp, Log, TEXT("Failed to %d Kick"), PlayerNumber);
 }
 
 
@@ -263,4 +273,11 @@ void ALobbyGameMode::UpdateDifficulty(int Difficulty)
 		if(LobbyPlayerController)
 			LobbyPlayerController->Client_UpdateDifficulty(Difficulty);
 	}
+}
+
+ALobbyPlayerController* ALobbyGameMode::GetFirstLobbyPlayerController()
+{
+	if(LobbyPlayerControllerArray.Num() > 0) return LobbyPlayerControllerArray[0];
+	
+	return nullptr;
 }

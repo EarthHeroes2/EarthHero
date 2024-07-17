@@ -19,7 +19,7 @@ class EARTHHERO_API ALobbyGameSession : public AEHGameSession
 	
 protected:
 	FUniqueNetIdRepl HostPlayerId;
-	APlayerController* NewPlayerPlayerController;
+	APlayerController* NewPlayerController;
 
 	void HostAssignment(APlayerController* HostPlayer);
 	void NewHostFind();

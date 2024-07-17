@@ -125,7 +125,7 @@ void ALobbyGameSession::RegisterPlayer(APlayerController* NewPlayer, const FUniq
 
             if (Session.IsValid())
             {
-                NewPlayerPlayerController = NewPlayer;
+                NewPlayerController = NewPlayer;
 
                 RegisterPlayerDelegateHandle =
                     Session->AddOnRegisterPlayersCompleteDelegate_Handle(FOnRegisterPlayersCompleteDelegate::CreateUObject(
@@ -167,7 +167,7 @@ void ALobbyGameSession::HandleRegisterPlayerCompleted(FName EOSSessionName, cons
                     UE_LOG(LogTemp, Log, TEXT("Host Assigment..."));
 
                     //클라이언트에게 방장 권한을 부여
-                    HostAssignment(NewPlayerPlayerController);
+                    HostAssignment(NewPlayerController);
                 }
             }
             else UE_LOG(LogTemp, Warning, TEXT("Failed to register player! (From Callback)"));
@@ -369,33 +369,21 @@ void ALobbyGameSession::NewHostFind()
     ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
     if(LobbyGameMode)
     {
-        if(LobbyGameMode->LobbyPlayerControllerArray.Num() > 0)
+        ALobbyPlayerController* NewHostLobbyPlayerController = LobbyGameMode->GetFirstLobbyPlayerController();
+        if(NewHostLobbyPlayerController)
         {
-            APlayerController* NewHostPlayerController = LobbyGameMode->LobbyPlayerControllerArray[0];
-            if(NewHostPlayerController)
+            APlayerState* PlayerState = NewHostLobbyPlayerController->PlayerState;
+
+            UE_LOG(LogTemp, Log, TEXT("Host Assignment..."));
+
+            if (PlayerState && PlayerState->GetUniqueId().IsValid())
             {
-                ALobbyPlayerController* NewHostLobbyPlayerController = Cast<ALobbyPlayerController>(NewHostPlayerController);
-
-                if (NewHostLobbyPlayerController)
-                {
-                    APlayerState* PlayerState = NewHostLobbyPlayerController->PlayerState;
-                
-                    UE_LOG(LogTemp, Log, TEXT("Host Assignment..."));
-
-                    if (PlayerState && PlayerState->GetUniqueId().IsValid())
-                    {
-                        HostPlayerId = PlayerState->GetUniqueId();
-                        HostAssignment(NewHostPlayerController);
-                    }
-                    else
-                    {
-                        UE_LOG(LogTemp, Warning, TEXT("Failed to get unique ID"));
-                    }
-                }
+                HostPlayerId = PlayerState->GetUniqueId();
+                HostAssignment(NewHostLobbyPlayerController);
             }
-            else UE_LOG(LogTemp, Warning, TEXT("player controller 0 is not vaild"));
+            else UE_LOG(LogTemp, Warning, TEXT("Failed to get unique ID"));
         }
-        else UE_LOG(LogTemp, Warning, TEXT("no player controller"));
+        else UE_LOG(LogTemp, Warning, TEXT("player controller 0 is not vaild"));
     }
 }
 
