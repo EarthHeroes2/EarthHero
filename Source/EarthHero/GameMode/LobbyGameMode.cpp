@@ -45,33 +45,35 @@ void ALobbyGameMode::BeginPlay()
 //특정 스폰 지점 설정
 AActor* ALobbyGameMode::FindPlayerStart_Implementation(AController* Player, const FString& IncomingName)
 {
-	UE_LOG(LogTemp, Error, TEXT("FindPlayerStart_Implementation called for player: %s %s"), *Player->GetName(), *IncomingName);
+	CallCount++;
+
+	if(CallCount % 2 == 0) //게임모드 베이스의 RestartPlayer에서 호출되어 왔을 것임
+	{
+		int32 PlayerIndex = ControllerArray.IndexOfByKey(Player);
 	
-	int32 PlayerIndex = ControllerArray.IndexOfByKey(Player);
-	
-	if (PlayerIndex != INDEX_NONE)
-	{UE_LOG(LogTemp, Error, TEXT("xxxxxxxxxxxxxxxxxxx"));
-		ControllerArray.RemoveAt(PlayerIndex);
-		LobbyPlayerControllerArray.RemoveAt(PlayerIndex);
-		PlayerNameArray.RemoveAt(PlayerIndex);
-		PlayerReadyStateArray.RemoveAt(PlayerIndex);
-		PlayerClassArray.RemoveAt(PlayerIndex);
-		PlayerSpotArray.RemoveAt(PlayerIndex);
+		if (PlayerIndex != INDEX_NONE)
+		{
+			ControllerArray.RemoveAt(PlayerIndex);
+			LobbyPlayerControllerArray.RemoveAt(PlayerIndex);
+			PlayerNameArray.RemoveAt(PlayerIndex);
+			PlayerReadyStateArray.RemoveAt(PlayerIndex);
+			PlayerClassArray.RemoveAt(PlayerIndex);
+			PlayerSpotArray.RemoveAt(PlayerIndex);
+		}
+
+		int PlayerStart = FindLobbyPlayerSpot();
+
+		ControllerArray.Add(Player);
+		ALobbyPlayerController* LobbyPlayerController = Cast<ALobbyPlayerController>(Player); //임시
+		LobbyPlayerControllerArray.Add(LobbyPlayerController);
+		PlayerNameArray.Add(Player->PlayerState->GetPlayerName());
+		PlayerReadyStateArray.Add(false);
+		PlayerClassArray.Add(Shooter); //임시
+		PlayerSpotArray.Add(PlayerStart);
+
+		return Super::FindPlayerStart_Implementation(Player, FString::FromInt(PlayerStart));
 	}
-	UE_LOG(LogTemp, Error, TEXT("ooooooooooooooooooo"));
-
-	int PlayerStart = FindLobbyPlayerSpot();
-
-	ControllerArray.Add(Player);
-	ALobbyPlayerController* LobbyPlayerController = Cast<ALobbyPlayerController>(Player);
-	if (LobbyPlayerController) LobbyPlayerControllerArray.Add(LobbyPlayerController);
-	else UE_LOG(LogGameMode, Error, TEXT("Failed to cast Player to ALobbyPlayerController.")); //임시
-	PlayerNameArray.Add(Player->PlayerState->GetPlayerName());
-	PlayerReadyStateArray.Add(false);
-	PlayerClassArray.Add(Shooter); //임시
-	PlayerSpotArray.Add(PlayerStart);
-	
-	return Super::FindPlayerStart_Implementation(Player, FString::FromInt(PlayerStart));
+	return Super::FindPlayerStart_Implementation(Player, "");
 }
 
 void ALobbyGameMode::JoinedPlayerInitSetup(ALobbyPlayerController* NewLobbyPlayerController)

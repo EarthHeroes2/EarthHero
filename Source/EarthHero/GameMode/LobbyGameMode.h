@@ -33,6 +33,8 @@ class EARTHHERO_API ALobbyGameMode : public AGameModeBase
 	TArray<EClassType> PlayerClassArray;
 	TArray<int> PlayerSpotArray;
 	TArray<bool> bSpotUsedArray;
+
+	int CallCount = 0;
 	
 
 	TArray<TSubclassOf<ACharacter>> CharacterClasses;
