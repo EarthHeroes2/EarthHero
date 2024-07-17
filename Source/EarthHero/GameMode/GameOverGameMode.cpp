@@ -3,6 +3,7 @@
 
 #include "GameOverGameMode.h"
 #include "EarthHero/GameSession/EHGameSession.h"
+#include "EarthHero/GameSession/GameOverGameSession.h"
 #include "EarthHero/PlayerController/GameOverPlayerController.h"
 #include "EarthHero/PlayerState/GameOverPlayerState.h"
 
@@ -26,33 +27,10 @@ void AGameOverGameMode::InitSeamlessTravelPlayer(AController* NewController)
 {
 	Super::InitSeamlessTravelPlayer(NewController);
 	
-	APlayerController* NewPlayerController = Cast<APlayerController>(NewController);
-
-	if(NewPlayerController)
-	{
-		AGameOverPlayerController* GameOverPlayerController = Cast<AGameOverPlayerController>(NewController);
-		if(GameOverPlayerController)
-		{
-			GameOverPlayerControllers.Add(GameOverPlayerController);
-		}
-	}
+	AGameOverGameSession* GameOverGameSession = Cast<AGameOverGameSession>(GameSession);
+	if (GameOverGameSession)
+		GameOverGameSession->SeamlessTravelSuccessCount();
 }
-
-void AGameOverGameMode::Logout(AController* Exiting)
-{
-    AGameOverPlayerController* ExitingGameOverPlayerController = Cast<AGameOverPlayerController>(Exiting);
-    if (ExitingGameOverPlayerController)
-    {
-    	UE_LOG(LogTemp, Log, TEXT("Remove exit player information..."));
-	
-    	int PlayerIndex = GameOverPlayerControllers.IndexOfByKey(ExitingGameOverPlayerController);
-		
-    	if (PlayerIndex != INDEX_NONE) GameOverPlayerControllers.RemoveAt(PlayerIndex);
-    }
-
-	Super::Logout(Exiting);
-}
-
 
 void AGameOverGameMode::SendChatMessage(const FText& Text)
 {

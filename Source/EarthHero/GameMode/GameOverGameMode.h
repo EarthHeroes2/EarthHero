@@ -17,8 +17,7 @@ class EARTHHERO_API AGameOverGameMode : public AGameModeBase
 	AGameOverGameMode();
 	virtual void BeginPlay() override;
 	virtual void InitSeamlessTravelPlayer(AController* NewController) override;
-	virtual void Logout(AController* Exiting) override;
-	
+
 public:
 	void SendChatMessage(const FText& Text);
 
