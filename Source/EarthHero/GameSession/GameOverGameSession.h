@@ -3,17 +3,18 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/PlayerState.h"
-#include "GameOverPlayerState.generated.h"
+#include "EHGameSession.h"
+#include "GameOverGameSession.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class EARTHHERO_API AGameOverPlayerState : public APlayerState
+class EARTHHERO_API AGameOverGameSession : public AEHGameSession
 {
 	GENERATED_BODY()
 
 public:
-	void UpdatePlayerData();
+	void SeamlessTravelSuccessCount();
+	
 };
