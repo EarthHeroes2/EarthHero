@@ -276,8 +276,7 @@ void APlayingGameMode::UpdateGameStateHealths()
 {
 	TArray<float> PlayerMaxHealths;
 	TArray<float> PlayerCurrentHealths;
-
-	UE_LOG(LogClass, Warning, TEXT("UpdateGameStateHealths::EHPlayerControllers count = %d"), EHPlayerControllers.Num());
+	
 	for(AEHPlayerController* EHPlayerController : EHPlayerControllers)
 	{
 		if(EHPlayerController && EHPlayerController->PlayerState)
@@ -288,10 +287,8 @@ void APlayingGameMode::UpdateGameStateHealths()
 				UStatComponent* StatComponent = EHPlayerState->GetStatComponent();
 				if(StatComponent)
 				{
-					PlayerMaxHealths.Add(StatComponent->GetHealth());
-					PlayerCurrentHealths.Add(StatComponent->GetMaxHealth());
-
-					 UE_LOG(LogTemp, Warning, TEXT("statcom->get : %lf"), StatComponent->GetMaxHealth());
+					PlayerMaxHealths.Add(StatComponent->GetMaxHealth());
+					PlayerCurrentHealths.Add(StatComponent->GetHealth());
 				}
 			}
 		}

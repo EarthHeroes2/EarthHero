@@ -43,15 +43,8 @@ void APlayingGameState::OnRep_GameTimerSec() const
 
 void APlayingGameState::UpdateGameStateHealths(const TArray<float>& PlayerMaxHealths, const TArray<float>& PlayerCurrentHealths)
 {
-	UE_LOG(LogTemp, Log, TEXT("UpdateGameStateHealths (gamestate)"));
 	AllPlayerMaxHealths = PlayerMaxHealths;
 	AllPlayerCurrentHealths = PlayerCurrentHealths;
-
-	UE_LOG(LogTemp, Error , TEXT("Num = %d"), PlayerCurrentHealths.Num());
-	for(float PlayerCurrentHealth : PlayerCurrentHealths)
-	{
-		UE_LOG(LogTemp, Error , TEXT("ch = %lf"), PlayerCurrentHealth);
-	}
 }
 
 void APlayingGameState::OnRep_GameStateHealths() const //일단은 현재 체력이 변했을 때만 이것이 불림
