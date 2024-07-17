@@ -291,19 +291,7 @@ void APlayingGameMode::UpdateGameStateHealths()
 					PlayerMaxHealths.Add(StatComponent->GetHealth());
 					PlayerCurrentHealths.Add(StatComponent->GetMaxHealth());
 				}
-				else
-				{
-					UE_LOG(LogClass, Warning, TEXT("fail to get StatComponent"));
-				}
 			}
-			else
-			{
-				UE_LOG(LogClass, Warning, TEXT("fail to Cast EHPlayerState"));
-			}
-		}
-		else
-		{
-			UE_LOG(LogClass, Warning, TEXT("No Valid EHPlayerController or PlayerState"));
 		}
 	}
 

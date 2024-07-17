@@ -43,6 +43,7 @@ void APlayingGameState::OnRep_GameTimerSec() const
 
 void APlayingGameState::UpdateGameStateHealths(const TArray<float>& PlayerMaxHealths, const TArray<float>& PlayerCurrentHealths)
 {
+	UE_LOG(LogTemp, Log, TEXT("UpdateGameStateHealths (gamestate)"));
 	AllPlayerMaxHealths = PlayerMaxHealths;
 	AllPlayerCurrentHealths = PlayerCurrentHealths;
 }
