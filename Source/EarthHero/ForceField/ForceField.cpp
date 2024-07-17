@@ -4,6 +4,9 @@
 #include "Materials/MaterialInstanceDynamic.h"
 #include "EarthHero/Character/EHCharacter.h"
 
+float MapEdgeLength = 201600.0f;
+float MapDiagLength = MapEdgeLength * 1.1414;
+
 AForceField::AForceField()
 {
     PrimaryActorTick.bCanEverTick = true;
@@ -12,7 +15,7 @@ AForceField::AForceField()
     RootComponent = ForceFieldMesh;
     
     ExpansionDuration = 20.0f; // Adjust as needed
-    InitialScale = FVector(0.1f, 0.1f, 0.1f); // Starting small
+    InitialScale = FVector(0.1f, 0.1f, 100.f); // Starting small
 
     static ConstructorHelpers::FObjectFinder<UCurveFloat> Curve(TEXT("/Game/Blueprints/ForceField/FC_ExpansionCurve.FC_ExpansionCurve"));
     if (Curve.Succeeded())
@@ -55,14 +58,10 @@ void AForceField::SetupTimeline()
 
 void AForceField::ExpandForceField(float Value)
 {
-    // Assuming the size of the map is known
-    float MapWidth = 176400.0f; // Example value, set to your actual map size
-    float MapHeight = 176400.0f; // Example value, set to your actual map size
+    float MaxScaleX = MapDiagLength / 100.0f; // Adjust based on initial scale
+    float MaxScaleY = MapDiagLength / 100.0f; // Adjust based on initial scale
 
-    float MaxScaleX = MapWidth / 100.0f; // Adjust based on initial scale
-    float MaxScaleY = MapHeight / 100.0f; // Adjust based on initial scale
-
-    FVector NewScale = InitialScale + FVector(MaxScaleX * Value, MaxScaleY * Value, 1.0f);
+    FVector NewScale = InitialScale + FVector(MaxScaleX * Value, MaxScaleY * Value, 100.0f);
     CurrentScale = NewScale;
     ForceFieldMesh->SetWorldScale3D(CurrentScale);
 }
@@ -74,6 +73,7 @@ void AForceField::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor)
         if (AEHCharacter* Character = Cast<AEHCharacter>(OtherActor))
         {
             Character->SetIsInForceField(true);
+            UE_LOG(LogTemp, Warning, TEXT("In force field: true"));
         }
     }
 }
@@ -85,6 +85,7 @@ void AForceField::OnOverlapEnd(AActor* OverlappedActor, AActor* OtherActor)
         if (AEHCharacter* Character = Cast<AEHCharacter>(OtherActor))
         {
             Character->SetIsInForceField(false);
+            UE_LOG(LogTemp, Warning, TEXT("In force field: false"));
         }
     }
 }
