@@ -92,6 +92,9 @@ public:
 	UFUNCTION()
 	virtual void OnRep_HeroStat();
 
+	UFUNCTION(Server, Reliable)
+	void OnRep_HeroStat_Server();
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

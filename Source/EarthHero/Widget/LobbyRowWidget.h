@@ -19,30 +19,25 @@ class EARTHHERO_API ULobbyRowWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
-	virtual bool Initialize();
-
-public:
-	void UpdateLobbyInfo(FOnlineSessionSearchResult Lobby);
-	UMainMenuWidget* MainMenuWidget;
-
-private:
-
-	UFUNCTION()
-	void JoinClicked();
+	virtual bool Initialize() override;
+	
+	FOnlineSessionSearchResult LobbyInfo;
+	bool bAdvertise;
 
 	UPROPERTY(meta = (BindWidget))
 	UButton* LobbyJoin_Btn;
-	
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* LobbyName_Tb;
-
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* PlayerCount_Tb;
-
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* Ping_Tb;
+	
+	UFUNCTION()
+	void JoinClicked();
 
-	FOnlineSessionSearchResult LobbyInfo;
-
-	bool bAdvertise;
+public:
+	UMainMenuWidget* MainMenuWidget;
+	
+	void UpdateLobbyInfo(FOnlineSessionSearchResult Lobby);
 };

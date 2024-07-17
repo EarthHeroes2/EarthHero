@@ -49,6 +49,7 @@ void AEffectBase::ApplyEffect(AActor* InTargetActor, float InEffectValue, float 
 			if (bIsStackable)
 			{
 				//중첩 효과 강화 하는 함수 실행 해야 한다.
+				ExistingEffect->AppliedEffectValue += InEffectValue;
 				ExistingEffect->UpgradeEffect(InEffectValue);
 			}
             
@@ -57,6 +58,7 @@ void AEffectBase::ApplyEffect(AActor* InTargetActor, float InEffectValue, float 
 			{
 				ExistingEffect->GetWorld()->GetTimerManager().ClearTimer(ExistingEffect->EffectTimerHandle);
 				ExistingEffect->GetWorld()->GetTimerManager().SetTimer(ExistingEffect->EffectTimerHandle, ExistingEffect, &AEffectBase::ResetEffect, InDuration, false);
+				bRefresh = true;
 			}
 			
 			return;
@@ -88,7 +90,7 @@ void AEffectBase::ResetEffect()
 	// 서브클래스에서 오버라이드하여 구체적인 효과 리셋 로직을 구현합니다.
 
 	//영구 효과는 지울 수 없다.
-	if (bIsStackable)
+	if (!bIsPermanent)
 	{
 		TMap<TSubclassOf<AEffectBase>, AEffectBase*>* TargetMap = EffectMap.Find(TargetActor);
 		if (TargetMap)

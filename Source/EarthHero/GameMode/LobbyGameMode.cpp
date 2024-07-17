@@ -27,8 +27,12 @@ ALobbyGameMode::ALobbyGameMode()
 	}
 	//Archor
 
-	for(int i = 0; i < 4; i++)
-		bSpotUsedArray.Add(false);
+	for(int i = 0; i < 4; i++) bSpotUsedArray.Add(false);
+
+	SpawnLocations.Add(FVector(500.0f, -180.0f, 0.0f));
+	SpawnLocations.Add(FVector(500.0f, -60.0f, 0.0f));
+	SpawnLocations.Add(FVector(500.0f, 60.0f, 0.0f));
+	SpawnLocations.Add(FVector(500.0f, 180.0f, 0.0f));
 }
 
 void ALobbyGameMode::BeginPlay()
@@ -36,43 +40,43 @@ void ALobbyGameMode::BeginPlay()
 	Super::BeginPlay();
 	
 	bUseSeamlessTravel = true;
-
-	SpawnLocations.Add(FVector(500.0f, -150.0f, 0.0f));
-	SpawnLocations.Add(FVector(500.0f, -50.0f, 0.0f));
-	SpawnLocations.Add(FVector(500.0f, 50.0f, 0.0f));
-	SpawnLocations.Add(FVector(500.0f, 150.0f, 0.0f));
 }
 
 //특정 스폰 지점 설정
 AActor* ALobbyGameMode::FindPlayerStart_Implementation(AController* Player, const FString& IncomingName)
 {
-	int32 PlayerIndex = ControllerArray.IndexOfByKey(Player);
-	
-	if (PlayerIndex != INDEX_NONE)
+	CallCount++;
+
+	if(CallCount % 2 == 0) //게임모드 베이스의 RestartPlayer에서 호출되어 왔을 것임
 	{
-		ControllerArray.RemoveAt(PlayerIndex);
-		LobbyPlayerControllerArray.RemoveAt(PlayerIndex);
-		PlayerNameArray.RemoveAt(PlayerIndex);
-		PlayerReadyStateArray.RemoveAt(PlayerIndex);
-		PlayerClassArray.RemoveAt(PlayerIndex);
-		PlayerSpotArray.RemoveAt(PlayerIndex);
-	}
-
-	int PlayerStart = FindLobbyPlayerSpot();
-
-	ControllerArray.Add(Player);
-	ALobbyPlayerController* LobbyPlayerController = Cast<ALobbyPlayerController>(Player);
-	if (LobbyPlayerController) LobbyPlayerControllerArray.Add(LobbyPlayerController);
-	else  UE_LOG(LogGameMode, Error, TEXT("Failed to cast Player to ALobbyPlayerController.")); //임시
-	PlayerNameArray.Add(Player->PlayerState->GetPlayerName());
-	PlayerReadyStateArray.Add(false);
-	PlayerClassArray.Add(Shooter); //임시
-	PlayerSpotArray.Add(PlayerStart);
+		int32 PlayerIndex = ControllerArray.IndexOfByKey(Player);
 	
-	return Super::FindPlayerStart_Implementation(Player, FString::FromInt(PlayerStart));
+		if (PlayerIndex != INDEX_NONE)
+		{
+			ControllerArray.RemoveAt(PlayerIndex);
+			LobbyPlayerControllerArray.RemoveAt(PlayerIndex);
+			PlayerNameArray.RemoveAt(PlayerIndex);
+			PlayerReadyStateArray.RemoveAt(PlayerIndex);
+			PlayerClassArray.RemoveAt(PlayerIndex);
+			PlayerSpotArray.RemoveAt(PlayerIndex);
+		}
+
+		int PlayerStart = FindLobbyPlayerSpot();
+
+		ControllerArray.Add(Player);
+		ALobbyPlayerController* LobbyPlayerController = Cast<ALobbyPlayerController>(Player); //임시
+		LobbyPlayerControllerArray.Add(LobbyPlayerController);
+		PlayerNameArray.Add(Player->PlayerState->GetPlayerName());
+		PlayerReadyStateArray.Add(false);
+		PlayerClassArray.Add(Shooter); //임시
+		PlayerSpotArray.Add(PlayerStart);
+
+		return Super::FindPlayerStart_Implementation(Player, FString::FromInt(PlayerStart));
+	}
+	return Super::FindPlayerStart_Implementation(Player, "");
 }
 
-void ALobbyGameMode::AddPlayerInfo(ALobbyPlayerController* NewLobbyPlayerController)
+void ALobbyGameMode::JoinedPlayerInitSetup(ALobbyPlayerController* NewLobbyPlayerController)
 {
 	//클라이언트에게 기본 캐릭터를 골라주고
 	//이름과 레디 리스트를 보내줌
@@ -87,8 +91,6 @@ int ALobbyGameMode::FindLobbyPlayerSpot()
 	{
 		int MaxNumberOfPlayers = LobbyGameSession->MaxNumberOfPlayersInSession;
 		
-		UE_LOG(LogTemp, Error, TEXT("Max n o p = %d"), MaxNumberOfPlayers);
-		
 		for(int i = 0; i < MaxNumberOfPlayers; i++)
 		{
 			if(!bSpotUsedArray[i])
@@ -99,6 +101,16 @@ int ALobbyGameMode::FindLobbyPlayerSpot()
 		}
 	}
 	return 0;
+}
+
+void ALobbyGameMode::Kick(int PlayerNumber)
+{
+	if(LobbyPlayerControllerArray[PlayerNumber])
+	{
+		UE_LOG(LogTemp, Log, TEXT("Player %d Kicked"), PlayerNumber);
+		LobbyPlayerControllerArray[PlayerNumber]->ClientTravel("/Game/Maps/StartupMap", ETravelType::TRAVEL_Absolute);
+	}
+	else UE_LOG(LogTemp, Log, TEXT("Failed to %d Kick"), PlayerNumber);
 }
 
 
@@ -114,7 +126,7 @@ void ALobbyGameMode::RemovePlayerInfo(const ALobbyPlayerController* ExitingLobby
 
 			bSpotUsedArray[PlayerSpotArray[PlayerIndex]] = false;
 			
-			ExitingLobbyPlayerController->LobbyCharacter->Destroy();
+			ExitingLobbyPlayerController->DestroyCharacter();
 
 			ControllerArray.RemoveAt(PlayerIndex);
 			LobbyPlayerControllerArray.RemoveAt(PlayerIndex);
@@ -168,7 +180,6 @@ void ALobbyGameMode::UpdatePlayerNameListAndReadyState()
 	UpdatePlayerReadyState();
 }
 
-//��� Ŭ���̾�Ʈ���� �ٲ� ���� ���� �迭 ����
 void ALobbyGameMode::UpdatePlayerReadyState()
 {
 	int32 NumberOfPlayers = LobbyPlayerControllerArray.Num();
@@ -224,16 +235,8 @@ void ALobbyGameMode::UpdateCharacter(ALobbyPlayerController* LobbyPlayerControll
 
 	PlayerClassArray[PlayerNumber] = ClassType;
 
-	//첫 생성이면 스폰 장소 찾기
-	if(!(LobbyPlayerController->LobbyCharacter))
-	{
-		UE_LOG(LogTemp, Log, TEXT("First Spawn"));
-	}
-	else //아니라면 기존 캐릭터 제거
-	{
-		UE_LOG(LogTemp, Log, TEXT("Respawn"));
-		LobbyPlayerController->LobbyCharacter->Destroy();
-	}
+	//이전 캐릭터 있으면 지움
+	LobbyPlayerController->DestroyCharacter();
 	
 	int SpawnSpotIndex = PlayerSpotArray[PlayerNumber];
 	
@@ -248,21 +251,12 @@ void ALobbyGameMode::UpdateCharacter(ALobbyPlayerController* LobbyPlayerControll
 		case Mechanic:
 			break;
 		case Shooter:
-			LobbyPlayerController->LobbyCharacter = GetWorld()->SpawnActor<AEHShooter>(EHShooterClass, SpawnLocations[SpawnSpotIndex], FRotator(0.0f, 180.0f, 0.0f), SpawnParams);
+			LobbyPlayerController->SetCharacter(GetWorld()->SpawnActor<AEHShooter>(EHShooterClass, SpawnLocations[SpawnSpotIndex], FRotator(0.0f, 180.0f, 0.0f), SpawnParams));
 			break;
 		case Archer:
 			break;
 		default:
 			break;
-	}
-	
-	if (LobbyPlayerController->LobbyCharacter)
-	{
-		UE_LOG(LogTemp, Log, TEXT("Spawned character : %s"), *SpawnLocations[SpawnSpotIndex].ToString());
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Failed to spawn character : %s"), *SpawnLocations[SpawnSpotIndex].ToString());
 	}
 }
 
@@ -277,7 +271,14 @@ void ALobbyGameMode::UpdateDifficulty(int Difficulty)
 
 	for(ALobbyPlayerController* LobbyPlayerController : LobbyPlayerControllerArray)
 	{
-		if(LobbyPlayerController && !LobbyPlayerController->bHost)
+		if(LobbyPlayerController)
 			LobbyPlayerController->Client_UpdateDifficulty(Difficulty);
 	}
+}
+
+ALobbyPlayerController* ALobbyGameMode::GetFirstLobbyPlayerController()
+{
+	if(LobbyPlayerControllerArray.Num() > 0) return LobbyPlayerControllerArray[0];
+	
+	return nullptr;
 }

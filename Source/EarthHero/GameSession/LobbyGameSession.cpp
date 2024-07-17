@@ -10,6 +10,7 @@
 #include <EarthHero/GameMode/LobbyGameMode.h>
 
 #include "EarthHero/EHGameInstance.h"
+#include "EarthHero/Socket/SocketClient.h"
 
 
 void ALobbyGameSession::BeginPlay()
@@ -124,7 +125,7 @@ void ALobbyGameSession::RegisterPlayer(APlayerController* NewPlayer, const FUniq
 
             if (Session.IsValid())
             {
-                NewPlayerPlayerController = NewPlayer;
+                NewPlayerController = NewPlayer;
 
                 RegisterPlayerDelegateHandle =
                     Session->AddOnRegisterPlayersCompleteDelegate_Handle(FOnRegisterPlayersCompleteDelegate::CreateUObject(
@@ -166,7 +167,7 @@ void ALobbyGameSession::HandleRegisterPlayerCompleted(FName EOSSessionName, cons
                     UE_LOG(LogTemp, Log, TEXT("Host Assigment..."));
 
                     //클라이언트에게 방장 권한을 부여
-                    HostAssignment(NewPlayerPlayerController);
+                    HostAssignment(NewPlayerController);
                 }
             }
             else UE_LOG(LogTemp, Warning, TEXT("Failed to register player! (From Callback)"));
@@ -346,42 +347,20 @@ void ALobbyGameSession::ChangeAdvertiseState(bool bAdvertise)
     }
 }
 
-void ALobbyGameSession::ChangeLobbyName(FString LobbyName)
+
+bool ALobbyGameSession::UpdateLobbyPassword(FString Password)
 {
-    IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
-    if (Subsystem)
+    //소켓 서버에게 비번변경을 요청해야함
+    
+    FString ExtraInfo = GetServerPort() + "|" + Password;
+    
+    USocketClient* NewSocket = NewObject<USocketClient>(this);
+    if(NewSocket)
     {
-        IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
-        if (Session.IsValid())
-        {
-            //기존 세션 정보 받아오고
-            FOnlineSessionSettings* SessionSettings = Session->GetSessionSettings(SessionName);
-            if (SessionSettings)
-            {
-                //로비(세션)이름 재설정
-                SessionSettings->Set("LobbyName", LobbyName, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
-
-                UE_LOG(LogTemp, Log, TEXT("Change lobby name : %s"), *LobbyName);
-
-                UpdateSessionDelegateHandle =
-                    Session->AddOnUpdateSessionCompleteDelegate_Handle(FOnUpdateSessionCompleteDelegate::CreateUObject(
-                        this,
-                        &ThisClass::HandleUpdateSessionCompleted));
-
-                // 세션 정보 업데이트
-                if (!Session->UpdateSession(SessionName, *SessionSettings, true))
-                {
-                    UE_LOG(LogTemp, Warning, TEXT("Failed to update Lobby"));
-                    Session->ClearOnUpdateSessionCompleteDelegate_Handle(UpdateSessionDelegateHandle);
-                    UpdateSessionDelegateHandle.Reset();
-                }
-            }
-            else
-            {
-                UE_LOG(LogTemp, Warning, TEXT("No session settings found for session: %s"), *SessionName.ToString());
-            }
-        }
+        NewSocket->CreateSocket("UpdatePassword", ExtraInfo);
+        return true;
     }
+    return false;
 }
 
 
@@ -390,33 +369,21 @@ void ALobbyGameSession::NewHostFind()
     ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
     if(LobbyGameMode)
     {
-        if(LobbyGameMode->LobbyPlayerControllerArray.Num() > 0)
+        ALobbyPlayerController* NewHostLobbyPlayerController = LobbyGameMode->GetFirstLobbyPlayerController();
+        if(NewHostLobbyPlayerController)
         {
-            APlayerController* NewHostPlayerController = LobbyGameMode->LobbyPlayerControllerArray[0];
-            if(NewHostPlayerController)
+            APlayerState* PlayerState = NewHostLobbyPlayerController->PlayerState;
+
+            UE_LOG(LogTemp, Log, TEXT("Host Assignment..."));
+
+            if (PlayerState && PlayerState->GetUniqueId().IsValid())
             {
-                ALobbyPlayerController* NewHostLobbyPlayerController = Cast<ALobbyPlayerController>(NewHostPlayerController);
-
-                if (NewHostLobbyPlayerController)
-                {
-                    APlayerState* PlayerState = NewHostLobbyPlayerController->PlayerState;
-                
-                    UE_LOG(LogTemp, Log, TEXT("Host Assignment..."));
-
-                    if (PlayerState && PlayerState->GetUniqueId().IsValid())
-                    {
-                        HostPlayerId = PlayerState->GetUniqueId();
-                        HostAssignment(NewHostPlayerController);
-                    }
-                    else
-                    {
-                        UE_LOG(LogTemp, Warning, TEXT("Failed to get unique ID"));
-                    }
-                }
+                HostPlayerId = PlayerState->GetUniqueId();
+                HostAssignment(NewHostLobbyPlayerController);
             }
-            else UE_LOG(LogTemp, Warning, TEXT("player controller 0 is not vaild"));
+            else UE_LOG(LogTemp, Warning, TEXT("Failed to get unique ID"));
         }
-        else UE_LOG(LogTemp, Warning, TEXT("no player controller"));
+        else UE_LOG(LogTemp, Warning, TEXT("player controller 0 is not vaild"));
     }
 }
 
@@ -436,7 +403,7 @@ void ALobbyGameSession::HostAssignment(APlayerController* HostPlayer)
             UEHGameInstance* EHGameinstance = Cast<UEHGameInstance>(GetGameInstance());
             if(EHGameinstance) Difficulty = EHGameinstance->Difficulty;
 
-            LobbyPlayerController->bHost = true;
+            LobbyPlayerController->SetHost();
             LobbyPlayerController->Client_HostAssignment(true, bAdvertise, Difficulty);
         }
     }

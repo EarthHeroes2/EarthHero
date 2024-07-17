@@ -4,6 +4,9 @@
 #include "Materials/MaterialInstanceDynamic.h"
 #include "EarthHero/Character/EHCharacter.h"
 
+float MapEdgeLength = 201600.0f;
+float MapDiagLength = MapEdgeLength * 1.1414;
+
 AForceField::AForceField()
 {
     PrimaryActorTick.bCanEverTick = true;
@@ -11,8 +14,8 @@ AForceField::AForceField()
     ForceFieldMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ForceFieldMesh"));
     RootComponent = ForceFieldMesh;
     
-    ExpansionDuration = 20.0f;
-    InitialScale = FVector(0.1f, 0.1f, 100.0f);
+    ExpansionDuration = 1.f;
+    InitialScale = FVector(0.1f, 0.1f, 100.f);
 
     static ConstructorHelpers::FObjectFinder<UCurveFloat> Curve(TEXT("/Game/Blueprints/ForceField/FC_ExpansionCurve.FC_ExpansionCurve"));
     if (Curve.Succeeded())
@@ -30,21 +33,35 @@ void AForceField::BeginPlay()
 
     OnActorBeginOverlap.AddDynamic(this, &AForceField::OnOverlapBegin);
     OnActorEndOverlap.AddDynamic(this, &AForceField::OnOverlapEnd);
+
+    SetupTimeline();
 }
 
 void AForceField::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-    ExpandForceField(DeltaTime);
+    ForceFieldTimeline.TickTimeline(DeltaTime);
 }
 
-void AForceField::ExpandForceField(float DeltaTime)
+void AForceField::SetupTimeline()
 {
-    float ScaleIncrement = DeltaTime * (100.0f / ExpansionDuration);
-    FVector NewScale = CurrentScale + FVector(ScaleIncrement, ScaleIncrement, 0.0f);
+    if (ExpansionCurve)
+    {
+        FOnTimelineFloat TimelineCallback;
+        TimelineCallback.BindUFunction(this, FName("ExpandForceField"));
+        ForceFieldTimeline.AddInterpFloat(ExpansionCurve, TimelineCallback);
+        ForceFieldTimeline.SetLooping(false);
+        ForceFieldTimeline.SetTimelineLength(ExpansionDuration);
+        ForceFieldTimeline.PlayFromStart();
+    }
+}
 
-    FCollisionQueryParams CollisionParams;
-    CollisionParams.AddIgnoredActor(this);
+void AForceField::ExpandForceField(float Value)
+{
+    float MaxScaleX = MapDiagLength / 100.0f; // Adjust based on initial scale
+    float MaxScaleY = MapDiagLength / 100.0f; // Adjust based on initial scale
+
+    FVector NewScale = InitialScale + FVector(MaxScaleX * Value, MaxScaleY * Value, 100.0f);
     CurrentScale = NewScale;
     ForceFieldMesh->SetWorldScale3D(CurrentScale);
 }
@@ -56,6 +73,7 @@ void AForceField::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor)
         if (AEHCharacter* Character = Cast<AEHCharacter>(OtherActor))
         {
             Character->SetIsInForceField(true);
+            UE_LOG(LogTemp, Warning, TEXT("In force field: true"));
         }
     }
 }
@@ -67,6 +85,36 @@ void AForceField::OnOverlapEnd(AActor* OverlappedActor, AActor* OtherActor)
         if (AEHCharacter* Character = Cast<AEHCharacter>(OtherActor))
         {
             Character->SetIsInForceField(false);
+            UE_LOG(LogTemp, Warning, TEXT("In force field: false"));
         }
+    }
+}
+
+void AForceField::SetExpansionDuration(float NewDuration)
+{
+    if (NewDuration != ExpansionDuration)
+    {
+        ExpansionDuration = NewDuration;
+        RestartTimeline();
+        UE_LOG(LogTemp, Warning, TEXT("ExpansionDuration set to: %f"), ExpansionDuration);
+    }
+}
+
+void AForceField::RestartTimeline()
+{
+    if (ForceFieldTimeline.IsPlaying())
+    {
+        ForceFieldTimeline.Stop();
+    }
+    SetupTimeline();
+}
+
+void AForceField::SetCustomCurve(UCurveFloat* NewCurve)
+{
+    if (NewCurve)
+    {
+        ExpansionCurve = NewCurve;
+        RestartTimeline();
+        UE_LOG(LogTemp, Warning, TEXT("CustomCurve set for ForceField"));
     }
 }

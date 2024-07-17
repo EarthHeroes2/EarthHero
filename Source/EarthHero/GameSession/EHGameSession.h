@@ -41,7 +41,8 @@ protected:
 	void HandleDestroySessionCompleted(FName SessionName, bool bWasSuccessful);
 	
 	void HandleUpdateSessionCompleted(FName SessionName, bool bWasSuccessful);
-	
+	FString GetServerPort();
+
 	FDelegateHandle EndSessionDelegateHandle;
 	FDelegateHandle DestroySessionDelegateHandle;
 	FDelegateHandle UpdateSessionDelegateHandle;

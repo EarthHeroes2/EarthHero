@@ -17,16 +17,29 @@ class EARTHHERO_API ALobbyPlayerController : public APlayerController
 	GENERATED_BODY()
 
 	virtual void BeginPlay() override;
-
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+	
 	ALobbyPlayerController();
 
-protected:
-	UFUNCTION(Server, Reliable)
-	void Server_InitSetup();
+	
+	TSubclassOf<class UUserWidget> LobbyWidgetClass;
+	ULobbyWidget* LobbyWidget;
 
-public:
+	AEHCharacter* LobbyCharacter; //게임모드에서 관리하기 실패
+	
 	bool bHost = false;
 
+	
+	UFUNCTION(Server, Reliable)
+	void Server_InitSetup();
+	
+	void ShowLobbyWidget();
+
+public:
+	void DestroyCharacter() const;
+	void SetCharacter(AEHCharacter* SpawnedCharacter);
+
+	
 	UFUNCTION(Client, Reliable)
 	void Client_HostAssignment(bool bHostAssignment, bool bAdvertise, int Difficulty);
 
@@ -65,14 +78,15 @@ public:
 	UFUNCTION(Client, Reliable)
 	void Client_UpdateDifficulty(int Difficulty);
 
-protected:
-	void ShowLobbyWidget();
-	
-	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
-	TSubclassOf<class UUserWidget> LobbyWidgetClass;
+	UFUNCTION(Server, Reliable)
+	void Server_UpdateLobbyPassword(const FString& Password);
 
-	ULobbyWidget* LobbyWidget;
-public:
-	AEHCharacter* LobbyCharacter;
+	UFUNCTION(Client, Reliable)
+	void Client_UpdateLobbyPasswordResult(bool bSuccess);
+
+
+
+	void SetHost();
+	void UpdateDifficulty(int Difficulty);
 };

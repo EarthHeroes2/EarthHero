@@ -17,25 +17,24 @@ class EARTHHERO_API ALobbyGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 
-protected:
-	virtual void BeginPlay() override;
+	ALobbyGameMode();
 	
-	//virtual AActor* ChoosePlayerStart_Implementation(AController* Player) override;
+	virtual void BeginPlay() override;
 	virtual AActor* FindPlayerStart_Implementation(AController* Player, const FString& IncomingName) override;
-
 	
 	int ReadyCount = 0;
-	
-	TArray<FVector> SpawnLocations;
 
+	//플레이어 정보들 관리
+	TArray<FVector> SpawnLocations;
 	TArray<AController*> ControllerArray;
-	
+	TArray<ALobbyPlayerController*> LobbyPlayerControllerArray;
 	TArray<FString> PlayerNameArray;
 	TArray<bool> PlayerReadyStateArray;
 	TArray<EClassType> PlayerClassArray;
 	TArray<int> PlayerSpotArray;
-	
 	TArray<bool> bSpotUsedArray;
+
+	int CallCount = 0;
 	
 
 	TArray<TSubclassOf<ACharacter>> CharacterClasses;
@@ -44,24 +43,27 @@ protected:
 	TSubclassOf<class AEHShooter> EHShooterClass;
 	//TSubclassOf<class AEHArchor> EHArchorClass;
 
-public:
-	ALobbyGameMode();
-
-	TArray<ALobbyPlayerController*> LobbyPlayerControllerArray;
-
-	void TogglePlayerReady(APlayerController* Player);
+	
 	void UpdatePlayerNameListAndReadyState();
 	void UpdatePlayerReadyState();
-	void AddPlayerInfo(ALobbyPlayerController* NewLobbyPlayerController);
-	void RemovePlayerInfo(const ALobbyPlayerController* ExitingLobbyPlayerController);
+	
+	int FindLobbyPlayerSpot();
+	
+public:
 	bool PressGameStartButton();
+	void TogglePlayerReady(APlayerController* Player);
+
+	void JoinedPlayerInitSetup(ALobbyPlayerController* NewLobbyPlayerController);
+	
+	void RemovePlayerInfo(const ALobbyPlayerController* ExitingLobbyPlayerController);
 
 	void SendChatMessage(const FText& Text);
+	
+	void UpdateDifficulty(int Difficulty);
 
 	void UpdateCharacter(ALobbyPlayerController* LobbyPlayerController, EClassType ClassType);
-	int FindLobbyPlayerSpot();
+	
+	ALobbyPlayerController* GetFirstLobbyPlayerController();
 
-
-
-	void UpdateDifficulty(int Difficulty);
+	void Kick(int PlayerNumber);
 };

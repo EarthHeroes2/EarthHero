@@ -112,10 +112,10 @@ bool UMainMenuWidget::Initialize()
 		CreateLobbyOK_Btn->OnClicked.AddDynamic(this, &ThisClass::CreateLobbyOKBtnClicked);
 		ButtonArray.Add(CreateLobbyOK_Btn);
 	}
-	if(CreateLobbyCancle_Btn)
+	if(CreateLobbyCancel_Btn)
 	{
-		CreateLobbyCancle_Btn->OnClicked.AddDynamic(this, &ThisClass::CreateLobbyCancleBtnClicked);
-		ButtonArray.Add(CreateLobbyCancle_Btn);
+		CreateLobbyCancel_Btn->OnClicked.AddDynamic(this, &ThisClass::CreateLobbyCancelBtnClicked);
+		ButtonArray.Add(CreateLobbyCancel_Btn);
 	}
 
 	if(PasswordOK_Btn)
@@ -123,10 +123,10 @@ bool UMainMenuWidget::Initialize()
 		PasswordOK_Btn->OnClicked.AddDynamic(this, &ThisClass::PasswordOKBtnClicked);
 		ButtonArray.Add(PasswordOK_Btn);
 	}
-	if(PasswordCancle_Btn)
+	if(PasswordCancel_Btn)
 	{
-		PasswordCancle_Btn->OnClicked.AddDynamic(this, &ThisClass::PasswordCancleBtnClicked);
-		ButtonArray.Add(PasswordCancle_Btn);
+		PasswordCancel_Btn->OnClicked.AddDynamic(this, &ThisClass::PasswordCancelBtnClicked);
+		ButtonArray.Add(PasswordCancel_Btn);
 	}
 
 	if(LobbyList_Btn)
@@ -138,6 +138,11 @@ bool UMainMenuWidget::Initialize()
 	{
 		FindLobby_Btn->OnClicked.AddDynamic(this, &ThisClass::FindLobbyBtnClicked);
 		ButtonArray.Add(FindLobby_Btn);
+	}
+
+	if(Private_Cb)
+	{
+		Private_Cb->OnCheckStateChanged.AddDynamic(this, &ThisClass::PrivateCbChanged);
 	}
 
 	return true;
@@ -169,17 +174,13 @@ void UMainMenuWidget::OptionsBtnClicked()
 	if (OptionsWidget)
 	{
 		if (OptionsWidget->IsVisible())
-		{
 			OptionsWidget->SetVisibility(ESlateVisibility::Hidden);
-		}
 		else
-		{
 			OptionsWidget->SetVisibility(ESlateVisibility::Visible);
-		}
 	}
 	else
 	{
-		OptionsWidget = Cast<UUserWidget>(CreateWidget(GetWorld(), OptionsWidgetClass));
+		OptionsWidget = Cast<UUserWidget>(CreateWidget(this, OptionsWidgetClass));
 		if (OptionsWidget)
 		{
 			OptionsWidget->AddToViewport();
@@ -190,16 +191,28 @@ void UMainMenuWidget::OptionsBtnClicked()
 
 void UMainMenuWidget::Exit_BtnClicked()
 {
-	// Get the current player controller
 	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-
-	// Ensure the PlayerController is valid
 	if (PlayerController)
-	{
-		// Call the QuitGame function from the UKismetSystemLibrary
 		UKismetSystemLibrary::QuitGame(GetWorld(), PlayerController, EQuitPreference::Quit, false);
+}
+
+
+void UMainMenuWidget::PrivateCbChanged(bool bChecked)
+{
+	if (PasswordSetting_Etb)
+	{
+		if(bChecked) PasswordSetting_Etb->SetIsEnabled(true);
+		else
+		{
+			PasswordSetting_Etb->SetIsEnabled(false);
+			PasswordSetting_Etb->SetText(FText());
+		}
 	}
 }
+
+
+
+
 
 void UMainMenuWidget::CreateLobbyOKBtnClicked()
 {
@@ -237,10 +250,14 @@ void UMainMenuWidget::CreateLobbyOKBtnClicked()
 		SetButtonsEnabled(true);
 	}
 }
-void UMainMenuWidget::CreateLobbyCancleBtnClicked()
+void UMainMenuWidget::CreateLobbyCancelBtnClicked()
 {
 	LobbySetting_Bd->SetVisibility(ESlateVisibility::Collapsed);
 }
+
+
+
+
 
 
 void UMainMenuWidget::PasswordOKBtnClicked()
@@ -269,7 +286,7 @@ void UMainMenuWidget::PasswordOKBtnClicked()
 	if(CompareResult == "true")
 	{
 		UE_LOG(LogTemp, Error, TEXT("correct password!!!!!"));
-		ServerRowClicked();
+		JoinToSelectedServer();
 	}
 	else
 	{
@@ -277,7 +294,7 @@ void UMainMenuWidget::PasswordOKBtnClicked()
 		SetButtonsEnabled(true);
 	}
 }
-void UMainMenuWidget::PasswordCancleBtnClicked()
+void UMainMenuWidget::PasswordCancelBtnClicked()
 {
 	Password_Bd->SetVisibility(ESlateVisibility::Collapsed);
 }
@@ -349,7 +366,7 @@ void UMainMenuWidget::UpdateLobbyList(TArray<FOnlineSessionSearchResult> FindLob
 		if(LobbyIndex != INDEX_NONE) LobbyRowList[LobbyIndex]->UpdateLobbyInfo(FindLobby);
 		else //아니라면 새로 추가
 		{
-			ULobbyRowWidget* LobbyRowWidget = Cast<ULobbyRowWidget>(CreateWidget(GetWorld(), LobbyRowWidgetClass));
+			ULobbyRowWidget* LobbyRowWidget = Cast<ULobbyRowWidget>(CreateWidget(this, LobbyRowWidgetClass));
 			if(LobbyRowWidget)
 			{
 				LobbyIdList.Add(FindLobby.GetSessionIdStr());
@@ -382,6 +399,14 @@ void UMainMenuWidget::UpdateLobbyList(TArray<FOnlineSessionSearchResult> FindLob
 	SetButtonsEnabled(true);
 }
 
+void UMainMenuWidget::ServerRowClicked(FOnlineSessionSearchResult LobbyInfo, bool bAdvertise)
+{
+	SelectedLobbyInfo = LobbyInfo;
+		
+	if(!bAdvertise) PrivateServerRowClicked();
+	else JoinToSelectedServer();
+}
+
 void UMainMenuWidget::PrivateServerRowClicked()
 {
 	if(Password_Bd)
@@ -393,7 +418,7 @@ void UMainMenuWidget::PrivateServerRowClicked()
 	}
 }
 
-void UMainMenuWidget::ServerRowClicked()
+void UMainMenuWidget::JoinToSelectedServer()
 {
 	IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
 	if (Subsystem)
@@ -495,12 +520,6 @@ void UMainMenuWidget::HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRe
 
                     if (bKeyValueFound1 && bKeyValueFound2 && bKeyValueFound3 && bKeyValueFound4 && bKeyValueFound5)
                     {
-                    	if(bAdvertise)
-                    	{
-                    		UE_LOG(LogTemp, Log, TEXT("session? : %s, %s, %d, true"), *FindSessionReason, *PortNumber, NumberOfJoinedPlayers);
-                    	}
-                    	else UE_LOG(LogTemp, Log, TEXT("session? : %s, %s, %d, false"), *FindSessionReason, *PortNumber, NumberOfJoinedPlayers);
-                    	
                     	if (GameName == "EH2" &&
 								(
 									(FindSessionReason == "JoinLobby" && NumberOfJoinedPlayers > 0 && bAdvertise) ||
@@ -509,12 +528,6 @@ void UMainMenuWidget::HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRe
 								)
 							)
                     	{
-                    		if(bAdvertise)
-                    		{
-                    			UE_LOG(LogTemp, Log, TEXT("Valid session : %s, %s, %d, true"), *FindSessionReason, *PortNumber, NumberOfJoinedPlayers);
-                    		}
-                    		else UE_LOG(LogTemp, Log, TEXT("Valid session : %s, %s, %d, false"), *FindSessionReason, *PortNumber, NumberOfJoinedPlayers);
-                    		
                         	if(FindSessionReason == "FindLobby")
                         	{
                         		bIsFind = true;

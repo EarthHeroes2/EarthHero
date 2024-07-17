@@ -2,7 +2,6 @@
 
 
 #include "LobbyRowWidget.h"
-
 #include "MainMenuWidget.h"
 #include "OnlineSessionSettings.h"
 #include "Components/Button.h"
@@ -25,13 +24,7 @@ void ULobbyRowWidget::UpdateLobbyInfo(FOnlineSessionSearchResult Lobby)
 	
 	bool bKeyValueFound = LobbyInfo.Session.SessionSettings.Get("Advertise", bAdvertise);
 
-	if(bKeyValueFound)
-	{
-		if(!bAdvertise)
-		{
-			SetColorAndOpacity(FLinearColor::Yellow);
-		}
-	}
+	if(bKeyValueFound && !bAdvertise) SetColorAndOpacity(FLinearColor::Yellow);
 	
 	FString LobbyName;
 	bKeyValueFound = LobbyInfo.Session.SessionSettings.Get("LobbyName", LobbyName);
@@ -54,10 +47,5 @@ void ULobbyRowWidget::UpdateLobbyInfo(FOnlineSessionSearchResult Lobby)
 void ULobbyRowWidget::JoinClicked()
 {
 	if (MainMenuWidget)
-	{
-		MainMenuWidget->SelectedLobbyInfo = LobbyInfo;
-		
-		if(!bAdvertise) MainMenuWidget->PrivateServerRowClicked();
-		else MainMenuWidget->ServerRowClicked();
-	}
+		MainMenuWidget->ServerRowClicked(LobbyInfo, bAdvertise);
 }

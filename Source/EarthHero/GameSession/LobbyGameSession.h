@@ -16,16 +16,17 @@ class EARTHHERO_API ALobbyGameSession : public AEHGameSession
 
 	virtual void BeginPlay() override;
 	
+	
 protected:
 	FUniqueNetIdRepl HostPlayerId;
-	APlayerController* NewPlayerPlayerController;
+	APlayerController* NewPlayerController;
 
 	void HostAssignment(APlayerController* HostPlayer);
 	void NewHostFind();
 	
 public:
 	void ChangeAdvertiseState(bool bAdvertise);
-	void ChangeLobbyName(FString LobbyName);
+	bool UpdateLobbyPassword(FString Password);
 
 	bool GetAdvertiseState();
 	

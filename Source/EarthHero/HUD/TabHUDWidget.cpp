@@ -192,7 +192,7 @@ void UTabHUDWidget::SetHeroUpgradeWidgetValues(int32 Index, UTexture2D* UpgradeI
 void UTabHUDWidget::UpdatePlayerHealths(const TArray<float>& PlayerMaxHealths, const TArray<float>& PlayerCurrentHealths)
 {
 	for(int i = 0; i < PlayerMaxHealths.Num(); i++)
-		TabUserInfoArray[i]->SetProgress(PlayerMaxHealths[i] / PlayerCurrentHealths[i]);
+		TabUserInfoArray[i]->SetProgress(PlayerCurrentHealths[i] / PlayerMaxHealths[i]);
 }
 
 void UTabHUDWidget::UpdatePlayerLevels(const TArray<int>& PlayerLevels)

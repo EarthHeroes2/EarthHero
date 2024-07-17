@@ -9,6 +9,8 @@
 #include "MainMenuWidget.generated.h"
 
 
+class UCheckBox;
+class UButton;
 class UTextBlock;
 class UEditableTextBox;
 class UScrollBox;
@@ -27,161 +29,129 @@ class EARTHHERO_API UMainMenuWidget : public UUserWidget
 	GENERATED_BODY()
 
 	UMainMenuWidget(const FObjectInitializer &ObjectInitializer);
-	TSubclassOf<UUserWidget> OptionsWidgetClass;
-	TSubclassOf<UUserWidget> LobbyRowWidgetClass;
-
-	UUserWidget* OptionsWidget;
-
-protected:
-	UFUNCTION()
-	
 	virtual bool Initialize() override;
 	virtual void NativeDestruct() override;
 	
+	
+	TSubclassOf<UUserWidget> OptionsWidgetClass;
+	TSubclassOf<UUserWidget> LobbyRowWidgetClass;
 
-private:
+	TArray<FString> LobbyIdList;
+	TArray<ULobbyRowWidget*> LobbyRowList;
+	
+	TArray<UButton*> ButtonArray; //주요 버튼들 저장
 
 	const FName JoinSessionName = "SessionName";
+	FString LeaveSessionReason, FindSessionReason;
 	FString ReceivedLobbyPort;
 
-	UPROPERTY(meta = (BindWidget))
-	class UButton* Play_Btn;
+	FString ConnectString;
+	FOnlineSessionSearchResult* SessionToJoin;
 
+	FOnlineSessionSearchResult SelectedLobbyInfo;
+	
+	UUserWidget* OptionsWidget;
+
+	
+	UPROPERTY(meta = (BindWidget))
+	UButton* Play_Btn;
 	UPROPERTY(meta = (BindWidget))
 	UButton* Join_Btn;
-
 	UPROPERTY(meta = (BindWidget))
 	UButton* Options_Btn;
-
 	UPROPERTY(meta = (BindWidget))
 	UButton* Exit_Btn;
 
 	UPROPERTY(meta = (BindWidget))
-	class UCheckBox* Private_Cb;
+	UBorder* LobbySetting_Bd;
+	UPROPERTY(meta = (BindWidget))
+	UEditableTextBox* LobbyName_Etb;
+	UPROPERTY(meta = (BindWidget))
+	UCheckBox* Private_Cb;
+	UPROPERTY(meta = (BindWidget))
+	UEditableTextBox* PasswordSetting_Etb;
+	UPROPERTY(meta = (BindWidget))
+	UButton* CreateLobbyOK_Btn;
+	UPROPERTY(meta = (BindWidget))
+	UButton* CreateLobbyCancel_Btn;
+	
+	UPROPERTY(meta = (BindWidget))
+	UBorder* Password_Bd;
+	UPROPERTY(meta = (BindWidget))
+	UEditableTextBox* Password_Etb;
+	UPROPERTY(meta = (BindWidget))
+	UButton* PasswordOK_Btn;
+	UPROPERTY(meta = (BindWidget))
+	UButton* PasswordCancel_Btn;
 
-	UFUNCTION()
-	void Play_BtnClicked();
-
-	UFUNCTION()
-	void Join_BtnClicked();
+	UPROPERTY(meta = (BindWidget))
+	UButton* LobbyList_Btn;
+	UPROPERTY(meta = (BindWidget))
+	UScrollBox* LobbyList_Scr;
+	UPROPERTY(meta = (BindWidget))
+	UBorder* LobbyList_Bd;
+	UPROPERTY(meta = (BindWidget))
+	UButton* FindLobby_Btn;
+	
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* Lev_Tb;
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* Exp_Tb;
+	
 	
 	UFUNCTION()
+	void Play_BtnClicked();
+	UFUNCTION()
+	void Join_BtnClicked();
+	UFUNCTION()
 	void OptionsBtnClicked();
-
 	UFUNCTION()
 	void Exit_BtnClicked();
 	
-
+	UFUNCTION()
+	void PrivateCbChanged(bool bChecked);
+	
 	UFUNCTION()
 	void CreateLobbyOKBtnClicked();
-
 	UFUNCTION()
-	void CreateLobbyCancleBtnClicked();
+	void CreateLobbyCancelBtnClicked();
 
 	UFUNCTION()
 	void PasswordOKBtnClicked();
 	UFUNCTION()
-	void PasswordCancleBtnClicked();
-
-	
-	void CreateLobbyWait();
-
-	void MenuTearDown();
-	
-	
-
-	UPROPERTY(meta = (BindWidget))
-	UBorder* LobbySetting_Bd;
-
-	UPROPERTY(meta = (BindWidget))
-	UEditableTextBox* LobbyName_Etb;
-
-	UPROPERTY(meta = (BindWidget))
-	UEditableTextBox* PasswordSetting_Etb;
-	
-	UPROPERTY(meta = (BindWidget))
-	UButton* CreateLobbyOK_Btn;
-
-	UPROPERTY(meta = (BindWidget))
-	UButton* CreateLobbyCancle_Btn;
-
-	
-	
-	UPROPERTY(meta = (BindWidget))
-	UBorder* Password_Bd;
-
-	UPROPERTY(meta = (BindWidget))
-	UEditableTextBox* Password_Etb;
-	
-	UPROPERTY(meta = (BindWidget))
-	UButton* PasswordOK_Btn;
-
-	UPROPERTY(meta = (BindWidget))
-	UButton* PasswordCancle_Btn;
-
-
-	
-	UPROPERTY(meta = (BindWidget))
-	UButton* LobbyList_Btn;
-
-	UPROPERTY(meta = (BindWidget))
-	UScrollBox* LobbyList_Scr;
-
-	UPROPERTY(meta = (BindWidget))
-	UBorder* LobbyList_Bd;
-
-	UPROPERTY(meta = (BindWidget))
-	UButton* FindLobby_Btn;
-
-
-	UPROPERTY(meta = (BindWidget))
-	UTextBlock* Lev_Tb;
-
-	UPROPERTY(meta = (BindWidget))
-	UTextBlock* Exp_Tb;
-	
+	void PasswordCancelBtnClicked();
 
 	UFUNCTION()
 	void LobbyListBtnClicked();
 	UFUNCTION()
 	void FindLobbyBtnClicked();
-	void UpdateLobbyList(TArray<FOnlineSessionSearchResult> FindLobbyList);
+
+	
+	void CreateLobbyWait();
+
+	void MenuTearDown();
+
 	void SetButtonsEnabled(bool bEnabled);
+	
+	void UpdateLobbyList(TArray<FOnlineSessionSearchResult> FindLobbyList);
+	
 	void FindLobbys(FString Reason);
 	void HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRef<FOnlineSessionSearch> Search);
+	
 	void JoinSession();
 	void HandleJoinSessionCompleted(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
-public:
-	void LeaveSession(FString Reason);
-	void PrivateServerRowClicked();
-	void ServerRowClicked();
 
-private:
+	void LeaveSession(FString Reason);
 	void DestroySessionComplete(FName SessionName, bool bWasSuccessful);
 	
-
-	TArray<FString> LobbyIdList;
-	TArray<ULobbyRowWidget*> LobbyRowList;
-
-
-	
-	//주요 버튼들 저장
-	TArray<UButton*> ButtonArray;
-public:
-	FOnlineSessionSearchResult SelectedLobbyInfo;
-
-
-protected:
-	FString LeaveSessionReason, FindSessionReason;
-
-public:
-	FString ConnectString;
-	FOnlineSessionSearchResult* SessionToJoin;
-	
-protected:
 	FDelegateHandle FindSessionsDelegateHandle;
 	FDelegateHandle JoinSessionDelegateHandle;
 	FDelegateHandle DestroySessionCompleteDelegatesHandle;
-	
-	
+
+public:
+	void ServerRowClicked(FOnlineSessionSearchResult LobbyInfo, bool bAdvertise);
+private:
+	void PrivateServerRowClicked();
+	void JoinToSelectedServer();
+
 };

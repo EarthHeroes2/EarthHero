@@ -2,6 +2,8 @@
 
 
 #include "PlayingGameMode.h"
+
+#include "EarthHero/ForceField/ForceField.h"
 #include "EarthHero/GameSession/PlayingGameSession.h"
 #include "EarthHero/GameState/PlayingGameState.h"
 #include "EarthHero/Player/EHPlayerController.h"
@@ -13,6 +15,132 @@ void APlayingGameMode::BeginPlay()
 	Super::BeginPlay();
 
 	bUseSeamlessTravel = true;
+	
+	SpawnForceFields();
+}
+
+void APlayingGameMode::SpawnForceFields()
+{
+    float MinX = -100800.0f;
+    float MaxX = 100800.0f;
+    float MinY = -100800.0f;
+    float MaxY = 100800.0f;
+    float Range = MaxX - MinX; // Assuming Range is same for both X and Y as it's a square map
+
+    // Normalize to scale of 0 to 10
+    float Scale = 10.0f / Range;
+
+    // Define the segments
+    float SegmentMin = 2.0f / Scale;
+    float SegmentMax = 8.0f / Scale;
+
+    TArray<FVector> ForceFieldLocations;
+    
+    // Initial random position on the Top side
+    float InitialX = FMath::RandRange(MinX, MaxX);
+    FVector TopLocation = FVector(InitialX, MaxY, 0.0f);
+    ForceFieldLocations.Add(TopLocation);
+
+    // Calculate position on the Right side
+    float RightY = FMath::RandRange(MinY + SegmentMin, MaxY - SegmentMin);
+    FVector RightLocation = FVector(MaxX, RightY, 0.0f);
+    ForceFieldLocations.Add(RightLocation);
+
+    // Calculate position on the Bottom side
+    float BottomX = FMath::RandRange(MinX + SegmentMin, MaxX - SegmentMin);
+    FVector BottomLocation = FVector(BottomX, MinY, 0.0f);
+    ForceFieldLocations.Add(BottomLocation);
+
+    // Calculate position on the Left side
+    float LeftY = FMath::RandRange(MinY + SegmentMin, MaxY - SegmentMin);
+    FVector LeftLocation = FVector(MinX, LeftY, 0.0f);
+    ForceFieldLocations.Add(LeftLocation);
+
+    // Ensure all distances are within 2 <= distance <= 8 when normalized
+    while (!IsValidForceFieldDistance(ForceFieldLocations, SegmentMin, SegmentMax))
+    {
+        ForceFieldLocations.Empty();
+
+        // Recalculate positions if the distances do not meet the criteria
+        InitialX = FMath::RandRange(MinX, MaxX);
+        TopLocation = FVector(InitialX, MaxY, 0.0f);
+        ForceFieldLocations.Add(TopLocation);
+
+        RightY = FMath::RandRange(MinY + SegmentMin, MaxY - SegmentMin);
+        RightLocation = FVector(MaxX, RightY, 0.0f);
+        ForceFieldLocations.Add(RightLocation);
+
+        BottomX = FMath::RandRange(MinX + SegmentMin, MaxX - SegmentMin);
+        BottomLocation = FVector(BottomX, MinY, 0.0f);
+        ForceFieldLocations.Add(BottomLocation);
+
+        LeftY = FMath::RandRange(MinY + SegmentMin, MaxY - SegmentMin);
+        LeftLocation = FVector(MinX, LeftY, 0.0f);
+        ForceFieldLocations.Add(LeftLocation);
+    }
+
+    // Define different durations for each force field
+    TArray<float> ExpansionDurations = { 10.0f, 15.0f, 20.0f, 25.0f };
+
+    // Spawn the force fields at the calculated locations with different durations
+    for (int i = 0; i < ForceFieldLocations.Num(); ++i)
+    {
+        SpawnForceFieldAtLocation(ForceFieldLocations[i], ExpansionDurations[i]);
+    }
+}
+
+bool APlayingGameMode::IsValidForceFieldDistance(const TArray<FVector>& Locations, float MinDistance, float MaxDistance)
+{
+    for (int i = 0; i < Locations.Num(); ++i)
+    {
+        int NextIndex = (i + 1) % Locations.Num();
+        float Distance = FVector::Dist(Locations[i], Locations[NextIndex]);
+
+        if (Distance < MinDistance || Distance > MaxDistance)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+void APlayingGameMode::SpawnForceFieldAtLocation(FVector Location, float ExpansionDuration)
+{
+    UWorld* World = GetWorld();
+    if (World)
+    {
+        FString AssetPath = TEXT("Blueprint'/Game/Blueprints/ForceField/BP_ForceField.BP_ForceField_C'");
+        UClass* ForceFieldClass = StaticLoadClass(AActor::StaticClass(), nullptr, *AssetPath);
+        if (ForceFieldClass)
+        {
+            FActorSpawnParameters SpawnParams;
+            SpawnParams.Owner = this;
+            SpawnParams.Instigator = GetInstigator();
+
+            FRotator SpawnRotation = FRotator::ZeroRotator;
+            AActor* SpawnedForceField = World->SpawnActor<AActor>(ForceFieldClass, Location, SpawnRotation, SpawnParams);
+            if (SpawnedForceField)
+            {
+                AForceField* ForceField = Cast<AForceField>(SpawnedForceField);
+                if (ForceField)
+                {
+                    // Create a new curve for each force field
+                    UCurveFloat* NewCurve = NewObject<UCurveFloat>();
+                    NewCurve->FloatCurve.AddKey(0.0f, 0.0f);
+                    NewCurve->FloatCurve.AddKey(ExpansionDuration, 1.0f);
+                    ForceField->SetCustomCurve(NewCurve);
+                    ForceField->SetExpansionDuration(ExpansionDuration);
+
+                    UE_LOG(LogTemp, Warning, TEXT("Spawned ForceField at location: %s with duration: %f"), *Location.ToString(), ExpansionDuration);
+                }
+            }
+        }
+        else
+        {
+            UE_LOG(LogTemp, Error, TEXT("Could not load ForceField Blueprint class"));
+        }
+    }
 }
 
 //심레스 트래블 이후 새로운 컨트롤러 생김
@@ -173,8 +301,8 @@ void APlayingGameMode::UpdateGameStateHealths()
 				UStatComponent* StatComponent = EHPlayerState->GetStatComponent();
 				if(StatComponent)
 				{
-					PlayerMaxHealths.Add(StatComponent->GetHealth());
-					PlayerCurrentHealths.Add(StatComponent->GetMaxHealth());
+					PlayerMaxHealths.Add(StatComponent->GetMaxHealth());
+					PlayerCurrentHealths.Add(StatComponent->GetHealth());
 				}
 			}
 		}

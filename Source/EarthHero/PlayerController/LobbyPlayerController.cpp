@@ -7,6 +7,7 @@
 #include <EarthHero/GameSession/LobbyGameSession.h>
 #include <EarthHero/GameMode/LobbyGameMode.h>
 #include "EarthHero/EHGameInstance.h"
+#include "EarthHero/Character/EHCharacter.h"
 #include "EarthHero/PlayerState/LobbyPlayerState.h"
 
 
@@ -50,6 +51,30 @@ void ALobbyPlayerController::ShowLobbyWidget()
 	}
 }
 
+void ALobbyPlayerController::DestroyCharacter() const
+{
+	if(LobbyCharacter) LobbyCharacter->Destroy();
+}
+
+void ALobbyPlayerController::SetCharacter(AEHCharacter* SpawnedCharacter)
+{
+	LobbyCharacter = SpawnedCharacter;
+}
+
+void ALobbyPlayerController::SetHost()
+{
+	bHost = true;
+}
+
+void ALobbyPlayerController::UpdateDifficulty(int Difficulty)
+{
+	if(!bHost) Client_UpdateDifficulty(Difficulty);
+}
+
+
+
+
+
 //클라이언트가 서버에게 준비됨을 알리며 실행되는 함수
 void ALobbyPlayerController::Server_InitSetup_Implementation()
 {
@@ -73,7 +98,7 @@ void ALobbyPlayerController::Server_InitSetup_Implementation()
 	}
 	
 	//게임모드에 플레이어 정보 등록
-	if (LobbyGameMode) LobbyGameMode->AddPlayerInfo(this);
+	if (LobbyGameMode) LobbyGameMode->JoinedPlayerInitSetup(this);
 }
 
 //서버에게서 방장 유무를 받음 (Server_InitSetup에서 불리거나 게임 세션에서 새로운 방장 할당 후에 불림)
@@ -131,23 +156,12 @@ void ALobbyPlayerController::Server_ClientReadyButtonClicked_Implementation()
 	ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
 	if (LobbyGameMode)
 	{
-		//호스트 용
 		if (bHost)
 		{
-			if (LobbyGameMode->PressGameStartButton())
-			{
-				Client_SendToDebugMessage("Game Start!");
-			}
-			else
-			{
-				Client_SendToDebugMessage("All players should be ready!");
-			}
+			if (LobbyGameMode->PressGameStartButton()) Client_SendToDebugMessage("Game Start!");
+			else  Client_SendToDebugMessage("All players should be ready!");
 		}
-		// 일반 플레이어 용
-		else
-		{
-			LobbyGameMode->TogglePlayerReady(this);
-		}
+		else LobbyGameMode->TogglePlayerReady(this);
 	}
 }
 
@@ -208,13 +222,7 @@ void ALobbyPlayerController::Server_PlayerKick_Implementation(int PlayerNumber)
 		ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
 		if (LobbyGameMode)
 		{
-			//킥할 플레이어에게 ClientTravel를 하도록 강요함
-			ALobbyPlayerController* TargetLobbyPlayerController = LobbyGameMode->LobbyPlayerControllerArray[PlayerNumber];
-			{
-				UE_LOG(LogTemp, Log, TEXT("Player %d ClientTravel"), PlayerNumber);
-
-				TargetLobbyPlayerController->ClientTravel("/Game/Maps/StartupMap", ETravelType::TRAVEL_Absolute);
-			}
+			LobbyGameMode->Kick(PlayerNumber);
 		}
 	}
 }
@@ -226,15 +234,11 @@ void ALobbyPlayerController::Server_SetPlayerCharacter_Implementation(int ClassT
 	//서버에서 선택한 클래스 캐릭터 자신의 위치에 생성
 	ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
 	if (LobbyGameMode)
-	{
 		LobbyGameMode->UpdateCharacter(this, PlayerClass);
-	}
 
 	ALobbyPlayerState* LobbyPlayerState = Cast<ALobbyPlayerState>(PlayerState);
 	if (LobbyPlayerState)
-	{
 		LobbyPlayerState->PlayerClass = PlayerClass;
-	}
 }
 
 void ALobbyPlayerController::Server_SetDifficulty_Implementation(int Difficulty)
@@ -251,9 +255,41 @@ void ALobbyPlayerController::Server_SetDifficulty_Implementation(int Difficulty)
 
 void ALobbyPlayerController::Client_UpdateDifficulty_Implementation(int Difficulty)
 {
-	if(LobbyWidget)
-		LobbyWidget->UpdateDifficulty(Difficulty);
+	if(!bHost && LobbyWidget) LobbyWidget->UpdateDifficulty(Difficulty);
 }
+
+
+
+void ALobbyPlayerController::Server_UpdateLobbyPassword_Implementation(const FString& Password)
+{
+	if (bHost)
+	{
+		ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
+		if (LobbyGameMode)
+		{
+			ALobbyGameSession* LobbyGameSession = Cast<ALobbyGameSession>(LobbyGameMode->GameSession);
+			if (LobbyGameSession)
+			{	
+				Client_UpdateLobbyPasswordResult(LobbyGameSession->UpdateLobbyPassword(Password));
+			}
+		}
+	}
+}
+
+void ALobbyPlayerController::Client_UpdateLobbyPasswordResult_Implementation(bool bSuccess)
+{
+	if (bHost)
+	{
+		if(LobbyWidget && LobbyWidget->Password_Etb)
+		{
+			if(bSuccess) LobbyWidget->Password_Etb->SetHintText(FText::FromString("Success!"));
+			else LobbyWidget->Password_Etb->SetHintText(FText::FromString("Fail..."));
+		}
+	}
+}
+
+
+
 
 
 

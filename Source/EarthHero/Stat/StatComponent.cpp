@@ -302,6 +302,21 @@ void UStatComponent::OnRep_HeroStat()
 			FText::AsNumber(HeroStat.HealthRegeneration),
 			FText::Format(FText::FromString(TEXT("{0}%")),FText::AsNumber(HeroStat.MovementSpeed * 100)));
 	}
+
+	OnRep_HeroStat_Server();
+}
+
+void UStatComponent::OnRep_HeroStat_Server_Implementation()
+{
+	if (APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode()))
+	{
+		UE_LOG(LogClass, Warning, TEXT("UpdateGameStateHealths"));
+		PlayingGameMode->UpdateGameStateHealths();
+	}
+	else
+	{
+		UE_LOG(LogClass, Warning, TEXT("failed to cast PlayingGameMode"));
+	}
 }
 
 void UStatComponent::OnRep_BaseHeroStat()

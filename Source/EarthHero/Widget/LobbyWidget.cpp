@@ -56,13 +56,15 @@ bool ULobbyWidget::Initialize()
 
 	Private_Cb->OnCheckStateChanged.AddDynamic(this, &ULobbyWidget::ChangePrivateState);
 
+	PasswordUpdate_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::PasswordUpdateBtnClicked);
+
 	Exit_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::ExitClicked);
 
 
 	UWorld* World = GetWorld();
 	if (World)
 	{
-		
+		ReadFriendsList();
 		World->GetTimerManager().SetTimer(ReadFriendsListTimerHandle, this, &ThisClass::ReadFriendsList, 4.0f, true);
 	}
 
@@ -210,6 +212,7 @@ void ULobbyWidget::HostAssignment(bool bHostAssignment, bool bAdvertise, int Dif
 		Difficulty5_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::Difficulty5BtnClicked);
 		
 		Private_Hb->SetVisibility(ESlateVisibility::Visible);
+		PasswordSetting_Hb->SetVisibility(ESlateVisibility::Visible);
 	}
 	else
 	{
@@ -498,6 +501,22 @@ void ULobbyWidget::UpdateDifficulty(const int Difficulty)
 		DifficultyBtn->SetColorAndOpacity(FLinearColor::Gray);
 	
 	DifficultyBtns[Difficulty - 1]->SetColorAndOpacity(FLinearColor::Green);
+}
+
+
+void ULobbyWidget::PasswordUpdateBtnClicked()
+{
+	if(Password_Etb)
+	{
+		FString Password = Password_Etb->GetText().ToString();
+		APlayerController* PlayerController = GetOwningPlayer();
+		if (PlayerController)
+		{
+			ALobbyPlayerController* LobbyPlayerController = Cast<ALobbyPlayerController>(PlayerController);
+			if (LobbyPlayerController)
+				LobbyPlayerController->Server_UpdateLobbyPassword(Password);
+		}
+	}
 }
 
 
