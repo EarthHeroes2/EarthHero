@@ -29,10 +29,10 @@ ALobbyGameMode::ALobbyGameMode()
 
 	for(int i = 0; i < 4; i++) bSpotUsedArray.Add(false);
 
-	SpawnLocations.Add(FVector(500.0f, -150.0f, 0.0f));
-	SpawnLocations.Add(FVector(500.0f, -50.0f, 0.0f));
-	SpawnLocations.Add(FVector(500.0f, 50.0f, 0.0f));
-	SpawnLocations.Add(FVector(500.0f, 150.0f, 0.0f));
+	SpawnLocations.Add(FVector(500.0f, -180.0f, 0.0f));
+	SpawnLocations.Add(FVector(500.0f, -60.0f, 0.0f));
+	SpawnLocations.Add(FVector(500.0f, 60.0f, 0.0f));
+	SpawnLocations.Add(FVector(500.0f, 180.0f, 0.0f));
 }
 
 void ALobbyGameMode::BeginPlay()
