@@ -45,12 +45,12 @@ void ALobbyGameMode::BeginPlay()
 //특정 스폰 지점 설정
 AActor* ALobbyGameMode::FindPlayerStart_Implementation(AController* Player, const FString& IncomingName)
 {
-	UE_LOG(LogGameMode, Error, TEXT("FindPlayerStart  FindPlayerStart   FindPlayerStart"));
+	UE_LOG(LogTemp, Error, TEXT("FindPlayerStart_Implementation called for player: %s %s"), *Player->GetName(), *IncomingName);
 	
 	int32 PlayerIndex = ControllerArray.IndexOfByKey(Player);
 	
 	if (PlayerIndex != INDEX_NONE)
-	{
+	{UE_LOG(LogTemp, Error, TEXT("xxxxxxxxxxxxxxxxxxx"));
 		ControllerArray.RemoveAt(PlayerIndex);
 		LobbyPlayerControllerArray.RemoveAt(PlayerIndex);
 		PlayerNameArray.RemoveAt(PlayerIndex);
@@ -58,6 +58,7 @@ AActor* ALobbyGameMode::FindPlayerStart_Implementation(AController* Player, cons
 		PlayerClassArray.RemoveAt(PlayerIndex);
 		PlayerSpotArray.RemoveAt(PlayerIndex);
 	}
+	UE_LOG(LogTemp, Error, TEXT("ooooooooooooooooooo"));
 
 	int PlayerStart = FindLobbyPlayerSpot();
 
@@ -87,8 +88,6 @@ int ALobbyGameMode::FindLobbyPlayerSpot()
 	if (LobbyGameSession)
 	{
 		int MaxNumberOfPlayers = LobbyGameSession->MaxNumberOfPlayersInSession;
-		
-		UE_LOG(LogTemp, Error, TEXT("Max n o p = %d"), MaxNumberOfPlayers);
 		
 		for(int i = 0; i < MaxNumberOfPlayers; i++)
 		{
