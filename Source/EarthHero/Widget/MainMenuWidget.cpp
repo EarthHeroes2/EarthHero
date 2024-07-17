@@ -112,10 +112,10 @@ bool UMainMenuWidget::Initialize()
 		CreateLobbyOK_Btn->OnClicked.AddDynamic(this, &ThisClass::CreateLobbyOKBtnClicked);
 		ButtonArray.Add(CreateLobbyOK_Btn);
 	}
-	if(CreateLobbyCancle_Btn)
+	if(CreateLobbyCancel_Btn)
 	{
-		CreateLobbyCancle_Btn->OnClicked.AddDynamic(this, &ThisClass::CreateLobbyCancleBtnClicked);
-		ButtonArray.Add(CreateLobbyCancle_Btn);
+		CreateLobbyCancel_Btn->OnClicked.AddDynamic(this, &ThisClass::CreateLobbyCancelBtnClicked);
+		ButtonArray.Add(CreateLobbyCancel_Btn);
 	}
 
 	if(PasswordOK_Btn)
@@ -123,10 +123,10 @@ bool UMainMenuWidget::Initialize()
 		PasswordOK_Btn->OnClicked.AddDynamic(this, &ThisClass::PasswordOKBtnClicked);
 		ButtonArray.Add(PasswordOK_Btn);
 	}
-	if(PasswordCancle_Btn)
+	if(PasswordCancel_Btn)
 	{
-		PasswordCancle_Btn->OnClicked.AddDynamic(this, &ThisClass::PasswordCancleBtnClicked);
-		ButtonArray.Add(PasswordCancle_Btn);
+		PasswordCancel_Btn->OnClicked.AddDynamic(this, &ThisClass::PasswordCancelBtnClicked);
+		ButtonArray.Add(PasswordCancel_Btn);
 	}
 
 	if(LobbyList_Btn)
@@ -174,13 +174,9 @@ void UMainMenuWidget::OptionsBtnClicked()
 	if (OptionsWidget)
 	{
 		if (OptionsWidget->IsVisible())
-		{
 			OptionsWidget->SetVisibility(ESlateVisibility::Hidden);
-		}
 		else
-		{
 			OptionsWidget->SetVisibility(ESlateVisibility::Visible);
-		}
 	}
 	else
 	{
@@ -195,15 +191,9 @@ void UMainMenuWidget::OptionsBtnClicked()
 
 void UMainMenuWidget::Exit_BtnClicked()
 {
-	// Get the current player controller
 	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-
-	// Ensure the PlayerController is valid
 	if (PlayerController)
-	{
-		// Call the QuitGame function from the UKismetSystemLibrary
 		UKismetSystemLibrary::QuitGame(GetWorld(), PlayerController, EQuitPreference::Quit, false);
-	}
 }
 
 
@@ -211,10 +201,7 @@ void UMainMenuWidget::PrivateCbChanged(bool bChecked)
 {
 	if (PasswordSetting_Etb)
 	{
-		if(bChecked)
-		{
-			PasswordSetting_Etb->SetIsEnabled(true);
-		}
+		if(bChecked) PasswordSetting_Etb->SetIsEnabled(true);
 		else
 		{
 			PasswordSetting_Etb->SetIsEnabled(false);
@@ -263,7 +250,7 @@ void UMainMenuWidget::CreateLobbyOKBtnClicked()
 		SetButtonsEnabled(true);
 	}
 }
-void UMainMenuWidget::CreateLobbyCancleBtnClicked()
+void UMainMenuWidget::CreateLobbyCancelBtnClicked()
 {
 	LobbySetting_Bd->SetVisibility(ESlateVisibility::Collapsed);
 }
@@ -299,7 +286,7 @@ void UMainMenuWidget::PasswordOKBtnClicked()
 	if(CompareResult == "true")
 	{
 		UE_LOG(LogTemp, Error, TEXT("correct password!!!!!"));
-		ServerRowClicked();
+		JoinToSelectedServer();
 	}
 	else
 	{
@@ -307,7 +294,7 @@ void UMainMenuWidget::PasswordOKBtnClicked()
 		SetButtonsEnabled(true);
 	}
 }
-void UMainMenuWidget::PasswordCancleBtnClicked()
+void UMainMenuWidget::PasswordCancelBtnClicked()
 {
 	Password_Bd->SetVisibility(ESlateVisibility::Collapsed);
 }
@@ -412,6 +399,14 @@ void UMainMenuWidget::UpdateLobbyList(TArray<FOnlineSessionSearchResult> FindLob
 	SetButtonsEnabled(true);
 }
 
+void UMainMenuWidget::ServerRowClicked(FOnlineSessionSearchResult LobbyInfo, bool bAdvertise)
+{
+	SelectedLobbyInfo = LobbyInfo;
+		
+	if(!bAdvertise) PrivateServerRowClicked();
+	else JoinToSelectedServer();
+}
+
 void UMainMenuWidget::PrivateServerRowClicked()
 {
 	if(Password_Bd)
@@ -423,7 +418,7 @@ void UMainMenuWidget::PrivateServerRowClicked()
 	}
 }
 
-void UMainMenuWidget::ServerRowClicked()
+void UMainMenuWidget::JoinToSelectedServer()
 {
 	IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
 	if (Subsystem)

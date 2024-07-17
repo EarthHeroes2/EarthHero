@@ -55,9 +55,6 @@ void ULobbyRowWidget::JoinClicked()
 {
 	if (MainMenuWidget)
 	{
-		MainMenuWidget->SelectedLobbyInfo = LobbyInfo;
-		
-		if(!bAdvertise) MainMenuWidget->PrivateServerRowClicked();
-		else MainMenuWidget->ServerRowClicked();
+		MainMenuWidget->ServerRowClicked(LobbyInfo, bAdvertise);
 	}
 }
