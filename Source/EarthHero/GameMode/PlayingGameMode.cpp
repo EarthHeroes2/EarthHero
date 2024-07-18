@@ -21,47 +21,46 @@ void APlayingGameMode::BeginPlay()
 
 void APlayingGameMode::SpawnForceFields()
 {
+    // 아래 값들은 실제 맵 크기 넣으면 됨
     float MinX = -100800.0f;
     float MaxX = 100800.0f;
     float MinY = -100800.0f;
     float MaxY = 100800.0f;
-    float Range = MaxX - MinX; // Assuming Range is same for both X and Y as it's a square map
+    float Range = MaxX - MinX;
 
-    // Normalize to scale of 0 to 10
+    // 맵 크기를 스케일 10으로 전환
     float Scale = 10.0f / Range;
 
-    // Define the segments
-    float SegmentMin = 2.0f / Scale;
-    float SegmentMax = 8.0f / Scale;
+    // 자기장끼리 거리 최소 3
+    float SegmentMin = 3.0f / Scale;
 
     TArray<FVector> ForceFieldLocations;
-    
-    // Initial random position on the Top side
+
+    // 위쪽 자기장
     float InitialX = FMath::RandRange(MinX, MaxX);
     FVector TopLocation = FVector(InitialX, MaxY, 0.0f);
     ForceFieldLocations.Add(TopLocation);
 
-    // Calculate position on the Right side
+    // 오른쪽 자기장
     float RightY = FMath::RandRange(MinY + SegmentMin, MaxY - SegmentMin);
     FVector RightLocation = FVector(MaxX, RightY, 0.0f);
     ForceFieldLocations.Add(RightLocation);
 
-    // Calculate position on the Bottom side
+    // 아래 자기장
     float BottomX = FMath::RandRange(MinX + SegmentMin, MaxX - SegmentMin);
     FVector BottomLocation = FVector(BottomX, MinY, 0.0f);
     ForceFieldLocations.Add(BottomLocation);
 
-    // Calculate position on the Left side
+    // 왼쪽 자기장
     float LeftY = FMath::RandRange(MinY + SegmentMin, MaxY - SegmentMin);
     FVector LeftLocation = FVector(MinX, LeftY, 0.0f);
     ForceFieldLocations.Add(LeftLocation);
 
-    // Ensure all distances are within 2 <= distance <= 8 when normalized
-    while (!IsValidForceFieldDistance(ForceFieldLocations, SegmentMin, SegmentMax))
+    // 각 자기장 거리 3 >= 아니면 재조정
+    while (!IsValidForceFieldDistance(ForceFieldLocations, SegmentMin))
     {
         ForceFieldLocations.Empty();
-
-        // Recalculate positions if the distances do not meet the criteria
+    	
         InitialX = FMath::RandRange(MinX, MaxX);
         TopLocation = FVector(InitialX, MaxY, 0.0f);
         ForceFieldLocations.Add(TopLocation);
@@ -79,30 +78,50 @@ void APlayingGameMode::SpawnForceFields()
         ForceFieldLocations.Add(LeftLocation);
     }
 
-    // Define different durations for each force field
-    TArray<float> ExpansionDurations = { 10.0f, 15.0f, 20.0f, 25.0f };
+    // 각 자기장 확장 시간 생성 (하나의 확장 시간은 900, 나머지는 600~900 사이)
+    TArray<float> ExpansionDurations;
+    GenerateRandomDurations(4, 600.0f, 900.0f, ExpansionDurations);
 
-    // Spawn the force fields at the calculated locations with different durations
+    // 자기장 각 위치에 소환하기
     for (int i = 0; i < ForceFieldLocations.Num(); ++i)
     {
         SpawnForceFieldAtLocation(ForceFieldLocations[i], ExpansionDurations[i]);
     }
 }
 
-bool APlayingGameMode::IsValidForceFieldDistance(const TArray<FVector>& Locations, float MinDistance, float MaxDistance)
+bool APlayingGameMode::IsValidForceFieldDistance(const TArray<FVector>& Locations, float MinDistance)
 {
     for (int i = 0; i < Locations.Num(); ++i)
     {
         int NextIndex = (i + 1) % Locations.Num();
         float Distance = FVector::Dist(Locations[i], Locations[NextIndex]);
 
-        if (Distance < MinDistance || Distance > MaxDistance)
+        if (Distance < MinDistance)
         {
             return false;
         }
     }
 
     return true;
+}
+
+void APlayingGameMode::GenerateRandomDurations(int Count, float Min, float Max, TArray<float>& OutDurations)
+{
+    // 하나의 확장 시간은 900으로 고정
+    OutDurations.Add(900.0f);
+
+    for (int i = 1; i < Count; ++i)
+    {
+        float RandomValue = FMath::RandRange(Min, Max);
+        OutDurations.Add(RandomValue);
+    }
+
+    // 셔플 -> 랜덤화
+    for (int i = 0; i < OutDurations.Num(); ++i)
+    {
+        int Index = FMath::RandRange(0, OutDurations.Num() - 1);
+        OutDurations.Swap(i, Index);
+    }
 }
 
 void APlayingGameMode::SpawnForceFieldAtLocation(FVector Location, float ExpansionDuration)
@@ -125,7 +144,7 @@ void APlayingGameMode::SpawnForceFieldAtLocation(FVector Location, float Expansi
                 AForceField* ForceField = Cast<AForceField>(SpawnedForceField);
                 if (ForceField)
                 {
-                    // Create a new curve for each force field
+                    // 각 자기장에 새로운 커브 생성
                     UCurveFloat* NewCurve = NewObject<UCurveFloat>();
                     NewCurve->FloatCurve.AddKey(0.0f, 0.0f);
                     NewCurve->FloatCurve.AddKey(ExpansionDuration, 1.0f);

@@ -15,7 +15,7 @@ AForceField::AForceField()
     RootComponent = ForceFieldMesh;
     
     ExpansionDuration = 1.f;
-    InitialScale = FVector(0.1f, 0.1f, 100.f);
+    InitialScale = FVector(0.1f, 0.1f, 300.f);
 
     static ConstructorHelpers::FObjectFinder<UCurveFloat> Curve(TEXT("/Game/Blueprints/ForceField/FC_ExpansionCurve.FC_ExpansionCurve"));
     if (Curve.Succeeded())
@@ -61,7 +61,7 @@ void AForceField::ExpandForceField(float Value)
     float MaxScaleX = MapDiagLength / 100.0f; // Adjust based on initial scale
     float MaxScaleY = MapDiagLength / 100.0f; // Adjust based on initial scale
 
-    FVector NewScale = InitialScale + FVector(MaxScaleX * Value, MaxScaleY * Value, 100.0f);
+    FVector NewScale = InitialScale + FVector(MaxScaleX * Value, MaxScaleY * Value, 300.0f);
     CurrentScale = NewScale;
     ForceFieldMesh->SetWorldScale3D(CurrentScale);
 }

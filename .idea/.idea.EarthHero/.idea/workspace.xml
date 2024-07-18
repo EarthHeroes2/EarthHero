@@ -79,10 +79,8 @@
   <component name="ChangeListManager">
     <list default="true" id="4591bad7-fd9f-4860-903f-8700cd913377" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/ForceField/BP_ForceField.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/ForceField/BP_ForceField.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/ForceField/FC_ExpansionCurve.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/ForceField/FC_ExpansionCurve.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EarthHero.uproject" beforeDir="false" afterPath="$PROJECT_DIR$/EarthHero.uproject" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/EarthHero/ForceField/ForceField.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/ForceField/ForceField.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/ForceField/ForceField.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/ForceField/ForceField.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/EarthHero/GameMode/PlayingGameMode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/GameMode/PlayingGameMode.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/EarthHero/GameMode/PlayingGameMode.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/GameMode/PlayingGameMode.h" afterDir="false" />
     </list>
@@ -315,6 +313,8 @@
       <workItem from="1721148884485" duration="2344000" />
       <workItem from="1721207510122" duration="8143000" />
       <workItem from="1721235102663" duration="178000" />
+      <workItem from="1721292939911" duration="9987000" />
+      <workItem from="1721306424609" duration="1017000" />
     </task>
     <servers />
   </component>
