@@ -1,6 +1,6 @@
 {
 	"FileVersion": 3,
-	"EngineAssociation": "{E8A99CA8-4E24-70EF-49A8-9B9FF942D8F0}",
+	"EngineAssociation": "{A5FCC1B6-49E7-C9C2-0606-3694917B1CE9}",
 	"Category": "",
 	"Description": "",
 	"Modules": [
@@ -10,7 +10,8 @@
 			"LoadingPhase": "Default",
 			"AdditionalDependencies": [
 				"Engine",
-				"UMG"
+				"UMG",
+				"AIModule"
 			]
 		}
 	],
