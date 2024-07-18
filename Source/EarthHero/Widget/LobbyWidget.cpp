@@ -382,9 +382,10 @@ void ULobbyWidget::ChangePrivateState(bool bPrivate)
 		{
 			if(bPrivate) //공개->비공개는 비번이 필수임
 			{
-				if(bPasswordSetting) Private_Cb->SetCheckedState(ECheckBoxState::Unchecked);
-				else //비번 설정먼저 하라고 안내함
+				if(!bPasswordSetting) //비번 설정먼저 하라고 안내함
 				{
+					Private_Cb->SetCheckedState(ECheckBoxState::Unchecked);
+					Password_Etb->SetText(FText());
 					Password_Etb->SetHintText(FText::FromString("Please set a password"));
 					return; 
 				}

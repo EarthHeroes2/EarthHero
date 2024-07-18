@@ -281,10 +281,15 @@ void ALobbyPlayerController::Client_UpdateLobbyPasswordResult_Implementation(boo
 		{
 			if(bSuccess)
 			{
+				LobbyWidget->Password_Etb->SetText(FText());
 				LobbyWidget->Password_Etb->SetHintText(FText::FromString("Success!"));
 				LobbyWidget->bPasswordSetting = true;
 			}
-			else LobbyWidget->Password_Etb->SetHintText(FText::FromString("Fail..."));
+			else
+			{
+				LobbyWidget->Password_Etb->SetText(FText());
+				LobbyWidget->Password_Etb->SetHintText(FText::FromString("Fail..."));
+			}
 		}
 	}
 }
