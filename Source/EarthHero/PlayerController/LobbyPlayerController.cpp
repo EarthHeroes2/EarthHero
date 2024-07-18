@@ -104,8 +104,6 @@ void ALobbyPlayerController::Server_InitSetup_Implementation()
 //서버에게서 방장 유무를 받음 (Server_InitSetup에서 불리거나 게임 세션에서 새로운 방장 할당 후에 불림)
 void ALobbyPlayerController::Client_HostAssignment_Implementation(bool bHostAssignment, bool bAdvertise, int Difficulty)
 {
-	UE_LOG(LogTemp, Error, TEXT("Client_HostAssignment!!!"));
-	
 	bHost = bHostAssignment; //클라이언트도 방장 유무는 알고 있지만, 서버에서 항상 확인해주기
 	
 	if (LobbyWidget) LobbyWidget->HostAssignment(bHost, bAdvertise, Difficulty);
@@ -115,7 +113,6 @@ void ALobbyPlayerController::Client_HostAssignment_Implementation(bool bHostAssi
 	{
 		UE_LOG(LogTemp, Log, TEXT("Host Assignmented!"));
 	}
-	
 }
 
 //클라이언트의 로비 advertise 설정 변경 요청을 서버가 받음
@@ -282,7 +279,11 @@ void ALobbyPlayerController::Client_UpdateLobbyPasswordResult_Implementation(boo
 	{
 		if(LobbyWidget && LobbyWidget->Password_Etb)
 		{
-			if(bSuccess) LobbyWidget->Password_Etb->SetHintText(FText::FromString("Success!"));
+			if(bSuccess)
+			{
+				LobbyWidget->Password_Etb->SetHintText(FText::FromString("Success!"));
+				LobbyWidget->bPasswordSetting = true;
+			}
 			else LobbyWidget->Password_Etb->SetHintText(FText::FromString("Fail..."));
 		}
 	}

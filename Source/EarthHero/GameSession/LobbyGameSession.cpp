@@ -62,7 +62,7 @@ void ALobbyGameSession::CreateSession(FString PortNumber)
             SessionSettings->bUseLobbiesIfAvailable = false; // 무조건 false여야 함
             SessionSettings->bAllowInvites = true;
             SessionSettings->bAllowJoinInProgress = false;
-            SessionSettings->bShouldAdvertise = true; //일단 무조건 public
+            SessionSettings->bShouldAdvertise = true; // 무조건 public (작동을 안함)
             
             //SessionSettings->bUsesStats = false; // 업적관련?
             //SessionSettings->bAntiCheatProtected = true; // 지원하나?
@@ -322,6 +322,7 @@ void ALobbyGameSession::ChangeAdvertiseState(bool bAdvertise)
 
                 if (bAdvertise)
                 {
+                    //비번 초기화 해줄 필요는 없음
                     UE_LOG(LogTemp, Log, TEXT("Change advertise state : on"));
                 }
                 else UE_LOG(LogTemp, Log, TEXT("Change advertise state : off"));
@@ -339,16 +340,13 @@ void ALobbyGameSession::ChangeAdvertiseState(bool bAdvertise)
                     UpdateSessionDelegateHandle.Reset();
                 }
             }
-            else
-            {
-                UE_LOG(LogTemp, Warning, TEXT("No session settings found for session: %s"), *SessionName.ToString());
-            }
+            else UE_LOG(LogTemp, Warning, TEXT("No session settings found for session: %s"), *SessionName.ToString());
         }
     }
 }
 
 
-bool ALobbyGameSession::UpdateLobbyPassword(FString Password)
+bool ALobbyGameSession::UpdateLobbyPassword(const FString& Password)
 {
     //소켓 서버에게 비번변경을 요청해야함
     
@@ -379,6 +377,10 @@ void ALobbyGameSession::NewHostFind()
             if (PlayerState && PlayerState->GetUniqueId().IsValid())
             {
                 HostPlayerId = PlayerState->GetUniqueId();
+
+                //무조건 공개방으로 전환
+                ChangeAdvertiseState(true);
+                
                 HostAssignment(NewHostLobbyPlayerController);
             }
             else UE_LOG(LogTemp, Warning, TEXT("Failed to get unique ID"));

@@ -13,6 +13,7 @@
 #include "EarthHero/Enum/Enums.h"
 #include "LobbyWidget.generated.h"
 
+class UImage;
 class UFriendRowWidget;
 
 UCLASS()
@@ -85,7 +86,8 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	UButton* Archor_Btn;
 
-
+	UPROPERTY(meta = (BindWidget))
+	UImage* RoomSetting_Img;
 
 	TArray<UButton*> DifficultyBtns;
 	UPROPERTY(meta = (BindWidget))
@@ -217,12 +219,16 @@ public:
 
 	FTimerHandle ReadFriendsListTimerHandle;
 
-	protected:
+	bool bPasswordSetting = false;
+
+protected:
 	void ReadFriendsListCompleted(int32 LocalUserNum, bool bWasSuccessful, const FString& ListName, const FString& ErrorStr);
 
 	
 	TArray<CSteamID> FriendSteamIds;
 	TArray<UFriendRowWidget*> FriendRowWidgets;
+
+	
 	
 	
 

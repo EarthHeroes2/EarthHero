@@ -11,8 +11,6 @@
 #include "FriendRowWidget.h"
 #include "Components/CheckBox.h"
 #include "Components/Image.h"
-#include "EarthHero/EHGameInstance.h"
-#include "Kismet/ImportanceSamplingLibrary.h"
 
 #include "steam/steam_api.h"
 
@@ -180,7 +178,11 @@ void ULobbyWidget::HostAssignment(bool bHostAssignment, bool bAdvertise, int Dif
 	{
 		//현재 비밀방 여부
 		if(bAdvertise) Private_Cb->SetCheckedState(ECheckBoxState::Unchecked);
-		else Private_Cb->SetCheckedState(ECheckBoxState::Checked);
+		else
+		{
+			bPasswordSetting = true;
+			Private_Cb->SetCheckedState(ECheckBoxState::Checked);
+		}
 		//현재 난이도 선택
 		SelectDifficulty = Difficulty;
 		DifficultyBtns[SelectDifficulty - 1]->SetIsEnabled(false);
@@ -210,7 +212,8 @@ void ULobbyWidget::HostAssignment(bool bHostAssignment, bool bAdvertise, int Dif
 		Difficulty3_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::Difficulty3BtnClicked);
 		Difficulty4_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::Difficulty4BtnClicked);
 		Difficulty5_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::Difficulty5BtnClicked);
-		
+
+		RoomSetting_Img->SetVisibility(ESlateVisibility::Visible);
 		Private_Hb->SetVisibility(ESlateVisibility::Visible);
 		PasswordSetting_Hb->SetVisibility(ESlateVisibility::Visible);
 	}
@@ -376,7 +379,20 @@ void ULobbyWidget::ChangePrivateState(bool bPrivate)
 	{
 		ALobbyPlayerController* LobbyPlayerController = Cast<ALobbyPlayerController>(PlayerController);
 		if (LobbyPlayerController)
+		{
+			if(bPrivate) //공개->비공개는 비번이 필수임
+			{
+				if(bPasswordSetting) Private_Cb->SetCheckedState(ECheckBoxState::Unchecked);
+				else //비번 설정먼저 하라고 안내함
+				{
+					Password_Etb->SetHintText(FText::FromString("Please set a password"));
+					return; 
+				}
+			}
+			//상태 변경
 			LobbyPlayerController->Server_ChangeAdvertiseState(!bPrivate);
+		}
+			
 	}
 }
 
@@ -463,13 +479,10 @@ void ULobbyWidget::UpdatePlayerNameList(const TArray<FString>& PlayerNameList)
 	UE_LOG(LogTemp, Log, TEXT("Widget : update player name list (%d players)"), NumberOfPlayers);
 
 	for (i = 0; i < NumberOfPlayers; i++)
-	{
 		PlayerTexts[i]->SetText(FText::FromString(PlayerNameList[i]));
-	}
+	
 	for (; i < MaxNumberOfPlayers; i++)
-	{
 		PlayerTexts[i]->SetText(FText::GetEmpty());
-	}
 }
 
 void ULobbyWidget::UpdateReadyState(const TArray<bool>& PlayerReadyStateArray)
@@ -510,11 +523,13 @@ void ULobbyWidget::PasswordUpdateBtnClicked()
 	{
 		FString Password = Password_Etb->GetText().ToString();
 		APlayerController* PlayerController = GetOwningPlayer();
-		if (PlayerController)
+		if (!Password.IsEmpty() && PlayerController)
 		{
 			ALobbyPlayerController* LobbyPlayerController = Cast<ALobbyPlayerController>(PlayerController);
 			if (LobbyPlayerController)
+			{
 				LobbyPlayerController->Server_UpdateLobbyPassword(Password);
+			}
 		}
 	}
 }

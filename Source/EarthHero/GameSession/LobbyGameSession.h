@@ -26,7 +26,7 @@ protected:
 	
 public:
 	void ChangeAdvertiseState(bool bAdvertise);
-	bool UpdateLobbyPassword(FString Password);
+	bool UpdateLobbyPassword(const FString& Password);
 
 	bool GetAdvertiseState();
 	
