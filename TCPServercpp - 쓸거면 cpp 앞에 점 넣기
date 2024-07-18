@@ -370,10 +370,10 @@ int main()
             }
             else if (request == "UpdatePassword" && numTokens == 3)
             {
-                int lobbyNumber = stoi(tokens[1]) - 7888;
+                int lobbyNumber = stoi(tokens[1]) - 7778;
                 string password = tokens[2];
 
-                printf("Update Password  %s  ->  %s\n", lobbyPassword[lobbyNumber], password);
+                printf("Update Password  %s  ->  %s\n", lobbyPassword[lobbyNumber].c_str(), password.c_str());
 
                 //패스워드 업데이트
                 lobbyPassword[lobbyNumber] = password;
