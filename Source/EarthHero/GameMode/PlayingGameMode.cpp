@@ -126,40 +126,40 @@ void APlayingGameMode::GenerateRandomDurations(int Count, float Min, float Max, 
 
 void APlayingGameMode::SpawnForceFieldAtLocation(FVector Location, float ExpansionDuration)
 {
-    UWorld* World = GetWorld();
-    if (World)
-    {
-        FString AssetPath = TEXT("Blueprint'/Game/Blueprints/ForceField/BP_ForceField.BP_ForceField_C'");
-        UClass* ForceFieldClass = StaticLoadClass(AActor::StaticClass(), nullptr, *AssetPath);
-        if (ForceFieldClass)
-        {
-            FActorSpawnParameters SpawnParams;
-            SpawnParams.Owner = this;
-            SpawnParams.Instigator = GetInstigator();
+	UWorld* World = GetWorld();
+	if (World)
+	{
+		FString AssetPath = TEXT("Blueprint'/Game/Blueprints/ForceField/BP_ForceField.BP_ForceField_C'");
+		UClass* ForceFieldClass = StaticLoadClass(AActor::StaticClass(), nullptr, *AssetPath);
+		if (ForceFieldClass)
+		{
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.Owner = this;
+			SpawnParams.Instigator = GetInstigator();
 
-            FRotator SpawnRotation = FRotator::ZeroRotator;
-            AActor* SpawnedForceField = World->SpawnActor<AActor>(ForceFieldClass, Location, SpawnRotation, SpawnParams);
-            if (SpawnedForceField)
-            {
-                AForceField* ForceField = Cast<AForceField>(SpawnedForceField);
-                if (ForceField)
-                {
-                    // 각 자기장에 새로운 커브 생성
-                    UCurveFloat* NewCurve = NewObject<UCurveFloat>();
-                    NewCurve->FloatCurve.AddKey(0.0f, 0.0f);
-                    NewCurve->FloatCurve.AddKey(ExpansionDuration, 1.0f);
-                    ForceField->SetCustomCurve(NewCurve);
-                    ForceField->SetExpansionDuration(ExpansionDuration);
+			FRotator SpawnRotation = FRotator::ZeroRotator;
+			AActor* SpawnedForceField = World->SpawnActor<AActor>(ForceFieldClass, Location, SpawnRotation, SpawnParams);
+			if (SpawnedForceField)
+			{
+				AForceField* ForceField = Cast<AForceField>(SpawnedForceField);
+				if (ForceField)
+				{
+					// Each force field gets a new curve created
+					UCurveFloat* NewCurve = NewObject<UCurveFloat>();
+					NewCurve->FloatCurve.AddKey(0.0f, 0.0f);
+					NewCurve->FloatCurve.AddKey(ExpansionDuration, 1.0f);
+					ForceField->SetCustomCurve(NewCurve);
+					ForceField->SetExpansionDuration(ExpansionDuration);
 
-                    UE_LOG(LogTemp, Warning, TEXT("Spawned ForceField at location: %s with duration: %f"), *Location.ToString(), ExpansionDuration);
-                }
-            }
-        }
-        else
-        {
-            UE_LOG(LogTemp, Error, TEXT("Could not load ForceField Blueprint class"));
-        }
-    }
+					UE_LOG(LogTemp, Warning, TEXT("Spawned ForceField at location: %s with duration: %f"), *Location.ToString(), ExpansionDuration);
+				}
+			}
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("Could not load ForceField Blueprint class"));
+		}
+	}
 }
 
 //심레스 트래블 이후 새로운 컨트롤러 생김

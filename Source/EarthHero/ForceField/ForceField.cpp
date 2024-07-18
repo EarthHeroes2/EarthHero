@@ -1,8 +1,8 @@
 #include "ForceField.h"
 #include "Components/StaticMeshComponent.h"
-#include "UObject/ConstructorHelpers.h"
-#include "Materials/MaterialInstanceDynamic.h"
 #include "EarthHero/Character/EHCharacter.h"
+#include "UObject/ConstructorHelpers.h"
+#include "Net/UnrealNetwork.h"
 
 float MapEdgeLength = 201600.0f;
 float MapDiagLength = MapEdgeLength * 1.1414;
@@ -22,6 +22,8 @@ AForceField::AForceField()
     {
         ExpansionCurve = Curve.Object;
     }
+
+    bReplicates = true; // Enable replication for this actor
 }
 
 void AForceField::BeginPlay()
@@ -117,4 +119,24 @@ void AForceField::SetCustomCurve(UCurveFloat* NewCurve)
         RestartTimeline();
         UE_LOG(LogTemp, Warning, TEXT("CustomCurve set for ForceField"));
     }
+}
+
+void AForceField::OnRep_ExpansionCurve()
+{
+    // Restart timeline when curve is updated
+    RestartTimeline();
+}
+
+void AForceField::OnRep_ExpansionDuration()
+{
+    // Restart timeline when duration is updated
+    RestartTimeline();
+}
+
+void AForceField::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
+{
+    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+    DOREPLIFETIME(AForceField, ExpansionCurve);
+    DOREPLIFETIME(AForceField, ExpansionDuration);
 }

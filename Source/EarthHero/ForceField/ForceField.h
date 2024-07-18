@@ -23,10 +23,10 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UStaticMeshComponent* ForceFieldMesh;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ForceField")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, ReplicatedUsing=OnRep_ExpansionCurve, Category = "ForceField")
 	UCurveFloat* ExpansionCurve;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ForceField")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, ReplicatedUsing=OnRep_ExpansionDuration, Category = "ForceField")
 	float ExpansionDuration;
 
 	FTimeline ForceFieldTimeline;
@@ -43,6 +43,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ForceField")
 	void SetCustomCurve(UCurveFloat* NewCurve);
 
+	UFUNCTION()
+	void OnRep_ExpansionCurve();
+
+	UFUNCTION()
+	void OnRep_ExpansionDuration();
+
 private:
 	FVector InitialScale;
 	FVector CurrentScale;
@@ -52,4 +58,6 @@ private:
 
 	void SetupTimeline();
 	void RestartTimeline();
+
+	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
 };
