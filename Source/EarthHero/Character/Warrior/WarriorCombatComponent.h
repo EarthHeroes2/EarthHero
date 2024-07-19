@@ -21,7 +21,7 @@ public:
 
 	void SwordHit();
 
-	void Whirlwind();
+	void ToggleWhirlwind();
 
 protected:
 	virtual void BeginPlay() override;
@@ -39,18 +39,24 @@ protected:
 
 	UFUNCTION(NetMulticast, Reliable)
 	void NetMulticast_SwordHit(FHitResult HitResult);
-
+	
+	void Whirlwind();
+	
 	UFUNCTION(Server, Reliable)
-	void Server_Whirlwind();
+	void Server_Whirlwind(FVector CamLocation);
 
 	UFUNCTION(NetMulticast, Reliable)
-	void NetMulticast_Whirlwind();
+	void NetMulticast_Whirlwind(FHitResult HitResult);
+
+	void ResetWhirlWind();
 
 private:
 	UPROPERTY()
 	AEHWarrior* Warrior;
 
-	FTimerHandle WarriorTimerHandle;
+	FTimerHandle AttackCooldownTimerHandle;
+	FTimerHandle WhirlwindCooldownTimerHandle;
+	FTimerHandle WhirlwindTimerHandle;
 
 	//Normal Attack
 	UPROPERTY()
@@ -58,9 +64,22 @@ private:
 	int32 AttackCombo = 0;
 	float AttackCooldown = 0.5f;
 
+	//WhirlWind
+	UPROPERTY()
+	bool bIsWhirlwind = false;
+	UPROPERTY()
+	bool bCanWhirlwind = true;
+	int32 TotalWhirlwindCount = 12;
+	int32 CurrentWhirlwindCount = 0;
+	float WhirlwindCooldown = 14.f;
+	
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true), Category = "Particle")
 	UParticleSystem* SwordHitParticle;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true), Category = "Particle")
+	UParticleSystem* WhirlwindHitParticle;
+	
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true), Category = "Animation");
 	UAnimMontage* TPS_AttackAnimMontage;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true), Category = "Animation");
@@ -69,5 +88,6 @@ private:
 public:
 	
 	FORCEINLINE void SetWarrior(AEHWarrior* NewWarrior) { Warrior = NewWarrior; }
+	FORCEINLINE bool GetIsWhirlwind() { return bIsWhirlwind; }
 	
 };

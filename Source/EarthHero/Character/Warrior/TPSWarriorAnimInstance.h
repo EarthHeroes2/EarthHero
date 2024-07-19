@@ -15,11 +15,13 @@ class EARTHHERO_API UTPSWarriorAnimInstance : public UEHAnimInstanceBase
 {
 	GENERATED_BODY()
 
-public:
+public:	
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
 protected:
 	UFUNCTION()
 	void AnimNotify_SwordHit();
 	
+	UPROPERTY(BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
+	bool bIsWhirlWind = false;
 };

@@ -9,6 +9,17 @@
 void UTPSWarriorAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
+	
+	if(Character)
+	{
+		AEHWarrior* Warrior = Cast<AEHWarrior>(Character);
+		UWarriorCombatComponent* CombatComponent = Warrior->GetCombatComponent();
+		if(CombatComponent)
+		{
+			bIsWhirlWind = CombatComponent->GetIsWhirlwind();
+		}
+		
+	}
 }
 
 void UTPSWarriorAnimInstance::AnimNotify_SwordHit()

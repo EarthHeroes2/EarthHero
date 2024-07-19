@@ -12,7 +12,6 @@ AEHShooter::AEHShooter()
 	CombatComponent = CreateDefaultSubobject<UShooterCombatComponent>(TEXT("Shooter Combat Component"));
 	SetMaxPitchAngle(70.f);
 	SetMinPitchAngle(-60.f);
-	
 }
 
 void AEHShooter::Tick(float DeltaSeconds)

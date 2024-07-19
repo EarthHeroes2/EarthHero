@@ -30,6 +30,10 @@ void AEHWarrior::Shoot()
 void AEHWarrior::Skill()
 {
 	Super::Skill();
+	if(CombatComponent)
+	{
+		CombatComponent->ToggleWhirlwind();
+	}
 }
 
 void AEHWarrior::BeginPlay()

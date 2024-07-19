@@ -30,19 +30,22 @@ void UWarriorCombatComponent::Attack()
 
 	float PlayRate = FMath::Clamp(0.3f * (1.f / AttackCooldown), 0.6f, 1.2f);
 	
-	if(Warrior && Warrior->IsLocallyControlled() && bCanAttack)
+	if(Warrior && bCanAttack && !bIsWhirlwind)
 	{
-		if(FPS_AttackAnimMontage[AttackCombo])
+		if(Warrior->IsLocallyControlled())
 		{
-			UAnimInstance* WarriorAnimInstance = Warrior->GetFirstPersonMesh()->GetAnimInstance();
-			WarriorAnimInstance->Montage_Play(FPS_AttackAnimMontage[AttackCombo]);
-			WarriorAnimInstance->Montage_SetPlayRate(FPS_AttackAnimMontage[AttackCombo], PlayRate);
+			if(FPS_AttackAnimMontage[AttackCombo])
+			{
+				UAnimInstance* WarriorAnimInstance = Warrior->GetFirstPersonMesh()->GetAnimInstance();
+				WarriorAnimInstance->Montage_Play(FPS_AttackAnimMontage[AttackCombo]);
+				WarriorAnimInstance->Montage_SetPlayRate(FPS_AttackAnimMontage[AttackCombo], PlayRate);
+			}
 		}
 
 		AttackCombo  = (AttackCombo + 1) % FPS_AttackAnimMontage.Num();
 
 		bCanAttack = false;
-		Warrior->GetWorldTimerManager().SetTimer(WarriorTimerHandle, this, &ThisClass::ResetAttack, AttackCooldown);
+		Warrior->GetWorldTimerManager().SetTimer(AttackCooldownTimerHandle,this, &ThisClass::ResetAttack, AttackCooldown);
 	
 		Server_Attack();
 	}
@@ -134,16 +137,102 @@ void UWarriorCombatComponent::NetMulticast_SwordHit_Implementation(FHitResult Hi
 }
 
 
+void UWarriorCombatComponent::ToggleWhirlwind()
+{
+	if(bCanWhirlwind)
+	{
+		bIsWhirlwind = true;
+		bCanWhirlwind = false;
+		CurrentWhirlwindCount = 0;
+		Warrior->GetWorldTimerManager().SetTimer(WhirlwindCooldownTimerHandle, this, &ThisClass::ResetWhirlWind, WhirlwindCooldown);
+		Warrior->GetWorldTimerManager().SetTimer(WhirlwindTimerHandle, this, &ThisClass::Whirlwind, 0.25f, true);
+	}
+	else
+	{
+		if(bIsWhirlwind)
+		{
+			bIsWhirlwind = false;
+		}
+	}
+}
+
 void UWarriorCombatComponent::Whirlwind()
 {
+	if(!bIsWhirlwind)
+	{
+		Warrior->GetWorldTimerManager().ClearTimer(WhirlwindTimerHandle);
+		return;
+	}
+	
+	if(CurrentWhirlwindCount <= TotalWhirlwindCount)
+	{
+		CurrentWhirlwindCount++;
+
+		if(Warrior && Warrior->GetFPSCamera())
+		{
+			FVector CamLocation = Warrior->GetFPSCamera()->GetComponentLocation();
+			Server_Whirlwind(CamLocation);
+		}
+	}
+	else
+	{
+		Warrior->GetWorldTimerManager().ClearTimer(WhirlwindTimerHandle);
+		bIsWhirlwind = false;
+	}
 }
 
-void UWarriorCombatComponent::NetMulticast_Whirlwind_Implementation()
+void UWarriorCombatComponent::Server_Whirlwind_Implementation(FVector CamLocation)
 {
+	TArray<AActor*> ActorsToIgnore;
+	ActorsToIgnore.Add(Warrior);
+	TArray<FHitResult> HitArray;
+
+	UWorld* World = GetWorld();
+	if(World)
+	{
+		// Sphere Trace 사용하긴 하지만 나중에 바꾸고 싶음. (Cylinder Trace느낌으로?)
+		const bool bHit = UKismetSystemLibrary::SphereTraceMulti(World, CamLocation, CamLocation, 200.f,
+			 UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel4), false, ActorsToIgnore,
+			 EDrawDebugTrace::None, HitArray, true, FLinearColor::Green, FLinearColor::Red, 4.f);
+
+		if(HitArray.Num() != 0)
+		{
+			TSet<AActor*> UniqueActors;
+
+			for(const FHitResult HitResult : HitArray)
+			{
+				if(UniqueActors.Contains(HitResult.GetActor()))
+				{
+					continue;
+				}
+				UniqueActors.Add(HitResult.GetActor());
+
+				if(AMonsterBase* HitMonster = Cast<AMonsterBase>(HitResult.GetActor()))
+				{
+					FVector Direction = HitMonster->GetActorLocation() - Warrior->GetActorLocation();
+					Direction.Z = 0.f;
+					HitMonster->LaunchCharacter(Direction * 1.f, false, false);
+					// 공격 파티클 생성 (NetMulticast)
+					NetMulticast_Whirlwind(HitResult);
+				}
+			}
+		}
+	}
 }
 
-void UWarriorCombatComponent::Server_Whirlwind_Implementation()
+void UWarriorCombatComponent::NetMulticast_Whirlwind_Implementation(FHitResult HitResult)
 {
+	UWorld* World = GetWorld();
+	if(World)
+	{
+		if(WhirlwindHitParticle)
+		{
+			UGameplayStatics::SpawnEmitterAtLocation(World, SwordHitParticle, HitResult.ImpactPoint);
+		}
+	}
 }
 
-
+void UWarriorCombatComponent::ResetWhirlWind()
+{
+	bCanWhirlwind = true;
+}
