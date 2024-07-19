@@ -6,6 +6,7 @@
 #include "BasicStatsWidget.h"
 #include "StatusWidget.h"
 #include "HeroUpgradeWidget.h"
+#include "WorldMapWidget.h"
 #include "TabHUDWidget.generated.h"
 
 UCLASS()
@@ -16,6 +17,9 @@ class EARTHHERO_API UTabHUDWidget : public UUserWidget
 	TArray<UTeamMemberWidget*> TabUserInfoArray;
     
 public:
+	UPROPERTY(meta = (BindWidget))
+	UWorldMapWidget* BP_WorldMap;
+	
 	UPROPERTY(meta = (BindWidget))
 	UTeamMemberWidget* BP_TabUserInfo_1;
 
@@ -97,4 +101,7 @@ public:
 	void UpdatePlayerExps(const TArray<float>& PlayerExps);
 	void UpdatePlayerClasses(const TArray<int>& PlayerClasses);
 	void UpdatePlayerNames(const TArray<FString>& PlayerNames);
+	
+	UFUNCTION(BlueprintCallable, Category = "TabHUD")
+	void UpdatePlayerImagesInWorldMap(const TArray<FVector2D>& PlayerPositions, const TArray<float>& PlayerRotations, int32 NumPlayers);
 };

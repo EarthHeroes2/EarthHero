@@ -189,6 +189,32 @@ void UTabHUDWidget::SetHeroUpgradeWidgetValues(int32 Index, UTexture2D* UpgradeI
 	}
 }
 
+void UTabHUDWidget::UpdatePlayerImagesInWorldMap(const TArray<FVector2D>& PlayerPositions, const TArray<float>& PlayerRotations, int32 NumPlayers)
+{
+	if (BP_WorldMap)
+	{
+		BP_WorldMap->SetNumberOfPlayers(NumPlayers);
+
+		for (int32 i = 0; i < NumPlayers; ++i)
+		{
+			BP_WorldMap->SetPlayerPosition(i, PlayerPositions[i]);
+			BP_WorldMap->SetPlayerRotation(i, PlayerRotations[i]);
+		}
+
+		// Hide the remaining player images if there are fewer than 4 players
+		for (int32 i = NumPlayers; i < 4; ++i)
+		{
+			BP_WorldMap->SetPlayerPosition(i, FVector2D::ZeroVector);
+			BP_WorldMap->SetPlayerRotation(i, 0.0f);
+			UImage* PlayerImages[4] = { BP_WorldMap->Player1Image, BP_WorldMap->Player2Image, BP_WorldMap->Player3Image, BP_WorldMap->Player4Image };
+			if (PlayerImages[i])
+			{
+				PlayerImages[i]->SetVisibility(ESlateVisibility::Hidden);
+			}
+		}
+	}
+}
+
 void UTabHUDWidget::UpdatePlayerHealths(const TArray<float>& PlayerMaxHealths, const TArray<float>& PlayerCurrentHealths)
 {
 	for(int i = 0; i < PlayerMaxHealths.Num(); i++)
