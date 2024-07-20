@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "EarthHero/Character/EHCharacter.h"
 #include "GameFramework/GameStateBase.h"
 #include "PlayingGameState.generated.h"
 
@@ -18,6 +19,7 @@ class EARTHHERO_API APlayingGameState : public AGameStateBase
 	AEHPlayerController* EHPlayerController;
 
 public:
+	
 	virtual void BeginPlay() override;
 	void UpdateHUDGameTimer(int GameTimer);
 	void UpdateGameStateHealths(const TArray<float>& PlayerMaxHealths, const TArray<float>& PlayerCurrentHealths);
@@ -29,6 +31,7 @@ public:
 	void UpdateGameStateGivenDamage(const TArray<float> PlayerGivenDamage);
 	void UpdateGameStateReceiveDamage(const TArray<float> PlayerReceiveDamage);
 	void UpdateGameStateHeal(const TArray<float> PlayerHeal);
+	void UpdateGameStateWorldMaps(const TArray<FVector2D> ActorLocations, const TArray<float> ActorRotations, const int32 PlayerNumbers);
 
 	UPROPERTY(ReplicatedUsing = OnRep_GameTimerSec)
 	int GameTimerSec;
@@ -52,6 +55,11 @@ public:
 	TArray<float> AllPlayerReceiveDamage;
 	UPROPERTY(ReplicatedUsing = OnRep_GameStateHeal)
 	TArray<float> AllPlayerHeal;
+	UPROPERTY(ReplicatedUsing = OnRep_GameStateActorLocations)
+	TArray<FVector2D> AllActorLocations;
+	UPROPERTY(ReplicatedUsing = OnRep_GameStateActorRotations)
+	TArray<float> AllActorRotations;
+	int32 AllPlayerNumbers;
 
 	UFUNCTION()
 	void OnRep_GameTimerSec() const;
@@ -73,4 +81,8 @@ public:
 	void OnRep_GameStateReceiveDamage() const;
 	UFUNCTION()
 	void OnRep_GameStateHeal() const;
+	UFUNCTION()
+	void OnRep_GameStateActorLocations() const;
+	UFUNCTION()
+	void OnRep_GameStateActorRotations() const;
 };

@@ -8,6 +8,7 @@
 #include "EarthHero/GameState/PlayingGameState.h"
 #include "EarthHero/Player/EHPlayerController.h"
 #include "EarthHero/Player/EHPlayerState.h"
+#include "Kismet/GameplayStatics.h"
 
 
 void APlayingGameMode::BeginPlay()
@@ -15,8 +16,33 @@ void APlayingGameMode::BeginPlay()
 	Super::BeginPlay();
 
 	bUseSeamlessTravel = true;
-	
+	PrimaryActorTick.bCanEverTick = true;
 	SpawnForceFields();
+}
+
+void APlayingGameMode::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	UpdateWorldMapInfo();
+}
+
+void APlayingGameMode::UpdateWorldMapInfo()
+{
+	TArray<FVector2D> ActorLocations;
+	TArray<float> ActorRotations;
+	for (AActor* Actor : Players)
+	{
+		if (Actor)
+		{
+			FVector ActorLocation = Actor->GetActorLocation();
+			FRotator ActorRotation = Actor->GetActorRotation();
+			ActorLocations.Add(FVector2D(ActorLocation.X, ActorLocation.Y));
+			ActorRotations.Add(ActorRotation.Yaw);
+		}
+	}
+
+	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
+	PlayingGameState->UpdateGameStateWorldMaps(ActorLocations, ActorRotations, Players.Num());
 }
 
 void APlayingGameMode::SpawnForceFields()
@@ -196,6 +222,9 @@ void APlayingGameMode::InitLevelSetting()
 		//AActor* TargetPlayerStart = FindPlayerStart(EHPlayerControllers[i], FString::FromInt(i));
 		//RestartPlayerAtPlayerStart(EHPlayerControllers[i], TargetPlayerStart);
 	}
+
+	//플레이어들 설정
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEHCharacter::StaticClass(), Players);
 }
 
 void APlayingGameMode::PlayerControllerReady() //조금 느리지만 안전하게 다 확인하고
@@ -231,7 +260,6 @@ void APlayingGameMode::EnableAllInput() //모든 플레이어 input 허용
 		EHPlayerController->Client_EnableInput();
 	}
 }
-
 
 void APlayingGameMode::PlayerLogOut(const AEHPlayerController* ConstExitingEHPlayerController)
 {

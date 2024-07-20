@@ -23,6 +23,13 @@ class EARTHHERO_API APlayingGameMode : public AGameModeBase
 	int NumDeadPlayers = 0;
 	const FString GameOverMap = TEXT("/Game/Maps/GameOverMap");
 
+protected:
+	virtual void Tick(float DeltaSeconds) override;
+	void UpdateWorldMapInfo();
+
+	UPROPERTY()
+	TArray<AActor*> Players;
+	
 public:
 	int NumPlayersInSession;
 	int GameTimer = 0;

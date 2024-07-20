@@ -3,13 +3,12 @@
 
 #include "PlayingGameState.h"
 
-#include "EarthHero/GameSession/PlayingGameSession.h"
+#include "EarthHero/Character/EHCharacter.h"
 #include "EarthHero/HUD/InGameHUD.h"
 #include "EarthHero/HUD/TabHUDWidget.h"
 #include "EarthHero/Player/EHPlayerController.h"
 #include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
-
 
 void APlayingGameState::BeginPlay()
 {
@@ -21,10 +20,6 @@ void APlayingGameState::BeginPlay()
 		if(PlayerController) EHPlayerController = Cast<AEHPlayerController>(PlayerController);
 	}
 }
-
-
-
-
 
 void APlayingGameState::UpdateHUDGameTimer(const int GameTimer)
 {
@@ -170,6 +165,31 @@ void APlayingGameState::OnRep_GameStateHeal() const
 	}
 }
 
+
+void APlayingGameState::UpdateGameStateWorldMaps(const TArray<FVector2D> ActorLocations, const TArray<float> ActorRotations,
+	const int32 PlayerNumbers)
+{
+	AllActorLocations = ActorLocations;
+	AllActorRotations = ActorRotations;
+	AllPlayerNumbers = PlayerNumbers;
+}
+void APlayingGameState::OnRep_GameStateActorLocations() const
+{
+	UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateActorLocations"));
+	if(EHPlayerController && EHPlayerController->TabHUD)
+	{
+		EHPlayerController->TabHUD->UpdatePlayerImagesInWorldMap(AllActorLocations, AllActorRotations, AllPlayerNumbers);
+	}
+}
+void APlayingGameState::OnRep_GameStateActorRotations() const
+{
+	UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateActorRotations"));
+	if(EHPlayerController && EHPlayerController->TabHUD)
+	{
+		EHPlayerController->TabHUD->UpdatePlayerImagesInWorldMap(AllActorLocations, AllActorRotations, AllPlayerNumbers);
+	}
+}
+
 void APlayingGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -183,4 +203,6 @@ void APlayingGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME(APlayingGameState, AllPlayerGivenDamage);
 	DOREPLIFETIME(APlayingGameState, AllPlayerReceiveDamage);
 	DOREPLIFETIME(APlayingGameState, AllPlayerHeal);
+	DOREPLIFETIME(APlayingGameState, AllActorLocations);
+	DOREPLIFETIME(APlayingGameState, AllActorRotations);
 }
