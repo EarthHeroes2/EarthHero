@@ -104,4 +104,11 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = "TabHUD")
 	void UpdatePlayerImagesInWorldMap(const TArray<FVector2D>& PlayerPositions, const TArray<float>& PlayerRotations, int32 NumPlayers);
+
+	UFUNCTION(BlueprintCallable, Category = "TabHUD")
+	void UpdateForceField(int32 ForceFieldIndex, float CurrentTime, float GrowthDuration);
+
+	UFUNCTION(BlueprintCallable, Category = "TabHUD")
+	void SetForceFieldAlignment(int32 ForceFieldIndex, const FVector2D& Alignment);
+
 };

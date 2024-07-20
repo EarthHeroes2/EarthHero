@@ -88,6 +88,24 @@ void UTabHUDWidget::SetBasicStatsWidgetValues(int32 Index, FText KillScore, FTex
 	}
 }
 
+// 계속 호출
+void UTabHUDWidget::UpdateForceField(int32 ForceFieldIndex, float CurrentTime, float GrowthDuration)
+{
+	if (BP_WorldMap)
+	{
+		BP_WorldMap->UpdateForceField(ForceFieldIndex, CurrentTime, GrowthDuration);
+	}
+}
+
+// 한 번 호출
+void UTabHUDWidget::SetForceFieldAlignment(int32 ForceFieldIndex, const FVector2D& Alignment)
+{
+	if (BP_WorldMap)
+	{
+		BP_WorldMap->SetForceFieldAlignment(ForceFieldIndex - 1, Alignment); // Convert to 0-based index
+	}
+}
+
 void UTabHUDWidget::SetStatusWidgetValues(FText AttackDamage, FText AttackSpeed, FText AttackSkillDamage, FText AttackSkillCooltime, FText MoveSkillCooltime, FText CurrentHealth, FText CurrentShield, FText MaxHealth, FText HealthRegenerationRate, FText MoveSpeed)
 {
 	if (BP_TabStatusInfo)
@@ -193,15 +211,13 @@ void UTabHUDWidget::UpdatePlayerImagesInWorldMap(const TArray<FVector2D>& Player
 {
 	if (BP_WorldMap)
 	{
-		BP_WorldMap->SetNumberOfPlayers(NumPlayers);
-
 		for (int32 i = 0; i < NumPlayers; ++i)
 		{
 			BP_WorldMap->SetPlayerPosition(i, PlayerPositions[i]);
 			BP_WorldMap->SetPlayerRotation(i, PlayerRotations[i]);
 		}
 
-		// Hide the remaining player images if there are fewer than 4 players
+		// 인원 수 보내면 인원 수 넘는 애들은 숨김
 		for (int32 i = NumPlayers; i < 4; ++i)
 		{
 			BP_WorldMap->SetPlayerPosition(i, FVector2D::ZeroVector);

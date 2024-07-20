@@ -34,47 +34,47 @@ void APlayingGameMode::SpawnForceFields()
     // 자기장끼리 거리 최소 3
     float SegmentMin = 3.0f / Scale;
 
-    TArray<FVector> ForceFieldLocations;
+    TArray<FVector2D> ForceFieldLocations;
 
     // 위쪽 자기장
     float InitialX = FMath::RandRange(MinX, MaxX);
-    FVector TopLocation = FVector(InitialX, MaxY, 0.0f);
+    FVector2D TopLocation = FVector2D(InitialX, MaxY);
     ForceFieldLocations.Add(TopLocation);
 
     // 오른쪽 자기장
     float RightY = FMath::RandRange(MinY + SegmentMin, MaxY - SegmentMin);
-    FVector RightLocation = FVector(MaxX, RightY, 0.0f);
+    FVector2D RightLocation = FVector2D(MaxX, RightY);
     ForceFieldLocations.Add(RightLocation);
 
     // 아래 자기장
     float BottomX = FMath::RandRange(MinX + SegmentMin, MaxX - SegmentMin);
-    FVector BottomLocation = FVector(BottomX, MinY, 0.0f);
+    FVector2D BottomLocation = FVector2D(BottomX, MinY);
     ForceFieldLocations.Add(BottomLocation);
 
     // 왼쪽 자기장
     float LeftY = FMath::RandRange(MinY + SegmentMin, MaxY - SegmentMin);
-    FVector LeftLocation = FVector(MinX, LeftY, 0.0f);
+    FVector2D LeftLocation = FVector2D(MinX, LeftY);
     ForceFieldLocations.Add(LeftLocation);
 
     // 각 자기장 거리 3 >= 아니면 재조정
     while (!IsValidForceFieldDistance(ForceFieldLocations, SegmentMin))
     {
         ForceFieldLocations.Empty();
-    	
+        
         InitialX = FMath::RandRange(MinX, MaxX);
-        TopLocation = FVector(InitialX, MaxY, 0.0f);
+        TopLocation = FVector2D(InitialX, MaxY);
         ForceFieldLocations.Add(TopLocation);
 
         RightY = FMath::RandRange(MinY + SegmentMin, MaxY - SegmentMin);
-        RightLocation = FVector(MaxX, RightY, 0.0f);
+        RightLocation = FVector2D(MaxX, RightY);
         ForceFieldLocations.Add(RightLocation);
 
         BottomX = FMath::RandRange(MinX + SegmentMin, MaxX - SegmentMin);
-        BottomLocation = FVector(BottomX, MinY, 0.0f);
+        BottomLocation = FVector2D(BottomX, MinY);
         ForceFieldLocations.Add(BottomLocation);
 
         LeftY = FMath::RandRange(MinY + SegmentMin, MaxY - SegmentMin);
-        LeftLocation = FVector(MinX, LeftY, 0.0f);
+        LeftLocation = FVector2D(MinX, LeftY);
         ForceFieldLocations.Add(LeftLocation);
     }
 
@@ -85,24 +85,25 @@ void APlayingGameMode::SpawnForceFields()
     // 자기장 각 위치에 소환하기
     for (int i = 0; i < ForceFieldLocations.Num(); ++i)
     {
-        SpawnForceFieldAtLocation(ForceFieldLocations[i], ExpansionDurations[i]);
+        SpawnForceFieldAtLocation(ForceFieldLocations[i], ExpansionDurations[i]); // Convert FVector2D to FVector
     }
 }
 
-bool APlayingGameMode::IsValidForceFieldDistance(const TArray<FVector>& Locations, float MinDistance)
+// 거리 3 이상인지 확인
+bool APlayingGameMode::IsValidForceFieldDistance(const TArray<FVector2D>& Locations, float MinDistance)
 {
-    for (int i = 0; i < Locations.Num(); ++i)
-    {
-        int NextIndex = (i + 1) % Locations.Num();
-        float Distance = FVector::Dist(Locations[i], Locations[NextIndex]);
+	for (int i = 0; i < Locations.Num(); ++i)
+	{
+		int NextIndex = (i + 1) % Locations.Num();
+		float Distance = FVector2D::Distance(Locations[i], Locations[NextIndex]);
 
-        if (Distance < MinDistance)
-        {
-            return false;
-        }
-    }
+		if (Distance < MinDistance)
+		{
+			return false;
+		}
+	}
 
-    return true;
+	return true;
 }
 
 void APlayingGameMode::GenerateRandomDurations(int Count, float Min, float Max, TArray<float>& OutDurations)
@@ -124,7 +125,7 @@ void APlayingGameMode::GenerateRandomDurations(int Count, float Min, float Max, 
     }
 }
 
-void APlayingGameMode::SpawnForceFieldAtLocation(FVector Location, float ExpansionDuration)
+void APlayingGameMode::SpawnForceFieldAtLocation(FVector2D Location, float ExpansionDuration)
 {
 	UWorld* World = GetWorld();
 	if (World)
@@ -138,7 +139,8 @@ void APlayingGameMode::SpawnForceFieldAtLocation(FVector Location, float Expansi
 			SpawnParams.Instigator = GetInstigator();
 
 			FRotator SpawnRotation = FRotator::ZeroRotator;
-			AActor* SpawnedForceField = World->SpawnActor<AActor>(ForceFieldClass, Location, SpawnRotation, SpawnParams);
+			FVector SpawnLocation = FVector(Location, 0.0f); // Convert FVector2D to FVector
+			AActor* SpawnedForceField = World->SpawnActor<AActor>(ForceFieldClass, SpawnLocation, SpawnRotation, SpawnParams);
 			if (SpawnedForceField)
 			{
 				AForceField* ForceField = Cast<AForceField>(SpawnedForceField);
@@ -151,7 +153,7 @@ void APlayingGameMode::SpawnForceFieldAtLocation(FVector Location, float Expansi
 					ForceField->SetCustomCurve(NewCurve);
 					ForceField->SetExpansionDuration(ExpansionDuration);
 
-					UE_LOG(LogTemp, Warning, TEXT("Spawned ForceField at location: %s with duration: %f"), *Location.ToString(), ExpansionDuration);
+					UE_LOG(LogTemp, Warning, TEXT("Spawned ForceField at location: %s with duration: %f"), *SpawnLocation.ToString(), ExpansionDuration);
 				}
 			}
 		}

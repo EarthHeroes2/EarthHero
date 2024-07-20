@@ -42,8 +42,8 @@ public:
 	void EnableAllInput();
 
 	void SpawnForceFields();
-	void SpawnForceFieldAtLocation(FVector Location, float ExpansionDuration);
+	void SpawnForceFieldAtLocation(FVector2D Location, float ExpansionDuration);
     
-	bool IsValidForceFieldDistance(const TArray<FVector>& Locations, float MinDistance);
+	bool IsValidForceFieldDistance(const TArray<FVector2D>& Locations, float MinDistance);
 	void GenerateRandomDurations(int Count, float Min, float Max, TArray<float>& OutDurations);
 };
