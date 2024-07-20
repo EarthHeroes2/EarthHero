@@ -1,15 +1,10 @@
 #include "TabHUDWidget.h"
-#include "EarthHero/Stat/StatComponent.h"
-#include "Components/ProgressBar.h"
-#include "Components/TextBlock.h"
 #include "TeamMemberWidget.h"
 #include "BasicStatsWidget.h"
 #include "StatusWidget.h"
 #include "HeroUpgradeWidget.h"
 #include "Components/EditableTextBox.h"
-#include "Components/ScrollBox.h"
-#include "Components/VerticalBox.h"
-#include "EarthHero/Player/EHPlayerController.h"
+
 #include "Engine/Texture2D.h"
 
 bool UTabHUDWidget::Initialize()
@@ -20,6 +15,10 @@ bool UTabHUDWidget::Initialize()
 	TabUserInfoArray.Add(BP_TabUserInfo_2);
 	TabUserInfoArray.Add(BP_TabUserInfo_3);
 	TabUserInfoArray.Add(BP_TabUserInfo_4);
+	TabUserBasicStatsArray.Add(BP_TabBasicStatsInfo_1);
+	TabUserBasicStatsArray.Add(BP_TabBasicStatsInfo_2);
+	TabUserBasicStatsArray.Add(BP_TabBasicStatsInfo_3);
+	TabUserBasicStatsArray.Add(BP_TabBasicStatsInfo_4);
 	
 	return true;
 }
@@ -243,4 +242,28 @@ void UTabHUDWidget::UpdatePlayerNames(const TArray<FString>& PlayerNames)
 {
 	for(int i = 0; i < PlayerNames.Num(); i++)
 		TabUserInfoArray[i]->SetName(PlayerNames[i]);
+}
+
+void UTabHUDWidget::UpdateGameStateKillCount(const TArray<int> PlayerKillCount)
+{
+	for(int i = 0; i < PlayerKillCount.Num(); i++)
+		TabUserBasicStatsArray[i]->SetKillScore(FText::AsNumber(PlayerKillCount[i]));
+}
+
+void UTabHUDWidget::UpdateGameStateGivenDamage(const TArray<float> PlayerGivenDamage)
+{
+	for(int i = 0; i < PlayerGivenDamage.Num(); i++)
+		TabUserBasicStatsArray[i]->SetTotalDamage(FText::AsNumber(PlayerGivenDamage[i]));
+}
+
+void UTabHUDWidget::UpdateGameStateReceiveDamage(const TArray<float> PlayerReceiveDamage)
+{
+	for(int i = 0; i < PlayerReceiveDamage.Num(); i++)
+		TabUserBasicStatsArray[i]->SetTotalShield(FText::AsNumber(PlayerReceiveDamage[i]));
+}
+
+void UTabHUDWidget::UpdateGameStateHeal(const TArray<float> PlayerHeal)
+{
+	for(int i = 0; i < PlayerHeal.Num(); i++)
+		TabUserBasicStatsArray[i]->SetTotalHeal(FText::AsNumber(PlayerHeal[i]));
 }

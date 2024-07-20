@@ -43,7 +43,7 @@ void UMonsterStatComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 }
 
 float UMonsterStatComponent::DamageTaken(float InDamage, TSubclassOf<UDamageType> DamageTypeClass,
-	const FHitResult& HitInfo, AController* Instigator, AEHCharacter* DamageCausor)
+	const FHitResult& HitInfo, AController* Instigator, AEHCharacter* DamageCausor, bool &IsDead)
 {
 	//데미지 계산
 	float resultDamage = UStatCalculationLibrary::CalNormalDamage(MonsterStat, InDamage * MonsterStat.MoreDamageTaken);
@@ -52,6 +52,7 @@ float UMonsterStatComponent::DamageTaken(float InDamage, TSubclassOf<UDamageType
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, Message);
 	if (MonsterStat.Health <= 0.f)
 	{
+		IsDead = true;
 		FString DeadMessage = FString::Printf(TEXT("Monster Dead"));
 		APlayingGameMode *GameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode());
 		if (GameMode)

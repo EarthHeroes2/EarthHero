@@ -25,6 +25,10 @@ public:
 	void UpdateGameStateExps(const TArray<float>& PlayerExps);
 	void UpdateGameStateClasses(const TArray<int>& PlayerClasses);
 	void UpdateGameStateNames(const TArray<FString>& PlayerNames);
+	void UpdateGameStateKillCount(const TArray<int> PlayerKillCount);
+	void UpdateGameStateGivenDamage(const TArray<float> PlayerGivenDamage);
+	void UpdateGameStateReceiveDamage(const TArray<float> PlayerReceiveDamage);
+	void UpdateGameStateHeal(const TArray<float> PlayerHeal);
 
 	UPROPERTY(ReplicatedUsing = OnRep_GameTimerSec)
 	int GameTimerSec;
@@ -40,7 +44,14 @@ public:
 	TArray<int> AllPlayerClasses;
 	UPROPERTY(ReplicatedUsing = OnRep_GameStateNames)
 	TArray<FString> AllPlayerNames;
-	
+	UPROPERTY(ReplicatedUsing = OnRep_GameStateKillCount)
+	TArray<int> AllPlayerKillCount;
+	UPROPERTY(ReplicatedUsing = OnRep_GameStateGivenDamage)
+	TArray<float> AllPlayerGivenDamage;
+	UPROPERTY(ReplicatedUsing = OnRep_GameStateReceiveDamage)
+	TArray<float> AllPlayerReceiveDamage;
+	UPROPERTY(ReplicatedUsing = OnRep_GameStateHeal)
+	TArray<float> AllPlayerHeal;
 
 	UFUNCTION()
 	void OnRep_GameTimerSec() const;
@@ -54,4 +65,12 @@ public:
 	void OnRep_GameStateClasses() const;
 	UFUNCTION()
 	void OnRep_GameStateNames() const;
+	UFUNCTION()
+	void OnRep_GameStateKillCount() const;
+	UFUNCTION()
+	void OnRep_GameStateGivenDamage() const;
+	UFUNCTION()
+	void OnRep_GameStateReceiveDamage() const;
+	UFUNCTION()
+	void OnRep_GameStateHeal() const;
 };

@@ -37,6 +37,10 @@ public:
 	void UpdateGameStateExps();
 	void UpdateGameStateNames();
 	void UpdateGameStateClasses();
+	void UpdateGameStateKillCount();
+	void UpdateGameStateDamage();
+	void UpdateGameStateReceiveDamage();
+	void UpdateGameStateHeal();
 
 	void PlayerControllerReady();
 	void EnableAllInput();

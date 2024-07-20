@@ -208,6 +208,10 @@ void APlayingGameMode::PlayerControllerReady() //조금 느리지만 안전하�
 		UpdateGameStateExps();
 		UpdateGameStateLevels();
 		UpdateGameStateHealths();
+		UpdateGameStateKillCount();
+		UpdateGameStateDamage();
+		UpdateGameStateReceiveDamage();
+		UpdateGameStateHeal();
 	 
 		//모두의 움직임 풀어줌
 		EnableAllInput();
@@ -407,5 +411,93 @@ void APlayingGameMode::UpdateGameStateClasses()
 	
 	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
 	PlayingGameState->UpdateGameStateClasses(PlayerClasses);
+}
+
+void APlayingGameMode::UpdateGameStateKillCount()
+{
+	TArray<int> PlayerKillCount;
+	
+	for (AEHPlayerController* EHPlayerController : EHPlayerControllers)
+	{
+		if(EHPlayerController && EHPlayerController->PlayerState)
+		{
+			AEHPlayerState* EHPlayerState = Cast<AEHPlayerState>(EHPlayerController->PlayerState);
+			if(EHPlayerState)
+			{
+				UStatComponent* StatComponent = EHPlayerState->GetStatComponent();
+				if(StatComponent)
+					PlayerKillCount.Add(StatComponent->GetKillCount());
+			}
+		}
+	}
+
+	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
+	PlayingGameState->UpdateGameStateKillCount(PlayerKillCount);
+}
+
+void APlayingGameMode::UpdateGameStateDamage()
+{
+	TArray<float> PlayerGivenDamage;
+	
+	for (AEHPlayerController* EHPlayerController : EHPlayerControllers)
+	{
+		if(EHPlayerController && EHPlayerController->PlayerState)
+		{
+			AEHPlayerState* EHPlayerState = Cast<AEHPlayerState>(EHPlayerController->PlayerState);
+			if(EHPlayerState)
+			{
+				UStatComponent* StatComponent = EHPlayerState->GetStatComponent();
+				if(StatComponent)
+					PlayerGivenDamage.Add(StatComponent->GetGivenDamage());
+			}
+		}
+	}
+	
+	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
+	PlayingGameState->UpdateGameStateGivenDamage(PlayerGivenDamage);
+}
+
+void APlayingGameMode::UpdateGameStateReceiveDamage()
+{
+	TArray<float> PlayerReceiveDamage;
+	
+	for (AEHPlayerController* EHPlayerController : EHPlayerControllers)
+	{
+		if(EHPlayerController && EHPlayerController->PlayerState)
+		{
+			AEHPlayerState* EHPlayerState = Cast<AEHPlayerState>(EHPlayerController->PlayerState);
+			if(EHPlayerState)
+			{
+				UStatComponent* StatComponent = EHPlayerState->GetStatComponent();
+				if(StatComponent)
+					PlayerReceiveDamage.Add(StatComponent->GetReceiveDamage());
+			}
+		}
+	}
+	
+	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
+	PlayingGameState->UpdateGameStateReceiveDamage(PlayerReceiveDamage);
+}
+
+void APlayingGameMode::UpdateGameStateHeal()
+{
+	TArray<float> PlayerHeal;
+	
+	for (AEHPlayerController* EHPlayerController : EHPlayerControllers)
+	{
+		if(EHPlayerController && EHPlayerController->PlayerState)
+		{
+			AEHPlayerState* EHPlayerState = Cast<AEHPlayerState>(EHPlayerController->PlayerState);
+			if(EHPlayerState)
+			{
+				UStatComponent* StatComponent = EHPlayerState->GetStatComponent();
+				if(StatComponent)
+					PlayerHeal.Add(StatComponent->GetHeal());
+			}
+		}
+	}
+
+	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
+	PlayingGameState->UpdateGameStateHeal(PlayerHeal);
 }
 
