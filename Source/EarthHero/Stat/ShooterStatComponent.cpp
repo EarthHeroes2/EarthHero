@@ -8,6 +8,7 @@
 #include "EarthHero/Character/Monster/MonsterBase.h"
 #include "EarthHero/Character/Shooter/EHShooter.h"
 #include "EarthHero/Character/Shooter/ShooterCombatComponent.h"
+#include "EarthHero/GameMode/PlayingGameMode.h"
 #include "Effect/Ef_Bind.h"
 #include "Effect/Ef_IncreaseDamageTaken.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -56,7 +57,23 @@ void UShooterStatComponent::ShooterDamage_Implementation(AActor* DamagedActor, c
 		//몬스터용 데미지 입는 함수 호출
 		if(AMonsterBase* HitMonster = Cast<AMonsterBase>(DamagedActor))
 		{
-			actualDamage = HitMonster->MonsterStatComponent->DamageTaken(resultDamage, UNormalDamageType::StaticClass(), HitInfo, nullptr, Shooter);
+			actualDamage = HitMonster->MonsterStatComponent->DamageTaken(resultDamage, UNormalDamageType::StaticClass(), HitInfo, nullptr, Shooter, IsDead);
+			if (IsDead)
+			{
+				KillCount += 1;
+				if (APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode()))
+				{
+					PlayingGameMode->UpdateGameStateKillCount();
+				}
+			}
+			if (actualDamage > 0)
+			{
+				GivenDamage += actualDamage;
+				if (APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode()))
+				{
+					PlayingGameMode->UpdateGameStateDamage();
+				}
+			}
 			UE_LOG(LogTemp, Error, TEXT("Acture Damage = %f"), actualDamage);
 		}
 		else if (AEHCharacter *HitHero = Cast<AEHCharacter>(DamagedActor)) // 임시 슈터끼리 공격
@@ -75,7 +92,25 @@ void UShooterStatComponent::ShooterGrenadeDamage_Implementation(AActor* DamagedA
 	if(AMonsterBase* HitMonster = Cast<AMonsterBase>(DamagedActor))
 	{
 		static FHitResult DummyHitResult;
-		actualDamage = HitMonster->MonsterStatComponent->DamageTaken(resultDamage, UNormalDamageType::StaticClass(), DummyHitResult, nullptr, Shooter);
+		actualDamage = HitMonster->MonsterStatComponent->DamageTaken(resultDamage, UNormalDamageType::StaticClass(), DummyHitResult, nullptr, Shooter, IsDead);
+		if (IsDead)
+		{
+			KillCount += 1;
+			if (APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode()))
+			{
+				PlayingGameMode->UpdateGameStateKillCount();
+			}
+		}
+
+		if (actualDamage > 0)
+		{
+			GivenDamage += actualDamage;
+			if (APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode()))
+			{
+				PlayingGameMode->UpdateGameStateDamage();
+			}
+		}
+		
 		UE_LOG(LogTemp, Error, TEXT("Acture Damage = %f"), actualDamage);
 
 		UWorld* World = HitMonster->GetWorld();

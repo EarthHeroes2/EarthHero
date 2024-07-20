@@ -91,7 +91,6 @@ void APlayingGameState::UpdateGameStateClasses(const TArray<int>& PlayerClasses)
 {
 	AllPlayerClasses = PlayerClasses;
 }
-
 void APlayingGameState::OnRep_GameStateClasses() const
 {
 	UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateClasses"));
@@ -106,13 +105,68 @@ void APlayingGameState::UpdateGameStateNames(const TArray<FString>& PlayerNames)
 {
 	AllPlayerNames = PlayerNames;
 }
-
 void APlayingGameState::OnRep_GameStateNames() const
 {
 	UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateNames"));
 	if(EHPlayerController && EHPlayerController->TabHUD)
 	{
 		EHPlayerController->TabHUD->UpdatePlayerNames(AllPlayerNames);
+	}
+}
+
+
+void APlayingGameState::UpdateGameStateKillCount(const TArray<int> PlayerKillCount)
+{
+	AllPlayerKillCount = PlayerKillCount;
+}
+void APlayingGameState::OnRep_GameStateKillCount() const
+{
+	UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateKillCount"));
+	if(EHPlayerController && EHPlayerController->TabHUD)
+	{
+		EHPlayerController->TabHUD->UpdateGameStateKillCount(AllPlayerKillCount);
+	}
+}
+
+
+void APlayingGameState::UpdateGameStateGivenDamage(const TArray<float> PlayerGivenDamage)
+{
+	AllPlayerGivenDamage = PlayerGivenDamage;
+}
+void APlayingGameState::OnRep_GameStateGivenDamage() const
+{
+	UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateGivenDamage"));
+	if(EHPlayerController && EHPlayerController->TabHUD)
+	{
+		EHPlayerController->TabHUD->UpdateGameStateGivenDamage(AllPlayerGivenDamage);
+	}
+}
+
+
+void APlayingGameState::UpdateGameStateReceiveDamage(const TArray<float> PlayerReceiveDamage)
+{
+	AllPlayerReceiveDamage = PlayerReceiveDamage;
+}
+void APlayingGameState::OnRep_GameStateReceiveDamage() const
+{
+	UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateReceiveDamage"));
+	if(EHPlayerController && EHPlayerController->TabHUD)
+	{
+		EHPlayerController->TabHUD->UpdateGameStateReceiveDamage(AllPlayerReceiveDamage);
+	}
+}
+
+
+void APlayingGameState::UpdateGameStateHeal(const TArray<float> PlayerHeal)
+{
+	AllPlayerHeal = PlayerHeal;
+}
+void APlayingGameState::OnRep_GameStateHeal() const
+{
+	UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateHeal"));
+	if(EHPlayerController && EHPlayerController->TabHUD)
+	{
+		EHPlayerController->TabHUD->UpdateGameStateHeal(AllPlayerHeal);
 	}
 }
 
@@ -125,4 +179,8 @@ void APlayingGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME(APlayingGameState, AllPlayerExps);
 	DOREPLIFETIME(APlayingGameState, AllPlayerClasses);
 	DOREPLIFETIME(APlayingGameState, AllPlayerNames);
+	DOREPLIFETIME(APlayingGameState, AllPlayerKillCount);
+	DOREPLIFETIME(APlayingGameState, AllPlayerGivenDamage);
+	DOREPLIFETIME(APlayingGameState, AllPlayerReceiveDamage);
+	DOREPLIFETIME(APlayingGameState, AllPlayerHeal);
 }

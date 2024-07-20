@@ -4,7 +4,7 @@
 
 #include "Structure/StatStructure.h"
 
-float UStatCalculationLibrary::CalNormalDamage(FStatStructure& HeroStat, float inDamage)
+float UStatCalculationLibrary::	CalNormalDamage(FStatStructure& HeroStat, float inDamage)
 {
 	//데미지 0이하 일 시 무시
 	if (inDamage <= 0)

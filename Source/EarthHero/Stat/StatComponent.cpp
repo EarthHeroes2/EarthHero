@@ -91,7 +91,15 @@ void UStatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 float UStatComponent::DamageTaken(float InDamage, TSubclassOf<UDamageType> DamageTypeClass, const FHitResult & HitInfo, AController* Instigator, AEHCharacter* DamageCausor)
 {
 	//데미지 계산
-	float resultDammage = UStatCalculationLibrary::CalNormalDamage(HeroStat, InDamage * HeroStat.MoreDamageTaken);
+	float resultDamage = UStatCalculationLibrary::CalNormalDamage(HeroStat, InDamage * HeroStat.MoreDamageTaken);
+	if (resultDamage > 0)
+	{
+		APlayingGameMode *GameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode());
+		if (GameMode)
+		{
+			GameMode->UpdateGameStateReceiveDamage();
+		}
+	}
 	
 	//FString Message = FString::Printf(TEXT("Health : %f"), HeroStat.Health);
 	//GEngine->AddOnScreenDebugMessage(-1, 1233223.f, FColor::Green, Message);
@@ -106,7 +114,7 @@ float UStatComponent::DamageTaken(float InDamage, TSubclassOf<UDamageType> Damag
 		GEngine->AddOnScreenDebugMessage(-1, 1233223.f, FColor::Green, Message);
 	}
 
-	return resultDammage;
+	return resultDamage;
 }
 
 
@@ -278,6 +286,26 @@ float UStatComponent::GetIncreasedExpGain() const
 float UStatComponent::GetJumpPower() const
 {
 	return HeroStat.JumpPower;
+}
+
+float UStatComponent::GetKillCount() const
+{
+	return KillCount;
+}
+
+float UStatComponent::GetGivenDamage() const
+{
+	return GivenDamage;
+}
+
+float UStatComponent::GetReceiveDamage() const
+{
+	return ReceiveDamage;
+}
+
+float UStatComponent::GetHeal() const
+{
+	return Heal;
 }
 
 /*****************************************/

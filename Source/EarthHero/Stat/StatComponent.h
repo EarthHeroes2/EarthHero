@@ -89,6 +89,18 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Stat")
 	float GetJumpPower() const;
 
+	UFUNCTION(BlueprintPure, Category = "Stat")
+	float GetKillCount() const;
+
+	UFUNCTION(BlueprintPure, Category = "Stat")
+	float GetGivenDamage() const;
+
+	UFUNCTION(BlueprintPure, Category = "Stat")
+	float GetReceiveDamage() const;
+	
+	UFUNCTION(BlueprintPure, Category = "Stat")
+	float GetHeal() const;
+
 	UFUNCTION()
 	virtual void OnRep_HeroStat();
 
@@ -107,7 +119,23 @@ protected:
 	FStatStructure BaseHeroStat;
 
 	UFUNCTION()
-	void OnRep_BaseHeroStat();	
+	void OnRep_BaseHeroStat();
+
+	//총 킬 수
+	UPROPERTY()
+	int KillCount = 0;
+
+	//공격한 대상이 죽었는지
+	bool IsDead = true;
+
+	//총 준 데미지
+	float GivenDamage = 0;
+
+	//총 받은 데미지
+	float ReceiveDamage = 0;
+
+	//총 힐량(흡혈, 팀원 회복)
+	float Heal = 0;
 
 private:
 	
@@ -127,5 +155,4 @@ private:
 	class UHeroUpgradeComponent *HeroUpgradeComponent;
 
 	FTimerHandle InitializeTimerHandle;
-
 };
