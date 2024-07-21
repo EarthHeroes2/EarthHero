@@ -199,19 +199,14 @@ void APlayingGameState::OnRep_GameStateActorRotations() const
 	}
 }
 
-void APlayingGameState::SetGameStateForceField(const TArray<float> ExpansionDurations, const TArray<FVector2D> ForceFieldLocations)
+void APlayingGameState::OnRep_GameStateExpansionDurations() const
 {
-	AllExpansionDurations = ExpansionDurations;
-	AllForceFieldLocations = ForceFieldLocations;
-
-	GetWorld()->GetTimerManager().SetTimer(SetForceFieldTimerHandle, this, &APlayingGameState::SetForceField, 0.5, true);
 }
 
-void APlayingGameState::SetForceField()
+void APlayingGameState::OnRep_GameStateForceFieldLocations() const
 {
-	if(EHPlayerController && EHPlayerController->TabHUD)
+	if (EHPlayerController && EHPlayerController->TabHUD)
 	{
-		GetWorld()->GetTimerManager().ClearTimer(SetForceFieldTimerHandle);
 		UE_LOG(LogTemp, Log, TEXT("junmoon10"));
 		for (int index = 0; index <= 3; index++)
 		{
@@ -230,6 +225,13 @@ void APlayingGameState::SetForceField()
 		}
 	}
 }
+
+void APlayingGameState::SetGameStateForceField(const TArray<float> ExpansionDurations, const TArray<FVector2D> ForceFieldLocations)
+{
+	AllExpansionDurations = ExpansionDurations;
+	AllForceFieldLocations = ForceFieldLocations;
+}
+
 void APlayingGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);

@@ -62,9 +62,9 @@ public:
 	TArray<float> AllActorRotations;
 	UPROPERTY(Replicated)
 	int32 AllPlayerNumbers;
-	UPROPERTY(Replicated)
+	UPROPERTY(ReplicatedUsing = OnRep_GameStateExpansionDurations)
 	TArray<float> AllExpansionDurations;
-	UPROPERTY(Replicated)
+	UPROPERTY(ReplicatedUsing = OnRep_GameStateForceFieldLocations)
 	TArray<FVector2D> AllForceFieldLocations;
 
 	UFUNCTION()
@@ -91,7 +91,8 @@ public:
 	void OnRep_GameStateActorLocations() const;
 	UFUNCTION()
 	void OnRep_GameStateActorRotations() const;
-private:
-	FTimerHandle SetForceFieldTimerHandle;
-	void SetForceField();
+	UFUNCTION()
+	void OnRep_GameStateExpansionDurations() const;
+	UFUNCTION()
+	void OnRep_GameStateForceFieldLocations() const;
 };
