@@ -74,9 +74,10 @@ void UWorldMapWidget::UpdateForceField(int32 ForceFieldIndex, float CurrentTime,
     }
 }
 
-void UWorldMapWidget::SetForceFieldAlignment(int32 ForceFieldIndex, const FVector2D& Alignment)
+void UWorldMapWidget::SetForceFieldAlignment(int32 ForceFieldIndex, const FVector2D& WorldPosition)
 {
-    ForceFieldAlignments[ForceFieldIndex] = Alignment;
+    FVector2D MapPosition = ConvertWorldToMapPosition(WorldPosition);
+    ForceFieldAlignments[ForceFieldIndex] = MapPosition;
 
     UImage* ForceFieldImages[4] = { ForceField1Image, ForceField2Image, ForceField3Image, ForceField4Image };
     if (ForceFieldImages[ForceFieldIndex])
@@ -84,8 +85,8 @@ void UWorldMapWidget::SetForceFieldAlignment(int32 ForceFieldIndex, const FVecto
         UCanvasPanelSlot* CanvasSlot = UWidgetLayoutLibrary::SlotAsCanvasSlot(ForceFieldImages[ForceFieldIndex]);
         if (CanvasSlot)
         {
-            UE_LOG(LogTemp, Log, TEXT("Alignment: %s"), *Alignment.ToString());
-            CanvasSlot->SetAlignment(Alignment);
+            UE_LOG(LogTemp, Log, TEXT("Alignment: %s"), *MapPosition.ToString());
+            CanvasSlot->SetAlignment(MapPosition);
         }
     }
 }
