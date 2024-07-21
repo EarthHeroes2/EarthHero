@@ -216,21 +216,28 @@ void APlayingGameMode::SpawnForceFieldAtLocation(FVector2D Location, float Expan
 void APlayingGameMode::InitSeamlessTravelPlayer(AController* NewController) //아니면... GenericPlayerInitialization?
 {
 	Super::InitSeamlessTravelPlayer(NewController);
-	
+
+	UE_LOG(LogClass, Warning, TEXT("Seungule1"));
 	APlayerController* NewPlayerController = Cast<APlayerController>(NewController);
 
 	if(NewPlayerController)
 	{
+		UE_LOG(LogClass, Warning, TEXT("Seungule2"));
 		AEHPlayerController* NewEHPlayerController = Cast<AEHPlayerController>(NewController);
 		if(NewEHPlayerController)
 		{
+			UE_LOG(LogClass, Warning, TEXT("Seungule3"));
 			APlayingGameSession* PlayingGameSession = Cast<APlayingGameSession>(GameSession);
 			if (PlayingGameSession)
 			{
+				UE_LOG(LogClass, Warning, TEXT("Seungule4"));
 				EHPlayerControllers.Add(NewEHPlayerController);
-				
+				UE_LOG(LogClass, Warning, TEXT("Seungule5, EHPlayerControllers num : %d"), EHPlayerControllers.Num());
 				//세션 속 모든 플레이어가 레벨에 들어왔다면 레벨 초기 작업 시작
-				if(EHPlayerControllers.Num() == PlayingGameSession->GetNumPlayersInSession()) InitLevelSetting();
+				if(EHPlayerControllers.Num() == PlayingGameSession->GetNumPlayersInSession())
+				{
+					InitLevelSetting();
+				}
 			}
 		}
 	}
@@ -244,7 +251,7 @@ void APlayingGameMode::InitLevelSetting()
 		//AActor* TargetPlayerStart = FindPlayerStart(EHPlayerControllers[i], FString::FromInt(i));
 		//RestartPlayerAtPlayerStart(EHPlayerControllers[i], TargetPlayerStart);
 	}
-
+	
 	//패키징 테스트 할  때 시도
 	UE_LOG(LogTemp, Log, TEXT("junmoon3"));
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEHCharacter::StaticClass(), Players);
