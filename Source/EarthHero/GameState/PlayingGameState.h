@@ -62,7 +62,9 @@ public:
 	TArray<float> AllActorRotations;
 	UPROPERTY(Replicated)
 	int32 AllPlayerNumbers;
+	UPROPERTY(Replicated)
 	TArray<float> AllExpansionDurations;
+	UPROPERTY(Replicated)
 	TArray<FVector2D> AllForceFieldLocations;
 
 	UFUNCTION()

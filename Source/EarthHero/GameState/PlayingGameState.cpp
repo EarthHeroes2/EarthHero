@@ -228,4 +228,6 @@ void APlayingGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME(APlayingGameState, AllActorLocations);
 	DOREPLIFETIME(APlayingGameState, AllActorRotations);
 	DOREPLIFETIME(APlayingGameState, AllPlayerNumbers);
+	DOREPLIFETIME(APlayingGameState, AllExpansionDurations);
+	DOREPLIFETIME(APlayingGameState, AllForceFieldLocations);
 }
