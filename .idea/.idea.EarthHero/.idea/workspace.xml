@@ -79,15 +79,10 @@
   <component name="ChangeListManager">
     <list default="true" id="4591bad7-fd9f-4860-903f-8700cd913377" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Item/BP_ExpItem.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Item/BP_ExpItem.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/EarthHero/GameMode/PlayingGameMode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/GameMode/PlayingGameMode.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/GameMode/PlayingGameMode.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/GameMode/PlayingGameMode.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/GameState/PlayingGameState.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/GameState/PlayingGameState.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/GameState/PlayingGameState.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/GameState/PlayingGameState.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/EarthHero/HUD/TabHUDWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/TabHUDWidget.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/HUD/TabHUDWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/TabHUDWidget.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Stat/StatComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Stat/StatComponent.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Stat/StatComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Stat/StatComponent.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/HUD/WorldMapWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/WorldMapWidget.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerState.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerState.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -323,7 +318,7 @@
       <workItem from="1721311697814" duration="1781000" />
       <workItem from="1721400203486" duration="5030000" />
       <workItem from="1721446178481" duration="8702000" />
-      <workItem from="1721541146558" duration="3450000" />
+      <workItem from="1721541146558" duration="6614000" />
     </task>
     <servers />
   </component>

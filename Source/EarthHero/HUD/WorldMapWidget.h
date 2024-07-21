@@ -53,4 +53,6 @@ private:
     TArray<float> ForceFieldGrowthRates;
     TArray<float> ForceFieldStartTimes;
     TArray<FVector2D> ForceFieldAlignments;
+
+    float TempRotation = 0.f;
 };

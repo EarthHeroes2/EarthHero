@@ -6,6 +6,7 @@
 #include "Components/EditableTextBox.h"
 
 #include "Engine/Texture2D.h"
+#include "Kismet/GameplayStatics.h"
 
 bool UTabHUDWidget::Initialize()
 {
@@ -19,6 +20,16 @@ bool UTabHUDWidget::Initialize()
 	TabUserBasicStatsArray.Add(BP_TabBasicStatsInfo_2);
 	TabUserBasicStatsArray.Add(BP_TabBasicStatsInfo_3);
 	TabUserBasicStatsArray.Add(BP_TabBasicStatsInfo_4);
+
+	InterpolatedPositions.Add(FVector2D(0, 0));
+	InterpolatedPositions.Add(FVector2D(0, 0));
+	InterpolatedPositions.Add(FVector2D(0, 0));
+	InterpolatedPositions.Add(FVector2D(0, 0));
+	InterpolatedRotations.Add(0);
+	InterpolatedRotations.Add(0);
+	InterpolatedRotations.Add(0);
+	InterpolatedRotations.Add(0);
+	
 	
 	return true;
 }
@@ -210,16 +221,16 @@ void UTabHUDWidget::UpdatePlayerImagesInWorldMap(const TArray<FVector2D>& Player
 {
 	if (BP_WorldMap)
 	{
-		float DeltaTime = GetWorld()->GetDeltaSeconds();
+		float DeltaTime = UGameplayStatics::GetWorldDeltaSeconds(this);
 
 		for (int32 i = 0; i < NumPlayers; ++i)
 		{
-			// InterpolatedPositions[i] = FMath::Vector2DInterpTo(InterpolatedPositions[i], PlayerPositions[i], DeltaTime, 0.1);
-			// InterpolatedRotations[i] = FMath::FInterpTo(InterpolatedRotations[i], PlayerRotations[i], DeltaTime, 0.1);
-			// BP_WorldMap->SetPlayerPosition(i, InterpolatedPositions[i]);
-			// BP_WorldMap->SetPlayerRotation(i, InterpolatedRotations[i]);
-			BP_WorldMap->SetPlayerPosition(i, PlayerPositions[i]);
-			BP_WorldMap->SetPlayerRotation(i, PlayerRotations[i]);
+			InterpolatedPositions[i] = FMath::Vector2DInterpTo(InterpolatedPositions[i], PlayerPositions[i], DeltaTime, 10.f);
+			InterpolatedRotations[i] = FMath::RInterpTo(FRotator(0,InterpolatedRotations[i],0), FRotator(0, PlayerRotations[i],0), DeltaTime, 10.f).Yaw;
+			BP_WorldMap->SetPlayerPosition(i, InterpolatedPositions[i]);
+			BP_WorldMap->SetPlayerRotation(i, InterpolatedRotations[i]);
+			// BP_WorldMap->SetPlayerPosition(i, PlayerPositions[i]);
+			// BP_WorldMap->SetPlayerRotation(i, PlayerRotations[i]);
 		}
 
 		// 인원 수 보내면 인원 수 넘는 애들은 숨김
