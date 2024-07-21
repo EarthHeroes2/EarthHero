@@ -103,7 +103,7 @@ void UTabHUDWidget::UpdateForceField(int32 ForceFieldIndex, float CurrentTime, f
 {
 	if (BP_WorldMap)
 	{
-		UE_LOG(LogTemp, Log, TEXT("CurrentTime: %f"), CurrentTime);
+		UE_LOG(LogTemp, Log, TEXT("ForceFieldIndex : %d, CurrentTime: %f, GrowthDuration : %f") ,ForceFieldIndex, CurrentTime, GrowthDuration);
 		BP_WorldMap->UpdateForceField(ForceFieldIndex, CurrentTime, GrowthDuration);
 	}
 }
