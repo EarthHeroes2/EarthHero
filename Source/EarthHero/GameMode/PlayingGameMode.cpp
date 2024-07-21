@@ -18,18 +18,12 @@ APlayingGameMode::APlayingGameMode()
 void APlayingGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-
-	UE_LOG(LogTemp, Log, TEXT("junmoon7"));
 	
 	bUseSeamlessTravel = true;
 	SpawnForceFields();
-
-	UE_LOG(LogTemp, Log, TEXT("junmoon8"));
 	
 	//플레이어들 설정(임시)
 	GetWorldTimerManager().SetTimer(GetActorsTimer, this, &APlayingGameMode::GetAllActorsInLevel, 2, true);
-	
-	UE_LOG(LogTemp, Log, TEXT("junmoon9"));
 }
 
 void APlayingGameMode::GetAllActorsInLevel()
@@ -40,10 +34,8 @@ void APlayingGameMode::GetAllActorsInLevel()
 	{
 		UE_LOG(LogClass, Warning, TEXT("GetAllActorsInLevel Success"));
 		GetWorldTimerManager().ClearTimer(GetActorsTimer);
-		UE_LOG(LogTemp, Log, TEXT("junmoon3"));
 		APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
 		PlayingGameState->SetGameStateForceField(ExpansionDurations, ForceFieldLocations);
-		UE_LOG(LogTemp, Log, TEXT("junmoon4"));
 	}
 }
 

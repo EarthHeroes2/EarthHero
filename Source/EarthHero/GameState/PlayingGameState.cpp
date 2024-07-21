@@ -39,9 +39,7 @@ void APlayingGameState::OnRep_GameTimerSec() const
 	{
 		for (int index = 0; index <= 3; index++)
 		{
-			UE_LOG(LogTemp, Log, TEXT("junmoon1"));
 			EHPlayerController->TabHUD->UpdateForceField(index, GameTimerSec, AllExpansionDurations[index]);
-			UE_LOG(LogTemp, Log, TEXT("junmoon2"));
 		}
 	}
 }
@@ -207,21 +205,9 @@ void APlayingGameState::OnRep_GameStateForceFieldLocations() const
 {
 	if (EHPlayerController && EHPlayerController->TabHUD)
 	{
-		UE_LOG(LogTemp, Log, TEXT("junmoon10"));
 		for (int index = 0; index <= 3; index++)
 		{
 			EHPlayerController->TabHUD->SetForceFieldAlignment(index, AllForceFieldLocations[index]);
-		}
-	}
-	else
-	{
-		if (!EHPlayerController)
-		{
-			UE_LOG(LogTemp, Log, TEXT("junmoon9.5 : EHPlayerController"));
-		}
-		else if (!EHPlayerController->TabHUD)
-		{
-			UE_LOG(LogTemp, Log, TEXT("junmoon9.5"));
 		}
 	}
 }

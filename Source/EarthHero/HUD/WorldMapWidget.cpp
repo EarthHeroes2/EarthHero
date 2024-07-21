@@ -5,7 +5,6 @@
 
 void UWorldMapWidget::NativeConstruct()
 {
-    UE_LOG(LogTemp, Log, TEXT("junmoon5"));
     Super::NativeConstruct();
 
     ForceFieldCurrentSizes.Init(0.0f, 4);
@@ -13,7 +12,6 @@ void UWorldMapWidget::NativeConstruct()
     ForceFieldGrowthRates.Init(0.0f, 4);
     ForceFieldStartTimes.Init(0.0f, 4);
     ForceFieldAlignments.Init(FVector2D(0.5f, 0.5f), 4);
-    UE_LOG(LogTemp, Log, TEXT("junmoon6"));
 }
 
 FVector2D UWorldMapWidget::ConvertWorldToMapPosition(const FVector2D& WorldPosition) const
@@ -54,7 +52,6 @@ void UWorldMapWidget::UpdateForceField(int32 ForceFieldIndex, float CurrentTime,
 {
     if (ForceFieldStartTimes[ForceFieldIndex] == 0.0f)
     {
-        UE_LOG(LogTemp, Log, TEXT("junmoon20"));
         ForceFieldStartTimes[ForceFieldIndex] = CurrentTime;
         ForceFieldTargetSizes[ForceFieldIndex] = 500.0f;
         ForceFieldGrowthRates[ForceFieldIndex] = 500.0f / GrowthDuration;

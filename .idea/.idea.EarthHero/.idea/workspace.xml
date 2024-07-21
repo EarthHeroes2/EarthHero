@@ -78,7 +78,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4591bad7-fd9f-4860-903f-8700cd913377" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/GameMode/PlayingGameMode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/GameMode/PlayingGameMode.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/GameState/PlayingGameState.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/GameState/PlayingGameState.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/HUD/TabHUDWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/TabHUDWidget.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/HUD/WorldMapWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/WorldMapWidget.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -316,6 +319,7 @@
       <workItem from="1721446178481" duration="8702000" />
       <workItem from="1721541146558" duration="6614000" />
       <workItem from="1721548780491" duration="8424000" />
+      <workItem from="1721567559028" duration="704000" />
     </task>
     <servers />
   </component>
