@@ -36,7 +36,7 @@ void APlayingGameMode::GetAllActorsInLevel()
 {
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEHCharacter::StaticClass(), Players);
 	UE_LOG(LogClass, Warning, TEXT("Players.Num: %d"), Players.Num());
-	if (Players.Num() == 1)
+	if (Players.Num() == 1 && EHPlayerControllers.IsValidIndex(0) && EHPlayerControllers.Num() == Players.Num())
 	{
 		UE_LOG(LogClass, Warning, TEXT("GetAllActorsInLevel Success"));
 		GetWorldTimerManager().ClearTimer(GetActorsTimer);
