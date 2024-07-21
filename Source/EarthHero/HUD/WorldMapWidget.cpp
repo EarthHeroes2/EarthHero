@@ -85,9 +85,8 @@ void UWorldMapWidget::SetForceFieldAlignment(int32 ForceFieldIndex, const FVecto
         UCanvasPanelSlot* CanvasSlot = UWidgetLayoutLibrary::SlotAsCanvasSlot(ForceFieldImages[ForceFieldIndex]);
         if (CanvasSlot)
         {
-            UE_LOG(LogTemp, Log, TEXT("Alignment: %s"), *MapPosition.ToString());
-            CanvasSlot->SetAlignment(MapPosition);
+            UE_LOG(LogTemp, Log, TEXT("Position: %s"), *MapPosition.ToString());
+            CanvasSlot->SetPosition(MapPosition);
         }
     }
 }
-
