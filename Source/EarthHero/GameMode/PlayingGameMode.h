@@ -27,6 +27,9 @@ class EARTHHERO_API APlayingGameMode : public AGameModeBase
 	FTimerHandle GetActorsTimer;
 	void GetAllActorsInLevel();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true), Category = "ForceField")
+	TSubclassOf<class AForceField> ForceFieldActor;
+
 protected:
 	virtual void Tick(float DeltaSeconds) override;
 	void UpdateWorldMapInfo();

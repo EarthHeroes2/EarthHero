@@ -52,10 +52,8 @@ void UWorldMapWidget::SetPlayerRotation(int32 PlayerIndex, float Rotation)
 
 void UWorldMapWidget::UpdateForceField(int32 ForceFieldIndex, float CurrentTime, float GrowthDuration)
 {
-    UE_LOG(LogTemp, Log, TEXT("junmoon11"));
     if (ForceFieldStartTimes[ForceFieldIndex] == 0.0f)
     {
-        UE_LOG(LogTemp, Log, TEXT("junmoon12"));
         ForceFieldStartTimes[ForceFieldIndex] = CurrentTime;
         ForceFieldTargetSizes[ForceFieldIndex] = 500.0f;
         ForceFieldGrowthRates[ForceFieldIndex] = 500.0f / GrowthDuration;
@@ -65,12 +63,10 @@ void UWorldMapWidget::UpdateForceField(int32 ForceFieldIndex, float CurrentTime,
     UImage* ForceFieldImages[4] = { ForceField1Image, ForceField2Image, ForceField3Image, ForceField4Image };
     if (ForceFieldImages[ForceFieldIndex] && ElapsedTime <= GrowthDuration)
     {
-        UE_LOG(LogTemp, Log, TEXT("junmoon13"));
         ForceFieldCurrentSizes[ForceFieldIndex] = FMath::Min(ForceFieldGrowthRates[ForceFieldIndex] * ElapsedTime, ForceFieldTargetSizes[ForceFieldIndex]);
         UCanvasPanelSlot* CanvasSlot = UWidgetLayoutLibrary::SlotAsCanvasSlot(ForceFieldImages[ForceFieldIndex]);
         if (CanvasSlot)
         {
-            UE_LOG(LogTemp, Log, TEXT("junmoon14"));
             CanvasSlot->SetSize(FVector2D(ForceFieldCurrentSizes[ForceFieldIndex], ForceFieldCurrentSizes[ForceFieldIndex]));
         }
     }

@@ -27,7 +27,7 @@ void APlayingGameMode::BeginPlay()
 	UE_LOG(LogTemp, Log, TEXT("junmoon8"));
 	
 	//플레이어들 설정(임시)
-	GetWorldTimerManager().SetTimer(GetActorsTimer, this, &APlayingGameMode::GetAllActorsInLevel, 2, true);
+	//GetWorldTimerManager().SetTimer(GetActorsTimer, this, &APlayingGameMode::GetAllActorsInLevel, 2, true);
 	
 	UE_LOG(LogTemp, Log, TEXT("junmoon9"));
 }
@@ -177,39 +177,37 @@ void APlayingGameMode::GenerateRandomDurations(int Count, float Min, float Max, 
 
 void APlayingGameMode::SpawnForceFieldAtLocation(FVector2D Location, float ExpansionDuration)
 {
+	if (ForceFieldActor == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("ForceFieldActor class not set in GameMode"));
+		return;
+	}
+
 	UWorld* World = GetWorld();
 	if (World)
 	{
-		FString AssetPath = TEXT("Blueprint'/Game/Blueprints/ForceField/BP_ForceField.BP_ForceField_C'");
-		UClass* ForceFieldClass = StaticLoadClass(AActor::StaticClass(), nullptr, *AssetPath);
-		if (ForceFieldClass)
-		{
-			FActorSpawnParameters SpawnParams;
-			SpawnParams.Owner = this;
-			SpawnParams.Instigator = GetInstigator();
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = this;
+		SpawnParams.Instigator = GetInstigator();
 
-			FRotator SpawnRotation = FRotator::ZeroRotator;
-			FVector SpawnLocation = FVector(Location, 0.0f); // Convert FVector2D to FVector
-			AActor* SpawnedForceField = World->SpawnActor<AActor>(ForceFieldClass, SpawnLocation, SpawnRotation, SpawnParams);
-			if (SpawnedForceField)
+		FRotator SpawnRotation = FRotator::ZeroRotator;
+		FVector SpawnLocation = FVector(Location, 0.0f); // Convert FVector2D to FVector
+
+		AActor* SpawnedForceField = World->SpawnActor<AActor>(ForceFieldActor, SpawnLocation, SpawnRotation, SpawnParams);
+		if (SpawnedForceField)
+		{
+			AForceField* ForceField = Cast<AForceField>(SpawnedForceField);
+			if (ForceField)
 			{
-				AForceField* ForceField = Cast<AForceField>(SpawnedForceField);
-				if (ForceField)
-				{
-					// Each force field gets a new curve created
-					UCurveFloat* NewCurve = NewObject<UCurveFloat>();
-					NewCurve->FloatCurve.AddKey(0.0f, 0.0f);
-					NewCurve->FloatCurve.AddKey(ExpansionDuration, 1.0f);
-					ForceField->SetCustomCurve(NewCurve);
-					ForceField->SetExpansionDuration(ExpansionDuration);
+				// Each force field gets a new curve created
+				UCurveFloat* NewCurve = NewObject<UCurveFloat>();
+				NewCurve->FloatCurve.AddKey(0.0f, 0.0f);
+				NewCurve->FloatCurve.AddKey(ExpansionDuration, 1.0f);
+				ForceField->SetCustomCurve(NewCurve);
+				ForceField->SetExpansionDuration(ExpansionDuration);
 
-					UE_LOG(LogTemp, Warning, TEXT("Spawned ForceField at location: %s with duration: %f"), *SpawnLocation.ToString(), ExpansionDuration);
-				}
+				UE_LOG(LogTemp, Warning, TEXT("Spawned ForceField at location: %s with duration: %f"), *SpawnLocation.ToString(), ExpansionDuration);
 			}
-		}
-		else
-		{
-			UE_LOG(LogTemp, Error, TEXT("Could not load ForceField Blueprint class"));
 		}
 	}
 }
@@ -247,14 +245,13 @@ void APlayingGameMode::InitLevelSetting()
 		//RestartPlayerAtPlayerStart(EHPlayerControllers[i], TargetPlayerStart);
 	}
 
-	/*
 	//패키징 테스트 할  때 시도
 	UE_LOG(LogTemp, Log, TEXT("junmoon3"));
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEHCharacter::StaticClass(), Players);
 	UE_LOG(LogTemp, Log, TEXT("junmoon3.5"));
+	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
 	PlayingGameState->SetGameStateForceField(ExpansionDurations, ForceFieldLocations);
 	UE_LOG(LogTemp, Log, TEXT("junmoon4"));
-	*/
 }
 
 void APlayingGameMode::PlayerControllerReady() //조금 느리지만 안전하게 다 확인하고
