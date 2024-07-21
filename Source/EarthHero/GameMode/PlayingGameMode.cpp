@@ -23,7 +23,7 @@ void APlayingGameMode::BeginPlay()
 	SpawnForceFields();
 
 	//플레이어들 설정(임시)
-	GetWorldTimerManager().SetTimer(GetActorsTimer, this, &APlayingGameMode::GetAllActorsInLevel, 2, true);
+	//GetWorldTimerManager().SetTimer(GetActorsTimer, this, &APlayingGameMode::GetAllActorsInLevel, 2, true);
 }
 
 void APlayingGameMode::GetAllActorsInLevel()
@@ -33,8 +33,8 @@ void APlayingGameMode::GetAllActorsInLevel()
 	{
 		UE_LOG(LogClass, Warning, TEXT("GetAllActorsInLevel Success"));
 		GetWorldTimerManager().ClearTimer(GetActorsTimer);
-		//APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
-		//PlayingGameState->SetGameStateForceField(ExpansionDurations, ForceFieldLocations);
+		APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
+		PlayingGameState->SetGameStateForceField(ExpansionDurations, ForceFieldLocations);
 	}
 }
 
@@ -240,7 +240,7 @@ void APlayingGameMode::InitLevelSetting()
 	}
 
 	//패키징 테스트 할  때 시도
-	//UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEHCharacter::StaticClass(), Players);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEHCharacter::StaticClass(), Players);
 }
 
 void APlayingGameMode::PlayerControllerReady() //조금 느리지만 안전하게 다 확인하고
