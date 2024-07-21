@@ -19,6 +19,7 @@ void APlayingGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
+	PlayingGameState = Cast<APlayingGameState>(GameState);
 	bUseSeamlessTravel = true;
 	SpawnForceFields();
 
@@ -33,7 +34,6 @@ void APlayingGameMode::GetAllActorsInLevel()
 	{
 		UE_LOG(LogClass, Warning, TEXT("GetAllActorsInLevel Success"));
 		GetWorldTimerManager().ClearTimer(GetActorsTimer);
-		APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
 		PlayingGameState->SetGameStateForceField(ExpansionDurations, ForceFieldLocations);
 	}
 }
@@ -59,8 +59,7 @@ void APlayingGameMode::UpdateWorldMapInfo()
 		}
 		//UE_LOG(LogClass, Warning, TEXT("UpdateWorldMapInfo"));
 	}
-
-	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
+	
 	PlayingGameState->UpdateGameStateWorldMaps(ActorLocations, ActorRotations, Players.Num());
 }
 
@@ -351,7 +350,7 @@ void APlayingGameMode::GameTimerCount()
 {
 	GameTimer++;
 
-	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
+	PlayingGameState = Cast<APlayingGameState>(GameState);
 	PlayingGameState->UpdateHUDGameTimer(GameTimer);
 }
 
@@ -377,7 +376,7 @@ void APlayingGameMode::UpdateGameStateHealths()
 		}
 	}
 
-	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
+	PlayingGameState = Cast<APlayingGameState>(GameState);
 	PlayingGameState->UpdateGameStateHealths(PlayerMaxHealths, PlayerCurrentHealths);
 }
 
@@ -399,7 +398,7 @@ void APlayingGameMode::UpdateGameStateLevels()
 		}
 	}
 
-	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
+	PlayingGameState = Cast<APlayingGameState>(GameState);
 	PlayingGameState->UpdateGameStateLevels(PlayerLevels);
 }
 
@@ -421,7 +420,7 @@ void APlayingGameMode::UpdateGameStateExps()
 		}
 	}
 
-	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
+	PlayingGameState = Cast<APlayingGameState>(GameState);
 	PlayingGameState->UpdateGameStateExps(PlayerExps);
 }
 
@@ -437,7 +436,7 @@ void APlayingGameMode::UpdateGameStateNames()
 		}
 	}
 
-	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
+	PlayingGameState = Cast<APlayingGameState>(GameState);
 	PlayingGameState->UpdateGameStateNames(PlayerNames);
 }
 
@@ -455,7 +454,7 @@ void APlayingGameMode::UpdateGameStateClasses()
 		}
 	}
 	
-	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
+	PlayingGameState = Cast<APlayingGameState>(GameState);
 	PlayingGameState->UpdateGameStateClasses(PlayerClasses);
 }
 
@@ -477,7 +476,7 @@ void APlayingGameMode::UpdateGameStateKillCount()
 		}
 	}
 
-	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
+	PlayingGameState = Cast<APlayingGameState>(GameState);
 	PlayingGameState->UpdateGameStateKillCount(PlayerKillCount);
 }
 
@@ -499,7 +498,7 @@ void APlayingGameMode::UpdateGameStateDamage()
 		}
 	}
 	
-	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
+	PlayingGameState = Cast<APlayingGameState>(GameState);
 	PlayingGameState->UpdateGameStateGivenDamage(PlayerGivenDamage);
 }
 
@@ -521,7 +520,7 @@ void APlayingGameMode::UpdateGameStateReceiveDamage()
 		}
 	}
 	
-	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
+	PlayingGameState = Cast<APlayingGameState>(GameState);
 	PlayingGameState->UpdateGameStateReceiveDamage(PlayerReceiveDamage);
 }
 
@@ -543,7 +542,7 @@ void APlayingGameMode::UpdateGameStateHeal()
 		}
 	}
 
-	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
+	PlayingGameState = Cast<APlayingGameState>(GameState);
 	PlayingGameState->UpdateGameStateHeal(PlayerHeal);
 }
 

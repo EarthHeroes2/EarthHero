@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "EarthHero/GameState/PlayingGameState.h"
 #include "GameFramework/GameModeBase.h"
 #include "PlayingGameMode.generated.h"
 
@@ -35,6 +36,7 @@ protected:
 	
 public:
 	APlayingGameMode();
+	APlayingGameState* PlayingGameState;
 	int NumPlayersInSession;
 	int GameTimer = 0;
 

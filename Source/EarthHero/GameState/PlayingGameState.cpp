@@ -44,7 +44,6 @@ void APlayingGameState::OnRep_GameTimerSec() const
 	// }
 }
 
-
 void APlayingGameState::UpdateGameStateHealths(const TArray<float>& PlayerMaxHealths, const TArray<float>& PlayerCurrentHealths)
 {
 	AllPlayerMaxHealths = PlayerMaxHealths;
@@ -60,7 +59,6 @@ void APlayingGameState::OnRep_GameStateHealths() const //일단은 현재 체력
 	}
 }
 
-
 void APlayingGameState::UpdateGameStateLevels(const TArray<int>& PlayerLevels)
 {
 	AllPlayerLevels = PlayerLevels;
@@ -74,7 +72,6 @@ void APlayingGameState::OnRep_GameStateLevels() const
 		EHPlayerController->TabHUD->UpdatePlayerLevels(AllPlayerLevels);
 	}
 }
-
 
 void APlayingGameState::UpdateGameStateExps(const TArray<float>& PlayerExps)
 {
@@ -90,11 +87,11 @@ void APlayingGameState::OnRep_GameStateExps() const
 	}
 }
 
-
 void APlayingGameState::UpdateGameStateClasses(const TArray<int>& PlayerClasses)
 {
 	AllPlayerClasses = PlayerClasses;
 }
+
 void APlayingGameState::OnRep_GameStateClasses() const
 {
 	UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateClasses"));
@@ -104,11 +101,11 @@ void APlayingGameState::OnRep_GameStateClasses() const
 	}
 }
 
-
 void APlayingGameState::UpdateGameStateNames(const TArray<FString>& PlayerNames)
 {
 	AllPlayerNames = PlayerNames;
 }
+
 void APlayingGameState::OnRep_GameStateNames() const
 {
 	UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateNames"));
@@ -118,11 +115,11 @@ void APlayingGameState::OnRep_GameStateNames() const
 	}
 }
 
-
 void APlayingGameState::UpdateGameStateKillCount(const TArray<int> PlayerKillCount)
 {
 	AllPlayerKillCount = PlayerKillCount;
 }
+
 void APlayingGameState::OnRep_GameStateKillCount() const
 {
 	UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateKillCount"));
@@ -132,11 +129,11 @@ void APlayingGameState::OnRep_GameStateKillCount() const
 	}
 }
 
-
 void APlayingGameState::UpdateGameStateGivenDamage(const TArray<float> PlayerGivenDamage)
 {
 	AllPlayerGivenDamage = PlayerGivenDamage;
 }
+
 void APlayingGameState::OnRep_GameStateGivenDamage() const
 {
 	UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateGivenDamage"));
@@ -146,11 +143,11 @@ void APlayingGameState::OnRep_GameStateGivenDamage() const
 	}
 }
 
-
 void APlayingGameState::UpdateGameStateReceiveDamage(const TArray<float> PlayerReceiveDamage)
 {
 	AllPlayerReceiveDamage = PlayerReceiveDamage;
 }
+
 void APlayingGameState::OnRep_GameStateReceiveDamage() const
 {
 	UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateReceiveDamage"));
@@ -160,11 +157,11 @@ void APlayingGameState::OnRep_GameStateReceiveDamage() const
 	}
 }
 
-
 void APlayingGameState::UpdateGameStateHeal(const TArray<float> PlayerHeal)
 {
 	AllPlayerHeal = PlayerHeal;
 }
+
 void APlayingGameState::OnRep_GameStateHeal() const
 {
 	UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateHeal"));
@@ -173,7 +170,6 @@ void APlayingGameState::OnRep_GameStateHeal() const
 		EHPlayerController->TabHUD->UpdateGameStateHeal(AllPlayerHeal);
 	}
 }
-
 
 void APlayingGameState::UpdateGameStateWorldMaps(const TArray<FVector2D> ActorLocations, const TArray<float> ActorRotations,
 	const int32 PlayerNumbers)
@@ -191,6 +187,7 @@ void APlayingGameState::OnRep_GameStateActorLocations() const
 		EHPlayerController->TabHUD->UpdatePlayerImagesInWorldMap(AllActorLocations, AllActorRotations, AllPlayerNumbers);
 	}
 }
+
 void APlayingGameState::OnRep_GameStateActorRotations() const
 {
 	if(EHPlayerController && EHPlayerController->TabHUD)
@@ -212,7 +209,6 @@ void APlayingGameState::SetGameStateForceField(const TArray<float> ExpansionDura
 		}
 	}
 }
-
 
 void APlayingGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
