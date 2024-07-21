@@ -91,4 +91,7 @@ public:
 	void OnRep_GameStateActorLocations() const;
 	UFUNCTION()
 	void OnRep_GameStateActorRotations() const;
+private:
+	FTimerHandle SetForceFieldTimerHandle;
+	void SetForceField();
 };
