@@ -113,7 +113,7 @@ void UTabHUDWidget::SetForceFieldAlignment(int32 ForceFieldIndex, const FVector2
 {
 	if (BP_WorldMap)
 	{
-		BP_WorldMap->SetForceFieldAlignment(ForceFieldIndex - 1, Alignment); // Convert to 0-based index
+		BP_WorldMap->SetForceFieldAlignment(ForceFieldIndex, Alignment);
 	}
 }
 
