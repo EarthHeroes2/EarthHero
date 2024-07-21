@@ -33,6 +33,15 @@ void APlayingGameState::OnRep_GameTimerSec() const
 	{
 		EHPlayerController->HUD->UpdateGameTimer(GameTimerSec);
 	}
+
+	// Sec에 따라 forcefield 업데이트
+	// if (EHPlayerController && EHPlayerController->TabHUD)
+	// {
+	// 	for (int index = 0; index <= 3; index++)
+	// 	{
+	// 		EHPlayerController->TabHUD->UpdateForceField(index, GameTimerSec, AllExpansionDurations[index]);
+	// 	}
+	// }
 }
 
 
@@ -173,22 +182,37 @@ void APlayingGameState::UpdateGameStateWorldMaps(const TArray<FVector2D> ActorLo
 	AllActorRotations = ActorRotations;
 	AllPlayerNumbers = PlayerNumbers;
 }
+
 void APlayingGameState::OnRep_GameStateActorLocations() const
 {
-	UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateActorLocations"));
 	if(EHPlayerController && EHPlayerController->TabHUD)
 	{
+		UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateActorLocations"));
 		EHPlayerController->TabHUD->UpdatePlayerImagesInWorldMap(AllActorLocations, AllActorRotations, AllPlayerNumbers);
 	}
 }
 void APlayingGameState::OnRep_GameStateActorRotations() const
 {
-	UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateActorRotations"));
 	if(EHPlayerController && EHPlayerController->TabHUD)
 	{
+		UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateActorRotations"));
 		EHPlayerController->TabHUD->UpdatePlayerImagesInWorldMap(AllActorLocations, AllActorRotations, AllPlayerNumbers);
 	}
 }
+
+void APlayingGameState::SetGameStateForceField(const TArray<float> ExpansionDurations, const TArray<FVector2D> ForceFieldLocations)
+{
+	AllExpansionDurations = ExpansionDurations;
+	AllForceFieldLocations = ForceFieldLocations;
+	if(EHPlayerController && EHPlayerController->TabHUD)
+	{
+		for (int index = 0; index <= 3; index++)
+		{
+			EHPlayerController->TabHUD->SetForceFieldAlignment(index, AllForceFieldLocations[index]);
+		}
+	}
+}
+
 
 void APlayingGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
@@ -205,4 +229,5 @@ void APlayingGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME(APlayingGameState, AllPlayerHeal);
 	DOREPLIFETIME(APlayingGameState, AllActorLocations);
 	DOREPLIFETIME(APlayingGameState, AllActorRotations);
+	DOREPLIFETIME(APlayingGameState, AllPlayerNumbers);
 }

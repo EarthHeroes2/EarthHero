@@ -210,8 +210,14 @@ void UTabHUDWidget::UpdatePlayerImagesInWorldMap(const TArray<FVector2D>& Player
 {
 	if (BP_WorldMap)
 	{
+		float DeltaTime = GetWorld()->GetDeltaSeconds();
+
 		for (int32 i = 0; i < NumPlayers; ++i)
 		{
+			// InterpolatedPositions[i] = FMath::Vector2DInterpTo(InterpolatedPositions[i], PlayerPositions[i], DeltaTime, 0.1);
+			// InterpolatedRotations[i] = FMath::FInterpTo(InterpolatedRotations[i], PlayerRotations[i], DeltaTime, 0.1);
+			// BP_WorldMap->SetPlayerPosition(i, InterpolatedPositions[i]);
+			// BP_WorldMap->SetPlayerRotation(i, InterpolatedRotations[i]);
 			BP_WorldMap->SetPlayerPosition(i, PlayerPositions[i]);
 			BP_WorldMap->SetPlayerRotation(i, PlayerRotations[i]);
 		}

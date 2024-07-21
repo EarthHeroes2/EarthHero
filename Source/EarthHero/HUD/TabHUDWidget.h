@@ -116,4 +116,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "TabHUD")
 	void SetForceFieldAlignment(int32 ForceFieldIndex, const FVector2D& Alignment);
 
+private:
+	TArray<FVector2D> InterpolatedPositions;
+	TArray<float> InterpolatedRotations;
+
+	TArray<FVector2D> TargetPositions;
+	TArray<float> TargetRotations;
+
 };
+ 

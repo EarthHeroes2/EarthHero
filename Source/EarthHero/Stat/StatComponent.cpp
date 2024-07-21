@@ -21,7 +21,6 @@
 
 UStatComponent::UStatComponent()
 {
-
 	PrimaryComponentTick.bCanEverTick = true;
 	SetIsReplicatedByDefault(true);  // 컴포넌트가 네트워크에서 복제될 수 있도록 설정
 }
@@ -65,20 +64,17 @@ void UStatComponent::BeginPlay()
 	//GetWorldTimerManager().SetTimer(InitializeTimerHandle, this, &ThisClass::InitializeStatData, 1.f, true);
 	
 	InitializeStatData();
+	GetWorld()->GetTimerManager().SetTimer(RegenHealthTimerHandle, this, &UStatComponent::RegenHealthFunc, 1, true);
 }
 
-void UStatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UStatComponent::RegenHealthFunc()
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	//체력 재생 (1 * (1 + 체력 재생 능력치)) -> 타이머로 수정 예정
-	HeroStat.Health = HeroStat.Health + HeroStat.HealthRegeneration * DeltaTime;
+	HeroStat.Health = HeroStat.Health + HeroStat.HealthRegeneration * GetWorld()->DeltaTimeSeconds;
 	if (HeroStat.Health > HeroStat.MaxHealth)
 	{
 		HeroStat.Health = HeroStat.MaxHealth;
 	}
 }
-
 
 /*데미지 받는 함수
  * float InDamage : 받은 데미지

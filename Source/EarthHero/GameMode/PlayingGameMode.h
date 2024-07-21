@@ -23,6 +23,9 @@ class EARTHHERO_API APlayingGameMode : public AGameModeBase
 	int NumDeadPlayers = 0;
 	const FString GameOverMap = TEXT("/Game/Maps/GameOverMap");
 
+	FTimerHandle GetActorsTimer;
+	void GetAllActorsInLevel();
+
 protected:
 	virtual void Tick(float DeltaSeconds) override;
 	void UpdateWorldMapInfo();
@@ -31,6 +34,7 @@ protected:
 	TArray<AActor*> Players;
 	
 public:
+	APlayingGameMode();
 	int NumPlayersInSession;
 	int GameTimer = 0;
 
@@ -57,4 +61,7 @@ public:
     
 	bool IsValidForceFieldDistance(const TArray<FVector2D>& Locations, float MinDistance);
 	void GenerateRandomDurations(int Count, float Min, float Max, TArray<float>& OutDurations);
+private:
+	TArray<float> ExpansionDurations;
+	TArray<FVector2D> ForceFieldLocations;
 };

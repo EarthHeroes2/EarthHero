@@ -10,14 +10,32 @@
 #include "EarthHero/Player/EHPlayerState.h"
 #include "Kismet/GameplayStatics.h"
 
+APlayingGameMode::APlayingGameMode()
+{
+	PrimaryActorTick.bCanEverTick = true;
+}
 
 void APlayingGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
 	bUseSeamlessTravel = true;
-	PrimaryActorTick.bCanEverTick = true;
 	SpawnForceFields();
+
+	//플레이어들 설정(임시)
+	//GetWorldTimerManager().SetTimer(GetActorsTimer, this, &APlayingGameMode::GetAllActorsInLevel, 2, true);
+}
+
+void APlayingGameMode::GetAllActorsInLevel()
+{
+	// UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEHCharacter::StaticClass(), Players);
+	// if (Players.Num() == 2)
+	// {
+	// 	UE_LOG(LogClass, Warning, TEXT("GetAllActorsInLevel Success"));
+	// 	GetWorldTimerManager().ClearTimer(GetActorsTimer);
+	// 	//APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
+	// 	//PlayingGameState->SetGameStateForceField(ExpansionDurations, ForceFieldLocations);
+	// }
 }
 
 void APlayingGameMode::Tick(float DeltaSeconds)
@@ -39,6 +57,7 @@ void APlayingGameMode::UpdateWorldMapInfo()
 			ActorLocations.Add(FVector2D(ActorLocation.X, ActorLocation.Y));
 			ActorRotations.Add(ActorRotation.Yaw);
 		}
+		//UE_LOG(LogClass, Warning, TEXT("UpdateWorldMapInfo"));
 	}
 
 	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
@@ -59,8 +78,6 @@ void APlayingGameMode::SpawnForceFields()
 
     // 자기장끼리 거리 최소 3
     float SegmentMin = 3.0f / Scale;
-
-    TArray<FVector2D> ForceFieldLocations;
 
     // 위쪽 자기장
     float InitialX = FMath::RandRange(MinX, MaxX);
@@ -105,7 +122,6 @@ void APlayingGameMode::SpawnForceFields()
     }
 
     // 각 자기장 확장 시간 생성 (하나의 확장 시간은 900, 나머지는 600~900 사이)
-    TArray<float> ExpansionDurations;
     GenerateRandomDurations(4, 600.0f, 900.0f, ExpansionDurations);
 
     // 자기장 각 위치에 소환하기
@@ -223,7 +239,7 @@ void APlayingGameMode::InitLevelSetting()
 		//RestartPlayerAtPlayerStart(EHPlayerControllers[i], TargetPlayerStart);
 	}
 
-	//플레이어들 설정
+	//패키징 테스트 할  때 시도
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEHCharacter::StaticClass(), Players);
 }
 

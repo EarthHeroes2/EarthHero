@@ -18,9 +18,6 @@ public:
 	FStatStructure &GetHeroStat();
 
 	FStatStructure &GetBaseHeroStat();
-	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	//데미지 처리 함수
 	float DamageTaken(float InDamage, TSubclassOf<UDamageType> DamageTypeClass, const FHitResult & HitInfo, AController *Instigator, class AEHCharacter *DamageCausor);
@@ -155,4 +152,8 @@ private:
 	class UHeroUpgradeComponent *HeroUpgradeComponent;
 
 	FTimerHandle InitializeTimerHandle;
+
+	FTimerHandle RegenHealthTimerHandle;
+	
+	void RegenHealthFunc();
 };
