@@ -19,22 +19,31 @@ void APlayingGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
-	PlayingGameState = Cast<APlayingGameState>(GameState);
+	UE_LOG(LogTemp, Log, TEXT("junmoon7"));
+	
 	bUseSeamlessTravel = true;
 	SpawnForceFields();
 
+	UE_LOG(LogTemp, Log, TEXT("junmoon8"));
+	
 	//플레이어들 설정(임시)
-	//GetWorldTimerManager().SetTimer(GetActorsTimer, this, &APlayingGameMode::GetAllActorsInLevel, 2, true);
+	GetWorldTimerManager().SetTimer(GetActorsTimer, this, &APlayingGameMode::GetAllActorsInLevel, 2, true);
+	
+	UE_LOG(LogTemp, Log, TEXT("junmoon9"));
 }
 
 void APlayingGameMode::GetAllActorsInLevel()
 {
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEHCharacter::StaticClass(), Players);
-	if (Players.Num() == 2)
+	UE_LOG(LogClass, Warning, TEXT("Players.Num: %d"), Players.Num());
+	if (Players.Num() == 1)
 	{
 		UE_LOG(LogClass, Warning, TEXT("GetAllActorsInLevel Success"));
 		GetWorldTimerManager().ClearTimer(GetActorsTimer);
+		UE_LOG(LogTemp, Log, TEXT("junmoon3"));
+		APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
 		PlayingGameState->SetGameStateForceField(ExpansionDurations, ForceFieldLocations);
+		UE_LOG(LogTemp, Log, TEXT("junmoon4"));
 	}
 }
 
@@ -59,7 +68,7 @@ void APlayingGameMode::UpdateWorldMapInfo()
 		}
 		//UE_LOG(LogClass, Warning, TEXT("UpdateWorldMapInfo"));
 	}
-	
+	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
 	PlayingGameState->UpdateGameStateWorldMaps(ActorLocations, ActorRotations, Players.Num());
 }
 
@@ -238,8 +247,14 @@ void APlayingGameMode::InitLevelSetting()
 		//RestartPlayerAtPlayerStart(EHPlayerControllers[i], TargetPlayerStart);
 	}
 
+	/*
 	//패키징 테스트 할  때 시도
+	UE_LOG(LogTemp, Log, TEXT("junmoon3"));
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEHCharacter::StaticClass(), Players);
+	UE_LOG(LogTemp, Log, TEXT("junmoon3.5"));
+	PlayingGameState->SetGameStateForceField(ExpansionDurations, ForceFieldLocations);
+	UE_LOG(LogTemp, Log, TEXT("junmoon4"));
+	*/
 }
 
 void APlayingGameMode::PlayerControllerReady() //조금 느리지만 안전하게 다 확인하고
@@ -350,7 +365,7 @@ void APlayingGameMode::GameTimerCount()
 {
 	GameTimer++;
 
-	PlayingGameState = Cast<APlayingGameState>(GameState);
+	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
 	PlayingGameState->UpdateHUDGameTimer(GameTimer);
 }
 
@@ -375,8 +390,7 @@ void APlayingGameMode::UpdateGameStateHealths()
 			}
 		}
 	}
-
-	PlayingGameState = Cast<APlayingGameState>(GameState);
+	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
 	PlayingGameState->UpdateGameStateHealths(PlayerMaxHealths, PlayerCurrentHealths);
 }
 
@@ -397,8 +411,7 @@ void APlayingGameMode::UpdateGameStateLevels()
 			}
 		}
 	}
-
-	PlayingGameState = Cast<APlayingGameState>(GameState);
+	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
 	PlayingGameState->UpdateGameStateLevels(PlayerLevels);
 }
 
@@ -419,8 +432,7 @@ void APlayingGameMode::UpdateGameStateExps()
 			}
 		}
 	}
-
-	PlayingGameState = Cast<APlayingGameState>(GameState);
+	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
 	PlayingGameState->UpdateGameStateExps(PlayerExps);
 }
 
@@ -435,8 +447,7 @@ void APlayingGameMode::UpdateGameStateNames()
 			PlayerNames.Add(EHPlayerController->PlayerState->GetPlayerName());
 		}
 	}
-
-	PlayingGameState = Cast<APlayingGameState>(GameState);
+	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
 	PlayingGameState->UpdateGameStateNames(PlayerNames);
 }
 
@@ -454,7 +465,7 @@ void APlayingGameMode::UpdateGameStateClasses()
 		}
 	}
 	
-	PlayingGameState = Cast<APlayingGameState>(GameState);
+	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
 	PlayingGameState->UpdateGameStateClasses(PlayerClasses);
 }
 
@@ -476,7 +487,7 @@ void APlayingGameMode::UpdateGameStateKillCount()
 		}
 	}
 
-	PlayingGameState = Cast<APlayingGameState>(GameState);
+	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
 	PlayingGameState->UpdateGameStateKillCount(PlayerKillCount);
 }
 
@@ -498,7 +509,7 @@ void APlayingGameMode::UpdateGameStateDamage()
 		}
 	}
 	
-	PlayingGameState = Cast<APlayingGameState>(GameState);
+	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
 	PlayingGameState->UpdateGameStateGivenDamage(PlayerGivenDamage);
 }
 
@@ -520,7 +531,7 @@ void APlayingGameMode::UpdateGameStateReceiveDamage()
 		}
 	}
 	
-	PlayingGameState = Cast<APlayingGameState>(GameState);
+	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
 	PlayingGameState->UpdateGameStateReceiveDamage(PlayerReceiveDamage);
 }
 
@@ -542,7 +553,7 @@ void APlayingGameMode::UpdateGameStateHeal()
 		}
 	}
 
-	PlayingGameState = Cast<APlayingGameState>(GameState);
+	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
 	PlayingGameState->UpdateGameStateHeal(PlayerHeal);
 }
 

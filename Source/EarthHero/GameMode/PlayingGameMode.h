@@ -36,7 +36,6 @@ protected:
 	
 public:
 	APlayingGameMode();
-	APlayingGameState* PlayingGameState;
 	int NumPlayersInSession;
 	int GameTimer = 0;
 

@@ -55,4 +55,7 @@ private:
     TArray<FVector2D> ForceFieldAlignments;
 
     float TempRotation = 0.f;
+
+protected:
+    virtual void NativeConstruct() override;
 };

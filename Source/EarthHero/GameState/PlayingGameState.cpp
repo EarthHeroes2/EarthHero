@@ -34,14 +34,16 @@ void APlayingGameState::OnRep_GameTimerSec() const
 		EHPlayerController->HUD->UpdateGameTimer(GameTimerSec);
 	}
 
-	// Sec에 따라 forcefield 업데이트
-	// if (EHPlayerController && EHPlayerController->TabHUD)
-	// {
-	// 	for (int index = 0; index <= 3; index++)
-	// 	{
-	// 		EHPlayerController->TabHUD->UpdateForceField(index, GameTimerSec, AllExpansionDurations[index]);
-	// 	}
-	// }
+	//Sec에 따라 forcefield 업데이트
+	if (EHPlayerController && EHPlayerController->TabHUD && AllExpansionDurations.IsValidIndex(0))
+	{
+		for (int index = 0; index <= 3; index++)
+		{
+			UE_LOG(LogTemp, Log, TEXT("junmoon1"));
+			EHPlayerController->TabHUD->UpdateForceField(index, GameTimerSec, AllExpansionDurations[index]);
+			UE_LOG(LogTemp, Log, TEXT("junmoon2"));
+		}
+	}
 }
 
 void APlayingGameState::UpdateGameStateHealths(const TArray<float>& PlayerMaxHealths, const TArray<float>& PlayerCurrentHealths)

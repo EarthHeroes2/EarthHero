@@ -3,6 +3,19 @@
 #include "Blueprint/WidgetLayoutLibrary.h"
 #include "Components/CanvasPanelSlot.h"
 
+void UWorldMapWidget::NativeConstruct()
+{
+    UE_LOG(LogTemp, Log, TEXT("junmoon5"));
+    Super::NativeConstruct();
+
+    ForceFieldCurrentSizes.Init(0.0f, 4);
+    ForceFieldTargetSizes.Init(0.0f, 4);
+    ForceFieldGrowthRates.Init(0.0f, 4);
+    ForceFieldStartTimes.Init(0.0f, 4);
+    ForceFieldAlignments.Init(FVector2D(0.5f, 0.5f), 4);
+    UE_LOG(LogTemp, Log, TEXT("junmoon6"));
+}
+
 FVector2D UWorldMapWidget::ConvertWorldToMapPosition(const FVector2D& WorldPosition) const
 {
     float MapX = (WorldPosition.Y + 100800.0f) / 201600.0f * 1000.0f - 500.0f;

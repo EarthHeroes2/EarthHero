@@ -82,7 +82,8 @@
       <change beforePath="$PROJECT_DIR$/Source/EarthHero/GameMode/PlayingGameMode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/GameMode/PlayingGameMode.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/EarthHero/GameMode/PlayingGameMode.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/GameMode/PlayingGameMode.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/EarthHero/GameState/PlayingGameState.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/GameState/PlayingGameState.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/HUD/TabHUDWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/TabHUDWidget.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/HUD/WorldMapWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/WorldMapWidget.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/HUD/WorldMapWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/WorldMapWidget.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -319,7 +320,7 @@
       <workItem from="1721400203486" duration="5030000" />
       <workItem from="1721446178481" duration="8702000" />
       <workItem from="1721541146558" duration="6614000" />
-      <workItem from="1721548780491" duration="1222000" />
+      <workItem from="1721548780491" duration="8424000" />
     </task>
     <servers />
   </component>
