@@ -16,8 +16,12 @@ void UWorldMapWidget::NativeConstruct()
 
 FVector2D UWorldMapWidget::ConvertWorldToMapPosition(const FVector2D& WorldPosition) const
 {
-    float MapX = (WorldPosition.Y + 100800.0f) / 201600.0f * 1000.0f - 500.0f;
-    float MapY = 500.0f - (WorldPosition.X + 100800.0f) / 201600.0f * 1000.0f;
+    // Map dimensions
+    float MapWidth = 689.5f;
+    float MapHeight = 706.5f;
+    
+    float MapX = (WorldPosition.Y + 100800.0f) / 201600.0f * MapWidth - (MapWidth / 2.0f);
+    float MapY = (MapHeight / 2.0f) - (WorldPosition.X + 100800.0f) / 201600.0f * MapHeight;
 
     return FVector2D(MapX, MapY);
 }
