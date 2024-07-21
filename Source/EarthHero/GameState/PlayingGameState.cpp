@@ -205,6 +205,7 @@ void APlayingGameState::SetGameStateForceField(const TArray<float> ExpansionDura
 	AllForceFieldLocations = ForceFieldLocations;
 	if(EHPlayerController && EHPlayerController->TabHUD)
 	{
+		UE_LOG(LogTemp, Log, TEXT("junmoon10"));
 		for (int index = 0; index <= 3; index++)
 		{
 			EHPlayerController->TabHUD->SetForceFieldAlignment(index, AllForceFieldLocations[index]);
