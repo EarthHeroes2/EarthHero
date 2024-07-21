@@ -218,6 +218,17 @@ void APlayingGameState::SetForceField()
 			EHPlayerController->TabHUD->SetForceFieldAlignment(index, AllForceFieldLocations[index]);
 		}
 	}
+	else
+	{
+		if (!EHPlayerController)
+		{
+			UE_LOG(LogTemp, Log, TEXT("junmoon9.5 : EHPlayerController"));
+		}
+		else if (!EHPlayerController->TabHUD)
+		{
+			UE_LOG(LogTemp, Log, TEXT("junmoon9.5"));
+		}
+	}
 }
 void APlayingGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
