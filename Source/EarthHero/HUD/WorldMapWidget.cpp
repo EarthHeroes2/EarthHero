@@ -54,6 +54,7 @@ void UWorldMapWidget::UpdateForceField(int32 ForceFieldIndex, float CurrentTime,
 {
     if (ForceFieldStartTimes[ForceFieldIndex] == 0.0f)
     {
+        UE_LOG(LogTemp, Log, TEXT("junmoon20"));
         ForceFieldStartTimes[ForceFieldIndex] = CurrentTime;
         ForceFieldTargetSizes[ForceFieldIndex] = 500.0f;
         ForceFieldGrowthRates[ForceFieldIndex] = 500.0f / GrowthDuration;
@@ -67,6 +68,7 @@ void UWorldMapWidget::UpdateForceField(int32 ForceFieldIndex, float CurrentTime,
         UCanvasPanelSlot* CanvasSlot = UWidgetLayoutLibrary::SlotAsCanvasSlot(ForceFieldImages[ForceFieldIndex]);
         if (CanvasSlot)
         {
+            UE_LOG(LogTemp, Log, TEXT("ForceFieldCurrentSizes[ForceFieldIndex]: %f"), ForceFieldCurrentSizes[ForceFieldIndex]);
             CanvasSlot->SetSize(FVector2D(ForceFieldCurrentSizes[ForceFieldIndex], ForceFieldCurrentSizes[ForceFieldIndex]));
         }
     }
@@ -82,7 +84,9 @@ void UWorldMapWidget::SetForceFieldAlignment(int32 ForceFieldIndex, const FVecto
         UCanvasPanelSlot* CanvasSlot = UWidgetLayoutLibrary::SlotAsCanvasSlot(ForceFieldImages[ForceFieldIndex]);
         if (CanvasSlot)
         {
+            UE_LOG(LogTemp, Log, TEXT("Alignment: %s"), *Alignment.ToString());
             CanvasSlot->SetAlignment(Alignment);
         }
     }
 }
+
