@@ -80,7 +80,6 @@ void UOptions::InitializeOptions()
     auto GameInstance = Cast<UEHGameInstance>(GetGameInstance());
     if (GameInstance)
     {
-        // Set ComboBox selections based on loaded settings
         if (ResolutionComboBox)
         {
             FString ResolutionString = FString::Printf(TEXT("%dx%d"), GameInstance->ResolutionWidth, GameInstance->ResolutionHeight);
@@ -117,7 +116,6 @@ void UOptions::InitializeOptions()
             PostProcessingComboBox->SetSelectedOption(QualityToString(GameInstance->PostProcessing));
         }
 
-        // Set Slider values based on loaded settings
         if (MasterVolumeSlider)
         {
             MasterVolumeSlider->SetValue(GameInstance->MasterVolume);
@@ -138,7 +136,6 @@ void UOptions::InitializeOptions()
             MouseSensitivitySlider->SetValue(GameInstance->MouseSensitivity);
         }
 
-        // Disable resolution combo box if necessary
         if (GameInstance->ScreenMode == 0 || GameInstance->ScreenMode == 1)
         {
             ResolutionComboBox->SetIsEnabled(false);
@@ -162,7 +159,6 @@ void UOptions::OnResolutionChanged(FString SelectedItem, ESelectInfo::Type Selec
             GameInstance->ResolutionHeight = Height;
             GameInstance->SaveSettings();
 
-            // Apply the resolution change
             UGameUserSettings* UserSettings = GEngine->GetGameUserSettings();
             if (UserSettings)
             {
@@ -173,7 +169,6 @@ void UOptions::OnResolutionChanged(FString SelectedItem, ESelectInfo::Type Selec
     }
 }
 
-
 void UOptions::OnScreenModeChanged(FString SelectedItem, ESelectInfo::Type SelectionType)
 {
     auto GameInstance = Cast<UEHGameInstance>(GetGameInstance());
@@ -182,7 +177,6 @@ void UOptions::OnScreenModeChanged(FString SelectedItem, ESelectInfo::Type Selec
         GameInstance->ScreenMode = ScreenModeFromString(SelectedItem);
         GameInstance->SaveSettings();
 
-        // Apply the screen mode change
         UGameUserSettings* UserSettings = GEngine->GetGameUserSettings();
         if (UserSettings)
         {
@@ -232,7 +226,6 @@ void UOptions::OnMaxFrameChanged(FString SelectedItem, ESelectInfo::Type Selecti
         GameInstance->MaxFrame = FCString::Atoi(*SelectedItem);
         GameInstance->SaveSettings();
         
-        // Apply the max frame rate change
         GEngine->GetGameUserSettings()->SetFrameRateLimit(GameInstance->MaxFrame);
     }
 }
@@ -245,7 +238,6 @@ void UOptions::OnVSyncChanged(FString SelectedItem, ESelectInfo::Type SelectionT
         GameInstance->bVSyncEnabled = (SelectedItem == TEXT("켜기"));
         GameInstance->SaveSettings();
 
-        // Apply the VSync change
         GEngine->GetGameUserSettings()->SetVSyncEnabled(GameInstance->bVSyncEnabled);
     }
 }
@@ -258,7 +250,6 @@ void UOptions::OnOverallQualityChanged(FString SelectedItem, ESelectInfo::Type S
         GameInstance->OverallQuality = QualityFromString(SelectedItem);
         GameInstance->SaveSettings();
 
-        // Apply the overall quality change
         UGameUserSettings* UserSettings = GEngine->GetGameUserSettings();
         if (UserSettings)
         {
@@ -276,7 +267,6 @@ void UOptions::OnAntiAliasingChanged(FString SelectedItem, ESelectInfo::Type Sel
         GameInstance->AntiAliasing = QualityFromString(SelectedItem);
         GameInstance->SaveSettings();
 
-        // Apply the anti-aliasing quality change
         UGameUserSettings* UserSettings = GEngine->GetGameUserSettings();
         if (UserSettings)
         {
@@ -294,7 +284,6 @@ void UOptions::OnPostProcessingChanged(FString SelectedItem, ESelectInfo::Type S
         GameInstance->PostProcessing = QualityFromString(SelectedItem);
         GameInstance->SaveSettings();
 
-        // Apply the post-processing quality change
         UGameUserSettings* UserSettings = GEngine->GetGameUserSettings();
         if (UserSettings)
         {
@@ -312,7 +301,6 @@ void UOptions::OnMasterVolumeChanged(float Value)
         GameInstance->MasterVolume = Value;
         GameInstance->SaveSettings();
         
-        // Apply the master volume change
         if (GEngine && GEngine->GetMainAudioDevice())
         {
             GEngine->GetMainAudioDevice()->SetSoundMixClassOverride(GameInstance->MainSoundMix, GameInstance->MasterVolumeSoundClass, Value, 1.0f, 0.0f, true);
@@ -329,7 +317,6 @@ void UOptions::OnBackgroundVolumeChanged(float Value)
         GameInstance->BackgroundVolume = Value;
         GameInstance->SaveSettings();
         
-        // Apply the background volume change
         if (GEngine && GEngine->GetMainAudioDevice())
         {
             GEngine->GetMainAudioDevice()->SetSoundMixClassOverride(GameInstance->MainSoundMix, GameInstance->BackgroundVolumeSoundClass, Value, 1.0f, 0.0f, true);
@@ -346,7 +333,6 @@ void UOptions::OnSFXVolumeChanged(float Value)
         GameInstance->SFXVolume = Value;
         GameInstance->SaveSettings();
         
-        // Apply the SFX volume change
         if (GEngine && GEngine->GetMainAudioDevice())
         {
             GEngine->GetMainAudioDevice()->SetSoundMixClassOverride(GameInstance->MainSoundMix, GameInstance->SFXVolumeSoundClass, Value, 1.0f, 0.0f, true);

@@ -28,6 +28,10 @@ private:
 	UPROPERTY()
 	class UDataTable* CharacterStatDataTable = nullptr;
 
+	void SetDefaultSettings();
+	void SetRecommendedResolution();
+	void ApplySettings();
+
 public:
 	bool bGameClear = true; //클리어 못할 시 false 적용해줘야함
 	
