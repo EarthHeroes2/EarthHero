@@ -55,6 +55,8 @@ private:
 	TObjectPtr<UInputAction> TabAction;
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> ChatAction;
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> EscapeAction; // Added EscapeAction
 
 	//07 13 히어로 업그레이드 선택 맵핑 액션 추가
 	UPROPERTY(EditAnywhere, Category = "Input")
@@ -69,7 +71,15 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "HUD")
 	TSubclassOf<class UUserWidget> TabHUDClass;
-	
+
+	// Add the EscMenu widget class
+	UPROPERTY(EditAnywhere, Category = "HUD")
+	TSubclassOf<class UUserWidget> EscMenuClass;
+
+	// Add the EscMenu widget instance
+	UPROPERTY()
+	class UEscMenu* EscMenu;
+
 	void InitializeHUD();
 
 	UPROPERTY()
@@ -78,7 +88,6 @@ private:
 	UFUNCTION(Server, Reliable)
 	void Server_PlayerControllerReady();
 
-	
 	FTimerHandle PlayerStateCheckTimerHandle;
 
 	TObjectPtr<ACharacter> ControlledCharacter;
@@ -89,12 +98,13 @@ protected:
 	void Skill();
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
-	void ShowTabHUD(); // Add the function to show the TabHUD
-	void HideTabHUD(); // Add the function to hide the TabHUD
+	void ShowTabHUD();
+	void HideTabHUD();
 	void FocusChatBox();
 	void SelectHU_1();
 	void SelectHU_2();
 	void SelectHU_3();
+	void ToggleEscMenu();
 	virtual void EndPlay(EEndPlayReason::Type EndPlayReason) override;
 
 public:

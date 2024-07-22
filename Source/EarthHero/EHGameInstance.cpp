@@ -7,6 +7,17 @@
 #include "GameFramework/GameUserSettings.h"
 #include "Kismet/GameplayStatics.h"
 
+constexpr int32 DefaultResolutionWidth = 1920;
+constexpr int32 DefaultResolutionHeight = 1080;
+constexpr int32 DefaultScreenMode = 0; // Fullscreen
+constexpr int32 DefaultMaxFrame = 60;
+constexpr bool DefaultVSyncEnabled = false;
+constexpr int32 DefaultOverallQuality = 2; // Medium
+constexpr int32 DefaultAntiAliasing = 2; // Medium
+constexpr int32 DefaultPostProcessing = 2; // Medium
+constexpr float DefaultVolume = 0.5f;
+constexpr float DefaultMouseSensitivity = 0.5f;
+
 UEHGameInstance::UEHGameInstance()
 {
     static ConstructorHelpers::FObjectFinder<UDataTable> DT_GameTable(TEXT("/Game/Data/Character/DT_CharacterStat.DT_CharacterStat"));
@@ -146,6 +157,81 @@ void UEHGameInstance::LoadSettings()
             InputSubsystem->SetMouseSensitivity(MouseSensitivity); */
         }
     }
+    else
+    {
+        // No settings file, use defaults
+        SetDefaultSettings();
+        SaveSettings();
+    }
+
+    ApplySettings();
 }
 
+void UEHGameInstance::SetRecommendedResolution()
+{
+    UGameUserSettings* UserSettings = GEngine->GetGameUserSettings();
+    if (UserSettings)
+    {
+        FIntPoint NativeResolution = UserSettings->GetDesktopResolution();
+        ResolutionWidth = NativeResolution.X;
+        ResolutionHeight = NativeResolution.Y;
+        UserSettings->SetScreenResolution(NativeResolution);
+        UserSettings->ApplySettings(false);
+    }
+}
 
+void UEHGameInstance::SetDefaultSettings()
+{
+    SetRecommendedResolution();
+    ScreenMode = DefaultScreenMode;
+    MaxFrame = DefaultMaxFrame;
+    bVSyncEnabled = DefaultVSyncEnabled;
+    OverallQuality = DefaultOverallQuality;
+    AntiAliasing = DefaultAntiAliasing;
+    PostProcessing = DefaultPostProcessing;
+    MasterVolume = DefaultVolume;
+    BackgroundVolume = DefaultVolume;
+    SFXVolume = DefaultVolume;
+    MouseSensitivity = DefaultMouseSensitivity;
+}
+
+void UEHGameInstance::ApplySettings()
+{
+    UGameUserSettings* UserSettings = GEngine->GetGameUserSettings();
+    if (UserSettings)
+    {
+        EWindowMode::Type WindowMode = EWindowMode::Windowed;
+        switch (ScreenMode)
+        {
+        case 0:
+            WindowMode = EWindowMode::Fullscreen;
+            break;
+        case 1:
+            WindowMode = EWindowMode::WindowedFullscreen;
+            break;
+        case 2:
+        default:
+            WindowMode = EWindowMode::Windowed;
+            break;
+        }
+        UserSettings->SetFullscreenMode(WindowMode);
+        UserSettings->SetScreenResolution(FIntPoint(ResolutionWidth, ResolutionHeight));
+        UserSettings->SetVSyncEnabled(bVSyncEnabled);
+        UserSettings->SetOverallScalabilityLevel(OverallQuality);
+        UserSettings->SetAntiAliasingQuality(AntiAliasing);
+        UserSettings->SetPostProcessingQuality(PostProcessing);
+        UserSettings->SetFrameRateLimit(MaxFrame);
+        UserSettings->ApplySettings(false);
+    }
+
+    if (GEngine && GEngine->GetMainAudioDevice())
+    {
+        GEngine->GetMainAudioDevice()->SetSoundMixClassOverride(MainSoundMix, MasterVolumeSoundClass, MasterVolume, 1.0f, 0.0f, true);
+        GEngine->GetMainAudioDevice()->SetSoundMixClassOverride(MainSoundMix, BackgroundVolumeSoundClass, BackgroundVolume, 1.0f, 0.0f, true);
+        GEngine->GetMainAudioDevice()->SetSoundMixClassOverride(MainSoundMix, SFXVolumeSoundClass, SFXVolume, 1.0f, 0.0f, true);
+        UGameplayStatics::PushSoundMixModifier(this, MainSoundMix);
+    }
+
+    /* Apply mouse sensitivity
+    InputSubsystem->SetMouseSensitivity(MouseSensitivity); */
+}
