@@ -9,6 +9,8 @@
 #include "EarthHero/GameMode/PlayingGameMode.h"
 #include "EarthHero/HUD/InGameHUD.h"
 #include "EarthHero/HUD/TabHUDWidget.h"
+#include "EarthHero/HUD/EscMenu.h"
+#include "GameFramework/PlayerController.h"
 #include "GameFramework/Character.h"
 
 AEHPlayerController::AEHPlayerController()
@@ -76,7 +78,14 @@ void AEHPlayerController::InitializeHUD()
 			MyPlayerState->GetStatComponent()->SetTabHUD(TabHUD);
 			MyPlayerState->GetHeroUpgradeComponent()->SetTabHUD(TabHUD);
 		}
-
+		
+		EscMenu = CreateWidget<UEscMenu>(this, EscMenuClass);
+		if (EscMenu)
+		{
+			EscMenu->AddToViewport();
+			EscMenu->SetVisibility(ESlateVisibility::Hidden);
+		}
+		
 		bShowMouseCursor = false;
 		FInputModeGameOnly InputMode;
 		SetInputMode(InputMode);
@@ -116,6 +125,48 @@ void AEHPlayerController::SetupInputComponent()
 	EnhancedInputComponent->BindAction(SelectHUAction_1, ETriggerEvent::Started, this, &ThisClass::SelectHU_1);
 	EnhancedInputComponent->BindAction(SelectHUAction_2, ETriggerEvent::Started, this, &ThisClass::SelectHU_2);
 	EnhancedInputComponent->BindAction(SelectHUAction_3, ETriggerEvent::Started, this, &ThisClass::SelectHU_3);
+
+	EnhancedInputComponent->BindAction(EscapeAction, ETriggerEvent::Started, this, &ThisClass::ToggleEscMenu);
+}
+
+void AEHPlayerController::ToggleEscMenu()
+{
+	if (EscMenu)
+	{
+		bool bIsVisible = EscMenu->IsVisible();
+		EscMenu->SetVisibility(bIsVisible ? ESlateVisibility::Hidden : ESlateVisibility::Visible);
+
+		if (!bIsVisible)
+		{
+			// UI mode, 마우스 보이게 하기
+			FInputModeUIOnly InputMode;
+			InputMode.SetWidgetToFocus(EscMenu->TakeWidget());
+			SetInputMode(InputMode);
+			bShowMouseCursor = true;
+		}
+		else
+		{
+			// Game mode
+			FInputModeGameOnly InputMode;
+			SetInputMode(InputMode);
+			bShowMouseCursor = false;
+		}
+	}
+	else
+	{
+		EscMenu = CreateWidget<UEscMenu>(this, EscMenuClass);
+		if (EscMenu)
+		{
+			EscMenu->AddToViewport();
+			EscMenu->SetVisibility(ESlateVisibility::Visible);
+
+			// UI mode, 마우스 보이게 하기
+			FInputModeUIOnly InputMode;
+			InputMode.SetWidgetToFocus(EscMenu->TakeWidget());
+			SetInputMode(InputMode);
+			bShowMouseCursor = true;
+		}
+	}
 }
 
 void AEHPlayerController::Jump()
