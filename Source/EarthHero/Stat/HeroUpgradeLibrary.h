@@ -44,6 +44,18 @@ public:
 	static void Pb_MovementSpeed(FHeroUpgradeStructure &SelectHeroUpgrade, FStatStructure &BaseHeroStat, FStatStructure &HeroStat);
 
 	//워리어 히어로 업그레이드
+	UFUNCTION()
+	static void WR_Berserker(FHeroUpgradeStructure &SelectHeroUpgrade, FStatStructure &BaseHeroStat, FStatStructure &HeroStat, class UWarriorStatComponent *WarriorStatComponent);
+
+	UFUNCTION()
+	static void WR_Guardian(FHeroUpgradeStructure &SelectHeroUpgrade, FStatStructure &BaseHeroStat, FStatStructure &HeroStat, class UWarriorStatComponent *WarriorStatComponent);
+	
+	UFUNCTION()
+	static void WR_JumpEnhanced(FHeroUpgradeStructure &SelectHeroUpgrade, FStatStructure &BaseHeroStat, FStatStructure &HeroStat, class UWarriorStatComponent *WarriorStatComponent);
+	
+	UFUNCTION()
+	static void WR_WheelWind(FHeroUpgradeStructure &SelectHeroUpgrade, FStatStructure &BaseHeroStat, FStatStructure &HeroStat, class UWarriorStatComponent *WarriorStatComponent);
+
 
 	//메카닉 히어로 업그레이드
 

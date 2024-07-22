@@ -183,7 +183,7 @@ void APlayingGameState::OnRep_GameStateActorLocations() const
 {
 	if(EHPlayerController && EHPlayerController->TabHUD)
 	{
-		UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateActorLocations"));
+		//UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateActorLocations"));
 		EHPlayerController->TabHUD->UpdatePlayerImagesInWorldMap(AllActorLocations, AllActorRotations, AllPlayerNumbers);
 	}
 }
@@ -192,7 +192,7 @@ void APlayingGameState::OnRep_GameStateActorRotations() const
 {
 	if(EHPlayerController && EHPlayerController->TabHUD)
 	{
-		UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateActorRotations"));
+		//UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateActorRotations"));
 		EHPlayerController->TabHUD->UpdatePlayerImagesInWorldMap(AllActorLocations, AllActorRotations, AllPlayerNumbers);
 	}
 }

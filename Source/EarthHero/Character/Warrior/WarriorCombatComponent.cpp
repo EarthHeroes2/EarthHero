@@ -5,6 +5,9 @@
 #include "EHWarrior.h"
 #include "Camera/CameraComponent.h"
 #include "EarthHero/Character/Monster/MonsterBase.h"
+#include "EarthHero/Stat/WarriorStatComponent.h"
+#include "EarthHero/Stat/Effect/Ef_ReduceDamageTaken.h"
+#include "EarthHero/Stat/Effect/Ef_SpeedBoost.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 
@@ -114,6 +117,19 @@ void UWarriorCombatComponent::Server_SwordHit_Implementation(FVector CamLocation
 				if(AMonsterBase* HitMonster = Cast<AMonsterBase>(HitResult.GetActor()))
 				{
 					// 일반 공격 데미지 주는 함수 호출 (Server)
+					Warrior->WarriorStatComponent->WarriorDamage(HitMonster);
+					if (Warrior->WarriorStatComponent->HU_GuardianLv == 1)
+					{
+						FVector Direction = HitMonster->GetActorLocation() - Warrior->GetActorLocation();
+						Direction.Z = 0.f;
+						HitMonster->LaunchCharacter(Direction * 1.f, false, false);
+					}
+					else if (Warrior->WarriorStatComponent->HU_GuardianLv == 2)
+					{
+						FVector Direction = HitMonster->GetActorLocation() - Warrior->GetActorLocation();
+						Direction.Z = 0.f;
+						HitMonster->LaunchCharacter(Direction * 2.5f, false, false);
+					}
 
 					// 공격 파티클 생성 (NetMulticast)
 					NetMulticast_SwordHit(HitResult);
@@ -143,15 +159,39 @@ void UWarriorCombatComponent::ToggleWhirlwind()
 	{
 		bIsWhirlwind = true;
 		bCanWhirlwind = false;
-		CurrentWhirlwindCount = 0;
+		CurrentWhirlwindDuration = 0;
+		CheckWhirlWindLevel();
 		Warrior->GetWorldTimerManager().SetTimer(WhirlwindCooldownTimerHandle, this, &ThisClass::ResetWhirlWind, WhirlwindCooldown);
-		Warrior->GetWorldTimerManager().SetTimer(WhirlwindTimerHandle, this, &ThisClass::Whirlwind, 0.25f, true);
+		Warrior->GetWorldTimerManager().SetTimer(WhirlwindTimerHandle, this, &ThisClass::Whirlwind, WhirlwindTick, true);
 	}
 	else
 	{
 		if(bIsWhirlwind)
 		{
 			bIsWhirlwind = false;
+		}
+	}
+}
+
+void UWarriorCombatComponent::CheckWhirlWindLevel_Implementation()
+{
+	if (Warrior->WarriorStatComponent->HU_WheelWindLv >= 2)
+	{
+		UWorld* World = Warrior->GetWorld();
+		if (World)
+		{
+			// 이동 속도 증가
+			AEf_SpeedBoost* Ef_SpeedBoost = World->SpawnActor<AEf_SpeedBoost>();
+			if (Ef_SpeedBoost)
+			{
+				Ef_SpeedBoost->ApplyEffect(Warrior, 0.5f, TotalWhirlwindDuration, false, false, true); // 중첩 불가능, 영구 아님, 지속 시간 갱신 가능
+			}
+			// 받는 데미지 감소
+			AEf_ReduceDamageTaken *Ef_ReduceDamageTaken = World->SpawnActor<AEf_ReduceDamageTaken>();
+			if (Ef_ReduceDamageTaken)
+			{
+				Ef_ReduceDamageTaken->ApplyEffect(Warrior, 0.3f, TotalWhirlwindDuration, false, false, true);
+			}
 		}
 	}
 }
@@ -164,9 +204,10 @@ void UWarriorCombatComponent::Whirlwind()
 		return;
 	}
 	
-	if(CurrentWhirlwindCount <= TotalWhirlwindCount)
+	if(CurrentWhirlwindDuration <= TotalWhirlwindDuration)
 	{
-		CurrentWhirlwindCount++;
+		CurrentWhirlwindDuration += WhirlwindTick;
+		//UE_LOG(LogClass, Warning, TEXT("CUrrentWhirlwindDuration = %f, WhirlWindTick = %f, TotalWhirlWindDuration = %f"), CurrentWhirlwindDuration, WhirlwindTick, TotalWhirlwindDuration);
 
 		if(Warrior && Warrior->GetFPSCamera())
 		{
@@ -209,9 +250,13 @@ void UWarriorCombatComponent::Server_Whirlwind_Implementation(FVector CamLocatio
 
 				if(AMonsterBase* HitMonster = Cast<AMonsterBase>(HitResult.GetActor()))
 				{
-					FVector Direction = HitMonster->GetActorLocation() - Warrior->GetActorLocation();
-					Direction.Z = 0.f;
-					HitMonster->LaunchCharacter(Direction * 1.f, false, false);
+					Warrior->WarriorStatComponent->WarriorWheelWindDamage(HitMonster);
+					if (Warrior->WarriorStatComponent->HU_GuardianLv == 3)
+					{
+						FVector Direction = HitMonster->GetActorLocation() - Warrior->GetActorLocation();
+						Direction.Z = 0.f;
+						HitMonster->LaunchCharacter(Direction * 1.f, false, false);
+					}
 					// 공격 파티클 생성 (NetMulticast)
 					NetMulticast_Whirlwind(HitResult);
 				}
@@ -235,4 +280,14 @@ void UWarriorCombatComponent::NetMulticast_Whirlwind_Implementation(FHitResult H
 void UWarriorCombatComponent::ResetWhirlWind()
 {
 	bCanWhirlwind = true;
+}
+
+void UWarriorCombatComponent::SetWheelWindDuration_Implementation(float WR_WheelWindDuration)
+{
+	TotalWhirlwindDuration = WR_WheelWindDuration;
+}
+
+void UWarriorCombatComponent::SetWheelWindTick_Implementation(float WR_WheelWindTick)
+{
+	WhirlwindTick = WR_WheelWindTick;
 }

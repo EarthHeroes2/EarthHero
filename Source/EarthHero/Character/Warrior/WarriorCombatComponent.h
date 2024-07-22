@@ -23,6 +23,9 @@ public:
 
 	void ToggleWhirlwind();
 
+	UFUNCTION(Server, Reliable)
+	void CheckWhirlWindLevel();
+
 protected:
 	virtual void BeginPlay() override;
 	
@@ -69,9 +72,10 @@ private:
 	bool bIsWhirlwind = false;
 	UPROPERTY()
 	bool bCanWhirlwind = true;
-	int32 TotalWhirlwindCount = 12;
-	int32 CurrentWhirlwindCount = 0;
+	float TotalWhirlwindDuration = 3.f;
+	float CurrentWhirlwindDuration = 0;
 	float WhirlwindCooldown = 14.f;
+	float WhirlwindTick = 0.25f;
 	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true), Category = "Particle")
@@ -90,4 +94,8 @@ public:
 	FORCEINLINE void SetWarrior(AEHWarrior* NewWarrior) { Warrior = NewWarrior; }
 	FORCEINLINE bool GetIsWhirlwind() { return bIsWhirlwind; }
 	
+	UFUNCTION(Client, Reliable)
+	void SetWheelWindTick(float WR_WheelWindTick);
+	UFUNCTION(Client, Reliable)
+	void SetWheelWindDuration(float WR_WheelWindDuration);
 };

@@ -55,6 +55,17 @@ float UStatCalculationLibrary::	CalNormalDamage(FStatStructure& HeroStat, float 
 	}
 }
 
+float UStatCalculationLibrary::CalWarriorNormalDamage(FStatStructure& HeroStat, float WR_NormalDamage)
+{
+	return WR_NormalDamage * HeroStat.NormalDamage;
+}
+
+float UStatCalculationLibrary::CalWarriorWheelWindDamage(FStatStructure& HeroStat, float WR_WheelWindDamage)
+{
+	return WR_WheelWindDamage * HeroStat.SkillDamage;
+}
+
+
 float UStatCalculationLibrary::CalShooterNormalDamage(FStatStructure &HeroStat, const FHitResult & HitInfo, float SH_HeadShot, float SH_NormalDamage)
 {
 	float resultDamage = 0.f;

@@ -4,6 +4,9 @@
 #include "HeroUpgradeLibrary.h"
 
 #include "ShooterStatComponent.h"
+#include "WarriorStatComponent.h"
+#include "EarthHero/Character/Warrior/EHWarrior.h"
+#include "EarthHero/Character/Warrior/WarriorCombatComponent.h"
 
 void UHeroUpgradeLibrary::Pb_NormalAttackDamage(FHeroUpgradeStructure& SelectHeroUpgrade, FStatStructure& BaseHeroStat,
                                                 FStatStructure& HeroStat)
@@ -205,8 +208,149 @@ void UHeroUpgradeLibrary::Pb_MovementSpeed(FHeroUpgradeStructure& SelectHeroUpgr
 	}
 }
 
+void UHeroUpgradeLibrary::WR_Berserker(FHeroUpgradeStructure& SelectHeroUpgrade, FStatStructure& BaseHeroStat,
+	FStatStructure& HeroStat, UWarriorStatComponent* WarriorStatComponent)
+{
+	//선택한 히어로 업그레이드는 레벨 업
+	SelectHeroUpgrade.UpgradeLevel += 1;
+	WarriorStatComponent->HU_BerserkerLv += 1;
+	
+	switch (SelectHeroUpgrade.UpgradeLevel)
+	{
+		case 1 :
+			//최대 체력 0.5
+			BaseHeroStat.MaxHealth *= 0.5;
+			HeroStat.MaxHealth = BaseHeroStat.MaxHealth;
+			if (HeroStat.Health > HeroStat.MaxHealth)
+			{
+				HeroStat.Health = HeroStat.MaxHealth;
+			}
+
+			//공격 속도 증가
+			BaseHeroStat.AttackSpeed = 1.2f;
+			HeroStat.AttackSpeed = BaseHeroStat.AttackSpeed;
+
+			//흡혈 추가
+			WarriorStatComponent->WR_Drain = 0.01f;
+			break;
+			
+		case 2 :
+			BaseHeroStat.AttackSpeed = 1.5f;
+			HeroStat.AttackSpeed = BaseHeroStat.AttackSpeed;
+			WarriorStatComponent->WR_Drain = 0.025f;
+			break;
+			
+		case 3 :
+			BaseHeroStat.AttackSpeed = 2.0f;
+			HeroStat.AttackSpeed = BaseHeroStat.AttackSpeed;
+			WarriorStatComponent->WR_Drain = 0.05f;
+			break ;
+			
+		default:
+			UE_LOG(LogClass, Error, TEXT("UHeroUpgradeLibrary : 히어로 업그레이드 레벨이 1, 2, 3 이 아닌 다른값이 들어옴"));
+	}
+}
+
+void UHeroUpgradeLibrary::WR_Guardian(FHeroUpgradeStructure& SelectHeroUpgrade, FStatStructure& BaseHeroStat,
+	FStatStructure& HeroStat, UWarriorStatComponent* WarriorStatComponent)
+{
+	//선택한 히어로 업그레이드는 레벨 업
+	SelectHeroUpgrade.UpgradeLevel += 1;
+	WarriorStatComponent->HU_GuardianLv += 1;
+	switch (SelectHeroUpgrade.UpgradeLevel)
+	{
+		case 1 :
+			//공격 속도 0.5
+			BaseHeroStat.AttackSpeed *= 0.5f;
+			HeroStat.AttackSpeed = BaseHeroStat.AttackSpeed;
+
+			//최대 체력 증가
+			BaseHeroStat.MaxHealth *= 1.3f;
+			HeroStat.MaxHealth = BaseHeroStat.MaxHealth;
+
+			//일반 공격 넉백 추가
+			break;
+				
+		case 2 :
+			//최대 체력 증가
+			BaseHeroStat.MaxHealth *= 1.3f;
+			HeroStat.MaxHealth = BaseHeroStat.MaxHealth;
+			break;
+				
+		case 3 :
+			BaseHeroStat.MaxHealth = 1.35f;
+			HeroStat.MaxHealth = BaseHeroStat.MaxHealth;
+			//휠 윈드 스킬 넉백 추가
+			break ;
+				
+		default:
+			UE_LOG(LogClass, Error, TEXT("UHeroUpgradeLibrary : 히어로 업그레이드 레벨이 1, 2, 3 이 아닌 다른값이 들어옴"));
+	}
+}
+
+void UHeroUpgradeLibrary::WR_JumpEnhanced(FHeroUpgradeStructure& SelectHeroUpgrade, FStatStructure& BaseHeroStat,
+	FStatStructure& HeroStat, UWarriorStatComponent* WarriorStatComponent)
+{
+	//선택한 히어로 업그레이드는 레벨 업
+	SelectHeroUpgrade.UpgradeLevel += 1;
+	WarriorStatComponent->HU_EnhnacedJumpLv += 1;
+
+	switch (SelectHeroUpgrade.UpgradeLevel)
+	{
+		case 1 :
+			WarriorStatComponent->WR_EnHancedJumpDistance = 1.25f;
+			WarriorStatComponent->WR_EnHancedJumpSpeed = 1.25f;
+			WarriorStatComponent->WR_JumpDamageMulti = 0.5f;
+			break;
+					
+		case 2 :
+			WarriorStatComponent->WR_EnHancedJumpDistance = 1.5f;
+			WarriorStatComponent->WR_EnHancedJumpSpeed = 1.5f;
+			WarriorStatComponent->WR_JumpDamageMulti = 1.f;
+			break;
+					
+		case 3 :
+			WarriorStatComponent->WR_EnHancedJumpDistance = 1.75f;
+			WarriorStatComponent->WR_EnHancedJumpSpeed = 1.75f;
+			WarriorStatComponent->WR_JumpDamageMulti = 2.f;
+			break ;
+					
+		default:
+			UE_LOG(LogClass, Error, TEXT("UHeroUpgradeLibrary : 히어로 업그레이드 레벨이 1, 2, 3 이 아닌 다른값이 들어옴"));
+	}
+	
+}
+
+void UHeroUpgradeLibrary::WR_WheelWind(FHeroUpgradeStructure& SelectHeroUpgrade, FStatStructure& BaseHeroStat,
+	FStatStructure& HeroStat, UWarriorStatComponent* WarriorStatComponent)
+{
+	//선택한 히어로 업그레이드는 레벨 업
+	SelectHeroUpgrade.UpgradeLevel += 1;
+	WarriorStatComponent->HU_WheelWindLv += 1;
+	switch (SelectHeroUpgrade.UpgradeLevel)
+	{
+		case 1 :
+			WarriorStatComponent->WR_WheelWindDuration = 4.5f;
+			WarriorStatComponent->Warrior->GetCombatComponent()->SetWheelWindDuration(4.5f);
+			break;
+						
+		case 2 :
+			//휠 윈드 사용 중 이동속도 1.5, 입는 피해 30% 감소
+			break;
+						
+		case 3 :
+			WarriorStatComponent->WR_WheelWindTick = 0.15f;
+			WarriorStatComponent->Warrior->GetCombatComponent()->SetWheelWindTick(0.15f);
+			break ;
+						
+		default:
+			UE_LOG(LogClass, Error, TEXT("UHeroUpgradeLibrary : 히어로 업그레이드 레벨이 1, 2, 3 이 아닌 다른값이 들어옴"));
+		}
+	
+}
+
 void UHeroUpgradeLibrary::St_Headshot(FHeroUpgradeStructure& SelectHeroUpgrade, FStatStructure& BaseHeroStat,
-	FStatStructure& HeroStat, UShooterStatComponent* ShooterStatComponent)
+                                      FStatStructure& HeroStat, UShooterStatComponent* ShooterStatComponent)
 {
 	//선택한 히어로 업그레이드는 레벨 업
 	SelectHeroUpgrade.UpgradeLevel += 1;

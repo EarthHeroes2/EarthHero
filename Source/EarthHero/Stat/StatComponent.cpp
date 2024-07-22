@@ -69,10 +69,9 @@ void UStatComponent::BeginPlay()
 
 void UStatComponent::RegenHealthFunc()
 {
-	HeroStat.Health = HeroStat.Health + HeroStat.HealthRegeneration * GetWorld()->DeltaTimeSeconds;
-	if (HeroStat.Health > HeroStat.MaxHealth)
+	if (HeroStat.Health + HeroStat.HealthRegeneration <= HeroStat.MaxHealth)
 	{
-		HeroStat.Health = HeroStat.MaxHealth;
+		HeroStat.Health = HeroStat.Health + HeroStat.HealthRegeneration;
 	}
 }
 

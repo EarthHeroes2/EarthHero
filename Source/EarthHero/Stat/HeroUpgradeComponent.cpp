@@ -212,12 +212,24 @@ void UHeroUpgradeComponent::ApplyHeroUpgrade_Implementation(int index)
 			UHeroUpgradeLibrary::Pb_MovementSpeed(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat());
 			break;
 		case Wr_Berserker :
+			UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
+
+			UHeroUpgradeLibrary::WR_Berserker(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat(), WarriorStatComponent);
 			break;
 		case Wr_Guardian :
+			UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
+
+			UHeroUpgradeLibrary::WR_Guardian(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat(), WarriorStatComponent);
 			break;
 		case Wr_Leap :
+			UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
+
+			UHeroUpgradeLibrary::WR_JumpEnhanced(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat(), WarriorStatComponent);
 			break;
 		case Wr_Whirlwind :
+			UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
+
+			UHeroUpgradeLibrary::WR_WheelWind(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat(), WarriorStatComponent);
 			break;
 		case Mc_IncreasedDroneCount :
 			break;

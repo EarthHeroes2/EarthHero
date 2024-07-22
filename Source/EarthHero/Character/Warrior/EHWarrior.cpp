@@ -61,6 +61,9 @@ void AEHWarrior::PossessedBy(AController* NewController)
 		if (WarriorStatComponent)
 		{
 			UE_LOG(LogClass, Warning, TEXT("EHWarrior: SUCCESS load WarriorStatComponent"));
+			WarriorStatComponent->Warrior = this;
+			CombatComponent->SetWheelWindTick(WarriorStatComponent->WR_WheelWindTick);
+			CombatComponent->SetWheelWindDuration(WarriorStatComponent->WR_WheelWindDuration);
 		}
 		else
 		{

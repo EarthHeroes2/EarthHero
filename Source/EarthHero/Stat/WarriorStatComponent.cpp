@@ -3,6 +3,14 @@
 
 #include "WarriorStatComponent.h"
 
+#include "StatCalculationLibrary.h"
+#include "DamageType/NormalDamageType.h"
+#include "EarthHero/Character/Monster/MonsterBase.h"
+#include "EarthHero/Character/Warrior/EHWarrior.h"
+#include "EarthHero/Character/Warrior/WarriorCombatComponent.h"
+#include "EarthHero/GameMode/PlayingGameMode.h"
+#include "Monster/MonsterStatComponent.h"
+
 //워리어 생성자
 UWarriorStatComponent::UWarriorStatComponent()
 {
@@ -19,6 +27,15 @@ void UWarriorStatComponent::BeginPlay()
 	Super::BeginPlay();
 }
 
+void UWarriorStatComponent::OnRep_HeroStat()
+{
+	Super::OnRep_HeroStat();
+	if (GetNetMode() != NM_Client && Warrior && Warrior->CombatComponent)
+	{
+		WR_JumpDamage = WR_JumpDamageMulti * HeroStat.NormalDamage;
+	}
+}
+
 //워리어 데미지 받는 함수(오버라이드)
 
 
@@ -28,23 +45,100 @@ void UWarriorStatComponent::InitializeStatData_Implementation()
 	Super::InitializeStatData_Implementation();
 }
 
-
 ////////////////
 /*워리어 용 함수*/
 ///////////////
 
 
 //워리어 일반데미지
-void UWarriorStatComponent::WarriorDamage_Implementation(AActor* DamagedActor,  TSubclassOf<UDamageType> DamageTypeClass)
+void UWarriorStatComponent::WarriorDamage_Implementation(AActor* DamagedActor)
 {
+	float resultDamage = UStatCalculationLibrary::CalWarriorNormalDamage(HeroStat, WR_NormalDamage);
+	float actualDamage = 0;
+	
+	if(AMonsterBase* HitMonster = Cast<AMonsterBase>(DamagedActor))
+	{
+		static FHitResult DummyHitResult;
+		actualDamage = HitMonster->MonsterStatComponent->DamageTaken(resultDamage, UNormalDamageType::StaticClass(), DummyHitResult, nullptr, Warrior, IsDead);
+		if (IsDead)
+		{
+			KillCount += 1;
+			if (APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode()))
+			{
+				PlayingGameMode->UpdateGameStateKillCount();
+			}
+		}
+
+		if (actualDamage > 0)
+		{
+			GivenDamage += actualDamage;
+			if (APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode()))
+			{
+				PlayingGameMode->UpdateGameStateDamage();
+			}
+
+			if (WR_Drain > 0)
+			{
+				if (HeroStat.Health + actualDamage * WR_Drain > HeroStat.MaxHealth)
+				{
+					HeroStat.Health = HeroStat.MaxHealth;
+				}
+				else
+				{
+					HeroStat.Health += actualDamage * WR_Drain; 
+				}
+			}
+		}
+		
+		UE_LOG(LogTemp, Error, TEXT("Acture Damage = %f"), actualDamage);
+	}
 }
 
 //워리어 휠윈드
-void UWarriorStatComponent::WarriorWheelWindDamage_Implementation(AActor* DamagedActor,  TSubclassOf<UDamageType> DamageTypeClass)
+void UWarriorStatComponent::WarriorWheelWindDamage_Implementation(AActor* DamagedActor)
 {
+	float resultDamage = UStatCalculationLibrary::CalWarriorWheelWindDamage(HeroStat, WR_WheelWindDamage);
+	float actualDamage = 0;
+	
+	if(AMonsterBase* HitMonster = Cast<AMonsterBase>(DamagedActor))
+	{
+		static FHitResult DummyHitResult;
+		actualDamage = HitMonster->MonsterStatComponent->DamageTaken(resultDamage, UNormalDamageType::StaticClass(), DummyHitResult, nullptr, Warrior, IsDead);
+		if (IsDead)
+		{
+			KillCount += 1;
+			if (APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode()))
+			{
+				PlayingGameMode->UpdateGameStateKillCount();
+			}
+		}
+
+		if (actualDamage > 0)
+		{
+			GivenDamage += actualDamage;
+			if (APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode()))
+			{
+				PlayingGameMode->UpdateGameStateDamage();
+			}
+
+			if (WR_Drain > 0)
+			{
+				if (HeroStat.Health + actualDamage * WR_Drain > HeroStat.MaxHealth)
+				{
+					HeroStat.Health = HeroStat.MaxHealth;
+				}
+				else
+				{
+					HeroStat.Health += actualDamage * WR_Drain; 
+				}
+			}
+		}
+		
+		UE_LOG(LogTemp, Error, TEXT("Acture Damage = %f"), actualDamage);
+	}
 }
 
 //워리어 대쉬
-void UWarriorStatComponent::WarriorDashDamage_Implementation(AActor* DamagedActor,  TSubclassOf<UDamageType> DamageTypeClass)
+void UWarriorStatComponent::WarriorDashDamage_Implementation(AActor* DamagedActor)
 {
 }
