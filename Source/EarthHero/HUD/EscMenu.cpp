@@ -69,5 +69,9 @@ void UEscMenu::OnSettingsClicked()
 
 void UEscMenu::OnLeaveClicked()
 {
-	
+	APlayerController* PlayerController = GetOwningPlayer();
+	if (PlayerController)
+	{
+		PlayerController->ClientTravel("/Game/Maps/StartupMap", ETravelType::TRAVEL_Absolute);
+	}
 }
