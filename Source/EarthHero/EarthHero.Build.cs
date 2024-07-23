@@ -26,7 +26,8 @@ public class EarthHero : ModuleRules
                 "Steamworks",
                 "Sockets",
                 "Networking",
-                "AIModule"
+                "AIModule",
+                "NavigationSystem"
             }
         );
 
