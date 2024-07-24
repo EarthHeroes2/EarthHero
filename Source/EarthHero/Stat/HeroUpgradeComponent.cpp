@@ -94,8 +94,20 @@ FStatStructure& UHeroUpgradeComponent::GetBaseHeroStat()
 	}
 }
 
+void UHeroUpgradeComponent::Delay()
+{
+	PushRandomHeroUpgrade();
+}
+
 void UHeroUpgradeComponent::PushRandomHeroUpgrade_Implementation()
 {
+	if (!IsSelectDone)
+	{
+		GetWorld()->GetTimerManager().SetTimer(SelectDoneTimerHandle, this, &UHeroUpgradeComponent::Delay, 0.5, false);
+		return;
+	}
+	IsSelectDone = false;
+	
 	RandomUpgrades.Empty();
 	for (int i = 0; i < 3; i++)
 	{
@@ -113,7 +125,8 @@ void UHeroUpgradeComponent::PushRandomHeroUpgrade_Implementation()
 	{
 		int32 RandomIndex = FMath::RandRange(0, HeroUpgrades.Num() - 1);
 		FHeroUpgradeStructure SelectedUpgrade = HeroUpgrades[RandomIndex];
-	
+		if (SelectedUpgrade.UpgradeLevel == 3)
+			continue;
 		if (!RandomUpgrades.Contains(SelectedUpgrade))
 		{
 			RandomUpgrades.Add(SelectedUpgrade);
@@ -143,7 +156,7 @@ void UHeroUpgradeComponent::PushHeroUpgrade_Implementation(const TArray<FHeroUpg
 void UHeroUpgradeComponent::OnRep_HeroUpgrades(const TArray<FHeroUpgradeStructure> &ServerHeroUpgrades)
 {
 	UE_LOG(LogClass, Warning, TEXT("OnRep_HeroUpgrades"));
-	if (GetNetMode() == NM_Client && TabHUD && !ServerHeroUpgrades.IsEmpty() && ServerHeroUpgrades.Num() >= 12)
+	if (GetNetMode() == NM_Client && TabHUD && !ServerHeroUpgrades.IsEmpty())
 	{
 		for (int32 i = 0; i < ServerHeroUpgrades.Num(); i++)
 		{
@@ -213,12 +226,12 @@ void UHeroUpgradeComponent::ApplyHeroUpgrade_Implementation(int index)
 			break;
 		case Wr_Berserker :
 			UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
-
+		
 			UHeroUpgradeLibrary::WR_Berserker(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat(), WarriorStatComponent);
 			break;
 		case Wr_Guardian :
 			UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
-
+		
 			UHeroUpgradeLibrary::WR_Guardian(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat(), WarriorStatComponent);
 			break;
 		case Wr_Leap :
@@ -288,6 +301,23 @@ void UHeroUpgradeComponent::ApplyHeroUpgrade_Implementation(int index)
 		break;
 	}
 	Update_TabHeroUpgrades(HeroUpgrades);
+	IsSelectDone = true;
+}
+
+void UHeroUpgradeComponent::RemoveUpgrade(int32 index)
+{
+	FHeroUpgradeStructure *FoundItem;
+	int32 Index;
+	
+	FoundItem = Algo::FindByPredicate(HeroUpgrades, [](FHeroUpgradeStructure Upgrade)
+	{
+		return Upgrade.HeroUpgradeType == 8;
+	});
+	if (FoundItem)
+	{
+		Index = HeroUpgrades.IndexOfByKey(*FoundItem);
+		HeroUpgrades.RemoveAt(Index);
+	}
 }
 
 void UHeroUpgradeComponent::SetFalseHUReady_Implementation()

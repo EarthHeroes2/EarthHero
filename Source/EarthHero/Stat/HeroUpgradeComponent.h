@@ -70,6 +70,10 @@ private:
 
 	UPROPERTY()
 	int OwnerClass;
+	UPROPERTY()
+	bool IsSelectDone = true;
+	FTimerHandle SelectDoneTimerHandle;
+	void Delay();
 
 	UPROPERTY()
 	class UWarriorStatComponent *WarriorStatComponent;
@@ -82,4 +86,6 @@ private:
 
 	UPROPERTY()
 	class UArcherStatComponent *ArcherStatComponent;
+
+	void RemoveUpgrade(int32 index);
 };

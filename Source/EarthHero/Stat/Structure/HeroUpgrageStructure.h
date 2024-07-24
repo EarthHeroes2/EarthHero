@@ -30,9 +30,6 @@ struct FHeroUpgradeStructure : public FTableRowBase
 	// == 연산자 오버로드
 	bool operator==(const FHeroUpgradeStructure& Other) const
 	{
-		return UpgradeName.EqualTo(Other.UpgradeName) && 
-			   Explanation[UpgradeLevel].EqualTo(Other.Explanation[UpgradeLevel]) && 
-			   UpgradeLevel == Other.UpgradeLevel && 
-			   HeroUpgradeType == Other.HeroUpgradeType;
+		return UpgradeName.EqualTo(Other.UpgradeName);
 	}
 };

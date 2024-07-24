@@ -42,6 +42,10 @@ public:
 	int NumPlayersInSession;
 	int GameTimer = 0;
 
+	//DEBUG_MODE
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DEBUG MODE")
+	bool IsDebugMode = false;
+
 	void PlayerLogOut(const AEHPlayerController* ExitingEHPlayerController);
 	void SendChatMessage(const FText& Text);
 	void AddPlayerDead();

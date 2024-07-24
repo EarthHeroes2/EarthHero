@@ -127,6 +127,26 @@ void AEHPlayerController::SetupInputComponent()
 	EnhancedInputComponent->BindAction(SelectHUAction_3, ETriggerEvent::Started, this, &ThisClass::SelectHU_3);
 
 	EnhancedInputComponent->BindAction(EscapeAction, ETriggerEvent::Started, this, &ThisClass::ToggleEscMenu);
+
+	// if (APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode()))
+	// {
+	// 	UE_LOG(LogClass, Warning, TEXT("Here1"));
+	// 	if (PlayingGameMode->IsDebugMode)
+	// 	{
+	// 		UE_LOG(LogClass, Warning, TEXT("Here2"));
+			EnhancedInputComponent->BindAction(DEBUG_LevelUp, ETriggerEvent::Started, this, &ThisClass::DEBUG_Levelup);
+		//}
+	//}
+}
+
+void AEHPlayerController::DEBUG_Levelup()
+{
+	UE_LOG(LogClass, Warning, TEXT("Here3"));
+	if ((MyPlayerState = Cast<AEHPlayerState>(PlayerState)))
+	{
+		UE_LOG(LogClass, Warning, TEXT("Here4"));
+		MyPlayerState->GetStatComponent()->UpdateExp(-10);
+	}
 }
 
 void AEHPlayerController::ToggleEscMenu()

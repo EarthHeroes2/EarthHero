@@ -58,6 +58,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> EscapeAction; // Added EscapeAction
 
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> DEBUG_LevelUp;
+
 	//07 13 히어로 업그레이드 선택 맵핑 액션 추가
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> SelectHUAction_1;
@@ -105,6 +108,7 @@ protected:
 	void SelectHU_2();
 	void SelectHU_3();
 	void ToggleEscMenu();
+	void DEBUG_Levelup();
 	virtual void EndPlay(EEndPlayReason::Type EndPlayReason) override;
 
 public:
