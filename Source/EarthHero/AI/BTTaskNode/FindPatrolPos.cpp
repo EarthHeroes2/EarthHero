@@ -6,6 +6,7 @@
 #include "NavigationSystem.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "EarthHero/AIController/TestAIController.h"
+#include "EarthHero/BlackBoard/BlackBoardKeys.h"
 
 UFindPatrolPos::UFindPatrolPos(FObjectInitializer const& ObjectInitializer)
 {
@@ -30,12 +31,11 @@ EBTNodeResult::Type UFindPatrolPos::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 	//다음 순찰 위치 찾고 (현재 주변 1000 주변 임의 지점)
 	if (NavSystem->GetRandomPointInNavigableRadius(CurrentLocation, SearchRadius, NextPatrolLocation,nullptr))
 	{
-		Controller->GetBlackboardComponent()->SetValueAsVector(ATestAIController::TargetLocation, NextPatrolLocation.Location);
+		//TargetLocation에 위치 값 저장
+		Controller->GetBlackboardComponent()->SetValueAsVector(BlackboardKeys::TargetLocation, NextPatrolLocation.Location);
 	}
-	
-	//그 다음 이동할 곳을 확인하기 위한 디버그메시지
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%s"),*NextPatrolLocation.Location.ToString()));
-	
+
+	//
 	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;
 }

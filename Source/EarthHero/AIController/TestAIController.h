@@ -42,8 +42,6 @@ class EARTHHERO_API ATestAIController : public AAIController
 	UBehaviorTree* BehavirTree;
 	UAISenseConfig_Sight* SightConfig;
 
-	
-	static const FName HomePosKey;
 public:
 	static const FName TargetLocation;
 	

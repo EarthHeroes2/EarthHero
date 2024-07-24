@@ -13,7 +13,6 @@
 #include "Perception/AISenseConfig_Sight.h"
 
 //블랙보드에 저장될 키 이름 저장?
-const FName ATestAIController::HomePosKey(TEXT("HomePos"));
 const FName ATestAIController::TargetLocation(TEXT("TargetLocation"));
 
 ATestAIController::ATestAIController(FObjectInitializer const& ObjectInitializer)
