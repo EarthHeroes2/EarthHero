@@ -27,10 +27,7 @@ class EARTHHERO_API ATestAIController : public AAIController
 	void SetPerceptionSystem();
 	
 	UBlackboardComponent* GetBlackBoardComponent() const;
-
-
-	UFUNCTION()
-	void OnUpdated(TArray<AActor*> const& UpdatedActors);
+	
 	UFUNCTION()
 	void OnTargetDetected(AActor* Actor, FAIStimulus Stimulus);
 	

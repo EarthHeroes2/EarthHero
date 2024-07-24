@@ -16,9 +16,10 @@ UFindPatrolPos::UFindPatrolPos(FObjectInitializer const& ObjectInitializer)
 
 EBTNodeResult::Type UFindPatrolPos::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	ATestAIController* Controller = Cast<ATestAIController>(OwnerComp.GetAIOwner());
+	ATestAIController* AIController = Cast<ATestAIController>(OwnerComp.GetAIOwner());
+	if (AIController == nullptr) return EBTNodeResult::Failed;
 
-	APawn* ControllingPawn = Controller->GetPawn();
+	APawn* ControllingPawn = AIController->GetPawn();
 	if (ControllingPawn == nullptr) return EBTNodeResult::Failed;
 	
 	UNavigationSystemV1* const NavSystem = UNavigationSystemV1::GetCurrent(GetWorld());
@@ -32,7 +33,7 @@ EBTNodeResult::Type UFindPatrolPos::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 	if (NavSystem->GetRandomPointInNavigableRadius(CurrentLocation, SearchRadius, NextPatrolLocation,nullptr))
 	{
 		//TargetLocation에 위치 값 저장
-		Controller->GetBlackboardComponent()->SetValueAsVector(BlackboardKeys::TargetLocation, NextPatrolLocation.Location);
+		AIController->GetBlackboardComponent()->SetValueAsVector(BlackboardKeys::TargetLocation, NextPatrolLocation.Location);
 	}
 
 	//
