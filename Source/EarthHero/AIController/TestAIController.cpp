@@ -77,11 +77,10 @@ void ATestAIController::OnTargetDetected(AActor* Actor, FAIStimulus Stimulus)
 
 void ATestAIController::SetPerceptionSystem()
 {
-	//
 	SightConfig = CreateOptionalDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight Config"));
 	SetPerceptionComponent(*CreateOptionalDefaultSubobject<UAIPerceptionComponent>(TEXT("AI Perception")));
 
-	//시야 반경, 시야 상실 반경, 시야각, 감각을 잃는 기간, 마지막으로 감지된 객체의 위치 탐지 성공 여부
+	//시야 거리, 목표 상실 거리, 시야각, 감각을 잃는 기간, 마지막으로 감지된 객체의 위치 탐지 성공 여부
 	SightConfig->SightRadius = AISightRadius;
 	SightConfig->LoseSightRadius = SightConfig->SightRadius + AILoseSightRadius;
 	SightConfig->PeripheralVisionAngleDegrees = AIFieldOfView;
