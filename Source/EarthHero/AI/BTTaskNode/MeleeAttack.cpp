@@ -10,7 +10,7 @@ UMeleeAttack::UMeleeAttack(FObjectInitializer const& ObjectInitializer)
 
 EBTNodeResult::Type UMeleeAttack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	UE_LOG(LogTemp, Error, TEXT("Attack!!!!!!!"));
+	UE_LOG(LogTemp, Warning, TEXT("Attack to player!!!!!!!"));
 
 	
 

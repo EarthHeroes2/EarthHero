@@ -25,7 +25,8 @@ class EARTHHERO_API ATestAIController : public AAIController
 
 	
 	void SetPerceptionSystem();
-	
+	void UpdatePerceptionSystem();
+
 	UBlackboardComponent* GetBlackBoardComponent() const;
 	
 	UFUNCTION()

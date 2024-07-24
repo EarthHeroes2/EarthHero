@@ -6,6 +6,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "EarthHero/AIController/TestAIController.h"
 #include "EarthHero/BlackBoard/BlackBoardKeys.h"
+#include "EarthHero/Character/Monster/MonsterBase.h"
 
 UCheckPlayerInAttackRange::UCheckPlayerInAttackRange(FObjectInitializer const& ObjectInitializer)
 {
@@ -27,12 +28,14 @@ EBTNodeResult::Type UCheckPlayerInAttackRange::ExecuteTask(UBehaviorTreeComponen
 	FVector const TargetLocation = TargetPlayer->GetActorLocation();
 	float const Distance = FVector::Dist(CurrentLocation, TargetLocation);
 
-	UE_LOG(LogTemp, Error, TEXT("dist = %f"), Distance);
-
-	if(Distance < 100.f)
-		AIController->GetBlackboardComponent()->SetValueAsBool(BlackboardKeys::IsPlayerInMeleeRange, true);
+	AMonsterBase* ControllingMonsterPawn = Cast<AMonsterBase>(ControllingPawn);
+	if(ControllingMonsterPawn == nullptr) return EBTNodeResult::Failed;
+	float const AttackRange = ControllingMonsterPawn->AttackRange;
+	
+	if(Distance <= AttackRange)
+		AIController->GetBlackboardComponent()->SetValueAsBool(BlackboardKeys::IsPlayerInAttackRange, true);
 	else
-		AIController->GetBlackboardComponent()->SetValueAsBool(BlackboardKeys::IsPlayerInMeleeRange, false);
+		AIController->GetBlackboardComponent()->SetValueAsBool(BlackboardKeys::IsPlayerInAttackRange, false);
 	
 	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;
