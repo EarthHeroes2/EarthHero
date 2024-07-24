@@ -22,6 +22,8 @@ class EARTHHERO_API ATestAIController : public AAIController
 	virtual void BeginPlay() override;
 	virtual void OnPossess(APawn* InPawn) override;
 
+
+	
 	void SetPerceptionSystem();
 	
 	UBlackboardComponent* GetBlackBoardComponent() const;
@@ -33,21 +35,19 @@ class EARTHHERO_API ATestAIController : public AAIController
 	void OnTargetDetected(AActor* Actor, FAIStimulus Stimulus);
 	
 	
-
-
+	
 	UBehaviorTreeComponent* BehaviorTreeComponent;
 	UBlackboardComponent* BlackBoardComponent;
 
+	UBehaviorTree* BehavirTree;
 	UAISenseConfig_Sight* SightConfig;
 
-	UBehaviorTree* BehavirTree;
-
-
+	
 	static const FName HomePosKey;
+public:
 	static const FName TargetLocation;
 	
-	
-	
+private:
 	float AISightRadius = 500.f;
 	float AILoseSightRadius = 50.f;
 	float AIFieldOfView = 90.f;

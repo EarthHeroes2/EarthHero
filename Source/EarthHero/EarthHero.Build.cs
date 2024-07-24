@@ -27,7 +27,8 @@ public class EarthHero : ModuleRules
                 "Sockets",
                 "Networking",
                 "AIModule",
-                "NavigationSystem"
+                "NavigationSystem",
+                "GameplayTasks"
             }
         );
 

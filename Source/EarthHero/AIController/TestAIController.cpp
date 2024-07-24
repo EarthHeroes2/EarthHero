@@ -98,17 +98,3 @@ void ATestAIController::SetPerceptionSystem()
 	GetPerceptionComponent()->OnTargetPerceptionUpdated.AddDynamic(this, &ATestAIController::OnTargetDetected); //감각에 감지 시
 	GetPerceptionComponent()->ConfigureSense(*SightConfig);
 }
-
-/*
-void ATestAIController::Patrol()
-{
-	UNavigationSystemV1* NavSystem = UNavigationSystemV1::GetNavigationSystem(GetWorld());
-	if (NavSystem)
-	{
-		FNavLocation NextLocation;
-		if (NavSystem->GetRandomPointInNavigableRadius(FVector::ZeroVector, 500.0f, NextLocation))
-		{
-			UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, NextLocation.Location);
-		}
-	}
-}*/
