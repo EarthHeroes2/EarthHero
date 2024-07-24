@@ -75,9 +75,10 @@ void AEHPlayerState::BeginPlay()
 	Super::BeginPlay();
 	
 	//패키징 시 주석 처리해야 함
-	PlayerClass = Warrior; ////
-	IsCopyPropertiesEnd = true; ////
-	GetWorldTimerManager().SetTimer(SetStatComponentTimerHandle, this, &AEHPlayerState::SetStatComponent, 0.5f,true);  ////
+	//PlayerClass = Warrior; ////
+	//IsCopyPropertiesEnd = true; ////
+	
+	GetWorldTimerManager().SetTimer(SetStatComponentTimerHandle, this, &AEHPlayerState::SetStatComponent, 0.5f,true);
 }
 
 void AEHPlayerState::SetStatComponent()
