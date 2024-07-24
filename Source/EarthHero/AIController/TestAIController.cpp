@@ -8,6 +8,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "EarthHero/BlackBoard/BlackBoardKeys.h"
 #include "EarthHero/Character/EHCharacter.h"
+#include "EarthHero/Character/Monster/MonsterBase.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AIPerceptionTypes.h"
 #include "Perception/AISenseConfig_Sight.h"
@@ -20,7 +21,7 @@ ATestAIController::ATestAIController(FObjectInitializer const& ObjectInitializer
 	if (BTObject.Succeeded()) BehavirTree = BTObject.Object;
 	BehaviorTreeComponent = ObjectInitializer.CreateDefaultSubobject<UBehaviorTreeComponent>(this, TEXT("BehaviorComp"));
 	BlackBoardComponent = ObjectInitializer.CreateDefaultSubobject<UBlackboardComponent>(this, TEXT("BlackBoardComp"));
-    
+
 	//Perception초기화
 	SetPerceptionSystem();
 }
@@ -39,6 +40,8 @@ void ATestAIController::BeginPlay()
 void ATestAIController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
+
+	UpdatePerceptionSystem();
 	
 	if (BlackBoardComponent)
 	{
@@ -65,17 +68,11 @@ void ATestAIController::OnTargetDetected(AActor* Actor, FAIStimulus Stimulus)
 	}
 }
 
+//기본 시야 설정
 void ATestAIController::SetPerceptionSystem()
 {
 	SightConfig = CreateOptionalDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight Config"));
 	SetPerceptionComponent(*CreateOptionalDefaultSubobject<UAIPerceptionComponent>(TEXT("AI Perception")));
-
-	//시야 거리, 목표 상실 거리, 시야각, 감각을 잃는 기간, 마지막으로 감지된 객체의 위치 탐지 성공 여부
-	SightConfig->SightRadius = AISightRadius;
-	SightConfig->LoseSightRadius = SightConfig->SightRadius + AILoseSightRadius;
-	SightConfig->PeripheralVisionAngleDegrees = AIFieldOfView;
-	SightConfig->SetMaxAge(AISightAge);
-	SightConfig->AutoSuccessRangeFromLastSeenLocation = AILastSeenLocation;
 
 	//적, 중립, 아군 전부 감지
 	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
@@ -85,4 +82,18 @@ void ATestAIController::SetPerceptionSystem()
 	GetPerceptionComponent()->SetDominantSense(*SightConfig->GetSenseImplementation()); //주된 감각 = 시야
 	GetPerceptionComponent()->OnTargetPerceptionUpdated.AddDynamic(this, &ATestAIController::OnTargetDetected); //감각에 감지 시
 	GetPerceptionComponent()->ConfigureSense(*SightConfig);
+}
+
+void ATestAIController::UpdatePerceptionSystem()
+{
+	AMonsterBase* ControllingMonster = Cast<AMonsterBase>(GetPawn());
+	if(ControllingMonster)
+	{
+		//시야 거리, 목표 상실 거리, 시야각, 감각을 잃는 기간, 마지막으로 감지된 객체의 위치 탐지 성공 거리?
+		SightConfig->SightRadius = ControllingMonster->AISightRadius;
+		SightConfig->LoseSightRadius = ControllingMonster->AILoseSightRadius;
+		SightConfig->PeripheralVisionAngleDegrees = ControllingMonster->AIFieldOfView;
+		SightConfig->SetMaxAge(ControllingMonster->AISightAge);
+		SightConfig->AutoSuccessRangeFromLastSeenLocation = ControllingMonster->AILastSeenLocation;
+	}
 }
