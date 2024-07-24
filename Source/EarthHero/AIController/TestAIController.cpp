@@ -20,11 +20,7 @@ ATestAIController::ATestAIController(FObjectInitializer const& ObjectInitializer
 	//비헤이비어트리를 찾고
 	static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(TEXT("BehaviorTree'/Game/Ai/BT_MeleeEnemy.BT_MeleeEnemy'"));
 	
-	if (BTObject.Succeeded())
-	{
-		BehavirTree = BTObject.Object;
-		UE_LOG(LogTemp, Error, TEXT("Behavir Tree Found!!"));
-	}
+	if (BTObject.Succeeded()) BehavirTree = BTObject.Object;
 	BehaviorTreeComponent = ObjectInitializer.CreateDefaultSubobject<UBehaviorTreeComponent>(this, TEXT("BehaviorComp"));
 	BlackBoardComponent = ObjectInitializer.CreateDefaultSubobject<UBlackboardComponent>(this, TEXT("BlackBoardComp"));
     
@@ -68,7 +64,8 @@ void ATestAIController::OnUpdated(TArray<AActor*> const& UpdatedActors)
 void ATestAIController::OnTargetDetected(AActor* Actor, FAIStimulus Stimulus)
 {
 	//플레이어 캐릭터만을 걸러내고
-	if (const AEHCharacter* PlayerCharacter = Cast<AEHCharacter>(Actor))
+	const AEHCharacter* PlayerCharacter = Cast<AEHCharacter>(Actor);
+	if (PlayerCharacter)
 	{
 		//감지 성공 시 블랙보드의 CanSeePlayer에 true
 		GetBlackBoardComponent()->SetValueAsBool(BlackboardKeys::CanSeePlayer, Stimulus.WasSuccessfullySensed());
