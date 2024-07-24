@@ -88,7 +88,25 @@ void UWorldMapWidget::SetForceFieldAlignment(int32 ForceFieldIndex, const FVecto
         {
             CanvasSlot->SetPosition(MapPosition);
             CanvasSlot->SetAlignment(FVector2D(0.5f, 0.5f));
-            UE_LOG(LogTemp, Log, TEXT("Position: %s"), *MapPosition.ToString());
+
+            float RotationAngle = 0.0f;
+            switch (ForceFieldIndex)
+            {
+            case 0:
+                RotationAngle = 180.0f;
+                break;
+            case 1:
+                RotationAngle = 270.0f;
+                break;
+            case 3:
+                RotationAngle = 90.0f;
+                break;
+            default:
+                break;
+            }
+            ForceFieldImages[ForceFieldIndex]->SetRenderTransformAngle(RotationAngle);
+
+            UE_LOG(LogTemp, Log, TEXT("Position: %s, Rotation: %f"), *MapPosition.ToString(), RotationAngle);
         }
     }
 }
