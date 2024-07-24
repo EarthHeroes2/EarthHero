@@ -11,4 +11,5 @@ namespace BlackboardKeys
 	TCHAR const * const TargetLocation = TEXT("TargetLocation");
 	TCHAR const * const CanSeePlayer = TEXT("CanSeePlayer");
 	TCHAR const * const TargetPlayer = TEXT("TargetPlayer");
+	TCHAR const * const IsPlayerInMeleeRange = TEXT("IsPlayerInMeleeRange");
 }

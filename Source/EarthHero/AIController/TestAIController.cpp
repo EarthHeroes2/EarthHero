@@ -12,9 +12,6 @@
 #include "Perception/AIPerceptionTypes.h"
 #include "Perception/AISenseConfig_Sight.h"
 
-//블랙보드에 저장될 키 이름 저장?
-const FName ATestAIController::TargetLocation(TEXT("TargetLocation"));
-
 ATestAIController::ATestAIController(FObjectInitializer const& ObjectInitializer)
 {
 	//비헤이비어트리를 찾고

@@ -38,9 +38,6 @@ class EARTHHERO_API ATestAIController : public AAIController
 
 	UBehaviorTree* BehavirTree;
 	UAISenseConfig_Sight* SightConfig;
-
-public:
-	static const FName TargetLocation;
 	
 private:
 	float AISightRadius = 500.f;
