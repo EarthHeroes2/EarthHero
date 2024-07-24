@@ -141,12 +141,14 @@ void AEHPlayerController::SetupInputComponent()
 
 void AEHPlayerController::DEBUG_Levelup()
 {
+	/*
 	UE_LOG(LogClass, Warning, TEXT("Here3"));
 	if ((MyPlayerState = Cast<AEHPlayerState>(PlayerState)))
 	{
 		UE_LOG(LogClass, Warning, TEXT("Here4"));
 		MyPlayerState->GetStatComponent()->UpdateExp(-10);
 	}
+	*/
 }
 
 void AEHPlayerController::ToggleEscMenu()
