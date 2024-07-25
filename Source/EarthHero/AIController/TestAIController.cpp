@@ -62,7 +62,8 @@ void ATestAIController::OnTargetDetected(AActor* Actor, FAIStimulus Stimulus)
 	AEHCharacter* PlayerCharacter = Cast<AEHCharacter>(Actor);
 	if (PlayerCharacter)
 	{
-		//감지 성공 시 블랙보드의 CanSeePlayer에 true
+		//감지 성공 시
+		//블랙보드의 CanSeePlayer에 true
 		GetBlackBoardComponent()->SetValueAsBool(BlackboardKeys::CanSeePlayer, Stimulus.WasSuccessfullySensed());
 		//해당 플레이어를 쫒을 목표로 설정
 		GetBlackBoardComponent()->SetValueAsObject(BlackboardKeys::TargetPlayer, PlayerCharacter);
