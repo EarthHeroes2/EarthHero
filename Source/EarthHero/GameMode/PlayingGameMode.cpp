@@ -221,7 +221,7 @@ void APlayingGameMode::InitSeamlessTravelPlayer(AController* NewController) //�
 			{
 				UE_LOG(LogClass, Warning, TEXT("Seungule4"));
 				EHPlayerControllers.Add(NewEHPlayerController);
-				UE_LOG(LogClass, Warning, TEXT("Seungule5, EHPlayerControllers num : %d"), EHPlayerControllers.Num());
+				UE_LOG(LogClass, Warning, TEXT("Seungule5, EHPlayerControllers num : %d, %d"), EHPlayerControllers.Num(), PlayingGameSession->GetNumPlayersInSession());
 				//세션 속 모든 플레이어가 레벨에 들어왔다면 레벨 초기 작업 시작
 				if(EHPlayerControllers.Num() == PlayingGameSession->GetNumPlayersInSession())
 				{
