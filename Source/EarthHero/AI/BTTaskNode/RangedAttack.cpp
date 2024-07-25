@@ -13,8 +13,6 @@ URangedAttack::URangedAttack(FObjectInitializer const& ObjectInitializer)
 
 EBTNodeResult::Type URangedAttack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Attack to player!!!!!!!"));
-
 	ATestAIController* AIController = Cast<ATestAIController>(OwnerComp.GetAIOwner());
 	if(AIController == nullptr) return EBTNodeResult::Failed;
 
@@ -22,7 +20,6 @@ EBTNodeResult::Type URangedAttack::ExecuteTask(UBehaviorTreeComponent& OwnerComp
 	if(ControllingMonster == nullptr) return EBTNodeResult::Failed;
 
 	ControllingMonster->Attack();
-
 	
 	//AActor* const TargetPlayer = Cast<AActor>(AIController->GetBlackboardComponent()->GetValueAsObject(BlackboardKeys::TargetPlayer));
 	//if (TargetPlayer == nullptr) return EBTNodeResult::Failed;

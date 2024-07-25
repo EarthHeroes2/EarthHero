@@ -11,10 +11,8 @@
 
 class APlayingGameMode;
 
-void APlayingGameSession::BeginPlay()
+APlayingGameSession::APlayingGameSession()
 {
-	Super::BeginPlay();
-
 	IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
 	if (Subsystem)
 	{
@@ -38,6 +36,10 @@ void APlayingGameSession::BeginPlay()
 			}
 		}
 	}
+}
+void APlayingGameSession::BeginPlay()
+{
+	Super::BeginPlay();
 }
 
 void APlayingGameSession::NotifyLogout(const APlayerController* ExitingPlayer)
