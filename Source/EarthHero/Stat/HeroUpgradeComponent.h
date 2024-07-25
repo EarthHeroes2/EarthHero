@@ -53,6 +53,9 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Upgrade", meta = (AllowPrivateAccess = "true"))
 	TArray<FHeroUpgradeStructure> RandomUpgrades;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Upgrade", meta = (AllowPrivateAccess = "true"))
+	TArray<FHeroUpgradeStructure> AvailableUpgrades;
+
 	UPROPERTY()
 	int RandomUpgradesIndex[3];
 

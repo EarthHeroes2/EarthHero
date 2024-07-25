@@ -278,7 +278,7 @@ void UHeroUpgradeLibrary::WR_Guardian(FHeroUpgradeStructure& SelectHeroUpgrade, 
 			break;
 				
 		case 3 :
-			BaseHeroStat.MaxHealth = 1.35f;
+			BaseHeroStat.MaxHealth *= 1.35f;
 			HeroStat.MaxHealth = BaseHeroStat.MaxHealth;
 			//휠 윈드 스킬 넉백 추가
 			break ;

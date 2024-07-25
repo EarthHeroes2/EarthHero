@@ -113,6 +113,12 @@ void UHeroUpgradeComponent::PushRandomHeroUpgrade_Implementation()
 	{
 		RandomUpgradesIndex[i] = 0;
 	}
+
+	// for (int i = 0; i < 12; i++)
+	// {
+	// 	if (HeroUpgrades[i].UpgradeLevel == 3) continue;
+	// 	if (HeroUpgrades[i].HeroUpgradeType == Wr_Berserker)
+	// }
 	
 	if (HeroUpgrades.Num() < 3)
 	{
@@ -146,7 +152,7 @@ void UHeroUpgradeComponent::PushHeroUpgrade_Implementation(const TArray<FHeroUpg
 		InGameHUD->SetIngameHUDHeroUpgrade(
 			i,
 			nullptr,
-			ServerHeroUpgrades[i].UpgradeLevel + 1,
+			ServerHeroUpgrades[i].UpgradeLevel,
 			ServerHeroUpgrades[i].UpgradeName,
 			ServerHeroUpgrades[i].Explanation[ServerHeroUpgrades[i].UpgradeLevel + 1]
 			);

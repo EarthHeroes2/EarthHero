@@ -66,8 +66,8 @@ void APlayingGameMode::SpawnForceFields()
     // 아래 값들은 실제 맵 크기 넣으면 됨
     float MinX = 0.0f;
     float MaxX = 403200.0f;
-    float MinY = 0.0f;
-    float MaxY = -403200.0f;
+    float MinY = -403200.0f;
+    float MaxY = 0.0f;
     float Range = MaxX - MinX;
 
     // 맵 크기를 스케일 10으로 전환

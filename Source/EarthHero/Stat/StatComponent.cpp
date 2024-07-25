@@ -152,10 +152,6 @@ void UStatComponent::InitializeStatData_Implementation()
 */
 void UStatComponent::UpdateExp(float ExpMount)
 {
-	if (ExpMount <= -10)
-	{
-		ExpMount = HeroStat.MaxExp - HeroStat.Exp;
-	}
 	bool isLevelUp = UStatCalculationLibrary::AddExp(HeroStat, BaseHeroStat, ExpMount);
 	UpdateExpUI(GetExpPercent(), HeroStat.Level, isLevelUp);
 	if (isLevelUp)

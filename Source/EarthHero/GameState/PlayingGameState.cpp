@@ -203,10 +203,13 @@ void APlayingGameState::OnRep_GameStateExpansionDurations() const
 
 void APlayingGameState::OnRep_GameStateForceFieldLocations() const
 {
+	UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateForceFieldLocations"));
 	if (EHPlayerController && EHPlayerController->TabHUD)
 	{
+		UE_LOG(LogTemp, Log, TEXT("EHPlayerController && EHPlayerController->TabHUD"));
 		for (int index = 0; index <= 3; index++)
 		{
+			UE_LOG(LogTemp, Log, TEXT("junmoon"));
 			EHPlayerController->TabHUD->SetForceFieldAlignment(index, AllForceFieldLocations[index]);
 		}
 	}
