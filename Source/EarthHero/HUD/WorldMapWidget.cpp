@@ -98,13 +98,16 @@ void UWorldMapWidget::SetForceFieldAlignment(int32 ForceFieldIndex, const FVecto
             switch (ForceFieldIndex)
             {
             case 0:
-                RotationAngle = 90.0f;
+                RotationAngle = 270.0f;
                 break;
             case 1:
-                RotationAngle = 0;
+                RotationAngle = 180.0f;
+                break;
+            case 2:
+                RotationAngle = 90.0;
                 break;
             case 3:
-                RotationAngle = 180.0f;
+                RotationAngle = 0.0f;
                 break;
             default:
                 break;
