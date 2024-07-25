@@ -114,34 +114,33 @@ void UHeroUpgradeComponent::PushRandomHeroUpgrade_Implementation()
 		RandomUpgradesIndex[i] = 0;
 	}
 
-	for (int i = 0; i < 12; i++)
+	// for (int i = 0; i < 12; i++)
+	// {
+	// 	if (HeroUpgrades[i].UpgradeLevel == 3) continue;
+	// 	else if (HeroUpgrades[i].UpgradeLevel == -1) continue;
+	// 	else AvailableUpgrades.Add(HeroUpgrades[i]);
+	// }
+	
+	if (HeroUpgrades.Num() < 3)
 	{
-		if (HeroUpgrades[i].UpgradeLevel == 3) continue;
-		else if (HeroUpgrades[i].UpgradeLevel == -1) continue;
-		else AvailableUpgrades.Add(HeroUpgrades[i]);
+		UE_LOG(LogTemp, Warning, TEXT("Not enough upgrades to choose from!"));
+		return;
 	}
 	
-	if (AvailableUpgrades.Num() < 3)
+	// 배열에서 랜덤하게 3개의 업그레이드를 선택합니다.
+	while (RandomUpgrades.Num() < 3)
 	{
-		for (auto Element : AvailableUpgrades)
+		int32 RandomIndex = FMath::RandRange(0, HeroUpgrades.Num() - 1);
+		FHeroUpgradeStructure SelectedUpgrade = HeroUpgrades[RandomIndex];
+		if (SelectedUpgrade.UpgradeLevel == 3 || SelectedUpgrade.UpgradeLevel == -1)
+			continue;
+		if (!RandomUpgrades.Contains(SelectedUpgrade))
 		{
-			RandomUpgrades.Add(Element);
+			RandomUpgrades.Add(SelectedUpgrade);
+			RandomUpgradesIndex[RandomUpgrades.Num() - 1] = RandomIndex;
 		}
 	}
-	else
-	{
-		// 배열에서 랜덤하게 3개의 업그레이드를 선택합니다.
-		while (RandomUpgrades.Num() < 3)
-		{
-			int32 RandomIndex = FMath::RandRange(0, AvailableUpgrades.Num() - 1);
-			FHeroUpgradeStructure SelectedUpgrade = AvailableUpgrades[RandomIndex];
-			if (!RandomUpgrades.Contains(SelectedUpgrade))
-			{
-				RandomUpgrades.Add(SelectedUpgrade);
-				RandomUpgradesIndex[RandomUpgrades.Num() - 1] = RandomIndex;
-			}
-		}
-	}
+
 	PushHeroUpgrade(RandomUpgrades);
 }
 
@@ -326,7 +325,7 @@ void UHeroUpgradeComponent::RemoveUpgrade(int32 index)
 	if (FoundItem)
 	{
 		Index = HeroUpgrades.IndexOfByKey(*FoundItem);
-		HeroUpgrades[Index].UpgradeLevel = -1;
+		HeroUpgrades[Index].UpgradeLevel == -1;
 	}
 }
 
