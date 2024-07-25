@@ -325,7 +325,7 @@ void UHeroUpgradeComponent::RemoveUpgrade(int32 index)
 	if (FoundItem)
 	{
 		Index = HeroUpgrades.IndexOfByKey(*FoundItem);
-		//HeroUpgrades[Index].UpgradeLevel = -1;
+		HeroUpgrades[Index].UpgradeLevel = -1;
 	}
 }
 
