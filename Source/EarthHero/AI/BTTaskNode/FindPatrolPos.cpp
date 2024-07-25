@@ -29,6 +29,7 @@ EBTNodeResult::Type UFindPatrolPos::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 	FVector const CurrentLocation = ControllingPawn->GetActorLocation();
 	FNavLocation NextPatrolLocation;
 
+	
 	//다음 순찰 위치 찾고 (현재 주변 1000 주변 임의 지점)
 	if (NavSystem->GetRandomPointInNavigableRadius(CurrentLocation, SearchRadius, NextPatrolLocation,nullptr))
 	{

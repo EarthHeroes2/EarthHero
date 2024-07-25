@@ -16,7 +16,8 @@
 ATestAIController::ATestAIController(FObjectInitializer const& ObjectInitializer)
 {
 	//비헤이비어트리를 찾고
-	static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(TEXT("BehaviorTree'/Game/Ai/BT_MeleeEnemy.BT_MeleeEnemy'"));
+	//static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(TEXT("BehaviorTree'/Game/Ai/BT_MeleeEnemy.BT_MeleeEnemy'"));
+	static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(TEXT("BehaviorTree'/Game/Ai/BT_RangedEnemy.BT_RangedEnemy'"));
 	
 	if (BTObject.Succeeded()) BehavirTree = BTObject.Object;
 	BehaviorTreeComponent = ObjectInitializer.CreateDefaultSubobject<UBehaviorTreeComponent>(this, TEXT("BehaviorComp"));
@@ -87,7 +88,7 @@ void ATestAIController::SetPerceptionSystem()
 void ATestAIController::UpdatePerceptionSystem()
 {
 	AMonsterBase* ControllingMonster = Cast<AMonsterBase>(GetPawn());
-	if(ControllingMonster)
+	if(ControllingMonster && SightConfig)
 	{
 		//시야 거리, 목표 상실 거리, 시야각, 감각을 잃는 기간, 마지막으로 감지된 객체의 위치 탐지 성공 거리?
 		SightConfig->SightRadius = ControllingMonster->AISightRadius;
@@ -95,5 +96,6 @@ void ATestAIController::UpdatePerceptionSystem()
 		SightConfig->PeripheralVisionAngleDegrees = ControllingMonster->AIFieldOfView;
 		SightConfig->SetMaxAge(ControllingMonster->AISightAge);
 		SightConfig->AutoSuccessRangeFromLastSeenLocation = ControllingMonster->AILastSeenLocation;
+		GetPerceptionComponent()->ConfigureSense(*SightConfig);
 	}
 }
