@@ -21,6 +21,8 @@ EBTNodeResult::Type URangedAttack::ExecuteTask(UBehaviorTreeComponent& OwnerComp
 	AMonsterBase* ControllingMonster = Cast<AMonsterBase>(AIController->GetPawn());
 	if(ControllingMonster == nullptr) return EBTNodeResult::Failed;
 
+	ControllingMonster->Attack();
+
 	
 	//AActor* const TargetPlayer = Cast<AActor>(AIController->GetBlackboardComponent()->GetValueAsObject(BlackboardKeys::TargetPlayer));
 	//if (TargetPlayer == nullptr) return EBTNodeResult::Failed;
