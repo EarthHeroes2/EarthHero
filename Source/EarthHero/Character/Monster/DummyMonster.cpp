@@ -3,31 +3,14 @@
 
 #include "DummyMonster.h"
 
-void ADummyMonster::BeginPlay()
+ADummyMonster::ADummyMonster()
 {
-	Super::BeginPlay();
-}
+	//임시
+	AttackRange = 700;
 
-/*
-void ADummyMonster::CheckPlayer()
-{
-	ATestAIController* AIController = Cast<ATestAIController>(GetController());
-	if (AIController && !AIController->bMoveToPlayer)
-	{
-		//임시로 0번 플레이어 지정
-		APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
-		if (PlayerPawn)
-		{
-			FVector PlayerLocation = PlayerPawn->GetActorLocation();
-			FVector MonsterLocation = GetActorLocation();
-			float DistanceToPlayer = FVector::Dist(PlayerLocation, MonsterLocation);
-			
-			if (DistanceToPlayer < 200.0f) // 감지 거리
-			{
-				AIController->UpdatePlayerInfo(PlayerPawn);
-				AIController->bMoveToPlayer = true;
-			}
-			else AIController->bMoveToPlayer = false;
-		}
-	}
-}*/
+	AISightRadius = 800.f;
+	AILoseSightRadius = 1000.f;
+	AIFieldOfView = 90.f; //시야각인데 *2가 됨
+	AISightAge = 4.f;
+	AILastSeenLocation = 1100.f;
+}

@@ -39,11 +39,4 @@ class EARTHHERO_API ATestAIController : public AAIController
 
 	UBehaviorTree* BehavirTree;
 	UAISenseConfig_Sight* SightConfig;
-	
-private:
-	float AISightRadius = 500.f;
-	float AILoseSightRadius = 200.f;
-	float AIFieldOfView = 90.f; //이거 캐릭 정면 기준 좌,우로 2배가 되네?
-	float AISightAge = 4.f;
-	float AILastSeenLocation = 900.f;
 };
