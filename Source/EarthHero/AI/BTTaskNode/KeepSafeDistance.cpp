@@ -3,7 +3,6 @@
 
 #include "KeepSafeDistance.h"
 
-#include "NavigationSystem.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "EarthHero/AIController/TestAIController.h"
 #include "EarthHero/BlackBoard/BlackBoardKeys.h"
@@ -34,14 +33,22 @@ EBTNodeResult::Type UKeepSafeDistance::ExecuteTask(UBehaviorTreeComponent& Owner
 	FVector const PlayerLocation = TargetPlayer->GetActorLocation();
 	
 	float const DistanceToPlayer = FVector::Dist(MonsterLocation, PlayerLocation);
-	
-	FVector const SafeDirection = MonsterLocation - PlayerLocation; 
-	FVector const SafeLocation = MonsterLocation + SafeDirection.GetSafeNormal() * (AttackRange - DistanceToPlayer);
 
-	UE_LOG(LogTemp, Warning, TEXT("%s   %s   %s"), *MonsterLocation.ToString(), *PlayerLocation.ToString(), *SafeLocation.ToString());
+	if(AttackRange >= DistanceToPlayer) //사거리 안에 플레이어가 존재하면 도망
+	{
+		FVector const SafeDirection = MonsterLocation - PlayerLocation; 
+		FVector const SafeLocation = MonsterLocation + SafeDirection.GetSafeNormal() * (AttackRange - DistanceToPlayer);
 	
-	AIController->GetBlackboardComponent()->SetValueAsVector(BlackboardKeys::TargetLocation, SafeLocation);
+		AIController->GetBlackboardComponent()->SetValueAsVector(BlackboardKeys::TargetLocation, SafeLocation);
+	}
+	else //사거리 안에 플레이어가 없으면 접근
+	{
+		FVector const ChaseDirection = PlayerLocation - MonsterLocation; 
+		FVector const SafeLocation = MonsterLocation + ChaseDirection.GetSafeNormal() * (DistanceToPlayer - AttackRange);
 	
+		AIController->GetBlackboardComponent()->SetValueAsVector(BlackboardKeys::TargetLocation, SafeLocation);
+	}
 	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;
+	
 }
