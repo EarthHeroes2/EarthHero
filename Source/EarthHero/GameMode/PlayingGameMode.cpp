@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "PlayingGameMode.h"
 
 #include "EarthHero/ForceField/ForceField.h"
@@ -67,10 +64,10 @@ void APlayingGameMode::UpdateWorldMapInfo()
 void APlayingGameMode::SpawnForceFields()
 {
     // 아래 값들은 실제 맵 크기 넣으면 됨
-    float MinX = -100800.0f;
-    float MaxX = 100800.0f;
-    float MinY = -100800.0f;
-    float MaxY = 100800.0f;
+    float MinX = 0.0f;
+    float MaxX = 403200.0f;
+    float MinY = 0.0f;
+    float MaxY = -403200.0f;
     float Range = MaxX - MinX;
 
     // 맵 크기를 스케일 10으로 전환

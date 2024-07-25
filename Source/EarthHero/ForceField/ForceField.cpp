@@ -4,7 +4,7 @@
 #include "UObject/ConstructorHelpers.h"
 #include "Net/UnrealNetwork.h"
 
-float MapEdgeLength = 201600.0f;
+float MapEdgeLength = 403200.0f;
 float MapDiagLength = MapEdgeLength * 1.1414;
 
 AForceField::AForceField()
@@ -60,8 +60,8 @@ void AForceField::SetupTimeline()
 
 void AForceField::ExpandForceField(float Value)
 {
-    float MaxScaleX = MapDiagLength / 100.0f; // Adjust based on initial scale
-    float MaxScaleY = MapDiagLength / 100.0f; // Adjust based on initial scale
+    float MaxScaleX = MapDiagLength / 100.0f;
+    float MaxScaleY = MapDiagLength / 100.0f;
 
     FVector NewScale = InitialScale + FVector(MaxScaleX * Value, MaxScaleY * Value, 300.0f);
     CurrentScale = NewScale;
@@ -123,13 +123,11 @@ void AForceField::SetCustomCurve(UCurveFloat* NewCurve)
 
 void AForceField::OnRep_ExpansionCurve()
 {
-    // Restart timeline when curve is updated
     RestartTimeline();
 }
 
 void AForceField::OnRep_ExpansionDuration()
 {
-    // Restart timeline when duration is updated
     RestartTimeline();
 }
 

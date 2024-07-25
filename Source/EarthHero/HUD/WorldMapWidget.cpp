@@ -16,15 +16,38 @@ void UWorldMapWidget::NativeConstruct()
 
 FVector2D UWorldMapWidget::ConvertWorldToMapPosition(const FVector2D& WorldPosition) const
 {
-    // Map dimensions
+    // Image Map dimensions
     float MapWidth = 689.5f;
     float MapHeight = 706.5f;
-    
-    float MapX = (WorldPosition.Y + 100800.0f) / 201600.0f * MapWidth - (MapWidth / 2.0f);
-    float MapY = (MapHeight / 2.0f) - (WorldPosition.X + 100800.0f) / 201600.0f * MapHeight;
+
+    // Map center coordinates
+    float MapLength = 403200.0f;
+    float MapCenterX = 201600.0f;
+    float MapCenterY = -201600.0f;
+
+    // Adjusting the calculations to accommodate the new map center
+    float MapX = (WorldPosition.Y - MapCenterY + MapLength / 2.0f) / MapLength * MapWidth - (MapWidth / 2.0f);
+    float MapY = (MapHeight / 2.0f) - (WorldPosition.X - MapCenterX + MapLength / 2.0f) / MapLength * MapHeight;
 
     return FVector2D(MapX, MapY);
 }
+
+/*
+FVector2D UWorldMapWidget::ConvertWorldToMapPosition(const FVector2D& WorldPosition) const
+{
+    // Map Image dimensions
+    float MapWidth = 689.5f;
+    float MapHeight = 706.5f;
+
+    // Min and Max values
+    float MapLength = 403200.0f;
+    
+    float MapX = (WorldPosition.Y + MapLength/2) / MapLength * MapWidth - (MapWidth / 2.0f);
+    float MapY = (MapHeight / 2.0f) - (WorldPosition.X + MapLength/2) / MapLength * MapHeight;
+
+    return FVector2D(MapX, MapY);
+}
+*/
 
 void UWorldMapWidget::SetPlayerPosition(int32 PlayerIndex, const FVector2D& Position)
 {
