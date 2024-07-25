@@ -16,4 +16,6 @@ class EARTHHERO_API ADummyMonster : public AMonsterBase
 
 	ADummyMonster();
 	virtual void Attack() override;
+
+	TSubclassOf<AActor> TestBulletClass;
 };

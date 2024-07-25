@@ -5,6 +5,14 @@
 
 ADummyMonster::ADummyMonster()
 {
+	static ConstructorHelpers::FClassFinder<AActor> TestBulletAsset(TEXT("/Game/Blueprints/Character/Dummy/BP_TestBullet.BP_TestBullet_C"));
+	if (TestBulletAsset.Succeeded())
+	{
+		TestBulletClass = TestBulletAsset.Class;
+	}
+	
+
+	
 	//임시
 	AttackRange = 700;
 
@@ -17,5 +25,16 @@ ADummyMonster::ADummyMonster()
 
 void ADummyMonster::Attack()
 {
-	
+	UWorld* World = GetWorld();
+	if (World != nullptr && TestBulletClass)
+	{
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = this;
+		SpawnParams.Instigator = GetInstigator();
+		
+		FVector SpawnLocation = GetActorLocation() + FVector(50.0f, 0.0f, 0.0f);
+		FRotator SpawnRotation = GetActorRotation();
+		
+		AActor* SpawnedActor = World->SpawnActor<AActor>(TestBulletClass, SpawnLocation, SpawnRotation, SpawnParams);
+	}
 }
