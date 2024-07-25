@@ -240,16 +240,6 @@ void APlayingGameMode::InitLevelSetting()
 		//AActor* TargetPlayerStart = FindPlayerStart(EHPlayerControllers[i], FString::FromInt(i));
 		//RestartPlayerAtPlayerStart(EHPlayerControllers[i], TargetPlayerStart);
 	}
-
-	SpawnForceFields();
-	
-	//패키징 테스트 할  때 시도
-	 UE_LOG(LogTemp, Log, TEXT("junmoon3"));
-	 UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEHCharacter::StaticClass(), Players);
-	 UE_LOG(LogTemp, Log, TEXT("junmoon3.5"));
-	 APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
-	 PlayingGameState->SetGameStateForceField(ExpansionDurations, ForceFieldLocations);
-	 UE_LOG(LogTemp, Log, TEXT("junmoon4"));
 }
 
 void APlayingGameMode::PlayerControllerReady() //조금 느리지만 안전하게 다 확인하고
@@ -259,6 +249,16 @@ void APlayingGameMode::PlayerControllerReady() //조금 느리지만 안전하�
 	//모든 플레이어가 준비 완료되었다면
 	if(NumPlayerControllerReady == EHPlayerControllers.Num())
 	{
+		SpawnForceFields();
+	
+		//패키징 테스트 할  때 시도
+		UE_LOG(LogTemp, Log, TEXT("junmoon3"));
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEHCharacter::StaticClass(), Players);
+		UE_LOG(LogTemp, Log, TEXT("junmoon3.5"));
+		APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
+		PlayingGameState->SetGameStateForceField(ExpansionDurations, ForceFieldLocations);
+		UE_LOG(LogTemp, Log, TEXT("junmoon4"));
+		
 		UpdateGameStateNames();
 		UpdateGameStateClasses();
 		UpdateGameStateExps();
