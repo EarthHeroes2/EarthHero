@@ -82,19 +82,19 @@ void UInGameHUD::SetIngameHUDHeroUpgrade(int Index, UTexture2D* UpgradeImage, in
 		switch(Level)
 		{
 		case 0:
-			TargetWidget->SetLevel1Img(WhiteStar);
+			TargetWidget->SetLevel1Img(GoldStar);
 			TargetWidget->SetLevel2Img(WhiteStar);
 			TargetWidget->SetLevel3Img(WhiteStar);
 			break;
 		case 1:
 			TargetWidget->SetLevel1Img(GoldStar);
-			TargetWidget->SetLevel2Img(WhiteStar);
+			TargetWidget->SetLevel2Img(GoldStar);
 			TargetWidget->SetLevel3Img(WhiteStar);
 			break;
 		case 2:
 			TargetWidget->SetLevel1Img(GoldStar);
 			TargetWidget->SetLevel2Img(GoldStar);
-			TargetWidget->SetLevel3Img(WhiteStar);
+			TargetWidget->SetLevel3Img(GoldStar);
 			break;
 		default:
 			UE_LOG(LogClass, Warning, TEXT("InGameHUD: Invalid Level"));

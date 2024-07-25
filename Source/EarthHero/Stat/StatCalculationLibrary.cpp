@@ -99,7 +99,14 @@ bool UStatCalculationLibrary::AddExp(FStatStructure& HeroStat, FStatStructure &B
 			resultExp = resultExp - HeroStat.MaxExp;
 			BaseHeroStat.Level += 1;
 			HeroStat.Level += 1;
-			BaseHeroStat.MaxExp = HeroStat.RequiresExp[HeroStat.Level];
+			if (HeroStat.Level >= 9)
+			{
+				BaseHeroStat.MaxExp = HeroStat.RequiresExp[9];
+			}
+			else
+			{
+				BaseHeroStat.MaxExp = HeroStat.RequiresExp[HeroStat.Level];
+			}
 			HeroStat.MaxExp = BaseHeroStat.MaxExp;
 		}
 		
