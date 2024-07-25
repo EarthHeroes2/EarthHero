@@ -15,4 +15,5 @@ class EARTHHERO_API ADummyMonster : public AMonsterBase
 	GENERATED_BODY()
 
 	ADummyMonster();
+	virtual void Attack() override;
 };

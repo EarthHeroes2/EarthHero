@@ -4,17 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTTaskNode.h"
-#include "ProperChasePlayer.generated.h"
+#include "RangedAttack.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class EARTHHERO_API UProperChasePlayer : public UBTTaskNode
+class EARTHHERO_API URangedAttack : public UBTTaskNode
 {
 	GENERATED_BODY()
 
-	UProperChasePlayer(FObjectInitializer const& ObjectInitializer);
-
+	URangedAttack(FObjectInitializer const& ObjectInitializer);
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 };

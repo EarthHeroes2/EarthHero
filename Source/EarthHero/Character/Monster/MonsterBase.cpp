@@ -36,3 +36,8 @@ void AMonsterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 }
 
+void AMonsterBase::Attack()
+{
+	//
+}
+

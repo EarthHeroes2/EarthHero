@@ -14,3 +14,8 @@ ADummyMonster::ADummyMonster()
 	AISightAge = 4.f;
 	AILastSeenLocation = 1100.f;
 }
+
+void ADummyMonster::Attack()
+{
+	
+}

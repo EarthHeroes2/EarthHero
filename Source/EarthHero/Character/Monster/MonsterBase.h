@@ -48,4 +48,7 @@ public:
 	float AIFieldOfView = 90.f; //시야각인데 *2가 됨
 	float AISightAge = 4.f;
 	float AILastSeenLocation = 600.f;
+
+	//상속받아서 구현해주기
+	virtual void Attack();
 };
