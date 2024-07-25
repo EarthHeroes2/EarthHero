@@ -32,23 +32,6 @@ FVector2D UWorldMapWidget::ConvertWorldToMapPosition(const FVector2D& WorldPosit
     return FVector2D(MapX, MapY);
 }
 
-/*
-FVector2D UWorldMapWidget::ConvertWorldToMapPosition(const FVector2D& WorldPosition) const
-{
-    // Map Image dimensions
-    float MapWidth = 689.5f;
-    float MapHeight = 706.5f;
-
-    // Min and Max values
-    float MapLength = 403200.0f;
-    
-    float MapX = (WorldPosition.Y + MapLength/2) / MapLength * MapWidth - (MapWidth / 2.0f);
-    float MapY = (MapHeight / 2.0f) - (WorldPosition.X + MapLength/2) / MapLength * MapHeight;
-
-    return FVector2D(MapX, MapY);
-}
-*/
-
 void UWorldMapWidget::SetPlayerPosition(int32 PlayerIndex, const FVector2D& Position)
 {
     UImage* PlayerImages[4] = { Player1Image, Player2Image, Player3Image, Player4Image };
@@ -92,7 +75,6 @@ void UWorldMapWidget::UpdateForceField(int32 ForceFieldIndex, float CurrentTime,
         UCanvasPanelSlot* CanvasSlot = UWidgetLayoutLibrary::SlotAsCanvasSlot(ForceFieldImages[ForceFieldIndex]);
         if (CanvasSlot)
         {
-            UE_LOG(LogTemp, Log, TEXT("ForceFieldCurrentSizes[ForceFieldIndex]: %f"), ForceFieldCurrentSizes[ForceFieldIndex]);
             CanvasSlot->SetSize(FVector2D(ForceFieldCurrentSizes[ForceFieldIndex], ForceFieldCurrentSizes[ForceFieldIndex]));
         }
     }
@@ -112,17 +94,17 @@ void UWorldMapWidget::SetForceFieldAlignment(int32 ForceFieldIndex, const FVecto
             CanvasSlot->SetPosition(MapPosition);
             CanvasSlot->SetAlignment(FVector2D(0.5f, 0.5f));
 
-            float RotationAngle = 0.0f;
+            float RotationAngle = -90.0f;
             switch (ForceFieldIndex)
             {
             case 0:
-                RotationAngle = 180.0f;
+                RotationAngle = 90.0f;
                 break;
             case 1:
-                RotationAngle = 270.0f;
+                RotationAngle = 180.0f;
                 break;
             case 3:
-                RotationAngle = 90.0f;
+                RotationAngle = 0.0f;
                 break;
             default:
                 break;
