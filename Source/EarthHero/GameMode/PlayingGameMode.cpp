@@ -17,7 +17,7 @@ void APlayingGameMode::BeginPlay()
 	Super::BeginPlay();
 	
 	bUseSeamlessTravel = true;
-	SpawnForceFields();
+	//SpawnForceFields();
 	
 	//플레이어들 설정(임시)
 	//GetWorldTimerManager().SetTimer(GetActorsTimer, this, &APlayingGameMode::GetAllActorsInLevel, 2, true);
@@ -240,6 +240,8 @@ void APlayingGameMode::InitLevelSetting()
 		//AActor* TargetPlayerStart = FindPlayerStart(EHPlayerControllers[i], FString::FromInt(i));
 		//RestartPlayerAtPlayerStart(EHPlayerControllers[i], TargetPlayerStart);
 	}
+
+	SpawnForceFields();
 	
 	//패키징 테스트 할  때 시도
 	 UE_LOG(LogTemp, Log, TEXT("junmoon3"));

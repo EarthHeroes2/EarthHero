@@ -217,6 +217,7 @@ void APlayingGameState::OnRep_GameStateForceFieldLocations() const
 
 void APlayingGameState::SetGameStateForceField(const TArray<float> ExpansionDurations, const TArray<FVector2D> ForceFieldLocations)
 {
+	UE_LOG(LogTemp, Log, TEXT("GameStateForceFieldLocations : %d"), ForceFieldLocations.Num());
 	AllExpansionDurations = ExpansionDurations;
 	AllForceFieldLocations = ForceFieldLocations;
 }
