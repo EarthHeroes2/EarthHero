@@ -20,13 +20,13 @@ void APlayingGameMode::BeginPlay()
 	SpawnForceFields();
 	
 	//플레이어들 설정(임시)
-	GetWorldTimerManager().SetTimer(GetActorsTimer, this, &APlayingGameMode::GetAllActorsInLevel, 2, true);
+	//GetWorldTimerManager().SetTimer(GetActorsTimer, this, &APlayingGameMode::GetAllActorsInLevel, 2, true);
 }
 
 void APlayingGameMode::GetAllActorsInLevel()
 {
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEHCharacter::StaticClass(), Players);
-	UE_LOG(LogClass, Warning, TEXT("Players.Num: %d"), Players.Num());
+	//UE_LOG(LogClass, Warning, TEXT("Players.Num: %d"), Players.Num());
 	if (Players.Num() == 2)
 	{
 		UE_LOG(LogClass, Warning, TEXT("GetAllActorsInLevel Success"));
@@ -242,12 +242,12 @@ void APlayingGameMode::InitLevelSetting()
 	}
 	
 	//패키징 테스트 할  때 시도
-	// UE_LOG(LogTemp, Log, TEXT("junmoon3"));
-	// UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEHCharacter::StaticClass(), Players);
-	// UE_LOG(LogTemp, Log, TEXT("junmoon3.5"));
-	// APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
-	// PlayingGameState->SetGameStateForceField(ExpansionDurations, ForceFieldLocations);
-	// UE_LOG(LogTemp, Log, TEXT("junmoon4"));
+	 UE_LOG(LogTemp, Log, TEXT("junmoon3"));
+	 UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEHCharacter::StaticClass(), Players);
+	 UE_LOG(LogTemp, Log, TEXT("junmoon3.5"));
+	 APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
+	 PlayingGameState->SetGameStateForceField(ExpansionDurations, ForceFieldLocations);
+	 UE_LOG(LogTemp, Log, TEXT("junmoon4"));
 }
 
 void APlayingGameMode::PlayerControllerReady() //조금 느리지만 안전하게 다 확인하고

@@ -114,32 +114,34 @@ void UHeroUpgradeComponent::PushRandomHeroUpgrade_Implementation()
 		RandomUpgradesIndex[i] = 0;
 	}
 
-	// for (int i = 0; i < 12; i++)
-	// {
-	// 	if (HeroUpgrades[i].UpgradeLevel == 3) continue;
-	// 	if (HeroUpgrades[i].HeroUpgradeType == Wr_Berserker)
-	// }
-	
-	if (HeroUpgrades.Num() < 3)
+	for (int i = 0; i < 12; i++)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Not enough upgrades to choose from!"));
-		return;
+		if (HeroUpgrades[i].UpgradeLevel == 3) continue;
+		else if (HeroUpgrades[i].UpgradeLevel == -1) continue;
+		else AvailableUpgrades.Add(HeroUpgrades[i]);
 	}
 	
-	// 배열에서 랜덤하게 3개의 업그레이드를 선택합니다.
-	while (RandomUpgrades.Num() < 3)
+	if (AvailableUpgrades.Num() < 3)
 	{
-		int32 RandomIndex = FMath::RandRange(0, HeroUpgrades.Num() - 1);
-		FHeroUpgradeStructure SelectedUpgrade = HeroUpgrades[RandomIndex];
-		if (SelectedUpgrade.UpgradeLevel == 3)
-			continue;
-		if (!RandomUpgrades.Contains(SelectedUpgrade))
+		for (auto Element : AvailableUpgrades)
 		{
-			RandomUpgrades.Add(SelectedUpgrade);
-			RandomUpgradesIndex[RandomUpgrades.Num() - 1] = RandomIndex;
+			RandomUpgrades.Add(Element);
 		}
 	}
-
+	else
+	{
+		// 배열에서 랜덤하게 3개의 업그레이드를 선택합니다.
+		while (RandomUpgrades.Num() < 3)
+		{
+			int32 RandomIndex = FMath::RandRange(0, AvailableUpgrades.Num() - 1);
+			FHeroUpgradeStructure SelectedUpgrade = AvailableUpgrades[RandomIndex];
+			if (!RandomUpgrades.Contains(SelectedUpgrade))
+			{
+				RandomUpgrades.Add(SelectedUpgrade);
+				RandomUpgradesIndex[RandomUpgrades.Num() - 1] = RandomIndex;
+			}
+		}
+	}
 	PushHeroUpgrade(RandomUpgrades);
 }
 
@@ -234,11 +236,13 @@ void UHeroUpgradeComponent::ApplyHeroUpgrade_Implementation(int index)
 			UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
 		
 			UHeroUpgradeLibrary::WR_Berserker(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat(), WarriorStatComponent);
+			RemoveUpgrade(Wr_Guardian);
 			break;
 		case Wr_Guardian :
 			UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
 		
 			UHeroUpgradeLibrary::WR_Guardian(SelectHeroUpgrade, GetBaseHeroStat(), GetHeroStat(), WarriorStatComponent);
+			RemoveUpgrade(Wr_Berserker);
 			break;
 		case Wr_Leap :
 			UE_LOG(LogClass, Error, TEXT("Apply HeroUpgrade %s"), *SelectHeroUpgrade.UpgradeName.ToString());
@@ -322,7 +326,7 @@ void UHeroUpgradeComponent::RemoveUpgrade(int32 index)
 	if (FoundItem)
 	{
 		Index = HeroUpgrades.IndexOfByKey(*FoundItem);
-		HeroUpgrades.RemoveAt(Index);
+		HeroUpgrades[Index].UpgradeLevel = -1;
 	}
 }
 
