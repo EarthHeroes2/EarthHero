@@ -18,7 +18,7 @@ AAIControllerBase::AAIControllerBase(FObjectInitializer const& ObjectInitializer
 	//if(IsRunningDedicatedServer())
 	if(GetNetMode() != NM_Client)
 	{
-		UE_LOG(LogTemp, Error, TEXT("SSSSSSSSSSSSSSSSSVVVVVVVVVVVVVVVVRRRRRRRRRRRRRRRRRR"));
+		UE_LOG(LogTemp, Log, TEXT("SSSSSSSSSSSSSSSSSVVVVVVVVVVVVVVVVRRRRRRRRRRRRRRRRRR"));
 		//비헤이비어트리를 찾고
 		//static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(TEXT("BehaviorTree'/Game/Ai/BT_MeleeEnemy.BT_MeleeEnemy'"));
 		static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(TEXT("BehaviorTree'/Game/Ai/BT_RangedEnemy.BT_RangedEnemy'"));
