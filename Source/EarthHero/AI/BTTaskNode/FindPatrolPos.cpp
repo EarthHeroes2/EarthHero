@@ -25,6 +25,8 @@ EBTNodeResult::Type UFindPatrolPos::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 	UNavigationSystemV1* const NavSystem = UNavigationSystemV1::GetCurrent(GetWorld());
 	if (NavSystem == nullptr) return EBTNodeResult::Failed;
 
+
+	ControllingPawn->SetActorRotation(FRotator(0.f, 270.f, 0.f));
 	
 	FVector const CurrentLocation = ControllingPawn->GetActorLocation();
 	FNavLocation NextPatrolLocation;

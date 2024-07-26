@@ -34,6 +34,12 @@ EBTNodeResult::Type UKeepSafeDistance::ExecuteTask(UBehaviorTreeComponent& Owner
 	
 	float const DistanceToPlayer = FVector::Dist(MonsterLocation, PlayerLocation);
 
+	//플레이어를 바라보며 이동하기 위함
+	FRotator LookAtRotation = (PlayerLocation - MonsterLocation).Rotation();
+	LookAtRotation.Roll = 0.f;
+	LookAtRotation.Pitch = 0.f;
+	ControllingMonster->SetActorRotation(LookAtRotation);
+
 	if(AttackRange >= DistanceToPlayer) //사거리 안에 플레이어가 존재하면 도망
 	{
 		FVector const SafeDirection = MonsterLocation - PlayerLocation; 

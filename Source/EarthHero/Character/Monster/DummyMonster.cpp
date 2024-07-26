@@ -11,8 +11,6 @@ ADummyMonster::ADummyMonster()
 		TestBulletClass = TestBulletAsset.Class;
 	}
 	
-
-	
 	//임시
 	AttackRange = 700;
 
@@ -32,7 +30,7 @@ void ADummyMonster::Attack()
 		SpawnParams.Owner = this;
 		SpawnParams.Instigator = GetInstigator();
 		
-		FVector SpawnLocation = GetActorLocation() + FVector(50.0f, 0.0f, 0.0f);
+		FVector SpawnLocation = GetActorLocation() + FVector(100.0f, 0.0f, 0.0f);
 		FRotator SpawnRotation = GetActorRotation();
 		
 		AActor* SpawnedActor = World->SpawnActor<AActor>(TestBulletClass, SpawnLocation, SpawnRotation, SpawnParams);
