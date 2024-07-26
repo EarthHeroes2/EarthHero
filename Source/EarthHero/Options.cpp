@@ -364,17 +364,6 @@ void UOptions::OnMouseSensitivityChanged(float Value)
     {
         GameInstance->MouseSensitivity = Value;
         GameInstance->SaveSettings();
-
-        // Find the player character and update the camera rotation speed
-        APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-        if (PlayerController)
-        {
-            AEHCharacter* PlayerCharacter = Cast<AEHCharacter>(PlayerController->GetPawn());
-            if (PlayerCharacter)
-            {
-                PlayerCharacter->UpdateCameraRotationSpeed(Value);
-            }
-        }
     }
 }
 
