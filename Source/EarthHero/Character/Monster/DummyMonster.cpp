@@ -32,8 +32,6 @@ void ADummyMonster::Attack(FVector SpawnNormalVector)
 		
 		FVector SpawnLocation = GetActorLocation() + SpawnNormalVector * 50;
 		FRotator SpawnRotation = GetActorRotation();
-
-		UE_LOG(LogTemp, Log, TEXT("%s %s"), *GetActorLocation().ToString(), *SpawnNormalVector.ToString());
 		
 		AActor* SpawnedActor = World->SpawnActor<AActor>(TestBulletClass, SpawnLocation, SpawnRotation, SpawnParams);
 	}
