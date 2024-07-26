@@ -75,6 +75,20 @@ void AAIControllerBase::OnTargetDetected(AActor* Actor, FAIStimulus Stimulus)
 	}
 }
 
+//플레이어한테 맞으면 그를 대상으로 삼음
+void AAIControllerBase::AttackedPlayer(AActor* AttackedPlayer)
+{
+	UE_LOG(LogTemp, Log, TEXT("11111111111111111111111111111111111"));
+	//다만 목표대상이 없을 때만 때린놈을 대상으로 삼음
+	bool bCanSeePlayer = GetBlackBoardComponent()->GetValueAsBool(BlackboardKeys::CanSeePlayer);
+	if(!bCanSeePlayer)
+	{
+		UE_LOG(LogTemp, Log, TEXT("22222222222222222222222222222"));
+		GetBlackBoardComponent()->SetValueAsBool(BlackboardKeys::CanSeePlayer, true);
+		GetBlackBoardComponent()->SetValueAsObject(BlackboardKeys::TargetPlayer, AttackedPlayer);
+	}
+}
+
 //기본 시야 설정
 void AAIControllerBase::SetPerceptionSystem()
 {
