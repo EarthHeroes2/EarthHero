@@ -4,6 +4,7 @@
 #include "Engine/DataTable.h"
 #include "UObject/ConstructorHelpers.h"
 //#include "Options.h"
+#include "Character/EHCharacter.h"
 #include "GameFramework/GameUserSettings.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -153,8 +154,16 @@ void UEHGameInstance::LoadSettings()
                 UGameplayStatics::PushSoundMixModifier(this, MainSoundMix);
             }
             
-            /* Apply mouse sensitivity
-            InputSubsystem->SetMouseSensitivity(MouseSensitivity); */
+            // Apply mouse sensitivity
+            APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+            if (PlayerController)
+            {
+                AEHCharacter* PlayerCharacter = Cast<AEHCharacter>(PlayerController->GetPawn());
+                if (PlayerCharacter)
+                {
+                    PlayerCharacter->UpdateCameraRotationSpeed(MouseSensitivity);
+                }
+            }
         }
     }
     else
@@ -232,6 +241,14 @@ void UEHGameInstance::ApplySettings()
         UGameplayStatics::PushSoundMixModifier(this, MainSoundMix);
     }
 
-    /* Apply mouse sensitivity
-    InputSubsystem->SetMouseSensitivity(MouseSensitivity); */
+    // Apply mouse sensitivity
+    APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+    if (PlayerController)
+    {
+        AEHCharacter* PlayerCharacter = Cast<AEHCharacter>(PlayerController->GetPawn());
+        if (PlayerCharacter)
+        {
+            PlayerCharacter->UpdateCameraRotationSpeed(MouseSensitivity);
+        }
+    }
 }
