@@ -12,7 +12,7 @@ ADummyMonster::ADummyMonster()
 	}
 	
 	//임시
-	AttackRange = 700;
+	AttackRange = 800.f;
 
 	AISightRadius = 800.f;
 	AILoseSightRadius = 1000.f;
@@ -31,8 +31,7 @@ void ADummyMonster::Attack(FVector SpawnNormalVector)
 		SpawnParams.Instigator = GetInstigator();
 		
 		FVector SpawnLocation = GetActorLocation() + SpawnNormalVector * 50;
-		FRotator SpawnRotation = GetActorRotation();
 		
-		AActor* SpawnedActor = World->SpawnActor<AActor>(TestBulletClass, SpawnLocation, SpawnRotation, SpawnParams);
+		World->SpawnActor<AActor>(TestBulletClass, SpawnLocation, SpawnNormalVector.Rotation(), SpawnParams);
 	}
 }

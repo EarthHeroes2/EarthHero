@@ -53,7 +53,7 @@ EBTNodeResult::Type UKeepSafeDistance::ExecuteTask(UBehaviorTreeComponent& Owner
 	else //사거리 안에 플레이어가 없으면 접근
 	{
 		FVector const ChaseDirection = PlayerLocation - MonsterLocation; 
-		FVector const SafeLocation = MonsterLocation + ChaseDirection.GetSafeNormal() * (DistanceToPlayer - AttackRange);
+		FVector const SafeLocation = MonsterLocation + ChaseDirection.GetSafeNormal() * (DistanceToPlayer - AttackRange + 50); //쏘기 좋게 50 더 접근
 	
 		AIController->GetBlackboardComponent()->SetValueAsVector(BlackboardKeys::TargetLocation, SafeLocation);
 	}
