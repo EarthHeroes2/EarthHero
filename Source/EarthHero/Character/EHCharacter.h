@@ -37,6 +37,8 @@ public:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
     class UStatComponent *StatComponent;
 
+    void UpdateCameraRotationSpeed(float Sensitivity);
+
 protected:
     virtual void BeginPlay() override;
 
@@ -45,6 +47,8 @@ protected:
     void Initialize();
     
 private:
+    float CameraRotationSpeed = 1.0f;
+    
     //승언 PossessedBy에서 사용하는 변수들
     FTimerHandle SetStatComponentTimerHandle;
 

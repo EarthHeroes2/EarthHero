@@ -4,6 +4,7 @@
 #include "Components/ComboBoxString.h"
 #include "Components/Slider.h"
 #include "EHGameInstance.h"
+#include "Character/EHCharacter.h"
 #include "GameFramework/GameUserSettings.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/Button.h"
@@ -356,7 +357,6 @@ void UOptions::OnSFXVolumeChanged(float Value)
     }
 }
 
-
 void UOptions::OnMouseSensitivityChanged(float Value)
 {
     auto GameInstance = Cast<UEHGameInstance>(GetGameInstance());
@@ -364,10 +364,17 @@ void UOptions::OnMouseSensitivityChanged(float Value)
     {
         GameInstance->MouseSensitivity = Value;
         GameInstance->SaveSettings();
-        
-        // Apply the mouse sensitivity change
-        // Assuming you have a function to set this in your input system
-        // InputSubsystem->SetMouseSensitivity(Value);
+
+        // Find the player character and update the camera rotation speed
+        APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+        if (PlayerController)
+        {
+            AEHCharacter* PlayerCharacter = Cast<AEHCharacter>(PlayerController->GetPawn());
+            if (PlayerCharacter)
+            {
+                PlayerCharacter->UpdateCameraRotationSpeed(Value);
+            }
+        }
     }
 }
 
