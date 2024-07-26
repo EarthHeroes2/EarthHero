@@ -18,6 +18,8 @@ class EARTHHERO_API UEHGameInstance : public UGameInstance
 public:
 	FStatStructure* GetStatStructure(FName HeroName) const;
 	FString ServerPortNumber;
+	
+	float MouseSensitivity;
 
 	int Difficulty = 1; //기본 값 1
 	

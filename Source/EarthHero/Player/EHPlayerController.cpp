@@ -222,10 +222,14 @@ void AEHPlayerController::Move(const FInputActionValue& Value)
 
 void AEHPlayerController::Look(const FInputActionValue& Value)
 {
-	const FVector2D LookVector = Value.Get<FVector2D>() * 0.5f;
+	auto GameInstance = Cast<UEHGameInstance>(GetGameInstance());
+	if (GameInstance)
+	{
+		const FVector2D LookVector = Value.Get<FVector2D>() * GameInstance->MouseSensitivity;
 
-	AddYawInput(LookVector.X);
-	AddPitchInput(-LookVector.Y);
+		AddYawInput(LookVector.X);
+		AddPitchInput(-LookVector.Y);
+	}
 }
 
 void AEHPlayerController::ShowTabHUD()
@@ -291,17 +295,10 @@ void AEHPlayerController::SelectHU_3()
 	}
 }
 
-
 void AEHPlayerController::Client_EnableInput_Implementation()
 {
 	EnableInput(this);
 }
-
-
-
-
-
-
 
 void AEHPlayerController::Server_SendChatMessage_Implementation(const FText& Text)
 {

@@ -153,17 +153,6 @@ void UEHGameInstance::LoadSettings()
                 GEngine->GetMainAudioDevice()->SetSoundMixClassOverride(MainSoundMix, SFXVolumeSoundClass, SFXVolume, 1.0f, 0.0f, true);
                 UGameplayStatics::PushSoundMixModifier(this, MainSoundMix);
             }
-            
-            // Apply mouse sensitivity
-            APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-            if (PlayerController)
-            {
-                AEHCharacter* PlayerCharacter = Cast<AEHCharacter>(PlayerController->GetPawn());
-                if (PlayerCharacter)
-                {
-                    PlayerCharacter->UpdateCameraRotationSpeed(MouseSensitivity);
-                }
-            }
         }
     }
     else
@@ -239,16 +228,5 @@ void UEHGameInstance::ApplySettings()
         GEngine->GetMainAudioDevice()->SetSoundMixClassOverride(MainSoundMix, BackgroundVolumeSoundClass, BackgroundVolume, 1.0f, 0.0f, true);
         GEngine->GetMainAudioDevice()->SetSoundMixClassOverride(MainSoundMix, SFXVolumeSoundClass, SFXVolume, 1.0f, 0.0f, true);
         UGameplayStatics::PushSoundMixModifier(this, MainSoundMix);
-    }
-
-    // Apply mouse sensitivity
-    APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-    if (PlayerController)
-    {
-        AEHCharacter* PlayerCharacter = Cast<AEHCharacter>(PlayerController->GetPawn());
-        if (PlayerCharacter)
-        {
-            PlayerCharacter->UpdateCameraRotationSpeed(MouseSensitivity);
-        }
     }
 }
