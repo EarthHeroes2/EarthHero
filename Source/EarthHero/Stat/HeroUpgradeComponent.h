@@ -73,9 +73,11 @@ private:
 
 	UPROPERTY()
 	int OwnerClass;
+	
 	UPROPERTY()
 	bool IsSelectDone = true;
-	FTimerHandle SelectDoneTimerHandle;
+	
+	TQueue<FTimerHandle> UpgradeRequestQueue;
 	void Delay();
 
 	UPROPERTY()

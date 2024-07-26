@@ -96,30 +96,31 @@ FStatStructure& UHeroUpgradeComponent::GetBaseHeroStat()
 
 void UHeroUpgradeComponent::Delay()
 {
-	PushRandomHeroUpgrade();
+	if (IsSelectDone)
+	{
+		FTimerHandle TempHandle;
+		UpgradeRequestQueue.Dequeue(TempHandle);
+		GetWorld()->GetTimerManager().ClearTimer(TempHandle);
+		PushRandomHeroUpgrade();
+	}
 }
 
 void UHeroUpgradeComponent::PushRandomHeroUpgrade_Implementation()
 {
 	if (!IsSelectDone)
 	{
-		GetWorld()->GetTimerManager().SetTimer(SelectDoneTimerHandle, this, &UHeroUpgradeComponent::Delay, 0.5, false);
+		FTimerHandle SelectDoneTimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(SelectDoneTimerHandle, this, &UHeroUpgradeComponent::Delay, 0.5f, true);
+		UpgradeRequestQueue.Enqueue(SelectDoneTimerHandle);
 		return;
 	}
 	IsSelectDone = false;
-	
+
 	RandomUpgrades.Empty();
 	for (int i = 0; i < 3; i++)
 	{
 		RandomUpgradesIndex[i] = 0;
 	}
-
-	// for (int i = 0; i < 12; i++)
-	// {
-	// 	if (HeroUpgrades[i].UpgradeLevel == 3) continue;
-	// 	else if (HeroUpgrades[i].UpgradeLevel == -1) continue;
-	// 	else AvailableUpgrades.Add(HeroUpgrades[i]);
-	// }
 	
 	if (HeroUpgrades.Num() < 3)
 	{
