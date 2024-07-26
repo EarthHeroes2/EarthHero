@@ -5,7 +5,7 @@
 
 #include "NavigationSystem.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "EarthHero/AIController/TestAIController.h"
+#include "EarthHero/AIController/AIControllerBase.h"
 #include "EarthHero/BlackBoard/BlackBoardKeys.h"
 
 UFindPatrolPos::UFindPatrolPos(FObjectInitializer const& ObjectInitializer)
@@ -16,7 +16,7 @@ UFindPatrolPos::UFindPatrolPos(FObjectInitializer const& ObjectInitializer)
 
 EBTNodeResult::Type UFindPatrolPos::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	ATestAIController* AIController = Cast<ATestAIController>(OwnerComp.GetAIOwner());
+	AAIControllerBase* AIController = Cast<AAIControllerBase>(OwnerComp.GetAIOwner());
 	if (AIController == nullptr) return EBTNodeResult::Failed;
 
 	APawn* ControllingPawn = AIController->GetPawn();

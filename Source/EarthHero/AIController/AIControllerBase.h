@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "AIController.h"
 #include "Perception/AIPerceptionTypes.h"
-#include "TestAIController.generated.h"
+#include "AIControllerBase.generated.h"
 
 class UAISenseConfig_Sight;
 class UBehaviorTreeComponent;
@@ -13,11 +13,11 @@ class UBehaviorTreeComponent;
  * 
  */
 UCLASS()
-class EARTHHERO_API ATestAIController : public AAIController
+class EARTHHERO_API AAIControllerBase : public AAIController
 {
 	GENERATED_BODY()
 
-	ATestAIController(FObjectInitializer const& ObjectInitializer);
+	AAIControllerBase(FObjectInitializer const& ObjectInitializer);
 	
 	virtual void Tick(float DeltaTime) override;
 

@@ -4,7 +4,7 @@
 #include "KeepSafeDistance.h"
 
 #include "BehaviorTree/BlackboardComponent.h"
-#include "EarthHero/AIController/TestAIController.h"
+#include "EarthHero/AIController/AIControllerBase.h"
 #include "EarthHero/BlackBoard/BlackBoardKeys.h"
 #include "EarthHero/Character/Monster/MonsterBase.h"
 
@@ -17,7 +17,7 @@ UKeepSafeDistance::UKeepSafeDistance(FObjectInitializer const& ObjectInitializer
 
 EBTNodeResult::Type UKeepSafeDistance::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	ATestAIController* AIController = Cast<ATestAIController>(OwnerComp.GetAIOwner());
+	AAIControllerBase* AIController = Cast<AAIControllerBase>(OwnerComp.GetAIOwner());
 	if(AIController == nullptr) return EBTNodeResult::Failed;
 
 	AMonsterBase* ControllingMonster = Cast<AMonsterBase>(AIController->GetPawn());

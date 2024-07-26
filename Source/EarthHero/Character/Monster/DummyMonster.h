@@ -15,7 +15,7 @@ class EARTHHERO_API ADummyMonster : public AMonsterBase
 	GENERATED_BODY()
 
 	ADummyMonster();
-	virtual void Attack() override;
+	virtual void Attack(FVector SpawnNormalVector) override;
 
 	TSubclassOf<AActor> TestBulletClass;
 };

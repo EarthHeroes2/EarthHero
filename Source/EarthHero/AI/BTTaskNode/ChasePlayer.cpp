@@ -4,7 +4,7 @@
 #include "ChasePlayer.h"
 
 #include "BehaviorTree/BlackboardComponent.h"
-#include "EarthHero/AIController/TestAIController.h"
+#include "EarthHero/AIController/AIControllerBase.h"
 #include "EarthHero/BlackBoard/BlackBoardKeys.h"
 
 UChasePlayer::UChasePlayer(FObjectInitializer const& ObjectInitializer)
@@ -14,7 +14,7 @@ UChasePlayer::UChasePlayer(FObjectInitializer const& ObjectInitializer)
 
 EBTNodeResult::Type UChasePlayer::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	ATestAIController* AIController = Cast<ATestAIController>(OwnerComp.GetAIOwner());
+	AAIControllerBase* AIController = Cast<AAIControllerBase>(OwnerComp.GetAIOwner());
 	if(AIController == nullptr) return EBTNodeResult::Failed;
 	
 	AActor* const TargetPlayer = Cast<AActor>(AIController->GetBlackboardComponent()->GetValueAsObject(BlackboardKeys::TargetPlayer));

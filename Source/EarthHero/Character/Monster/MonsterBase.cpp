@@ -36,8 +36,7 @@ void AMonsterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 }
 
-void AMonsterBase::Attack()
+void AMonsterBase::Attack(FVector SpawnNormalVector)
 {
-	//
 }
 

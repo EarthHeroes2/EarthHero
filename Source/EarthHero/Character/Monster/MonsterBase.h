@@ -50,5 +50,5 @@ public:
 	float AILastSeenLocation = 600.f;
 
 	//상속받아서 구현해주기
-	virtual void Attack();
+	virtual void Attack(FVector SpawnNormalVector);
 };

@@ -21,7 +21,7 @@ ADummyMonster::ADummyMonster()
 	AILastSeenLocation = 1100.f;
 }
 
-void ADummyMonster::Attack()
+void ADummyMonster::Attack(FVector SpawnNormalVector)
 {
 	UWorld* World = GetWorld();
 	if (World != nullptr && TestBulletClass)
@@ -30,8 +30,10 @@ void ADummyMonster::Attack()
 		SpawnParams.Owner = this;
 		SpawnParams.Instigator = GetInstigator();
 		
-		FVector SpawnLocation = GetActorLocation() + FVector(100.0f, 0.0f, 0.0f);
+		FVector SpawnLocation = GetActorLocation() + SpawnNormalVector * 50;
 		FRotator SpawnRotation = GetActorRotation();
+
+		UE_LOG(LogTemp, Log, TEXT("%s %s"), *GetActorLocation().ToString(), *SpawnNormalVector.ToString());
 		
 		AActor* SpawnedActor = World->SpawnActor<AActor>(TestBulletClass, SpawnLocation, SpawnRotation, SpawnParams);
 	}

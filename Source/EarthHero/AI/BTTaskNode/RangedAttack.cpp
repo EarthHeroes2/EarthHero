@@ -3,7 +3,9 @@
 
 #include "RangedAttack.h"
 
-#include "EarthHero/AIController/TestAIController.h"
+#include "BehaviorTree/BlackboardComponent.h"
+#include "EarthHero/AIController/AIControllerBase.h"
+#include "EarthHero/BlackBoard/BlackBoardKeys.h"
 #include "EarthHero/Character/Monster/MonsterBase.h"
 
 URangedAttack::URangedAttack(FObjectInitializer const& ObjectInitializer)
@@ -13,16 +15,20 @@ URangedAttack::URangedAttack(FObjectInitializer const& ObjectInitializer)
 
 EBTNodeResult::Type URangedAttack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	ATestAIController* AIController = Cast<ATestAIController>(OwnerComp.GetAIOwner());
+	AAIControllerBase* AIController = Cast<AAIControllerBase>(OwnerComp.GetAIOwner());
 	if(AIController == nullptr) return EBTNodeResult::Failed;
 
 	AMonsterBase* ControllingMonster = Cast<AMonsterBase>(AIController->GetPawn());
 	if(ControllingMonster == nullptr) return EBTNodeResult::Failed;
 
-	ControllingMonster->Attack();
+	AActor* const TargetPlayer = Cast<AActor>(AIController->GetBlackboardComponent()->GetValueAsObject(BlackboardKeys::TargetPlayer));
+	if (TargetPlayer == nullptr) return EBTNodeResult::Failed;
+
+	FVector SpawnNormalVector = (TargetPlayer->GetActorLocation() - ControllingMonster->GetActorLocation()).GetSafeNormal();
 	
-	//AActor* const TargetPlayer = Cast<AActor>(AIController->GetBlackboardComponent()->GetValueAsObject(BlackboardKeys::TargetPlayer));
-	//if (TargetPlayer == nullptr) return EBTNodeResult::Failed;
+	ControllingMonster->Attack(SpawnNormalVector);
+	
+	
 	
 	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;

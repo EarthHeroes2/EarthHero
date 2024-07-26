@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "TestAIController.h"
+#include "AIControllerBase.h"
 
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
@@ -13,7 +13,7 @@
 #include "Perception/AIPerceptionTypes.h"
 #include "Perception/AISenseConfig_Sight.h"
 
-ATestAIController::ATestAIController(FObjectInitializer const& ObjectInitializer)
+AAIControllerBase::AAIControllerBase(FObjectInitializer const& ObjectInitializer)
 {
 	//비헤이비어트리를 찾고
 	//static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(TEXT("BehaviorTree'/Game/Ai/BT_MeleeEnemy.BT_MeleeEnemy'"));
@@ -27,13 +27,13 @@ ATestAIController::ATestAIController(FObjectInitializer const& ObjectInitializer
 	SetPerceptionSystem();
 }
 
-void ATestAIController::Tick(float DeltaTime)
+void AAIControllerBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
 
 
-void ATestAIController::BeginPlay()
+void AAIControllerBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
@@ -43,7 +43,7 @@ void ATestAIController::BeginPlay()
 	BehaviorTreeComponent->StartTree(*BehavirTree);
 }
 
-void ATestAIController::OnPossess(APawn* InPawn)
+void AAIControllerBase::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
 
@@ -56,12 +56,12 @@ void ATestAIController::OnPossess(APawn* InPawn)
 	}
 }
 
-UBlackboardComponent* ATestAIController::GetBlackBoardComponent() const
+UBlackboardComponent* AAIControllerBase::GetBlackBoardComponent() const
 {
 	return BlackBoardComponent;
 }
 
-void ATestAIController::OnTargetDetected(AActor* Actor, FAIStimulus Stimulus)
+void AAIControllerBase::OnTargetDetected(AActor* Actor, FAIStimulus Stimulus)
 {
 	//플레이어 캐릭터만을 걸러내고
 	AEHCharacter* PlayerCharacter = Cast<AEHCharacter>(Actor);
@@ -76,7 +76,7 @@ void ATestAIController::OnTargetDetected(AActor* Actor, FAIStimulus Stimulus)
 }
 
 //기본 시야 설정
-void ATestAIController::SetPerceptionSystem()
+void AAIControllerBase::SetPerceptionSystem()
 {
 	SightConfig = CreateOptionalDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight Config"));
 	SetPerceptionComponent(*CreateOptionalDefaultSubobject<UAIPerceptionComponent>(TEXT("AI Perception")));
@@ -87,11 +87,11 @@ void ATestAIController::SetPerceptionSystem()
 	SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
 	
 	GetPerceptionComponent()->SetDominantSense(*SightConfig->GetSenseImplementation()); //주된 감각 = 시야
-	GetPerceptionComponent()->OnTargetPerceptionUpdated.AddDynamic(this, &ATestAIController::OnTargetDetected); //감각에 감지 시
+	GetPerceptionComponent()->OnTargetPerceptionUpdated.AddDynamic(this, &AAIControllerBase::OnTargetDetected); //감각에 감지 시
 	GetPerceptionComponent()->ConfigureSense(*SightConfig);
 }
 
-void ATestAIController::UpdatePerceptionSystem()
+void AAIControllerBase::UpdatePerceptionSystem()
 {
 	AMonsterBase* ControllingMonster = Cast<AMonsterBase>(GetPawn());
 	if(ControllingMonster && SightConfig)
