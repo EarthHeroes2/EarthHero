@@ -4,6 +4,8 @@
 #include "MonsterStatComponent.h"
 
 #include "EarthHero/EHGameInstance.h"
+#include "EarthHero/AIController/AIControllerBase.h"
+#include "EarthHero/Character/Monster/MonsterBase.h"
 #include "EarthHero/GameMode/PlayingGameMode.h"
 #include "EarthHero/Stat/StatCalculationLibrary.h"
 #include "Kismet/GameplayStatics.h"
@@ -50,6 +52,27 @@ float UMonsterStatComponent::DamageTaken(float InDamage, TSubclassOf<UDamageType
 	
 	FString Message = FString::Printf(TEXT("Health : %f"), MonsterStat.Health);
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, Message);
+
+	AActor* Actor = GetOwner();
+	if(Actor)
+	{
+		AMonsterBase* Monster = Cast<AMonsterBase>(Actor);
+		if(Monster)
+		{
+			AController* Controller = Monster->GetController();
+			if(Controller)
+			{
+				AAIControllerBase* AIControllerBase = Cast<AAIControllerBase>(Controller);
+				if(AIControllerBase)
+				{
+					AIControllerBase->AttackedPlayer(DamageCausor);
+				}
+			}
+		}
+	}
+
+
+	
 	if (MonsterStat.Health <= 0.f)
 	{
 		IsDead = true;

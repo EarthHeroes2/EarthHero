@@ -41,4 +41,7 @@ class EARTHHERO_API AAIControllerBase : public AAIController
 
 	UBehaviorTree* BehavirTree;
 	UAISenseConfig_Sight* SightConfig;
+
+public:
+	void AttackedPlayer(AActor* AttackedPlayer);
 };
