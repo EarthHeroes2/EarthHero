@@ -18,6 +18,8 @@ class EARTHHERO_API ATestAIController : public AAIController
 	GENERATED_BODY()
 
 	ATestAIController(FObjectInitializer const& ObjectInitializer);
+	
+	virtual void Tick(float DeltaTime) override;
 
 	virtual void BeginPlay() override;
 	virtual void OnPossess(APawn* InPawn) override;

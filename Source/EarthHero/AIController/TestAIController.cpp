@@ -27,6 +27,11 @@ ATestAIController::ATestAIController(FObjectInitializer const& ObjectInitializer
 	SetPerceptionSystem();
 }
 
+void ATestAIController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+}
+
 
 void ATestAIController::BeginPlay()
 {

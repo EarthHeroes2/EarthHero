@@ -34,7 +34,10 @@ EBTNodeResult::Type UKeepSafeDistance::ExecuteTask(UBehaviorTreeComponent& Owner
 	
 	float const DistanceToPlayer = FVector::Dist(MonsterLocation, PlayerLocation);
 
-	//플레이어를 바라보며 이동하기 위함
+	//플레이어를 바라보며 이동하기 위해
+	//ai컨트롤러 틱을 잠시 비활성화
+	AIController->SetActorTickEnabled(false);
+	//그리고 방향을 돌려줌
 	FRotator LookAtRotation = (PlayerLocation - MonsterLocation).Rotation();
 	LookAtRotation.Roll = 0.f;
 	LookAtRotation.Pitch = 0.f;
