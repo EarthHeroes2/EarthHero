@@ -15,33 +15,39 @@
 
 AAIControllerBase::AAIControllerBase(FObjectInitializer const& ObjectInitializer)
 {
-	//비헤이비어트리를 찾고
-	//static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(TEXT("BehaviorTree'/Game/Ai/BT_MeleeEnemy.BT_MeleeEnemy'"));
-	static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(TEXT("BehaviorTree'/Game/Ai/BT_RangedEnemy.BT_RangedEnemy'"));
+	//if(IsRunningDedicatedServer())
+	if(GetNetMode() != NM_Client)
+	{
+		UE_LOG(LogTemp, Error, TEXT("SSSSSSSSSSSSSSSSSVVVVVVVVVVVVVVVVRRRRRRRRRRRRRRRRRR"));
+		//비헤이비어트리를 찾고
+		//static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(TEXT("BehaviorTree'/Game/Ai/BT_MeleeEnemy.BT_MeleeEnemy'"));
+		static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(TEXT("BehaviorTree'/Game/Ai/BT_RangedEnemy.BT_RangedEnemy'"));
 	
-	if (BTObject.Succeeded()) BehavirTree = BTObject.Object;
-	BehaviorTreeComponent = ObjectInitializer.CreateDefaultSubobject<UBehaviorTreeComponent>(this, TEXT("BehaviorComp"));
-	BlackBoardComponent = ObjectInitializer.CreateDefaultSubobject<UBlackboardComponent>(this, TEXT("BlackBoardComp"));
+		if (BTObject.Succeeded()) BehavirTree = BTObject.Object;
+		BehaviorTreeComponent = ObjectInitializer.CreateDefaultSubobject<UBehaviorTreeComponent>(this, TEXT("BehaviorComp"));
+		BlackBoardComponent = ObjectInitializer.CreateDefaultSubobject<UBlackboardComponent>(this, TEXT("BlackBoardComp"));
 
-	//Perception초기화
-	SetPerceptionSystem();
+		//Perception초기화
+		SetPerceptionSystem();
+	}
 }
 
 void AAIControllerBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	//비헤이비어 트리 실행
-	RunBehaviorTree(BehavirTree);
-	//위와 무슨 차이지?
-	BehaviorTreeComponent->StartTree(*BehavirTree);
+
+	if(GetNetMode() != NM_Client)
+	{
+		//비헤이비어 트리 실행
+		RunBehaviorTree(BehavirTree);
+		//위와 무슨 차이지?
+		BehaviorTreeComponent->StartTree(*BehavirTree);
+	}
 }
 
 void AAIControllerBase::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
-
-	UE_LOG(LogTemp, Log, TEXT("OnPossess OnPossess OnPossess OnPossess"));
 
 	UpdatePerceptionSystem();
 	
@@ -59,8 +65,6 @@ UBlackboardComponent* AAIControllerBase::GetBlackBoardComponent() const
 
 void AAIControllerBase::OnTargetDetected(AActor* Actor, FAIStimulus Stimulus)
 {
-	UE_LOG(LogTemp, Log, TEXT("OnTargetDetected OnTargetDetected OnTargetDetected"));
-	
 	//플레이어 캐릭터만을 걸러내고
 	AEHCharacter* PlayerCharacter = Cast<AEHCharacter>(Actor);
 	if (PlayerCharacter)
@@ -89,7 +93,6 @@ void AAIControllerBase::AttackedPlayer(AActor* AttackedPlayer)
 //기본 시야 설정
 void AAIControllerBase::SetPerceptionSystem()
 {
-	UE_LOG(LogTemp, Log, TEXT("SetPerceptionSystem SetPerceptionSystem SetPerceptionSystem"));
 	SightConfig = CreateOptionalDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight Config"));
 	SetPerceptionComponent(*CreateOptionalDefaultSubobject<UAIPerceptionComponent>(TEXT("AI Perception")));
 
@@ -105,8 +108,6 @@ void AAIControllerBase::SetPerceptionSystem()
 
 void AAIControllerBase::UpdatePerceptionSystem()
 {
-	UE_LOG(LogTemp, Log, TEXT(" UpdatePerceptionSystem UpdatePerceptionSystem UpdatePerceptionSystem"));
-	
 	AMonsterBase* ControllingMonster = Cast<AMonsterBase>(GetPawn());
 	if(ControllingMonster && SightConfig)
 	{

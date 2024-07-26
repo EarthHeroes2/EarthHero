@@ -15,8 +15,6 @@ UCheckPlayerInAttackRange::UCheckPlayerInAttackRange(FObjectInitializer const& O
 
 EBTNodeResult::Type UCheckPlayerInAttackRange::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	UE_LOG(LogTemp, Log, TEXT("22222222222222222222222222222"));
-	
 	AAIControllerBase* AIController = Cast<AAIControllerBase>(OwnerComp.GetAIOwner());
 	if(AIController == nullptr) return EBTNodeResult::Failed;
 
