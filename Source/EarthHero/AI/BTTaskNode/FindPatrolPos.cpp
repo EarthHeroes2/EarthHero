@@ -16,6 +16,8 @@ UFindPatrolPos::UFindPatrolPos(FObjectInitializer const& ObjectInitializer)
 
 EBTNodeResult::Type UFindPatrolPos::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
+	UE_LOG(LogTemp, Log, TEXT("33333333333333333333333333333333333"));
+	
 	AAIControllerBase* AIController = Cast<AAIControllerBase>(OwnerComp.GetAIOwner());
 	if (AIController == nullptr) return EBTNodeResult::Failed;
 

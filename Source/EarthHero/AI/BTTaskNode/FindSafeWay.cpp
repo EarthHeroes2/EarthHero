@@ -18,6 +18,8 @@ UFindSafeWay::UFindSafeWay(FObjectInitializer const& ObjectInitializer)
 
 EBTNodeResult::Type UFindSafeWay::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
+	UE_LOG(LogTemp, Log, TEXT("44444444444444444444444444444444444"));
+	
 	AAIControllerBase* AIController = Cast<AAIControllerBase>(OwnerComp.GetAIOwner());
 	if(AIController == nullptr) return EBTNodeResult::Failed;
 

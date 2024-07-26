@@ -17,6 +17,8 @@ UKeepSafeDistance::UKeepSafeDistance(FObjectInitializer const& ObjectInitializer
 
 EBTNodeResult::Type UKeepSafeDistance::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
+	UE_LOG(LogTemp, Log, TEXT("5555555555555555555555555555555555555"));
+	
 	AAIControllerBase* AIController = Cast<AAIControllerBase>(OwnerComp.GetAIOwner());
 	if(AIController == nullptr) return EBTNodeResult::Failed;
 

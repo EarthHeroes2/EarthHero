@@ -27,12 +27,6 @@ AAIControllerBase::AAIControllerBase(FObjectInitializer const& ObjectInitializer
 	SetPerceptionSystem();
 }
 
-void AAIControllerBase::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
-
-
 void AAIControllerBase::BeginPlay()
 {
 	Super::BeginPlay();
@@ -46,6 +40,8 @@ void AAIControllerBase::BeginPlay()
 void AAIControllerBase::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
+
+	UE_LOG(LogTemp, Log, TEXT("OnPossess OnPossess OnPossess OnPossess"));
 
 	UpdatePerceptionSystem();
 	
@@ -63,6 +59,8 @@ UBlackboardComponent* AAIControllerBase::GetBlackBoardComponent() const
 
 void AAIControllerBase::OnTargetDetected(AActor* Actor, FAIStimulus Stimulus)
 {
+	UE_LOG(LogTemp, Log, TEXT("OnTargetDetected OnTargetDetected OnTargetDetected"));
+	
 	//플레이어 캐릭터만을 걸러내고
 	AEHCharacter* PlayerCharacter = Cast<AEHCharacter>(Actor);
 	if (PlayerCharacter)
@@ -78,12 +76,11 @@ void AAIControllerBase::OnTargetDetected(AActor* Actor, FAIStimulus Stimulus)
 //플레이어한테 맞으면 그를 대상으로 삼음
 void AAIControllerBase::AttackedPlayer(AActor* AttackedPlayer)
 {
-	UE_LOG(LogTemp, Log, TEXT("11111111111111111111111111111111111"));
+	UE_LOG(LogTemp, Log, TEXT("AttackedPlayer AttackedPlayer  AttackedPlayer"));
 	//다만 목표대상이 없을 때만 때린놈을 대상으로 삼음
 	bool bCanSeePlayer = GetBlackBoardComponent()->GetValueAsBool(BlackboardKeys::CanSeePlayer);
 	if(!bCanSeePlayer)
 	{
-		UE_LOG(LogTemp, Log, TEXT("22222222222222222222222222222"));
 		GetBlackBoardComponent()->SetValueAsBool(BlackboardKeys::CanSeePlayer, true);
 		GetBlackBoardComponent()->SetValueAsObject(BlackboardKeys::TargetPlayer, AttackedPlayer);
 	}
@@ -92,6 +89,7 @@ void AAIControllerBase::AttackedPlayer(AActor* AttackedPlayer)
 //기본 시야 설정
 void AAIControllerBase::SetPerceptionSystem()
 {
+	UE_LOG(LogTemp, Log, TEXT("SetPerceptionSystem SetPerceptionSystem SetPerceptionSystem"));
 	SightConfig = CreateOptionalDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight Config"));
 	SetPerceptionComponent(*CreateOptionalDefaultSubobject<UAIPerceptionComponent>(TEXT("AI Perception")));
 
@@ -107,6 +105,8 @@ void AAIControllerBase::SetPerceptionSystem()
 
 void AAIControllerBase::UpdatePerceptionSystem()
 {
+	UE_LOG(LogTemp, Log, TEXT(" UpdatePerceptionSystem UpdatePerceptionSystem UpdatePerceptionSystem"));
+	
 	AMonsterBase* ControllingMonster = Cast<AMonsterBase>(GetPawn());
 	if(ControllingMonster && SightConfig)
 	{

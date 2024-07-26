@@ -15,6 +15,8 @@ URangedAttack::URangedAttack(FObjectInitializer const& ObjectInitializer)
 
 EBTNodeResult::Type URangedAttack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
+	UE_LOG(LogTemp, Log, TEXT("7777777777777777777777777777777777"));
+	
 	AAIControllerBase* AIController = Cast<AAIControllerBase>(OwnerComp.GetAIOwner());
 	if(AIController == nullptr) return EBTNodeResult::Failed;
 

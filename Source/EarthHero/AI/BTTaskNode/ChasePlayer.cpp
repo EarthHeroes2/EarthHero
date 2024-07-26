@@ -14,6 +14,8 @@ UChasePlayer::UChasePlayer(FObjectInitializer const& ObjectInitializer)
 
 EBTNodeResult::Type UChasePlayer::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
+	UE_LOG(LogTemp, Log, TEXT("11111111111111111111111111111111111"));
+	
 	AAIControllerBase* AIController = Cast<AAIControllerBase>(OwnerComp.GetAIOwner());
 	if(AIController == nullptr) return EBTNodeResult::Failed;
 	

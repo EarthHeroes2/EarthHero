@@ -19,8 +19,6 @@ class EARTHHERO_API AAIControllerBase : public AAIController
 
 	AAIControllerBase(FObjectInitializer const& ObjectInitializer);
 	
-	virtual void Tick(float DeltaTime) override;
-
 	virtual void BeginPlay() override;
 	virtual void OnPossess(APawn* InPawn) override;
 

@@ -23,6 +23,8 @@ ADummyMonster::ADummyMonster()
 
 void ADummyMonster::Attack(FVector SpawnNormalVector)
 {
+	UE_LOG(LogTemp, Log, TEXT("ADummyMonster::Attack ADummyMonster::Attack"));
+	
 	UWorld* World = GetWorld();
 	if (World != nullptr && TestBulletClass)
 	{
