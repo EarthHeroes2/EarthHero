@@ -25,7 +25,7 @@ void AEHPlayerController::Tick(float DeltaSeconds)
 void AEHPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 	if (!IsRunningDedicatedServer())
 	{
 		check(HeroContext);
