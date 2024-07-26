@@ -247,14 +247,29 @@ void UOptions::OnOverallQualityChanged(FString SelectedItem, ESelectInfo::Type S
     auto GameInstance = Cast<UEHGameInstance>(GetGameInstance());
     if (GameInstance)
     {
-        GameInstance->OverallQuality = QualityFromString(SelectedItem);
+        int32 OverallQuality = QualityFromString(SelectedItem);
+        GameInstance->OverallQuality = OverallQuality;
+        GameInstance->AntiAliasing = OverallQuality;
+        GameInstance->PostProcessing = OverallQuality;
         GameInstance->SaveSettings();
 
         UGameUserSettings* UserSettings = GEngine->GetGameUserSettings();
         if (UserSettings)
         {
             UserSettings->SetOverallScalabilityLevel(GameInstance->OverallQuality);
+            UserSettings->SetAntiAliasingQuality(GameInstance->AntiAliasing);
+            UserSettings->SetPostProcessingQuality(GameInstance->PostProcessing);
             UserSettings->ApplySettings(false);
+        }
+
+        if (AntiAliasingComboBox)
+        {
+            AntiAliasingComboBox->SetSelectedOption(QualityToString(GameInstance->AntiAliasing));
+        }
+
+        if (PostProcessingComboBox)
+        {
+            PostProcessingComboBox->SetSelectedOption(QualityToString(GameInstance->PostProcessing));
         }
     }
 }
