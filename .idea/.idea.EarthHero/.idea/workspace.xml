@@ -79,10 +79,11 @@
   <component name="ChangeListManager">
     <list default="true" id="4591bad7-fd9f-4860-903f-8700cd913377" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_InGameHUD.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_InGameHUD.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/GameState/PlayingGameState.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/GameState/PlayingGameState.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/HUD/InGameHUD.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/InGameHUD.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/HUD/InGameHUD.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/InGameHUD.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Character/Warrior/BP_Warrior.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Character/Warrior/BP_Warrior.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/GameMode/BP_EHGameMode.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/GameMode/BP_EHGameMode.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/AIController/AIControllerBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/AIController/AIControllerBase.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/AIController/MeleeAIController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/AIController/MeleeAIController.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/AIController/RangeAIController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/AIController/RangeAIController.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
