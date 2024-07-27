@@ -8,7 +8,6 @@ ADummyRangeMonster::ADummyRangeMonster()
 	static ConstructorHelpers::FClassFinder<AActor> TestBulletAsset(TEXT("Actor'/Game/Blueprints/Character/Dummy/BP_TestBullet.BP_TestBullet_C'"));
 	if (TestBulletAsset.Succeeded()) TestBulletClass = TestBulletAsset.Class;
 	
-	AttackType = Range;
 	AttackRange = 700.f;
 	AISightRadius = 700.f;
 	AILoseSightRadius = 850.f;

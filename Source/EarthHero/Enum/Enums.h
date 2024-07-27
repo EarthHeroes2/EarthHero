@@ -48,11 +48,3 @@ enum MonsterType
 	Normal,
 	Boss
 };
-
-//몬스터 공격 타입
-enum EMonsterAttackType
-{
-	Melee,
-	Range,
-	TypeMax
-};

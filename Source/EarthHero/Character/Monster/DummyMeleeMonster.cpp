@@ -5,7 +5,6 @@
 
 ADummyMeleeMonster::ADummyMeleeMonster()
 {
-	AttackType = Melee;
 	AttackRange = 200.f;
 	AISightRadius = 500.f;
 	AILoseSightRadius = 700.f;

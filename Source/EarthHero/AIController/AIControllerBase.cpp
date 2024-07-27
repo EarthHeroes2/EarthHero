@@ -31,7 +31,6 @@ void AAIControllerBase::BeginPlay()
 
 	if(GetNetMode() != NM_Client)
 	{
-		UE_LOG(LogTemp, Log, TEXT("BeginPlay()BeginPlay()BeginPlay()"));
 		//비헤이비어 트리 실행
 		RunBehaviorTree(BehavirTree);
 		//위와 무슨 차이지?
