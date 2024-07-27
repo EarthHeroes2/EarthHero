@@ -35,10 +35,6 @@ void APlayingGameMode::BeginPlay()
 	Super::BeginPlay();
 	
 	bUseSeamlessTravel = true;
-	//SpawnForceFields();
-	
-	//플레이어들 설정(임시)
-	//GetWorldTimerManager().SetTimer(GetActorsTimer, this, &APlayingGameMode::GetAllActorsInLevel, 2, true);
 }
 
 APawn* APlayingGameMode::SpawnDefaultPawnFor_Implementation(AController* NewPlayer, AActor* StartSpot)
@@ -67,20 +63,6 @@ APawn* APlayingGameMode::SpawnDefaultPawnFor_Implementation(AController* NewPlay
 		}
 	}
 	return nullptr;
-}
-
-//???????
-void APlayingGameMode::GetAllActorsInLevel()
-{
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEHCharacter::StaticClass(), Players);
-	//UE_LOG(LogClass, Warning, TEXT("Players.Num: %d"), Players.Num());
-	if (Players.Num() == 2)
-	{
-		UE_LOG(LogClass, Warning, TEXT("GetAllActorsInLevel Success"));
-		GetWorldTimerManager().ClearTimer(GetActorsTimer);
-		APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
-		PlayingGameState->SetGameStateForceField(ExpansionDurations, ForceFieldLocations);
-	}
 }
 
 void APlayingGameMode::Tick(float DeltaSeconds)
@@ -252,23 +234,18 @@ void APlayingGameMode::SpawnForceFieldAtLocation(FVector2D Location, float Expan
 void APlayingGameMode::InitSeamlessTravelPlayer(AController* NewController) //아니면... GenericPlayerInitialization?
 {
 	Super::InitSeamlessTravelPlayer(NewController);
-
-	UE_LOG(LogClass, Warning, TEXT("Seungule1"));
+	
 	APlayerController* NewPlayerController = Cast<APlayerController>(NewController);
 
 	if(NewPlayerController)
 	{
-		UE_LOG(LogClass, Warning, TEXT("Seungule2"));
 		AEHPlayerController* NewEHPlayerController = Cast<AEHPlayerController>(NewController);
 		if(NewEHPlayerController)
 		{
-			UE_LOG(LogClass, Warning, TEXT("Seungule3"));
 			APlayingGameSession* PlayingGameSession = Cast<APlayingGameSession>(GameSession);
 			if (PlayingGameSession)
 			{
-				UE_LOG(LogClass, Warning, TEXT("Seungule4"));
 				EHPlayerControllers.Add(NewEHPlayerController);
-				UE_LOG(LogClass, Warning, TEXT("Seungule5, EHPlayerControllers num : %d, %d"), EHPlayerControllers.Num(), PlayingGameSession->GetNumPlayersInSession());
 				//세션 속 모든 플레이어가 레벨에 들어왔다면 레벨 초기 작업 시작
 				if(EHPlayerControllers.Num() == PlayingGameSession->GetNumPlayersInSession())
 				{
@@ -297,6 +274,11 @@ void APlayingGameMode::PlayerControllerReady() //조금 느리지만 안전하�
 	if(NumPlayerControllerReady == EHPlayerControllers.Num())
 	{
 		SpawnForceFields();
+
+		//지도에 자기장 및 플레이어 표시를 위한 설정
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEHCharacter::StaticClass(), Players);
+		APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
+		PlayingGameState->SetGameStateForceField(ExpansionDurations, ForceFieldLocations);
 		
 		UpdateGameStateNames();
 		UpdateGameStateClasses();
@@ -589,5 +571,39 @@ void APlayingGameMode::UpdateGameStateHeal()
 
 	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
 	PlayingGameState->UpdateGameStateHeal(PlayerHeal);
+}
+
+void APlayingGameMode::UpdatePlayerClassImage()
+{
+	TArray<UTexture2D*> ClassImage;
+	static ConstructorHelpers::FObjectFinder<UTexture2D> WrTexture(TEXT("/Game/Assets/Textures/SwordImage.SwordImage"));
+	static ConstructorHelpers::FObjectFinder<UTexture2D> McTexture(TEXT("/Game/Assets/Textures/DroneImage.DroneImage"));
+	static ConstructorHelpers::FObjectFinder<UTexture2D> StTexture(TEXT("/Game/Assets/Textures/GunImage.GunImage"));
+	static ConstructorHelpers::FObjectFinder<UTexture2D> AcTexture(TEXT("/Game/Assets/Textures/BowImage.BowImage"));
+	
+	for (AEHPlayerController* EHPlayerController : EHPlayerControllers)
+	{
+		if(EHPlayerController && EHPlayerController->PlayerState)
+		{
+			AEHPlayerState* EHPlayerState = Cast<AEHPlayerState>(EHPlayerController->PlayerState);
+			if(EHPlayerState)
+			{
+				switch (EHPlayerState->PlayerClass)
+				{
+				case Warrior:
+						ClassImage.Add(WrTexture.Object);
+				case Mechanic:
+						ClassImage.Add(McTexture.Object);
+				case Shooter:
+						ClassImage.Add(StTexture.Object);
+				case Archer:
+						ClassImage.Add(AcTexture.Object);
+				}
+			}
+		}
+	}
+	
+	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
+	PlayingGameState->UpatePlayerClassImage(ClassImage);
 }
 

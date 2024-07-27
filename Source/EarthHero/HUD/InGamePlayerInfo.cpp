@@ -17,15 +17,18 @@ void UInGamePlayerInfo::SetName(const FString& Name) const
 
 void UInGamePlayerInfo::SetProgress(const float Progress) const
 {
+	UE_LOG(LogClass, Warning, TEXT("InGamePlayInfo progress = %f"), Progress);
 	if (HealthProgressBar)
 	{
 		HealthProgressBar->SetPercent(Progress);
 	}
 }
 
-void UInGamePlayerInfo::SetImage(FSlateBrush SlateBrush) const
+void UInGamePlayerInfo::SetImage(UTexture2D *Image) const
 {
-	PlayerClass->SetBrush(SlateBrush);
+	FSlateBrush Brush;
+	Brush.SetResourceObject(Image);
+	PlayerClass->SetBrush(Brush);
 }
 
 bool UInGamePlayerInfo::Initialize()

@@ -62,6 +62,7 @@ void UTeamMemberWidget::SetProgress(const float Progress) const
 {
 	if (HealthProgressBar)
 	{
+		UE_LOG(LogClass, Warning, TEXT("TeamMemberWidget progress = %f"), Progress);
 		HealthProgressBar->SetPercent(Progress);
 	}
 }

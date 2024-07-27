@@ -28,9 +28,6 @@ class EARTHHERO_API APlayingGameMode : public AGameModeBase
 	int NumDeadPlayers = 0;
 	const FString GameOverMap = TEXT("/Game/Maps/GameOverMap");
 
-	FTimerHandle GetActorsTimer;
-	void GetAllActorsInLevel();
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true), Category = "ForceField")
 	TSubclassOf<class AForceField> ForceFieldActor;
 
@@ -72,6 +69,7 @@ public:
 	void UpdateGameStateDamage();
 	void UpdateGameStateReceiveDamage();
 	void UpdateGameStateHeal();
+	void UpdatePlayerClassImage();
 
 	void PlayerControllerReady();
 	void EnableAllInput();

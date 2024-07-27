@@ -231,6 +231,18 @@ void APlayingGameState::SetGameStateForceField(const TArray<float> ExpansionDura
 	AllForceFieldLocations = ForceFieldLocations;
 }
 
+void APlayingGameState::UpatePlayerClassImage(const TArray<UTexture2D*> PlayerClassImages)
+{
+	AllPlayerClassImages = PlayerClassImages;
+}
+void APlayingGameState::OnRep_GameStatePlayerClassImages() const
+{
+	if(EHPlayerController && EHPlayerController->HUD)
+	{
+		//UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateActorLocations"));
+		EHPlayerController->HUD->UpdatePlayerClassImages(AllPlayerClassImages);
+	}
+}
 void APlayingGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -249,4 +261,5 @@ void APlayingGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME(APlayingGameState, AllPlayerNumbers);
 	DOREPLIFETIME(APlayingGameState, AllExpansionDurations);
 	DOREPLIFETIME(APlayingGameState, AllForceFieldLocations);
+	DOREPLIFETIME(APlayingGameState, AllPlayerClassImages);
 }

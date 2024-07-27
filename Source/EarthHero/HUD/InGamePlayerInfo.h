@@ -50,7 +50,7 @@ public:
 
 	void SetName(const FString& Name) const;
 	void SetProgress(const float Progress) const;
-	void SetImage(FSlateBrush SlateBrush) const;
+	void SetImage(UTexture2D *Image) const;
 
 protected:
 	virtual bool Initialize() override;

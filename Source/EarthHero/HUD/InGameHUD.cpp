@@ -202,22 +202,37 @@ void UInGameHUD::AddChatMessage(const FText& Text)
 	}
 }
 
+void UInGameHUD::AddStatusImage(UTexture2D* EffectImage, FString EffectName, float CoolDown)
+{
+	EffectCount += 1;
+	//StatusArray[EffectCount - 1]->
+}
+
 void UInGameHUD::UpdatePlayerHealths(const TArray<float>& PlayerMaxHealths, const TArray<float>& PlayerCurrentHealths)
 {
-	int i;
-	for(i = 0; i < PlayerMaxHealths.Num(); i++)
+	int i = 0;
+	for (auto Element : InGamePlayerInfoArray)
 	{
-		InGamePlayerInfoArray[i]->SetProgress(PlayerCurrentHealths[i] / PlayerMaxHealths[i]);
+		Element->SetProgress(PlayerCurrentHealths[i] / PlayerMaxHealths[i]);
+		i++;
 	}
-	for (i; i < 3; i++)
+	for (int j = i; j <= 3; j++)
 	{
-		InGamePlayerInfoArray[i]->PlayerClass->SetVisibility(ESlateVisibility::Collapsed);
-		InGamePlayerInfoArray[i]->PlayerName->SetVisibility(ESlateVisibility::Collapsed);
-		InGamePlayerInfoArray[i]->HealthProgressBar->SetVisibility(ESlateVisibility::Collapsed);
-		for (auto CoolDownWidget : InGamePlayerInfoArray[i]->PLayerStatusArray)
+		InGamePlayerInfoArray[j]->PlayerClass->SetVisibility(ESlateVisibility::Collapsed);
+		InGamePlayerInfoArray[j]->PlayerName->SetVisibility(ESlateVisibility::Collapsed);
+		InGamePlayerInfoArray[j]->HealthProgressBar->SetVisibility(ESlateVisibility::Collapsed);
+		for (auto CoolDownWidget : InGamePlayerInfoArray[j]->PLayerStatusArray)
 		{
 			CoolDownWidget->SetVisibility(ESlateVisibility::Collapsed);
 		}
+	}
+}
+
+void UInGameHUD::UpdatePlayerClassImages(const TArray<UTexture2D*> PlayerClassImages)
+{
+	for(int i = 0; i < PlayerClassImages.Num(); i++)
+	{
+		InGamePlayerInfoArray[i]->SetImage(PlayerClassImages[i]);
 	}
 }
 

@@ -94,7 +94,14 @@ public:
 	UPROPERTY()
 	TArray<FStatus> StatusArray;
 
+	UPROPERTY()
+	int EffectCount = 0;
+
+	void AddStatusImage(UTexture2D *EffectImage, FString EffectName, float CoolDown);
+
 	void UpdatePlayerHealths(const TArray<float>& PlayerMaxHealths, const TArray<float>& PlayerCurrentHealths);
+
+	void UpdatePlayerClassImages(const TArray<UTexture2D*> PlayerClassImages);
 
 	void UpdatePlayerNames(const TArray<FString> AllPlayerNames);
 

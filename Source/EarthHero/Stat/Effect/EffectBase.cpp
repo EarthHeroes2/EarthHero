@@ -4,6 +4,7 @@
 #include "EarthHero/Stat/Effect/EffectBase.h"
 
 #include "EarthHero/Character/EHCharacter.h"
+#include "EarthHero/Player/EHPlayerController.h"
 #include "EarthHero/Stat/Structure/EffectStructure.h"
 
 TMap<AActor*, TMap<TSubclassOf<AEffectBase>, AEffectBase*>> AEffectBase::EffectMap;
@@ -64,6 +65,10 @@ void AEffectBase::ApplyEffect(AActor* InTargetActor, float InEffectValue, float 
 				if (AEHCharacter *Hero = Cast<AEHCharacter>(TargetActor))
 				{
 					UE_LOG(LogClass, Warning, TEXT("Effect Name : %s"), *EffectArray[EffectType]->EffectName.ToString());
+					if (AEHPlayerController *PlayerController = Cast<AEHPlayerController>(Hero->Controller))
+					{
+						//PlayerController->HUD->AddStatusImage();
+					}
 				}
 				bRefresh = true;
 			}

@@ -33,6 +33,7 @@ public:
 	void UpdateGameStateHeal(const TArray<float> PlayerHeal);
 	void UpdateGameStateWorldMaps(const TArray<FVector2D> ActorLocations, const TArray<float> ActorRotations, const int32 PlayerNumbers);
 	void SetGameStateForceField(const TArray<float> ExpansionDurations, const TArray<FVector2D> ForceFieldLocations);
+	void UpatePlayerClassImage(const TArray<UTexture2D*> PlayerClassImages);
 
 	UPROPERTY(ReplicatedUsing = OnRep_GameTimerSec)
 	int GameTimerSec;
@@ -66,6 +67,8 @@ public:
 	TArray<float> AllExpansionDurations;
 	UPROPERTY(ReplicatedUsing = OnRep_GameStateForceFieldLocations)
 	TArray<FVector2D> AllForceFieldLocations;
+	UPROPERTY(ReplicatedUsing = OnRep_GameStatePlayerClassImages)
+	TArray<UTexture2D*> AllPlayerClassImages;
 
 	UFUNCTION()
 	void OnRep_GameTimerSec() const;
@@ -95,4 +98,6 @@ public:
 	void OnRep_GameStateExpansionDurations() const;
 	UFUNCTION()
 	void OnRep_GameStateForceFieldLocations() const;
+	UFUNCTION()
+	void  OnRep_GameStatePlayerClassImages() const;
 };
