@@ -14,7 +14,6 @@ class EARTHHERO_API UEHGameInstance : public UGameInstance
 	GENERATED_BODY()
 
 	virtual void Init() override;
-	void SetupLoadingScreen();
 
 public:
 	FStatStructure* GetStatStructure(FName HeroName) const;

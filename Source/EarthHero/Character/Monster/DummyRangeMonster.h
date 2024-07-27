@@ -4,17 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "MonsterBase.h"
-#include "DummyMonster.generated.h"
+#include "DummyRangeMonster.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class EARTHHERO_API ADummyMonster : public AMonsterBase
+class EARTHHERO_API ADummyRangeMonster : public AMonsterBase
 {
 	GENERATED_BODY()
 
-	ADummyMonster();
+	ADummyRangeMonster();
 	virtual void Attack(FVector SpawnNormalVector) override;
 
 	TSubclassOf<AActor> TestBulletClass;

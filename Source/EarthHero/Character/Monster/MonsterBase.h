@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "EarthHero/Enum/Enums.h"
 #include "GameFramework/Character.h"
 #include "MonsterBase.generated.h"
 
@@ -40,6 +41,8 @@ public:
 	//임시로 만들어둠 - 박정익
 	//자식에서 상속받아서 값 바꾸어주세용
 	//원거리 몬스터인 경우 사거리가 시야보다 더 넓게 해주세요
+	EMonsterAttackType AttackType = Melee;
+	
 	float AttackRange = 100.0f;
 
 	//시야 거리, 목표 상실 거리, 시야각, 감각을 잃는 기간, 마지막으로 감지된 객체의 위치 탐지 성공 거리?

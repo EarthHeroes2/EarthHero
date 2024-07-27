@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
+#include "EarthHero/Enum/Enums.h"
 #include "Perception/AIPerceptionTypes.h"
 #include "AIControllerBase.generated.h"
 
@@ -17,8 +18,9 @@ class EARTHHERO_API AAIControllerBase : public AAIController
 {
 	GENERATED_BODY()
 
+protected:
 	AAIControllerBase(FObjectInitializer const& ObjectInitializer);
-	
+private:
 	virtual void BeginPlay() override;
 	virtual void OnPossess(APawn* InPawn) override;
 
@@ -37,7 +39,10 @@ class EARTHHERO_API AAIControllerBase : public AAIController
 	UBehaviorTreeComponent* BehaviorTreeComponent;
 	UBlackboardComponent* BlackBoardComponent;
 
+protected:
 	UBehaviorTree* BehavirTree;
+	EMonsterAttackType AttackType;
+private:
 	UAISenseConfig_Sight* SightConfig;
 
 public:

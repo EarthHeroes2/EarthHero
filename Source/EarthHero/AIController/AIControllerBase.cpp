@@ -15,11 +15,28 @@
 
 AAIControllerBase::AAIControllerBase(FObjectInitializer const& ObjectInitializer)
 {
-	if(IsRunningDedicatedServer())
+	UE_LOG(LogTemp, Log, TEXT("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"));
+	if(GetNetMode() != NM_Client)
 	{
 		//비헤이비어트리를 찾고
-		//static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(TEXT("BehaviorTree'/Game/Ai/BT_MeleeEnemy.BT_MeleeEnemy'"));
-		static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(TEXT("BehaviorTree'/Game/Ai/BT_RangedEnemy.BT_RangedEnemy'"));
+		FString BehaviorTreePath;
+
+		switch (AttackType)
+		{
+		case Melee:
+			UE_LOG(LogTemp, Log, TEXT("MeleeMeleeMeleeMeleeMeleeMeleeMeleeMeleeMeleeMelee"));
+			BehaviorTreePath = TEXT("BehaviorTree'/Game/Ai/BT_MeleeEnemy.BT_MeleeEnemy'");
+			break;
+		case Range:
+			UE_LOG(LogTemp, Log, TEXT("RangeRangeRangeRangeRangeRangeRangeRangeRange"));
+			BehaviorTreePath = TEXT("BehaviorTree'/Game/Ai/BT_RangedEnemy.BT_RangedEnemy'");
+			break;
+		default:
+			//없으니 오류발생해야하지만...
+			BehaviorTreePath = TEXT("BehaviorTree'/Game/Ai/BT_MeleeEnemy.BT_MeleeEnemy'");
+		}
+		
+		static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(*BehaviorTreePath);
 	
 		if (BTObject.Succeeded()) BehavirTree = BTObject.Object;
 		BehaviorTreeComponent = ObjectInitializer.CreateDefaultSubobject<UBehaviorTreeComponent>(this, TEXT("BehaviorComp"));
@@ -34,7 +51,7 @@ void AAIControllerBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if(IsRunningDedicatedServer())
+	if(GetNetMode() != NM_Client)
 	{
 		//비헤이비어 트리 실행
 		RunBehaviorTree(BehavirTree);
