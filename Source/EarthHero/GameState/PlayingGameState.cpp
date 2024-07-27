@@ -118,6 +118,10 @@ void APlayingGameState::OnRep_GameStateNames() const
 	{
 		EHPlayerController->TabHUD->UpdatePlayerNames(AllPlayerNames);
 	}
+	if(EHPlayerController && EHPlayerController->HUD)
+	{
+		EHPlayerController->HUD->UpdatePlayerNames(AllPlayerNames);
+	}
 }
 
 void APlayingGameState::UpdateGameStateKillCount(const TArray<int> PlayerKillCount)

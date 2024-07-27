@@ -3,6 +3,7 @@
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
 #include "IngameHUDHeroUpgradeWidget.h"
+#include "InGamePlayerInfo.h"
 #include "Components/EditableTextBox.h"
 #include "Components/Image.h"
 #include "Components/ScrollBox.h"
@@ -13,14 +14,10 @@ bool UInGameHUD::Initialize()
 {
 	Super::Initialize();
 
-	PlayerHPBarArray.Add(PlayerHPBar_0);
-	PlayerHPBarArray.Add(PlayerHPBar_1);
-	PlayerHPBarArray.Add(PlayerHPBar_2);
-	PlayerHPBarArray.Add(PlayerHPBar_3);
-	PlayerClassImageArray.Add(PlayerClass);
-	PlayerClassImageArray.Add(PlayerClass_1);
-	PlayerClassImageArray.Add(PlayerClass_2);
-	PlayerClassImageArray.Add(PlayerClass_3);
+	InGamePlayerInfoArray.Add(BP_InGamePlayerInfo);
+	InGamePlayerInfoArray.Add(BP_InGamePlayerInfo_1);
+	InGamePlayerInfoArray.Add(BP_InGamePlayerInfo_2);
+	InGamePlayerInfoArray.Add(BP_InGamePlayerInfo_3);
 
 	StatusArray.Add(FStatus(TEXT(""), Status));
 	StatusArray.Add(FStatus(TEXT(""), Status_1));
@@ -210,11 +207,24 @@ void UInGameHUD::UpdatePlayerHealths(const TArray<float>& PlayerMaxHealths, cons
 	int i;
 	for(i = 0; i < PlayerMaxHealths.Num(); i++)
 	{
-		PlayerHPBarArray[i]->SetPercent(PlayerCurrentHealths[i] / PlayerMaxHealths[i]);
+		InGamePlayerInfoArray[i]->SetProgress(PlayerCurrentHealths[i] / PlayerMaxHealths[i]);
 	}
 	for (i; i < 3; i++)
 	{
-		PlayerHPBarArray[i]->SetVisibility(ESlateVisibility::Collapsed);
-		PlayerClassImageArray[i]->SetVisibility(ESlateVisibility::Collapsed);
+		InGamePlayerInfoArray[i]->PlayerClass->SetVisibility(ESlateVisibility::Collapsed);
+		InGamePlayerInfoArray[i]->PlayerName->SetVisibility(ESlateVisibility::Collapsed);
+		InGamePlayerInfoArray[i]->HealthProgressBar->SetVisibility(ESlateVisibility::Collapsed);
+		for (auto CoolDownWidget : InGamePlayerInfoArray[i]->PLayerStatusArray)
+		{
+			CoolDownWidget->SetVisibility(ESlateVisibility::Collapsed);
+		}
+	}
+}
+
+void UInGameHUD::UpdatePlayerNames(const TArray<FString> AllPlayerNames)
+{
+	for(int i = 0; i < AllPlayerNames.Num(); i++)
+	{
+		InGamePlayerInfoArray[i]->SetName(AllPlayerNames[i]);
 	}
 }

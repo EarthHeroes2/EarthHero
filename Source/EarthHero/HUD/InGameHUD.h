@@ -53,28 +53,20 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	class UIngameHUDHeroUpgradeWidget* BP_IngameHUDHeroUpgrade_2;
 
-	// 왼쪽 팀원 정보
 	UPROPERTY(meta = (BindWidget))
-	class UProgressBar* PlayerHPBar_0;
-	UPROPERTY(meta = (BindWidget))
-	class UProgressBar* PlayerHPBar_1;
-	UPROPERTY(meta = (BindWidget))
-	class UProgressBar* PlayerHPBar_2;
-	UPROPERTY(meta = (BindWidget))
-	class UProgressBar* PlayerHPBar_3;
-
-	TArray<UProgressBar*> PlayerHPBarArray;
+	class UInGamePlayerInfo *BP_InGamePlayerInfo;
 
 	UPROPERTY(meta = (BindWidget))
-	class UImage *PlayerClass;
-	UPROPERTY(meta = (BindWidget))
-	class UImage *PlayerClass_1;
-	UPROPERTY(meta = (BindWidget))
-	class UImage *PlayerClass_2;
-	UPROPERTY(meta = (BindWidget))
-	class UImage *PlayerClass_3;
+	class UInGamePlayerInfo *BP_InGamePlayerInfo_1;
 
-	TArray<UImage*> PlayerClassImageArray;
+	UPROPERTY(meta = (BindWidget))
+	class UInGamePlayerInfo *BP_InGamePlayerInfo_2;
+
+	UPROPERTY(meta = (BindWidget))
+	class UInGamePlayerInfo *BP_InGamePlayerInfo_3;
+
+	UPROPERTY()
+	TArray<UInGamePlayerInfo*> InGamePlayerInfoArray;
 
 
 	//플레이어 캐릭터 Effect 표시
@@ -103,6 +95,8 @@ public:
 	TArray<FStatus> StatusArray;
 
 	void UpdatePlayerHealths(const TArray<float>& PlayerMaxHealths, const TArray<float>& PlayerCurrentHealths);
+
+	void UpdatePlayerNames(const TArray<FString> AllPlayerNames);
 
 	void ShowHeroUpgradeVerticalBox();
 
