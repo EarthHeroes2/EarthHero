@@ -13,7 +13,6 @@ UCLASS()
 class EARTHHERO_API ARangeAIController : public AAIControllerBase
 {
 	GENERATED_BODY()
-	
-	EMonsterAttackType AttackType = Range;
-	
+
+	ARangeAIController(FObjectInitializer const& ObjectInitializer);
 };

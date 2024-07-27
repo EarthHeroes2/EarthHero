@@ -13,7 +13,5 @@ UCLASS()
 class EARTHHERO_API AMeleeAIController : public AAIControllerBase
 {
 	GENERATED_BODY()
-	
-	EMonsterAttackType AttackType = Melee;
-	
+	AMeleeAIController(FObjectInitializer const& ObjectInitializer);
 };

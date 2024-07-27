@@ -20,13 +20,11 @@ class EARTHHERO_API AAIControllerBase : public AAIController
 
 protected:
 	AAIControllerBase(FObjectInitializer const& ObjectInitializer);
+	
 private:
 	virtual void BeginPlay() override;
 	virtual void OnPossess(APawn* InPawn) override;
-
-
 	
-	void SetPerceptionSystem();
 	void UpdatePerceptionSystem();
 
 	UBlackboardComponent* GetBlackBoardComponent() const;
@@ -35,13 +33,13 @@ private:
 	void OnTargetDetected(AActor* Actor, FAIStimulus Stimulus);
 	
 	
-	
 	UBehaviorTreeComponent* BehaviorTreeComponent;
 	UBlackboardComponent* BlackBoardComponent;
-
 protected:
 	UBehaviorTree* BehavirTree;
-	EMonsterAttackType AttackType;
+	
+	void SetPerceptionSystem();
+	
 private:
 	UAISenseConfig_Sight* SightConfig;
 

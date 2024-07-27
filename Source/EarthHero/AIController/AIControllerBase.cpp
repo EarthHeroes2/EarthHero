@@ -15,30 +15,8 @@
 
 AAIControllerBase::AAIControllerBase(FObjectInitializer const& ObjectInitializer)
 {
-	UE_LOG(LogTemp, Log, TEXT("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"));
 	if(GetNetMode() != NM_Client)
 	{
-		//비헤이비어트리를 찾고
-		FString BehaviorTreePath;
-
-		switch (AttackType)
-		{
-		case Melee:
-			UE_LOG(LogTemp, Log, TEXT("MeleeMeleeMeleeMeleeMeleeMeleeMeleeMeleeMeleeMelee"));
-			BehaviorTreePath = TEXT("BehaviorTree'/Game/Ai/BT_MeleeEnemy.BT_MeleeEnemy'");
-			break;
-		case Range:
-			UE_LOG(LogTemp, Log, TEXT("RangeRangeRangeRangeRangeRangeRangeRangeRange"));
-			BehaviorTreePath = TEXT("BehaviorTree'/Game/Ai/BT_RangedEnemy.BT_RangedEnemy'");
-			break;
-		default:
-			//없으니 오류발생해야하지만...
-			BehaviorTreePath = TEXT("BehaviorTree'/Game/Ai/BT_MeleeEnemy.BT_MeleeEnemy'");
-		}
-		
-		static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(*BehaviorTreePath);
-	
-		if (BTObject.Succeeded()) BehavirTree = BTObject.Object;
 		BehaviorTreeComponent = ObjectInitializer.CreateDefaultSubobject<UBehaviorTreeComponent>(this, TEXT("BehaviorComp"));
 		BlackBoardComponent = ObjectInitializer.CreateDefaultSubobject<UBlackboardComponent>(this, TEXT("BlackBoardComp"));
 
@@ -53,6 +31,7 @@ void AAIControllerBase::BeginPlay()
 
 	if(GetNetMode() != NM_Client)
 	{
+		UE_LOG(LogTemp, Log, TEXT("BeginPlay()BeginPlay()BeginPlay()"));
 		//비헤이비어 트리 실행
 		RunBehaviorTree(BehavirTree);
 		//위와 무슨 차이지?
@@ -63,7 +42,7 @@ void AAIControllerBase::BeginPlay()
 void AAIControllerBase::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
-
+	
 	UpdatePerceptionSystem();
 	
 	if (BlackBoardComponent)
