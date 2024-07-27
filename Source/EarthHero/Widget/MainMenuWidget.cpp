@@ -632,14 +632,14 @@ void UMainMenuWidget::HandleJoinSessionCompleted(FName SessionName, EOnJoinSessi
                 	
                 	GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Yellow, FString::Printf(TEXT("Connect String : %s"), *ConnectString));
 
-                	//로딩
+                	
                 	const UWorld* World = GetWorld();
                 	if (World)
                 	{
                 		UCustomGameViewportClient* GameViewportClient = Cast<UCustomGameViewportClient>(World->GetGameViewport());
                 		if (GameViewportClient)
                 		{
-                			GameViewportClient->Fade(2, true);
+                			GameViewportClient->Fade(1, true);
                 		}
                 	}
 

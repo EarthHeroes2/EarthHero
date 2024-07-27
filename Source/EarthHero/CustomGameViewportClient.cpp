@@ -3,12 +3,12 @@
 #include "CustomGameViewportClient.h"
 #include "Engine/Canvas.h"
 #include "Engine/Engine.h"
+#include "Kismet/GameplayStatics.h"
 
 void UCustomGameViewportClient::PostRender(UCanvas* Canvas)
 {
 	Super::PostRender(Canvas);
 	
-	// Fade if requested, you could use the same DrawScreenFade method from any canvas such as the HUD
 	if (bFading)
 	{
 		DrawScreenFade(Canvas);
@@ -22,40 +22,45 @@ void UCustomGameViewportClient::ClearFade()
 
 void UCustomGameViewportClient::Fade(const float Duration, const bool bToBlack_)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Fade"));
-	
 	const UWorld* World_ = GetWorld();
 	if (World_)
 	{
 		bFading = true;
-		this->bToBlack = bToBlack_;
 		FadeDuration = Duration;
+		bToBlack = bToBlack_;
 		FadeStartTime = World_->GetTimeSeconds();
 	}
 }
 
 void UCustomGameViewportClient::DrawScreenFade(UCanvas* Canvas)
 {
-	UE_LOG(LogTemp, Warning, TEXT("DrawScreenFade"));
 	if (bFading)
 	{
 		const UWorld* World_ = GetWorld();
-		if (World)
+		if (World_)
 		{
-			const float Time = World->GetTimeSeconds();
-			const float Alpha = FMath::Clamp((Time - FadeStartTime) / FadeDuration, 0.f, 3.f);
+			//FPlatformTime::Seconds....?
+			//fade start로 부터 FadeDuration 만큼 지나면 alpha는 1이 되고...
+			const float Time = World_->GetTimeSeconds();
+			const float Alpha = FMath::Clamp((Time - FadeStartTime) / FadeDuration, 0.f, 1.f);
 
-			// Make sure that we stay black in a fade to black
-			if (Alpha == 3.f && !bToBlack)
+			//새 맵으로 이동한 시점이라면 종료
+			if(Time == 0.f)
 			{
-				bFading = false;
+				//bFading = false;
+				Fade(1.f, false);
 			}
+			
+
+			UE_LOG(LogTemp, Warning, TEXT("Alpha = %f, bToBlack = %d, Time = %f, FadeStartTime = %f, FadeDuration = %f,    bFading = %d"), Alpha, bToBlack, Time, FadeStartTime, FadeDuration, bFading);
+			
+			if (Alpha == 1.f && !bToBlack) bFading = false;
 			else
 			{
 				FColor OldColor = Canvas->DrawColor;
 				FLinearColor FadeColor = FLinearColor::Black;
-				FadeColor.A = bToBlack ? Alpha : 3 - Alpha;
-				Canvas->DrawColor = FadeColor.ToFColor(true); // TheJamsh: "4.10 cannot convert directly to FColor, so need to use FLinearColor::ToFColor() :)
+				FadeColor.A = bToBlack ? Alpha : 1 - Alpha;
+				Canvas->DrawColor = FadeColor.ToFColor(true);
 				Canvas->DrawTile(Canvas->DefaultTexture, 0, 0, Canvas->ClipX, Canvas->ClipY, 0, 0, Canvas->DefaultTexture->GetSizeX(), Canvas->DefaultTexture->GetSizeY());
 				Canvas->DrawColor = OldColor;
 			}
