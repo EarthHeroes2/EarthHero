@@ -2,6 +2,7 @@
 
 #include "EarthHero/Character/Shooter/EHShooter.h"
 #include "EarthHero/Character/Warrior/EHWarrior.h"
+#include "EarthHero/Enum/Enums.h"
 #include "EarthHero/ForceField/ForceField.h"
 #include "EarthHero/GameSession/PlayingGameSession.h"
 #include "EarthHero/GameState/PlayingGameState.h"
