@@ -3,7 +3,6 @@
 #include "CustomGameViewportClient.h"
 #include "Engine/Canvas.h"
 #include "Engine/Engine.h"
-#include "Kismet/GameplayStatics.h"
 
 void UCustomGameViewportClient::PostRender(UCanvas* Canvas)
 {
@@ -39,20 +38,11 @@ void UCustomGameViewportClient::DrawScreenFade(UCanvas* Canvas)
 		const UWorld* World_ = GetWorld();
 		if (World_)
 		{
-			//FPlatformTime::Seconds....?
-			//fade start로 부터 FadeDuration 만큼 지나면 alpha는 1이 되고...
 			const float Time = World_->GetTimeSeconds();
 			const float Alpha = FMath::Clamp((Time - FadeStartTime) / FadeDuration, 0.f, 1.f);
 
-			//새 맵으로 이동한 시점이라면 종료
-			if(Time == 0.f)
-			{
-				//bFading = false;
-				Fade(1.f, false);
-			}
-			
-
-			UE_LOG(LogTemp, Warning, TEXT("Alpha = %f, bToBlack = %d, Time = %f, FadeStartTime = %f, FadeDuration = %f,    bFading = %d"), Alpha, bToBlack, Time, FadeStartTime, FadeDuration, bFading);
+			//새 맵으로 이동한 시점이라면 페이드 인
+			if(Time == 0.f) Fade(1.f, false);
 			
 			if (Alpha == 1.f && !bToBlack) bFading = false;
 			else
