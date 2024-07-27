@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "EarthHero/Stat/Structure/EffectStructure.h"
 #include "GameFramework/Actor.h"
 #include "EffectBase.generated.h"
 
