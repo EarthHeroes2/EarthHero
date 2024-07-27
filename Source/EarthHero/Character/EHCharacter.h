@@ -36,6 +36,7 @@ public:
     //승언 :StatComponent 참조
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
     class UStatComponent *StatComponent;
+    
 
 protected:
     virtual void BeginPlay() override;

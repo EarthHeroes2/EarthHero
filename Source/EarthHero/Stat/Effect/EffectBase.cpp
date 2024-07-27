@@ -3,6 +3,8 @@
 
 #include "EarthHero/Stat/Effect/EffectBase.h"
 
+#include "EarthHero/Character/EHCharacter.h"
+
 TMap<AActor*, TMap<TSubclassOf<AEffectBase>, AEffectBase*>> AEffectBase::EffectMap;
 
 // Sets default values
@@ -48,7 +50,7 @@ void AEffectBase::ApplyEffect(AActor* InTargetActor, float InEffectValue, float 
 			//중첩 가능한 효과이면...
 			if (bIsStackable)
 			{
-				//중첩 효과 강화 하는 함수 실행 해야 한다.
+				//중첩 효과 강화하는 함수 실행해야 한다.
 				ExistingEffect->AppliedEffectValue += InEffectValue;
 				ExistingEffect->UpgradeEffect(InEffectValue);
 			}
@@ -58,6 +60,10 @@ void AEffectBase::ApplyEffect(AActor* InTargetActor, float InEffectValue, float 
 			{
 				ExistingEffect->GetWorld()->GetTimerManager().ClearTimer(ExistingEffect->EffectTimerHandle);
 				ExistingEffect->GetWorld()->GetTimerManager().SetTimer(ExistingEffect->EffectTimerHandle, ExistingEffect, &AEffectBase::ResetEffect, InDuration, false);
+				if (AEHCharacter *Hero = Cast<AEHCharacter>(TargetActor))
+				{
+					// HUD 갱신? GameMode에 관리해줘야하나
+				}
 				bRefresh = true;
 			}
 			
@@ -75,6 +81,10 @@ void AEffectBase::ApplyEffect(AActor* InTargetActor, float InEffectValue, float 
 		//효과 적용 목록에 추가
 		EffectMap.Add(TargetActor, TMap<TSubclassOf<AEffectBase>, AEffectBase*>());
 		TargetMap = EffectMap.Find(TargetActor);
+		if (AEHCharacter *Hero = Cast<AEHCharacter>(TargetActor))
+		{
+			// HUD 갱신? GameMode에 관리해줘야하나
+		}
 	}
 	TargetMap->Add(GetClass(), this);
 	

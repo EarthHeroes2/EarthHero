@@ -42,6 +42,21 @@ void UInGameHUD::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 	}
 }
 
+void UInGameHUD::NativeConstruct()
+{
+	Super::NativeConstruct();
+	StatusArray.Add(FStatus(TEXT(""), Status));
+	StatusArray.Add(FStatus(TEXT(""), Status_1));
+	StatusArray.Add(FStatus(TEXT(""), Status_2));
+	StatusArray.Add(FStatus(TEXT(""), Status_3));
+	StatusArray.Add(FStatus(TEXT(""), Status_4));
+	StatusArray.Add(FStatus(TEXT(""), Status_5));
+	StatusArray.Add(FStatus(TEXT(""), Status_6));
+	StatusArray.Add(FStatus(TEXT(""), Status_7));
+	StatusArray.Add(FStatus(TEXT(""), Status_8));
+	StatusArray.Add(FStatus(TEXT(""), Status_9));
+}
+
 void UInGameHUD::UpdateGameTimer(int GameTimerSec)
 {
 	GameTimer_Tb->SetText(FText::Format(FText::FromString("{0} : {1}"), FText::AsNumber(GameTimerSec / 60), FText::AsNumber(GameTimerSec % 60)));
