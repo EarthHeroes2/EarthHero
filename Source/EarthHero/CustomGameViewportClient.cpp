@@ -7,7 +7,7 @@
 void UCustomGameViewportClient::PostRender(UCanvas* Canvas)
 {
 	Super::PostRender(Canvas);
-
+	
 	// Fade if requested, you could use the same DrawScreenFade method from any canvas such as the HUD
 	if (bFading)
 	{
@@ -22,6 +22,8 @@ void UCustomGameViewportClient::ClearFade()
 
 void UCustomGameViewportClient::Fade(const float Duration, const bool bToBlack_)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Fade"));
+	
 	const UWorld* World_ = GetWorld();
 	if (World_)
 	{
@@ -34,6 +36,7 @@ void UCustomGameViewportClient::Fade(const float Duration, const bool bToBlack_)
 
 void UCustomGameViewportClient::DrawScreenFade(UCanvas* Canvas)
 {
+	UE_LOG(LogTemp, Warning, TEXT("DrawScreenFade"));
 	if (bFading)
 	{
 		const UWorld* World_ = GetWorld();

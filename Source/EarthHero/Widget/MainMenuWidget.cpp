@@ -15,6 +15,7 @@
 #include "Components/ScrollBox.h"
 #include "../Socket/SocketClient.h"
 #include "Components/TextBlock.h"
+#include "EarthHero/CustomGameViewportClient.h"
 
 
 UMainMenuWidget::UMainMenuWidget(const FObjectInitializer &ObjectInitializer)
@@ -631,6 +632,18 @@ void UMainMenuWidget::HandleJoinSessionCompleted(FName SessionName, EOnJoinSessi
                 	
                 	GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Yellow, FString::Printf(TEXT("Connect String : %s"), *ConnectString));
 
+                	//로딩
+                	const UWorld* World = GetWorld();
+                	if (World)
+                	{
+                		UCustomGameViewportClient* GameViewportClient = Cast<UCustomGameViewportClient>(World->GetGameViewport());
+                		if (GameViewportClient)
+                		{
+                			GameViewportClient->Fade(2, true);
+                		}
+                	}
+
+                	
                     FURL DedicatedServerURL(nullptr, *ConnectString, TRAVEL_Absolute);
                     FString DedicatedServerJoinError;
                     auto DedicatedServerJoinStatus = GEngine->Browse(GEngine->GetWorldContextFromWorldChecked(GetWorld()), DedicatedServerURL, DedicatedServerJoinError);
