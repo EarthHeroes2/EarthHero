@@ -3,6 +3,8 @@
 
 #include "DummyFlyingMonster.h"
 
+#include "GameFramework/FloatingPawnMovement.h"
+
 ADummyFlyingMonster::ADummyFlyingMonster()
 {
 	static ConstructorHelpers::FClassFinder<AActor> TestBulletAsset(TEXT("Actor'/Game/Blueprints/Character/Dummy/BP_TestBullet.BP_TestBullet_C'"));

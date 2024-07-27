@@ -6,6 +6,8 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "EarthHero/AIController/AIControllerBase.h"
 #include "EarthHero/BlackBoard/BlackBoardKeys.h"
+#include "EarthHero/Character/Monster/DummyFlyingMonster.h"
+#include "GameFramework/FloatingPawnMovement.h"
 #include "GameFramework/PawnMovementComponent.h"
 
 UFindFlyingPatrolPos::UFindFlyingPatrolPos(FObjectInitializer const& ObjectInitializer)
@@ -21,6 +23,9 @@ EBTNodeResult::Type UFindFlyingPatrolPos::ExecuteTask(UBehaviorTreeComponent& Ow
 
 	APawn* ControllingPawn = AIController->GetPawn();
 	if (ControllingPawn == nullptr) return EBTNodeResult::Failed;
+
+	ADummyFlyingMonster* ControllingFlyingMonster = Cast<ADummyFlyingMonster>(ControllingPawn);
+	if (ControllingFlyingMonster == nullptr) return EBTNodeResult::Failed;
 	
 	//본래 회전 상태로 복원
 	//AIController->SetActorTickEnabled(true);
@@ -28,14 +33,14 @@ EBTNodeResult::Type UFindFlyingPatrolPos::ExecuteTask(UBehaviorTreeComponent& Ow
 
 	FVector Location;
 	
-	Location.X += FMath::FRandRange(0.f, 300.f);
-	Location.Y += FMath::FRandRange(0.f, 300.f);
-	Location.Z += FMath::FRandRange(0.f, 30.f);
+	Location.X += FMath::FRandRange(-500.f, 500.f);
+	Location.Y += FMath::FRandRange(-500.f, 500.f);
+	Location.Z += FMath::FRandRange(-50.f, 50.f);
 	
 	//TargetLocation에 위치 값 저장
 	//AIController->GetBlackboardComponent()->SetValueAsVector(BlackboardKeys::TargetLocation, Location);
 
-	//ControllingPawn->GetMovementComponent()->Velocity = Location;
+	ControllingPawn->GetMovementComponent()->Velocity = Location;
 	
 	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;

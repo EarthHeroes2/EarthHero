@@ -6,6 +6,7 @@
 #include "MonsterBase.h"
 #include "DummyFlyingMonster.generated.h"
 
+class UFloatingPawnMovement;
 /**
  * 
  */
@@ -15,6 +16,8 @@ class EARTHHERO_API ADummyFlyingMonster : public AMonsterBase
 	GENERATED_BODY()
 
 	ADummyFlyingMonster();
+	
+	
 
 	virtual void Attack(FVector SpawnNormalVector) override;
 
