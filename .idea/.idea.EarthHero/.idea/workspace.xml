@@ -78,7 +78,61 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4591bad7-fd9f-4860-903f-8700cd913377" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Icons/HU_AttackSpeed.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Icons/HU_Berserker.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Icons/HU_BoosterUpgrade.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Icons/HU_Bullet.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Icons/HU_DroneCount.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Icons/HU_ElectricUpgrade.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Icons/HU_GrenerateUpgrade.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Icons/HU_Guardian.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Icons/HU_HeadShot.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Icons/HU_HealthDrone.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Icons/HU_HealthRegen.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Icons/HU_JumpUpgrade.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Icons/HU_MaxHealth.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Icons/HU_MoveSkillCoolTIme.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Icons/HU_MovementSpeed.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Icons/HU_NormalDamage.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Icons/HU_ParlArrow.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Icons/HU_PoisonArrow.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Icons/HU_ScectorFormArrow.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Icons/HU_SkillCoolTIme.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Icons/HU_SkillDamage.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Icons/HU_TelePort.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Icons/HU_WhirWind.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Icons/20.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Icons/28.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Icons/43.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Icons/54.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/Icons/54.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Icons/57.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Icons/61.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Icons/77.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Icons/79.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Icons/85.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Icons/86.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Icons/88.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Icons/96.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Icons/97.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Icons/Attack_Original.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Icons/Conqueror.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Icons/Dinosaur.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Icons/Over_Growth.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Icons/Speed.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Icons/Tex_seeds_01.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Icons/icon01.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Icons/icon11.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Icons/icon16.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Icons/icon27.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Icons/icon28.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Icons/shooter_q.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Data/HeroUpgrade/DT_ArcherHeroUpgrade.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Data/HeroUpgrade/DT_ArcherHeroUpgrade.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Data/HeroUpgrade/DT_MechanicHeroUpgrade.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Data/HeroUpgrade/DT_MechanicHeroUpgrade.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Data/HeroUpgrade/DT_ShooterHeroUpgrade.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Data/HeroUpgrade/DT_ShooterHeroUpgrade.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Data/HeroUpgrade/DT_WarriorHeroUpgrade.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Data/HeroUpgrade/DT_WarriorHeroUpgrade.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerState.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerState.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Stat/HeroUpgradeComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Stat/HeroUpgradeComponent.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -131,9 +185,9 @@
   },
   "keyToStringList": {
     "rider.external.source.directories": [
-      "C:\\Users\\Nasutcho\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\DecompilerCache",
-      "C:\\Users\\Nasutcho\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\SourcesCache",
-      "C:\\Users\\Nasutcho\\AppData\\Local\\Symbols\\src"
+      "C:\\Users\\doban\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\DecompilerCache",
+      "C:\\Users\\doban\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\SourcesCache",
+      "C:\\Users\\doban\\AppData\\Local\\Symbols\\src"
     ]
   }
 }]]></component>
@@ -320,6 +374,7 @@
       <workItem from="1721653764565" duration="4133000" />
       <workItem from="1721809912405" duration="257000" />
       <workItem from="1721882683284" duration="16274000" />
+      <workItem from="1722043813980" duration="1865000" />
     </task>
     <servers />
   </component>
