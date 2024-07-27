@@ -15,7 +15,7 @@
 
 AAIControllerBase::AAIControllerBase(FObjectInitializer const& ObjectInitializer)
 {
-	if(GetNetMode() != NM_Client)
+	if(IsRunningDedicatedServer())
 	{
 		BehaviorTreeComponent = ObjectInitializer.CreateDefaultSubobject<UBehaviorTreeComponent>(this, TEXT("BehaviorComp"));
 		BlackBoardComponent = ObjectInitializer.CreateDefaultSubobject<UBlackboardComponent>(this, TEXT("BlackBoardComp"));
@@ -29,7 +29,7 @@ void AAIControllerBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if(GetNetMode() != NM_Client)
+	if(IsRunningDedicatedServer())
 	{
 		//비헤이비어 트리 실행
 		RunBehaviorTree(BehavirTree);
