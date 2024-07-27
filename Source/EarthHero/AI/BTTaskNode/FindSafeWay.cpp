@@ -13,7 +13,7 @@
 
 UFindSafeWay::UFindSafeWay(FObjectInitializer const& ObjectInitializer)
 {
-	NodeName = TEXT("Keep Safe Distance");
+	NodeName = TEXT("Find Safe Way");
 }
 
 EBTNodeResult::Type UFindSafeWay::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
