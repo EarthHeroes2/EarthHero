@@ -15,13 +15,8 @@
 
 AAIControllerBase::AAIControllerBase(FObjectInitializer const& ObjectInitializer)
 {
-	if(IsRunningDedicatedServer())
+	if(GetNetMode() != NM_Client)
 	{
-		//비헤이비어트리를 찾고
-		//static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(TEXT("BehaviorTree'/Game/Ai/BT_MeleeEnemy.BT_MeleeEnemy'"));
-		static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(TEXT("BehaviorTree'/Game/Ai/BT_RangedEnemy.BT_RangedEnemy'"));
-	
-		if (BTObject.Succeeded()) BehavirTree = BTObject.Object;
 		BehaviorTreeComponent = ObjectInitializer.CreateDefaultSubobject<UBehaviorTreeComponent>(this, TEXT("BehaviorComp"));
 		BlackBoardComponent = ObjectInitializer.CreateDefaultSubobject<UBlackboardComponent>(this, TEXT("BlackBoardComp"));
 
@@ -34,7 +29,7 @@ void AAIControllerBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if(IsRunningDedicatedServer())
+	if(GetNetMode() != NM_Client)
 	{
 		//비헤이비어 트리 실행
 		RunBehaviorTree(BehavirTree);
@@ -46,7 +41,7 @@ void AAIControllerBase::BeginPlay()
 void AAIControllerBase::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
-
+	
 	UpdatePerceptionSystem();
 	
 	if (BlackBoardComponent)

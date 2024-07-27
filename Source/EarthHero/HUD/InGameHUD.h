@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Structure/Status.h"
 #include "InGameHUD.generated.h"
 
 UCLASS()
@@ -52,6 +53,30 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	class UIngameHUDHeroUpgradeWidget* BP_IngameHUDHeroUpgrade_2;
 
+	UPROPERTY(meta = (BindWidget))
+	UCoolDown *Status;
+	UPROPERTY(meta = (BindWidget))
+	UCoolDown *Status_1;
+	UPROPERTY(meta = (BindWidget))
+	UCoolDown *Status_2;
+	UPROPERTY(meta = (BindWidget))
+	UCoolDown *Status_3;
+	UPROPERTY(meta = (BindWidget))
+	UCoolDown *Status_4;
+	UPROPERTY(meta = (BindWidget))
+	UCoolDown *Status_5;
+	UPROPERTY(meta = (BindWidget))
+	UCoolDown *Status_6;
+	UPROPERTY(meta = (BindWidget))
+	UCoolDown *Status_7;
+	UPROPERTY(meta = (BindWidget))
+	UCoolDown *Status_8;
+	UPROPERTY(meta = (BindWidget))
+	UCoolDown *Status_9;
+
+	UPROPERTY()
+	TArray<FStatus> StatusArray;
+
 	void ShowHeroUpgradeVerticalBox();
 
 	void HideHeroUpgradeVerticalBox();
@@ -71,11 +96,14 @@ public:
 
 	UFUNCTION()
 	void SetFalseHeroUpgradeReady();
+	
 protected:
 	UFUNCTION()
 	void ChatTextCommitted(const FText& Text, ETextCommit::Type CommitMethod);
 	
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
+
+	virtual void NativeConstruct() override;
 
 private:
 	UPROPERTY()

@@ -1,30 +1,23 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "DummyMonster.h"
+#include "DummyRangeMonster.h"
 
-ADummyMonster::ADummyMonster()
+ADummyRangeMonster::ADummyRangeMonster()
 {
 	static ConstructorHelpers::FClassFinder<AActor> TestBulletAsset(TEXT("Actor'/Game/Blueprints/Character/Dummy/BP_TestBullet.BP_TestBullet_C'"));
-	if (TestBulletAsset.Succeeded())
-	{
-		TestBulletClass = TestBulletAsset.Class;
-	}
+	if (TestBulletAsset.Succeeded()) TestBulletClass = TestBulletAsset.Class;
 	
-	//임시
-	AttackRange = 800.f;
-
-	AISightRadius = 800.f;
-	AILoseSightRadius = 1000.f;
-	AIFieldOfView = 90.f; //시야각인데 *2가 됨
-	AISightAge = 4.f;
-	AILastSeenLocation = 1100.f;
+	AttackRange = 700.f;
+	AISightRadius = 700.f;
+	AILoseSightRadius = 850.f;
+	AIFieldOfView = 90.f;
+	AISightAge = 3.f;
+	AILastSeenLocation = 1000.f;
 }
 
-void ADummyMonster::Attack(FVector SpawnNormalVector)
+void ADummyRangeMonster::Attack(FVector SpawnNormalVector)
 {
-	UE_LOG(LogTemp, Log, TEXT("ADummyMonster::Attack ADummyMonster::Attack"));
-	
 	UWorld* World = GetWorld();
 	if (World != nullptr && TestBulletClass)
 	{

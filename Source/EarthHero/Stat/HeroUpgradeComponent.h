@@ -20,7 +20,7 @@ public:
 	void SetInGameHUD(class UInGameHUD *ControllerInGameHUD);
 
 	void SetTabHUD(class UTabHUDWidget *ControllerTabHUD);
-
+	
 	void SetStatComponent(int PlayerClass, class UWarriorStatComponent *Wr, class UMechanicStatComponent *Mc, class UShooterStatComponent *Sh, class UArcherStatComponent *Ar);
 	//PlayerState에서 호출할 스텟 컴포넌트 가져오는 함수 짜야 함
 	
