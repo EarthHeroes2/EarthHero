@@ -85,6 +85,7 @@ void AEffectBase::ApplyEffect(AActor* InTargetActor, float InEffectValue, float 
 		if (AEHCharacter *Hero = Cast<AEHCharacter>(TargetActor))
 		{
 			// HUD 갱신? GameMode에 관리해줘야하나
+			UE_LOG(LogClass, Warning, TEXT("Effect Name : %s"), *EffectArray[EffectType]->EffectName.ToString());
 		}
 	}
 	TargetMap->Add(GetClass(), this);
