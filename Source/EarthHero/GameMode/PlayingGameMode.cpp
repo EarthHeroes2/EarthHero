@@ -1,5 +1,7 @@
 #include "PlayingGameMode.h"
 
+#include "EarthHero/Character/Shooter/EHShooter.h"
+#include "EarthHero/Character/Warrior/EHWarrior.h"
 #include "EarthHero/ForceField/ForceField.h"
 #include "EarthHero/GameSession/PlayingGameSession.h"
 #include "EarthHero/GameState/PlayingGameState.h"
@@ -9,6 +11,21 @@
 
 APlayingGameMode::APlayingGameMode()
 {
+
+	CharacterClasses.SetNum(4);
+	
+	//Warrior
+	static ConstructorHelpers::FClassFinder<AEHWarrior> EHWarriorAsset(TEXT("/Game/Blueprints/Character/Warrior/BP_Warrior.BP_Warrior_C"));
+	if (EHWarriorAsset.Succeeded()) CharacterClasses[Warrior] = EHWarriorClass = EHWarriorAsset.Class;
+
+	//Mechanic
+
+	//shooter
+	static ConstructorHelpers::FClassFinder<AEHShooter> EHShooterAsset(TEXT("/Game/Blueprints/Character/Shooter/BP_Shooter.BP_Shooter_C"));
+	if (EHShooterAsset.Succeeded()) CharacterClasses[Shooter] = EHShooterClass = EHShooterAsset.Class;
+
+	//Archor
+	
 	PrimaryActorTick.bCanEverTick = true;
 }
 
@@ -23,6 +40,35 @@ void APlayingGameMode::BeginPlay()
 	//GetWorldTimerManager().SetTimer(GetActorsTimer, this, &APlayingGameMode::GetAllActorsInLevel, 2, true);
 }
 
+APawn* APlayingGameMode::SpawnDefaultPawnFor_Implementation(AController* NewPlayer, AActor* StartSpot)
+{
+	UE_LOG(LogClass, Warning, TEXT("SpawnDefaultPawnFor_Implementation"));
+	APlayerState* PlayerState = NewPlayer->PlayerState;
+	if(PlayerState)
+	{
+		AEHPlayerState* EHPlayerState = Cast<AEHPlayerState>(PlayerState);
+		if(EHPlayerState)
+		{
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.Owner = this;
+			SpawnParams.Instigator = GetInstigator();
+
+			UWorld* World = GetWorld();
+			if(World)
+			{
+				APawn* SpawnedCharacter = World->SpawnActor<APawn>(CharacterClasses[EHPlayerState->PlayerClass], StartSpot->GetActorTransform(), SpawnParams);
+				if(SpawnedCharacter)
+				{
+					UE_LOG(LogClass, Warning, TEXT("SpawnDefaultPawnFor_Implementation Success!~~~~~"));
+					return SpawnedCharacter;
+				}
+			}
+		}
+	}
+	return nullptr;
+}
+
+//???????
 void APlayingGameMode::GetAllActorsInLevel()
 {
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEHCharacter::StaticClass(), Players);

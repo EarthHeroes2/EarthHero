@@ -60,11 +60,7 @@ void AEHPlayerState::CopyProperties(APlayerState* PlayerState)
 	UE_LOG(LogTemp, Error, TEXT("Copy Properties - EH"));
 	
 	AGameOverPlayerState* GameOverPlayerState = Cast<AGameOverPlayerState>(PlayerState);
-
-	/*
-	if (GameOverPlayerState)
-		GameOverPlayerState->TestVar = PlayerClass;
-	*/
+	
 	GameOverPlayerState->UpdatePlayerData();
 
 	//EHPlayerState->SetStatComponent(); //이것은 사정상 lobbyPlayerState로 이동되었습니다 - 박정익
