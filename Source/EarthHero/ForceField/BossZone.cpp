@@ -54,7 +54,6 @@ void ABP_BossZone::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AAct
         if (AEHCharacter* Character = Cast<AEHCharacter>(OtherActor))
         {
             Character->SetIsInBossZone(true);
-            UE_LOG(LogTemp, Log, TEXT("Character entered the Boss Zone"));
         }
     }
 }
@@ -66,7 +65,6 @@ void ABP_BossZone::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor
         if (AEHCharacter* Character = Cast<AEHCharacter>(OtherActor))
         {
             Character->SetIsInBossZone(false);
-            UE_LOG(LogTemp, Log, TEXT("Character exited the Boss Zone"));
         }
     }
 }
