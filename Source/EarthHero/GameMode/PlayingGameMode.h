@@ -16,7 +16,7 @@ class EARTHHERO_API APlayingGameMode : public AGameModeBase
 
 	virtual void BeginPlay() override;
 
-	virtual APawn* SpawnDefaultPawnFor_Implementation(AController* NewPlayer, AActor* StartSpot);
+	virtual APawn* SpawnDefaultPawnFor_Implementation(AController* NewPlayer, AActor* StartSpot) override;
 	virtual void InitSeamlessTravelPlayer(AController* NewController) override;
 
 	void InitLevelSetting();
