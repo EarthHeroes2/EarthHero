@@ -3,12 +3,13 @@
 #include "CoreMinimal.h"
 #include "EHCharacterBase.h"
 #include "Components/PostProcessComponent.h"
+#include "EarthHero/ForceField/BossZone.h"
 #include "EHCharacter.generated.h"
 
 class UWidgetComponent;
 class UCameraComponent;
 class USpringArmComponent;
-class ABP_BossZone;
+class ADifficultyZone;
 
 UCLASS()
 class EARTHHERO_API AEHCharacter : public AEHCharacterBase
@@ -29,14 +30,17 @@ public:
 
     bool IsInForceField() const;
     void SetIsInForceField(bool bInForceField);
-    
+
+    void AddDifficultyZone(ADifficultyZone* Zone);
+    void RemoveDifficultyZone(ADifficultyZone* Zone);
+    void UpdateDifficulty();
+
     virtual void Shoot();
     virtual void Skill();
 
     //승언 :StatComponent 참조
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
     class UStatComponent *StatComponent;
-    
 
 protected:
     virtual void BeginPlay() override;
@@ -83,10 +87,11 @@ private:
     bool bIsInBossZone;
     UPROPERTY()
     bool bIsInForceField;
+
+    TArray<ADifficultyZone*> OverlappingDifficultyZones; // To store overlapping zones
     
     UFUNCTION(Client, Reliable)
     void Client_DisableAllInput(APlayerController* PlayerController);
-    
 
 public:
     FORCEINLINE USkeletalMeshComponent* GetEquippedWeapon() { return WeaponMesh; }

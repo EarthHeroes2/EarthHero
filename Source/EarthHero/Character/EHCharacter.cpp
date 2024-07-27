@@ -8,11 +8,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "../ForceField/BossZone.h"
 #include "EarthHero/Player/EHPlayerState.h"
-#include "Components/SceneCaptureComponent2D.h"
-#include "GameFramework/SpringArmComponent.h"
-#include "PaperSpriteComponent.h"
-#include "PaperSprite.h"
 #include "EarthHero/Player/EHPlayerController.h"
+#include "EarthHero/ForceField/DifficultyZone.h"
 
 AEHCharacter::AEHCharacter()
 {
@@ -197,6 +194,36 @@ void AEHCharacter::SetIsInForceField(bool bInForceField)
     {
         DisableForceFieldEffect();
     }
+}
+
+void AEHCharacter::AddDifficultyZone(ADifficultyZone* Zone)
+{
+    OverlappingDifficultyZones.AddUnique(Zone);
+    UpdateDifficulty();
+}
+
+void AEHCharacter::RemoveDifficultyZone(ADifficultyZone* Zone)
+{
+    OverlappingDifficultyZones.Remove(Zone);
+    UpdateDifficulty();
+}
+
+void AEHCharacter::UpdateDifficulty()
+{
+    if (OverlappingDifficultyZones.Num() == 0)
+    {
+        UE_LOG(LogTemp, Log, TEXT("No overlapping difficulty zones."));
+        return;
+    }
+
+    float TotalDifficulty = 0.0f;
+    for (ADifficultyZone* Zone : OverlappingDifficultyZones)
+    {
+        TotalDifficulty += Zone->Difficulty;
+    }
+
+    float AverageDifficulty = TotalDifficulty / OverlappingDifficultyZones.Num();
+    UE_LOG(LogTemp, Log, TEXT("Updated difficulty to: %f"), AverageDifficulty);
 }
 
 void AEHCharacter::Shoot()
