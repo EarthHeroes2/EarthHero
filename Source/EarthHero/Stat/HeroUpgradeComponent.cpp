@@ -153,7 +153,7 @@ void UHeroUpgradeComponent::PushHeroUpgrade_Implementation(const TArray<FHeroUpg
 		UE_LOG(LogTemp, Warning, TEXT("Selected Upgrade: %s"), *ServerHeroUpgrades[i].UpgradeName.ToString());
 		InGameHUD->SetIngameHUDHeroUpgrade(
 			i,
-			nullptr,
+			ServerHeroUpgrades[i].UpgradeImage,
 			ServerHeroUpgrades[i].UpgradeLevel,
 			ServerHeroUpgrades[i].UpgradeName,
 			ServerHeroUpgrades[i].Explanation[ServerHeroUpgrades[i].UpgradeLevel + 1]
@@ -171,7 +171,7 @@ void UHeroUpgradeComponent::OnRep_HeroUpgrades(const TArray<FHeroUpgradeStructur
 			//UE_LOG(LogClass, Warning, TEXT("HeroUpgrade : %s, Level : %d"), *ServerHeroUpgrades[i].UpgradeName.ToString(), ServerHeroUpgrades[i].UpgradeLevel)
 			TabHUD->SetHeroUpgradeWidgetValues(
 				i,
-				nullptr,
+				ServerHeroUpgrades[i].UpgradeImage,
 				ServerHeroUpgrades[i].UpgradeLevel,
 				ServerHeroUpgrades[i].UpgradeName,
 				ServerHeroUpgrades[i].Explanation[ServerHeroUpgrades[i].UpgradeLevel]);
