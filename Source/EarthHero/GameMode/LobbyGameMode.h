@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -7,9 +5,6 @@
 #include <EarthHero/PlayerController/LobbyPlayerController.h>
 #include "LobbyGameMode.generated.h"
 
-/**
- * 
- */
 class AEHShooter;
 class AEHWarrior;
 
@@ -27,6 +22,7 @@ class EARTHHERO_API ALobbyGameMode : public AGameModeBase
 
 	//플레이어 정보들 관리
 	TArray<FVector> SpawnLocations;
+	TArray<FRotator> SpawnRotations; // Add this for rotations
 	TArray<AController*> ControllerArray;
 	TArray<ALobbyPlayerController*> LobbyPlayerControllerArray;
 	TArray<FString> PlayerNameArray;
