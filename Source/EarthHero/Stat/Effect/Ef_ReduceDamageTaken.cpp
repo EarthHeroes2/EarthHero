@@ -5,12 +5,14 @@
 
 #include "EarthHero/Character/EHCharacter.h"
 #include "EarthHero/Character/Monster/MonsterBase.h"
+#include "EarthHero/Enum/Enums.h"
 #include "EarthHero/Stat/StatComponent.h"
 #include "EarthHero/Stat/Monster/MonsterStatComponent.h"
 
 void AEf_ReduceDamageTaken::ApplyEffect(AActor* InTargetActor, float InEffectValue, float InDuration,
                                         bool InbIsStackable, bool InbIsPermanent, bool InbShouldRefreshDuration)
 {
+	EffectType = Ef_ReduceDamageTaken;
 	Super::ApplyEffect(InTargetActor, InEffectValue, InDuration, InbIsStackable, InbIsPermanent,
 	                   InbShouldRefreshDuration);
 

@@ -4,11 +4,13 @@
 #include "EarthHero/Stat/Effect/Ef_Bind.h"
 #include "EarthHero/Character/EHCharacter.h"
 #include "EarthHero/Character/Monster/MonsterBase.h"
+#include "EarthHero/Enum/Enums.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 void AEf_Bind::ApplyEffect(AActor* InTargetActor, float InEffectValue, float InDuration, bool InbIsStackable,
                            bool InbIsPermanent, bool InbShouldRefreshDuration)
 {
+	EffectType = Ef_Bind;
 	Super::ApplyEffect(InTargetActor, InEffectValue, InDuration, InbIsStackable, InbIsPermanent,
 	                   InbShouldRefreshDuration);
 

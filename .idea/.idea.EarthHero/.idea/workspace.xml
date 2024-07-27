@@ -78,12 +78,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4591bad7-fd9f-4860-903f-8700cd913377" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Icons/Ef_Bind.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Icons/Ef_IncreaseDamageTaken.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Icons/Ef_ReduceDamageTaken.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Assets/Icons/Ef_SpeedBoost.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Data/Effect/DT_EffectTable.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/EarthHero/Stat/Structure/EffectStructure.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/EarthHero/Stat/Structure/EffectStructure.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Character/Warrior/BP_Warrior.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Character/Warrior/BP_Warrior.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/GameMode/BP_EHGameMode.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/GameMode/BP_EHGameMode.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/AIController/AIControllerBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/AIController/AIControllerBase.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/AIController/MeleeAIController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/AIController/MeleeAIController.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/AIController/RangeAIController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/AIController/RangeAIController.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Icons/God_Speed.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Icons/Guardian.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Icons/Rip_Original.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Icons/icon03.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/EHGameInstance.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/EHGameInstance.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/EHGameInstance.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/EHGameInstance.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Enum/Enums.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Enum/Enums.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Stat/Effect/Ef_Bind.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Stat/Effect/Ef_Bind.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Stat/Effect/Ef_IncreaseDamageTaken.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Stat/Effect/Ef_IncreaseDamageTaken.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Stat/Effect/Ef_ReduceDamageTaken.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Stat/Effect/Ef_ReduceDamageTaken.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Stat/Effect/Ef_SpeedBoost.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Stat/Effect/Ef_SpeedBoost.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Stat/Effect/EffectBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Stat/Effect/EffectBase.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Stat/Effect/EffectBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Stat/Effect/EffectBase.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Stat/Structure/HeroUpgrageStructure.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Stat/Structure/HeroUpgrageStructure.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,6 +110,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Intermediate/Build/Win64/UnrealEditor/Inc/EarthHero/UHT/Status.gen.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/EarthHero/GameMode/PlayingGameMode.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/EarthHero/Options.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/EarthHero/Stat/ShooterStatComponent.cpp" root0="FORCE_HIGHLIGHTING" />

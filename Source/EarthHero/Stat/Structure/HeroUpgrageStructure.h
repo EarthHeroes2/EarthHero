@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "EarthHero/Enum/Enums.h"
 #include "Engine/DataTable.h"
 #include "HeroUpgrageStructure.generated.h"
 

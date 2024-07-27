@@ -7,6 +7,8 @@
 #include "Character/EHCharacter.h"
 #include "GameFramework/GameUserSettings.h"
 #include "Kismet/GameplayStatics.h"
+#include "Stat/Effect/EffectBase.h"
+#include "Stat/Structure/EffectStructure.h"
 
 constexpr int32 DefaultResolutionWidth = 1920;
 constexpr int32 DefaultResolutionHeight = 1080;
@@ -25,6 +27,22 @@ UEHGameInstance::UEHGameInstance()
     if (DT_GameTable.Succeeded())
     {
         CharacterStatDataTable = DT_GameTable.Object;
+    }
+
+    static ConstructorHelpers::FObjectFinder<UDataTable> DT_EffectTable(TEXT("/Game/Data/Effect/DT_EffectTable.DT_EffectTable"));
+    if (DT_EffectTable.Succeeded())
+    {
+        EffectTable = DT_EffectTable.Object;
+        TArray<FEffectStructure*> AllEffects;
+        EffectTable->GetAllRows(TEXT(""), AllEffects);
+        
+        for (FEffectStructure* Effect : AllEffects)
+        {
+            if (Effect)
+            {
+                AEffectBase::EffectArray.Add(Effect);
+            }
+        }
     }
     
     static ConstructorHelpers::FObjectFinder<USoundMix> SoundMixFinder(TEXT("/Game/Sounds/MainSoundMix.MainSoundMix"));

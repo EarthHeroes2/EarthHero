@@ -4,9 +4,10 @@
 #include "EarthHero/Stat/Effect/EffectBase.h"
 
 #include "EarthHero/Character/EHCharacter.h"
+#include "EarthHero/Stat/Structure/EffectStructure.h"
 
 TMap<AActor*, TMap<TSubclassOf<AEffectBase>, AEffectBase*>> AEffectBase::EffectMap;
-
+TArray<FEffectStructure*> AEffectBase::EffectArray;
 // Sets default values
 AEffectBase::AEffectBase()
 {
@@ -62,7 +63,7 @@ void AEffectBase::ApplyEffect(AActor* InTargetActor, float InEffectValue, float 
 				ExistingEffect->GetWorld()->GetTimerManager().SetTimer(ExistingEffect->EffectTimerHandle, ExistingEffect, &AEffectBase::ResetEffect, InDuration, false);
 				if (AEHCharacter *Hero = Cast<AEHCharacter>(TargetActor))
 				{
-					// HUD 갱신? GameMode에 관리해줘야하나
+					UE_LOG(LogClass, Warning, TEXT("Effect Name : %s"), *EffectArray[EffectType]->EffectName.ToString());
 				}
 				bRefresh = true;
 			}

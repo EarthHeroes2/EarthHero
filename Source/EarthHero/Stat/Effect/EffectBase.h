@@ -18,6 +18,8 @@ public:
 	virtual void ApplyEffect(AActor* InTargetActor, float InEffectValue, float InDuration, bool InbIsStackable = false, bool InbIsPermanent = false, bool InbShouldRefreshDuration = false);
 
 	virtual void UpgradeEffect(float InEffectValue);
+	
+	static TArray<FEffectStructure*> EffectArray;
 
 protected:
 	// Called when the game starts or when spawned
@@ -56,6 +58,8 @@ protected:
 
 	// 동일한 대상에 적용된 효과를 관리하기 위한 맵 액터 -> 적용 효과 -> 효과 객체 주소
 	static TMap<AActor*, TMap<TSubclassOf<AEffectBase>, AEffectBase*>> EffectMap;
+
+	int EffectType;
 
 public:	
 	// Called every frame

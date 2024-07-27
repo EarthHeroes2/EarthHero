@@ -27,6 +27,8 @@ protected:
 private:
 	UPROPERTY()
 	class UDataTable* CharacterStatDataTable = nullptr;
+	UPROPERTY()
+	class UDataTable* EffectTable = nullptr;
 
 	void SetDefaultSettings();
 	void SetRecommendedResolution();

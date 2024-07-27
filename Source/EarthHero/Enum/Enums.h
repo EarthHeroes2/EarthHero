@@ -48,3 +48,14 @@ enum MonsterType
 	Normal,
 	Boss
 };
+
+//Effect 타입
+UENUM(BlueprintType)
+enum EffectType
+{
+	Ef_Bind,
+	Ef_IncreaseDamageTaken,
+	Ef_PointImpulse,
+	Ef_ReduceDamageTaken,
+	Ef_SpeedBoost,
+};
