@@ -7,6 +7,7 @@
 #include "EarthHero/EHGameInstance.h"
 #include "GameFramework/PlayerState.h"
 #include "EarthHero/Character/Shooter/EHShooter.h"
+#include "EarthHero/Character/Warrior/EHWarrior.h"
 #include "EarthHero/PlayerState/LobbyPlayerState.h"
 
 ALobbyGameMode::ALobbyGameMode()
@@ -18,13 +19,15 @@ ALobbyGameMode::ALobbyGameMode()
 	CharacterClasses.SetNum(4);
 	
 	//Warrior
+	static ConstructorHelpers::FClassFinder<AEHWarrior> EHWarriorAsset(TEXT("/Game/Blueprints/Character/Warrior/BP_Warrior.BP_Warrior_C"));
+	if (EHWarriorAsset.Succeeded()) CharacterClasses[Warrior] = EHWarriorClass = EHWarriorAsset.Class;
+
 	//Mechanic
-	//shooter 블루프린트
+
+	//shooter
 	static ConstructorHelpers::FClassFinder<AEHShooter> EHShooterAsset(TEXT("/Game/Blueprints/Character/Shooter/BP_Shooter.BP_Shooter_C"));
-	if (EHShooterAsset.Succeeded())
-	{
-		CharacterClasses[Shooter] = EHShooterClass = EHShooterAsset.Class;
-	}
+	if (EHShooterAsset.Succeeded()) CharacterClasses[Shooter] = EHShooterClass = EHShooterAsset.Class;
+
 	//Archor
 
 	for(int i = 0; i < 4; i++) bSpotUsedArray.Add(false);
@@ -68,7 +71,7 @@ AActor* ALobbyGameMode::FindPlayerStart_Implementation(AController* Player, cons
 		LobbyPlayerControllerArray.Add(LobbyPlayerController);
 		PlayerNameArray.Add(Player->PlayerState->GetPlayerName());
 		PlayerReadyStateArray.Add(false);
-		PlayerClassArray.Add(Shooter); //임시
+		PlayerClassArray.Add(Warrior); //ALobbyPlayerController::Client_SelectDefaultCharacter_Implementation() 기본값 변경이면 여기도 함께 변경해줘야함 (나중에 수정할수도)
 		PlayerSpotArray.Add(PlayerStart);
 
 		return Super::FindPlayerStart_Implementation(Player, FString::FromInt(PlayerStart));
@@ -247,6 +250,7 @@ void ALobbyGameMode::UpdateCharacter(ALobbyPlayerController* LobbyPlayerControll
 	switch (ClassType)
 	{
 		case Warrior:
+			LobbyPlayerController->SetCharacter(GetWorld()->SpawnActor<AEHWarrior>(EHWarriorClass, SpawnLocations[SpawnSpotIndex], FRotator(0.0f, 180.0f, 0.0f), SpawnParams));
 			break;
 		case Mechanic:
 			break;

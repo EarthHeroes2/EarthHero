@@ -11,6 +11,7 @@
  * 
  */
 class AEHShooter;
+class AEHWarrior;
 
 UCLASS()
 class EARTHHERO_API ALobbyGameMode : public AGameModeBase
@@ -38,9 +39,9 @@ class EARTHHERO_API ALobbyGameMode : public AGameModeBase
 	
 
 	TArray<TSubclassOf<ACharacter>> CharacterClasses;
-	//TSubclassOf<class AEHWarrior> EHWarriorClass;
+	TSubclassOf<AEHWarrior> EHWarriorClass;
 	//TSubclassOf<class AEHMechanic> EHMechanicClass;
-	TSubclassOf<class AEHShooter> EHShooterClass;
+	TSubclassOf<AEHShooter> EHShooterClass;
 	//TSubclassOf<class AEHArchor> EHArchorClass;
 
 	

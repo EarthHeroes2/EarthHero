@@ -143,7 +143,7 @@ void ALobbyPlayerController::Client_SelectDefaultCharacter_Implementation()
 {
 	if (LobbyWidget)
 	{
-		LobbyWidget->ChangeSelectedButton(Shooter);
+		LobbyWidget->ChangeSelectedButton(Warrior);
 	}
 	else UE_LOG(LogTemp, Log, TEXT("invalid LobbyWidget"));
 }
