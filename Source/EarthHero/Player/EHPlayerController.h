@@ -27,6 +27,9 @@ public:
 	UFUNCTION(Client, Reliable)
 	void Client_EnableInput();
 
+	UFUNCTION(Client, Reliable)
+	void Client_AddEffect(UTexture2D* EffectImage, int ServerEffectType, float Duration);
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;

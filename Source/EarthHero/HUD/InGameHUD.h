@@ -90,14 +90,15 @@ public:
 	UCoolDown *Status_8;
 	UPROPERTY(meta = (BindWidget))
 	UCoolDown *Status_9;
-
+	
 	UPROPERTY()
 	TArray<FStatus> StatusArray;
 
 	UPROPERTY()
 	int EffectCount = 0;
 
-	void AddStatusImage(UTexture2D *EffectImage, FString EffectName, float CoolDown);
+	void AddStatusImage(UTexture2D *EffectImage, int EffectType, float CoolDown);
+	void DeleteStatusImage(int EffectType);
 
 	void UpdatePlayerHealths(const TArray<float>& PlayerMaxHealths, const TArray<float>& PlayerCurrentHealths);
 

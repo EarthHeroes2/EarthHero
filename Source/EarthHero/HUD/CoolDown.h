@@ -14,4 +14,34 @@ class EARTHHERO_API UCoolDown : public UUserWidget
 {
 	GENERATED_BODY()
 	
+public:
+	UPROPERTY(meta = (BindWidget))
+	class UImage *EffectImage;
+
+	UPROPERTY(meta = (BindWidget))
+	class UTextBlock *Text_RemainingTime;
+
+	UPROPERTY(meta = (BindWidget))
+	class UProgressBar *ProgressBar_CoolDown;
+
+	UPROPERTY()
+	class UInGameHUD *InGameHUD;
+	
+	void SetImage(UTexture2D *Image);
+	void ClearImage();
+	void StartCoolDown(float CoolDown, int InEffectType);
+
+	FTimerHandle ProgressHandle;
+	FTimerHandle EffectEndHandle;
+
+	void Loop();
+	void End();
+	UPROPERTY()
+	int EffectType;
+	UPROPERTY()
+	float SubtractPercent;
+	UPROPERTY()
+	float RemainingTime;
+	UPROPERTY()
+	float Percent;
 };

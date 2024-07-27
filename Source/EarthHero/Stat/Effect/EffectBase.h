@@ -61,7 +61,7 @@ protected:
 	static TMap<AActor*, TMap<TSubclassOf<AEffectBase>, AEffectBase*>> EffectMap;
 
 	int EffectType;
-
+	
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

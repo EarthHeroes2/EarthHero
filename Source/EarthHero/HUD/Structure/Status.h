@@ -11,19 +11,25 @@ struct FStatus
 	
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FString StatusName;
+	int EffectType;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UCoolDown *CoolDownWidget;
 
 	FStatus()
-		: StatusName(TEXT("DefaultStatus"))
+		: EffectType(0)
 		,CoolDownWidget(nullptr)
 	{
 	}
 
-	FStatus(const FString& InStatusName, UCoolDown *InCoolDownWidget)
-		: StatusName(InStatusName)
+	FStatus(const int InEffectType, UCoolDown *InCoolDownWidget)
+		: EffectType(InEffectType)
 		, CoolDownWidget(InCoolDownWidget)
 	{
+	}
+
+	// Equality operator for comparing EffectType
+	bool operator==(const int InEffectType) const
+	{
+		return EffectType == InEffectType;
 	}
 };

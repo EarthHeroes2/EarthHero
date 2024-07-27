@@ -22,6 +22,11 @@ void AEHPlayerController::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 }
 
+void AEHPlayerController::Client_AddEffect_Implementation(UTexture2D* EffectImage, int ServerEffectType, float Duration)
+{
+	HUD->AddStatusImage(EffectImage, ServerEffectType, Duration);
+}
+
 void AEHPlayerController::BeginPlay()
 {
 	Super::BeginPlay();

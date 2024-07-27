@@ -4,17 +4,18 @@
 #include "EarthHero/Stat/Effect/EffectBase.h"
 
 #include "EarthHero/Character/EHCharacter.h"
+#include "EarthHero/HUD/InGameHUD.h"
 #include "EarthHero/Player/EHPlayerController.h"
 #include "EarthHero/Stat/Structure/EffectStructure.h"
 
 TMap<AActor*, TMap<TSubclassOf<AEffectBase>, AEffectBase*>> AEffectBase::EffectMap;
 TArray<FEffectStructure*> AEffectBase::EffectArray;
+
 // Sets default values
 AEffectBase::AEffectBase()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 
@@ -64,10 +65,9 @@ void AEffectBase::ApplyEffect(AActor* InTargetActor, float InEffectValue, float 
 				ExistingEffect->GetWorld()->GetTimerManager().SetTimer(ExistingEffect->EffectTimerHandle, ExistingEffect, &AEffectBase::ResetEffect, InDuration, false);
 				if (AEHCharacter *Hero = Cast<AEHCharacter>(TargetActor))
 				{
-					UE_LOG(LogClass, Warning, TEXT("Effect Name : %s"), *EffectArray[EffectType]->EffectName.ToString());
-					if (AEHPlayerController *PlayerController = Cast<AEHPlayerController>(Hero->Controller))
+					if (AEHPlayerController *PlayerController = Cast<AEHPlayerController>(Hero->GetController()))
 					{
-						//PlayerController->HUD->AddStatusImage();
+						PlayerController->Client_AddEffect(EffectArray[EffectType]->EffectImage, EffectArray[EffectType]->EffectType, InDuration);
 					}
 				}
 				bRefresh = true;
@@ -89,8 +89,10 @@ void AEffectBase::ApplyEffect(AActor* InTargetActor, float InEffectValue, float 
 		TargetMap = EffectMap.Find(TargetActor);
 		if (AEHCharacter *Hero = Cast<AEHCharacter>(TargetActor))
 		{
-			// HUD 갱신? GameMode에 관리해줘야하나
-			UE_LOG(LogClass, Warning, TEXT("Effect Name : %s"), *EffectArray[EffectType]->EffectName.ToString());
+			if (AEHPlayerController *PlayerController = Cast<AEHPlayerController>(Hero->GetController()))
+			{
+				PlayerController->Client_AddEffect(EffectArray[EffectType]->EffectImage, EffectArray[EffectType]->EffectType, InDuration);
+			}
 		}
 	}
 	TargetMap->Add(GetClass(), this);

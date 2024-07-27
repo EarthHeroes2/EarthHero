@@ -19,16 +19,16 @@ bool UInGameHUD::Initialize()
 	InGamePlayerInfoArray.Add(BP_InGamePlayerInfo_2);
 	InGamePlayerInfoArray.Add(BP_InGamePlayerInfo_3);
 
-	StatusArray.Add(FStatus(TEXT(""), Status));
-	StatusArray.Add(FStatus(TEXT(""), Status_1));
-	StatusArray.Add(FStatus(TEXT(""), Status_2));
-	StatusArray.Add(FStatus(TEXT(""), Status_3));
-	StatusArray.Add(FStatus(TEXT(""), Status_4));
-	StatusArray.Add(FStatus(TEXT(""), Status_5));
-	StatusArray.Add(FStatus(TEXT(""), Status_6));
-	StatusArray.Add(FStatus(TEXT(""), Status_7));
-	StatusArray.Add(FStatus(TEXT(""), Status_8));
-	StatusArray.Add(FStatus(TEXT(""), Status_9));
+	StatusArray.Add(FStatus(0, Status));
+	StatusArray.Add(FStatus(0, Status_1));
+	StatusArray.Add(FStatus(0, Status_2));
+	StatusArray.Add(FStatus(0, Status_3));
+	StatusArray.Add(FStatus(0, Status_4));
+	StatusArray.Add(FStatus(0, Status_5));
+	StatusArray.Add(FStatus(0, Status_6));
+	StatusArray.Add(FStatus(0, Status_7));
+	StatusArray.Add(FStatus(0, Status_8));
+	StatusArray.Add(FStatus(0, Status_9));
 	Chat_Etb->OnTextCommitted.AddDynamic(this, &ThisClass::ChatTextCommitted);
 	
 	if (HeroUpgradeVerticalBox)
@@ -202,10 +202,23 @@ void UInGameHUD::AddChatMessage(const FText& Text)
 	}
 }
 
-void UInGameHUD::AddStatusImage(UTexture2D* EffectImage, FString EffectName, float CoolDown)
+void UInGameHUD::AddStatusImage(UTexture2D* EffectImage, int EffectType, float CoolDown)
 {
 	EffectCount += 1;
-	//StatusArray[EffectCount - 1]->
+	StatusArray[EffectCount - 1] = FStatus(EffectType, StatusArray[EffectCount - 1].CoolDownWidget);
+	StatusArray[EffectCount - 1].CoolDownWidget->SetImage(EffectImage);
+	StatusArray[EffectCount - 1].CoolDownWidget->StartCoolDown(CoolDown, EffectType);
+	StatusArray[EffectCount - 1].CoolDownWidget->InGameHUD = this;
+}
+
+void UInGameHUD::DeleteStatusImage(int EffectType)
+{
+	EffectCount -= 1;
+	FStatus *FindStatus = Algo::FindByPredicate(StatusArray, [EffectType](const FStatus& Status)
+	{
+		return Status.EffectType == EffectType;
+	});
+	FindStatus->CoolDownWidget->ClearImage();
 }
 
 void UInGameHUD::UpdatePlayerHealths(const TArray<float>& PlayerMaxHealths, const TArray<float>& PlayerCurrentHealths)
