@@ -35,10 +35,7 @@ EBTNodeResult::Type UFindFlyingPatrolPos::ExecuteTask(UBehaviorTreeComponent& Ow
 	
 	Location.X += FMath::FRandRange(-500.f, 500.f);
 	Location.Y += FMath::FRandRange(-500.f, 500.f);
-	Location.Z += FMath::FRandRange(-50.f, 50.f);
-	
-	//TargetLocation에 위치 값 저장
-	//AIController->GetBlackboardComponent()->SetValueAsVector(BlackboardKeys::TargetLocation, Location);
+	Location.Z += FMath::FRandRange(-50.f, 50.f); //지상과 너무 가깝지 않게 추가적인 작업 필요
 
 	ControllingPawn->GetMovementComponent()->Velocity = Location;
 	
