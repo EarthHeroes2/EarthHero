@@ -75,7 +75,6 @@ void AForceField::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor)
         if (AEHCharacter* Character = Cast<AEHCharacter>(OtherActor))
         {
             Character->SetIsInForceField(true);
-            UE_LOG(LogTemp, Warning, TEXT("In force field: true"));
         }
     }
 }
@@ -87,7 +86,6 @@ void AForceField::OnOverlapEnd(AActor* OverlappedActor, AActor* OtherActor)
         if (AEHCharacter* Character = Cast<AEHCharacter>(OtherActor))
         {
             Character->SetIsInForceField(false);
-            UE_LOG(LogTemp, Warning, TEXT("In force field: false"));
         }
     }
 }
@@ -117,7 +115,6 @@ void AForceField::SetCustomCurve(UCurveFloat* NewCurve)
     {
         ExpansionCurve = NewCurve;
         RestartTimeline();
-        UE_LOG(LogTemp, Warning, TEXT("CustomCurve set for ForceField"));
     }
 }
 
