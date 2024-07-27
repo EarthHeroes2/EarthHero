@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "LobbyGameMode.h"
 #include <EarthHero/GameSession/LobbyGameSession.h>
 
@@ -32,10 +29,15 @@ ALobbyGameMode::ALobbyGameMode()
 
 	for(int i = 0; i < 4; i++) bSpotUsedArray.Add(false);
 
-	SpawnLocations.Add(FVector(500.0f, -180.0f, 0.0f));
-	SpawnLocations.Add(FVector(500.0f, -60.0f, 0.0f));
-	SpawnLocations.Add(FVector(500.0f, 60.0f, 0.0f));
-	SpawnLocations.Add(FVector(500.0f, 180.0f, 0.0f));
+	SpawnLocations.Add(FVector(2640.0f, 1420.0f, -406.744093));
+	SpawnLocations.Add(FVector(2230.0f, 1360.0f, -397.733997));
+	SpawnLocations.Add(FVector(2340.0f, 930.0f, -54.579708));
+	SpawnLocations.Add(FVector(2603.821996, 959.925651, -70.079027));
+
+	SpawnRotations.Add(FRotator(0.0f, 50.0f, 0.0f));
+	SpawnRotations.Add(FRotator(0.0f, 119.999999, 0.0f));
+	SpawnRotations.Add(FRotator(0.0f, 159.999999, 0.0f));
+	SpawnRotations.Add(FRotator(0.0f, 10.0f, 0.0f));
 }
 
 void ALobbyGameMode::BeginPlay()
@@ -229,7 +231,6 @@ void ALobbyGameMode::SendChatMessage(const FText& Text)
 	}
 }
 
-//플레이어 캐릭터(클래스) 선택 업데이트
 void ALobbyGameMode::UpdateCharacter(ALobbyPlayerController* LobbyPlayerController, EClassType ClassType)
 {
 	int PlayerNumber = LobbyPlayerControllerArray.Find(LobbyPlayerController);
@@ -240,27 +241,28 @@ void ALobbyGameMode::UpdateCharacter(ALobbyPlayerController* LobbyPlayerControll
 
 	//이전 캐릭터 있으면 지움
 	LobbyPlayerController->DestroyCharacter();
-	
+    
 	int SpawnSpotIndex = PlayerSpotArray[PlayerNumber];
-	
+    
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = this;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn; // 항상 생성
 
 	//해당 자리에 캐릭터 생성
 	switch (ClassType)
 	{
-		case Warrior:
-			LobbyPlayerController->SetCharacter(GetWorld()->SpawnActor<AEHWarrior>(EHWarriorClass, SpawnLocations[SpawnSpotIndex], FRotator(0.0f, 180.0f, 0.0f), SpawnParams));
-			break;
-		case Mechanic:
-			break;
-		case Shooter:
-			LobbyPlayerController->SetCharacter(GetWorld()->SpawnActor<AEHShooter>(EHShooterClass, SpawnLocations[SpawnSpotIndex], FRotator(0.0f, 180.0f, 0.0f), SpawnParams));
-			break;
-		case Archer:
-			break;
-		default:
-			break;
+	case Warrior:
+		LobbyPlayerController->SetCharacter(GetWorld()->SpawnActor<AEHWarrior>(EHWarriorClass, SpawnLocations[SpawnSpotIndex], SpawnRotations[SpawnSpotIndex], SpawnParams)); // Use rotation
+		break;
+	case Mechanic:
+		break;
+	case Shooter:
+		LobbyPlayerController->SetCharacter(GetWorld()->SpawnActor<AEHShooter>(EHShooterClass, SpawnLocations[SpawnSpotIndex], SpawnRotations[SpawnSpotIndex], SpawnParams)); // Use rotation
+		break;
+	case Archer:
+		break;
+	default:
+		break;
 	}
 }
 

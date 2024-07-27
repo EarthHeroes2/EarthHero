@@ -5,6 +5,8 @@
 #include "GameFramework/GameModeBase.h"
 #include "PlayingGameMode.generated.h"
 
+class AEHShooter;
+class AEHWarrior;
 class AEHPlayerController;
 
 UCLASS()
@@ -13,6 +15,8 @@ class EARTHHERO_API APlayingGameMode : public AGameModeBase
 	GENERATED_BODY()
 
 	virtual void BeginPlay() override;
+
+	virtual APawn* SpawnDefaultPawnFor_Implementation(AController* NewPlayer, AActor* StartSpot);
 	virtual void InitSeamlessTravelPlayer(AController* NewController) override;
 
 	void InitLevelSetting();
@@ -29,6 +33,14 @@ class EARTHHERO_API APlayingGameMode : public AGameModeBase
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true), Category = "ForceField")
 	TSubclassOf<class AForceField> ForceFieldActor;
+
+
+
+	TArray<TSubclassOf<ACharacter>> CharacterClasses;
+	TSubclassOf<AEHWarrior> EHWarriorClass;
+	//TSubclassOf<class AEHMechanic> EHMechanicClass;
+	TSubclassOf<AEHShooter> EHShooterClass;
+	//TSubclassOf<class AEHArchor> EHArchorClass;
 
 protected:
 	virtual void Tick(float DeltaSeconds) override;
