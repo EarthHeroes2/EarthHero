@@ -4,6 +4,7 @@
 #include "Components/TextBlock.h"
 #include "IngameHUDHeroUpgradeWidget.h"
 #include "Components/EditableTextBox.h"
+#include "Components/Image.h"
 #include "Components/ScrollBox.h"
 #include "Components/VerticalBox.h"
 #include "EarthHero/Player/EHPlayerController.h"
@@ -12,6 +13,25 @@ bool UInGameHUD::Initialize()
 {
 	Super::Initialize();
 
+	PlayerHPBarArray.Add(PlayerHPBar_0);
+	PlayerHPBarArray.Add(PlayerHPBar_1);
+	PlayerHPBarArray.Add(PlayerHPBar_2);
+	PlayerHPBarArray.Add(PlayerHPBar_3);
+	PlayerClassImageArray.Add(PlayerClass);
+	PlayerClassImageArray.Add(PlayerClass_1);
+	PlayerClassImageArray.Add(PlayerClass_2);
+	PlayerClassImageArray.Add(PlayerClass_3);
+
+	StatusArray.Add(FStatus(TEXT(""), Status));
+	StatusArray.Add(FStatus(TEXT(""), Status_1));
+	StatusArray.Add(FStatus(TEXT(""), Status_2));
+	StatusArray.Add(FStatus(TEXT(""), Status_3));
+	StatusArray.Add(FStatus(TEXT(""), Status_4));
+	StatusArray.Add(FStatus(TEXT(""), Status_5));
+	StatusArray.Add(FStatus(TEXT(""), Status_6));
+	StatusArray.Add(FStatus(TEXT(""), Status_7));
+	StatusArray.Add(FStatus(TEXT(""), Status_8));
+	StatusArray.Add(FStatus(TEXT(""), Status_9));
 	Chat_Etb->OnTextCommitted.AddDynamic(this, &ThisClass::ChatTextCommitted);
 	
 	if (HeroUpgradeVerticalBox)
@@ -40,21 +60,6 @@ void UInGameHUD::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 		CurrentHealthText->SetText(FText::AsNumber(FMath::FloorToInt(StatComponentRef->GetHealth())));
 		MaxHealthText->SetText(FText::Format(FText::FromString(TEXT("/ {0}")), FText::AsNumber(FMath::FloorToInt(StatComponentRef->GetMaxHealth()))));
 	}
-}
-
-void UInGameHUD::NativeConstruct()
-{
-	Super::NativeConstruct();
-	StatusArray.Add(FStatus(TEXT(""), Status));
-	StatusArray.Add(FStatus(TEXT(""), Status_1));
-	StatusArray.Add(FStatus(TEXT(""), Status_2));
-	StatusArray.Add(FStatus(TEXT(""), Status_3));
-	StatusArray.Add(FStatus(TEXT(""), Status_4));
-	StatusArray.Add(FStatus(TEXT(""), Status_5));
-	StatusArray.Add(FStatus(TEXT(""), Status_6));
-	StatusArray.Add(FStatus(TEXT(""), Status_7));
-	StatusArray.Add(FStatus(TEXT(""), Status_8));
-	StatusArray.Add(FStatus(TEXT(""), Status_9));
 }
 
 void UInGameHUD::UpdateGameTimer(int GameTimerSec)
@@ -197,5 +202,19 @@ void UInGameHUD::AddChatMessage(const FText& Text)
 			Chat_Scr->AddChild(TextBlock);
 			Chat_Scr->ScrollToEnd();
 		}
+	}
+}
+
+void UInGameHUD::UpdatePlayerHealths(const TArray<float>& PlayerMaxHealths, const TArray<float>& PlayerCurrentHealths)
+{
+	int i;
+	for(i = 0; i < PlayerMaxHealths.Num(); i++)
+	{
+		PlayerHPBarArray[i]->SetPercent(PlayerCurrentHealths[i] / PlayerMaxHealths[i]);
+	}
+	for (i; i < 3; i++)
+	{
+		PlayerHPBarArray[i]->SetVisibility(ESlateVisibility::Collapsed);
+		PlayerClassImageArray[i]->SetVisibility(ESlateVisibility::Collapsed);
 	}
 }

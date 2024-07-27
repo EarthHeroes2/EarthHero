@@ -57,6 +57,11 @@ void APlayingGameState::OnRep_GameStateHealths() const //일단은 현재 체력
 	{
 		EHPlayerController->TabHUD->UpdatePlayerHealths(AllPlayerMaxHealths, AllPlayerCurrentHealths);
 	}
+
+	if(EHPlayerController && EHPlayerController->HUD)
+	{
+		EHPlayerController->HUD->UpdatePlayerHealths(AllPlayerMaxHealths, AllPlayerCurrentHealths);
+	}
 }
 
 void APlayingGameState::UpdateGameStateLevels(const TArray<int>& PlayerLevels)

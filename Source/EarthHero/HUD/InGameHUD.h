@@ -53,6 +53,31 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	class UIngameHUDHeroUpgradeWidget* BP_IngameHUDHeroUpgrade_2;
 
+	// 왼쪽 팀원 정보
+	UPROPERTY(meta = (BindWidget))
+	class UProgressBar* PlayerHPBar_0;
+	UPROPERTY(meta = (BindWidget))
+	class UProgressBar* PlayerHPBar_1;
+	UPROPERTY(meta = (BindWidget))
+	class UProgressBar* PlayerHPBar_2;
+	UPROPERTY(meta = (BindWidget))
+	class UProgressBar* PlayerHPBar_3;
+
+	TArray<UProgressBar*> PlayerHPBarArray;
+
+	UPROPERTY(meta = (BindWidget))
+	class UImage *PlayerClass;
+	UPROPERTY(meta = (BindWidget))
+	class UImage *PlayerClass_1;
+	UPROPERTY(meta = (BindWidget))
+	class UImage *PlayerClass_2;
+	UPROPERTY(meta = (BindWidget))
+	class UImage *PlayerClass_3;
+
+	TArray<UImage*> PlayerClassImageArray;
+
+
+	//플레이어 캐릭터 Effect 표시
 	UPROPERTY(meta = (BindWidget))
 	UCoolDown *Status;
 	UPROPERTY(meta = (BindWidget))
@@ -76,6 +101,8 @@ public:
 
 	UPROPERTY()
 	TArray<FStatus> StatusArray;
+
+	void UpdatePlayerHealths(const TArray<float>& PlayerMaxHealths, const TArray<float>& PlayerCurrentHealths);
 
 	void ShowHeroUpgradeVerticalBox();
 
@@ -102,8 +129,6 @@ protected:
 	void ChatTextCommitted(const FText& Text, ETextCommit::Type CommitMethod);
 	
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
-
-	virtual void NativeConstruct() override;
 
 private:
 	UPROPERTY()
