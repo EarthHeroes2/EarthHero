@@ -22,7 +22,7 @@ protected:
 	int NumberOfPlayersInSession = 0;
 
 	const FName SessionName = "NAME_GameSession"; 
-	const FString InGameMap = TEXT("/Game/Assets/BattleRoyaleStarterKit/Maps/BattleRoyale_Map_a");
+	const FString InGameMap = TEXT("/Game/Assets/BattleRoyaleStarterKit/Maps/BattleRoyale_Map_a/BattleRoyale_Map_a_WP");
 	
 	virtual void BeginPlay() override;
 
