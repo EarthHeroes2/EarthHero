@@ -3,7 +3,6 @@
 
 #include "MonsterBase.h"
 
-#include "NavigationInvokerComponent.h"
 #include "EarthHero/Stat/Monster/MonsterStatComponent.h"
 
 // Sets default values
@@ -12,9 +11,6 @@ AMonsterBase::AMonsterBase()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	MonsterStatComponent = CreateDefaultSubobject<UMonsterStatComponent>(TEXT("MonsterStatComponent"));
-
-	NavigationInvoker = CreateDefaultSubobject<UNavigationInvokerComponent>(TEXT("NavigationInvoker"));
-	NavigationInvoker->SetGenerationRadii(2000.0f, 2500.0f); //생성, 제거 범위
 	
 	MonsterStatComponent->SetIsReplicated(true);
 }

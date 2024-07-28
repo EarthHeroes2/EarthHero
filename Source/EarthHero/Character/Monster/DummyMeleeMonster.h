@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MonsterBase.h"
+#include "GroundMonster.h"
 #include "DummyMeleeMonster.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class EARTHHERO_API ADummyMeleeMonster : public AMonsterBase
+class EARTHHERO_API ADummyMeleeMonster : public AGroundMonster
 {
 	GENERATED_BODY()
 

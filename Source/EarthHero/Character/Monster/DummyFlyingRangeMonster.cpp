@@ -3,11 +3,12 @@
 
 #include "DummyFlyingRangeMonster.h"
 
-ADummyFlyingRangeMonster::ADummyFlyingRangeMonster()
+ADummyFlyingRangeMonster::ADummyFlyingRangeMonster() : Super()
 {
-	static ConstructorHelpers::FClassFinder<AActor> TestBulletAsset(TEXT("Actor'/Game/Blueprints/Character/Dummy/BP_TestBullet.BP_TestBullet_C'"));
+	static ConstructorHelpers::FClassFinder<AActor> TestBulletAsset(
+		TEXT("Actor'/Game/Blueprints/Character/Dummy/BP_TestBullet.BP_TestBullet_C'"));
 	if (TestBulletAsset.Succeeded()) TestBulletClass = TestBulletAsset.Class;
-	
+
 	AttackRange = 1800.f;
 	AISightRadius = 1600.f;
 	AILoseSightRadius = 1900.f;

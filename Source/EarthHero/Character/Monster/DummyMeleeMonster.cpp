@@ -3,7 +3,7 @@
 
 #include "DummyMeleeMonster.h"
 
-ADummyMeleeMonster::ADummyMeleeMonster()
+ADummyMeleeMonster::ADummyMeleeMonster() : Super()
 {
 	AttackRange = 200.f;
 	AISightRadius = 500.f;

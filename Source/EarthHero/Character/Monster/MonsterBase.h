@@ -6,8 +6,6 @@
 #include "GameFramework/Character.h"
 #include "MonsterBase.generated.h"
 
-class UNavigationInvokerComponent;
-
 UCLASS()
 class EARTHHERO_API AMonsterBase : public ACharacter
 {
@@ -20,8 +18,6 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	UNavigationInvokerComponent* NavigationInvoker;
 
 public:	
 	// Called every frame
