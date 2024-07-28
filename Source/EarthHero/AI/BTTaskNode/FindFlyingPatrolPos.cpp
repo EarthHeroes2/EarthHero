@@ -29,7 +29,6 @@ EBTNodeResult::Type UFindFlyingPatrolPos::ExecuteTask(UBehaviorTreeComponent& Ow
 	AddLocation.Z = FMath::FRandRange(-50.f, 50.f); //지상과 너무 가깝지 않게 추가적인 작업 필요
 
 	//땅과의 일정 거리 유지
-
 	FHitResult HitResult;
 	FVector MonsterLocation = ControllingPawn->GetActorLocation();
 	FVector EndLocation = MonsterLocation;
