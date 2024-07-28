@@ -11,6 +11,7 @@
 #include "EarthHero/Player/EHPlayerController.h"
 #include "EarthHero/ForceField/DifficultyZone.h"
 #include "DrawDebugHelpers.h"
+#include "EarthHero/AIController/MeleeAIController.h"
 
 AEHCharacter::AEHCharacter()
 {
@@ -310,9 +311,28 @@ void AEHCharacter::SpawnActorsForDifficulty(float Difficulty)
 
             FActorSpawnParameters SpawnParams;
             SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;;
-
+            SpawnParams.Owner = this;
+            SpawnParams.Instigator = GetInstigator();
+            
             TSubclassOf<AActor> ActorClassToSpawn = ActorClassesToSpawn[FMath::RandHelper(ActorClassesToSpawn.Num())];
-            GetWorld()->SpawnActor<AActor>(ActorClassToSpawn, SpawnLocation, FRotator::ZeroRotator, SpawnParams);
+            AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(ActorClassToSpawn, SpawnLocation, FRotator::ZeroRotator, SpawnParams);
+            
+            if (SpawnedActor)
+            {
+                // If the spawned actor is a character, ensure it is possessed by an AI controller
+                if (ACharacter* SpawnedCharacter = Cast<ACharacter>(SpawnedActor))
+                {
+                    AAIController* AIController = GetWorld()->SpawnActor<AAIController>(SpawnedCharacter->AIControllerClass, SpawnLocation, FRotator::ZeroRotator, SpawnParams);
+                    if (AIController)
+                    {
+                        AIController->Possess(SpawnedCharacter);
+                    }
+                    else
+                    {
+                        UE_LOG(LogTemp, Warning, TEXT("Failed to spawn AI controller for %s"), *SpawnedCharacter->GetName());
+                    }
+                }
+            }
         }
         else
         {
