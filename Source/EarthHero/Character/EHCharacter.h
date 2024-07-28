@@ -11,6 +11,15 @@ class UCameraComponent;
 class USpringArmComponent;
 class ADifficultyZone;
 
+USTRUCT(BlueprintType)
+struct FSpawnConfiguration
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")
+    TArray<TSubclassOf<AActor>> ActorClasses;
+};
+
 UCLASS()
 class EARTHHERO_API AEHCharacter : public AEHCharacterBase
 {
@@ -38,7 +47,6 @@ public:
     virtual void Shoot();
     virtual void Skill();
 
-    //승언 :StatComponent 참조
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
     class UStatComponent *StatComponent;
 
@@ -48,16 +56,35 @@ protected:
     virtual void PossessedBy(AController* NewController) override;
 
     void Initialize();
-    
+
+    void SpawnActorsForDifficulty(float Difficulty);
+
+    UPROPERTY(EditAnywhere, Category = "Spawning")
+    float SpawnRadius;
+
+    UPROPERTY(EditAnywhere, Category = "Debug")
+    bool bShowDebugCircle;
+
+    UPROPERTY(EditAnywhere, Category = "Spawning")
+    float SpawnInterval;
+
+    UPROPERTY(EditAnywhere, Category = "Spawning")
+    FSpawnConfiguration Difficulty1Config;
+
+    UPROPERTY(EditAnywhere, Category = "Spawning")
+    FSpawnConfiguration Difficulty2Config;
+
+    UPROPERTY(EditAnywhere, Category = "Spawning")
+    FSpawnConfiguration Difficulty3Config;
+
 private:
-    //승언 PossessedBy에서 사용하는 변수들
     FTimerHandle SetStatComponentTimerHandle;
+    FTimerHandle SpawnTimerHandle;
 
     void SetStatComponent();
 
     UPROPERTY()
     class AEHPlayerState* MyPlayerState;
-    /*******************/
     
     UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true), Category = "Camera")
     UCameraComponent* FPSCamera;
@@ -87,11 +114,15 @@ private:
     bool bIsInBossZone;
     UPROPERTY()
     bool bIsInForceField;
+    
+    float AverageDifficulty = 1.0f;
 
     TArray<ADifficultyZone*> OverlappingDifficultyZones; // To store overlapping zones
     
     UFUNCTION(Client, Reliable)
     void Client_DisableAllInput(APlayerController* PlayerController);
+
+    void SpawnActorsForDifficultyWrapper();
 
 public:
     FORCEINLINE USkeletalMeshComponent* GetEquippedWeapon() { return WeaponMesh; }
