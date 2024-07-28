@@ -3,8 +3,6 @@
 
 #include "DummyFlyingMonster.h"
 
-#include "GameFramework/FloatingPawnMovement.h"
-
 ADummyFlyingMonster::ADummyFlyingMonster()
 {
 	static ConstructorHelpers::FClassFinder<AActor> TestBulletAsset(TEXT("Actor'/Game/Blueprints/Character/Dummy/BP_TestBullet.BP_TestBullet_C'"));
@@ -27,7 +25,7 @@ void ADummyFlyingMonster::Attack(FVector SpawnNormalVector)
 		SpawnParams.Owner = this;
 		SpawnParams.Instigator = GetInstigator();
 		
-		FVector SpawnLocation = GetActorLocation() + SpawnNormalVector * 50;
+		FVector SpawnLocation = GetActorLocation() + SpawnNormalVector * 100;
 		
 		World->SpawnActor<AActor>(TestBulletClass, SpawnLocation, SpawnNormalVector.Rotation(), SpawnParams);
 	}

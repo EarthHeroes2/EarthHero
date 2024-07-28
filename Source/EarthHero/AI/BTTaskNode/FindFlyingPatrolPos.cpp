@@ -5,9 +5,7 @@
 
 #include "BehaviorTree/BlackboardComponent.h"
 #include "EarthHero/AIController/AIControllerBase.h"
-#include "EarthHero/BlackBoard/BlackBoardKeys.h"
 #include "EarthHero/Character/Monster/DummyFlyingMonster.h"
-#include "GameFramework/FloatingPawnMovement.h"
 #include "GameFramework/PawnMovementComponent.h"
 
 UFindFlyingPatrolPos::UFindFlyingPatrolPos(FObjectInitializer const& ObjectInitializer)
@@ -26,17 +24,15 @@ EBTNodeResult::Type UFindFlyingPatrolPos::ExecuteTask(UBehaviorTreeComponent& Ow
 
 	ADummyFlyingMonster* ControllingFlyingMonster = Cast<ADummyFlyingMonster>(ControllingPawn);
 	if (ControllingFlyingMonster == nullptr) return EBTNodeResult::Failed;
-	
-	//본래 회전 상태로 복원
-	//AIController->SetActorTickEnabled(true);
-	//ControllingPawn->SetActorRotation(FRotator(0.f, 270.f, 0.f));
 
+	
 	FVector Location;
 	
-	Location.X += FMath::FRandRange(-500.f, 500.f);
-	Location.Y += FMath::FRandRange(-500.f, 500.f);
-	Location.Z += FMath::FRandRange(-50.f, 50.f); //지상과 너무 가깝지 않게 추가적인 작업 필요
+	Location.X += FMath::FRandRange(-400.f, 400.f);
+	Location.Y += FMath::FRandRange(-400.f, 400.f);
+	Location.Z += FMath::FRandRange(-40.f, 40.f); //지상과 너무 가깝지 않게 추가적인 작업 필요
 
+	ControllingPawn->SetActorRotation(Location.Rotation());
 	ControllingPawn->GetMovementComponent()->Velocity = Location;
 	
 	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);

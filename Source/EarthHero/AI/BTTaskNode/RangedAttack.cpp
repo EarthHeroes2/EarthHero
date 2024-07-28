@@ -25,12 +25,8 @@ EBTNodeResult::Type URangedAttack::ExecuteTask(UBehaviorTreeComponent& OwnerComp
 	if (TargetPlayer == nullptr) return EBTNodeResult::Failed;
 
 	FVector SpawnNormalVector = (TargetPlayer->GetActorLocation() - ControllingMonster->GetActorLocation()).GetSafeNormal();
-
-	UE_LOG(LogTemp, Log, TEXT("%s %s"), *SpawnNormalVector.ToString(), *SpawnNormalVector.Rotation().ToString())
 	
 	ControllingMonster->Attack(SpawnNormalVector);
-	
-	
 	
 	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;

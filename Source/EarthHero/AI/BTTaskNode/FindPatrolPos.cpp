@@ -39,8 +39,7 @@ EBTNodeResult::Type UFindPatrolPos::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 		//TargetLocation에 위치 값 저장
 		AIController->GetBlackboardComponent()->SetValueAsVector(BlackboardKeys::TargetLocation, NextPatrolLocation.Location);
 	}
-
-	//
+	
 	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;
 }
