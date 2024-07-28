@@ -64,8 +64,8 @@ EBTNodeResult::Type UKeepSafeFlyDistance::ExecuteTask(UBehaviorTreeComponent& Ow
 	{
 		float const DistanceFromGround = MonsterLocation.Z - HitResult.Location.Z;
 		
-		if(DistanceFromGround < 600) SafeVector.Z = (600 - DistanceFromGround);
-		else if(DistanceFromGround > 900) SafeVector.Z = (DistanceFromGround - 900);
+		if(DistanceFromGround < 600) SafeVector.Z = 600 - DistanceFromGround;
+		else if(DistanceFromGround > 900) SafeVector.Z = 900 - DistanceFromGround;
 	}
 	else return EBTNodeResult::Failed;
 	
