@@ -296,8 +296,8 @@ void AEHCharacter::SpawnActorsForDifficulty(float Difficulty)
         FVector SpawnLocation = CharacterLocation + FVector(FMath::Cos(FMath::DegreesToRadians(Angle)) * SpawnRadius, FMath::Sin(FMath::DegreesToRadians(Angle)) * SpawnRadius, 0.0f);
 
         // Perform a line trace to find the ground level at the spawn location
-        FVector StartLocation = SpawnLocation + FVector(0.0f, 0.0f, 5000.0f); // Start above the ground
-        FVector EndLocation = SpawnLocation - FVector(0.0f, 0.0f, 10000.0f); // End below the ground
+        FVector StartLocation = SpawnLocation + FVector(0.0f, 0.0f, 100000.0f); // Start above the ground
+        FVector EndLocation = SpawnLocation - FVector(0.0f, 0.0f, 200000.0f); // End below the ground
 
         FHitResult HitResult;
         FCollisionQueryParams CollisionParams;
@@ -309,7 +309,7 @@ void AEHCharacter::SpawnActorsForDifficulty(float Difficulty)
             SpawnLocation.Z = HitResult.Location.Z;
 
             FActorSpawnParameters SpawnParams;
-            SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+            SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;;
 
             TSubclassOf<AActor> ActorClassToSpawn = ActorClassesToSpawn[FMath::RandHelper(ActorClassesToSpawn.Num())];
             GetWorld()->SpawnActor<AActor>(ActorClassToSpawn, SpawnLocation, FRotator::ZeroRotator, SpawnParams);
