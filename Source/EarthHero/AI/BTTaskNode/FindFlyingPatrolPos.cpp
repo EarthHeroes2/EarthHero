@@ -24,16 +24,32 @@ EBTNodeResult::Type UFindFlyingPatrolPos::ExecuteTask(UBehaviorTreeComponent& Ow
 
 	ADummyFlyingMonster* ControllingFlyingMonster = Cast<ADummyFlyingMonster>(ControllingPawn);
 	if (ControllingFlyingMonster == nullptr) return EBTNodeResult::Failed;
-
 	
-	FVector Location;
 	
-	Location.X += FMath::FRandRange(-400.f, 400.f);
-	Location.Y += FMath::FRandRange(-400.f, 400.f);
-	Location.Z += FMath::FRandRange(-40.f, 40.f); //지상과 너무 가깝지 않게 추가적인 작업 필요
+	FVector AddLocation;
+	
+	AddLocation.X = FMath::FRandRange(-400.f, 400.f);
+	AddLocation.Y = FMath::FRandRange(-400.f, 400.f);
+	AddLocation.Z = FMath::FRandRange(-50.f, 50.f); //지상과 너무 가깝지 않게 추가적인 작업 필요
 
-	ControllingPawn->SetActorRotation(Location.Rotation());
-	ControllingPawn->GetMovementComponent()->Velocity = Location;
+	//땅과의 일정 거리 유지
+
+	FHitResult HitResult;
+	FVector MonsterLocation = ControllingPawn->GetActorLocation();
+	FVector EndLocation = MonsterLocation;
+	EndLocation.Z -= 3000.f;
+
+	UWorld* World = GetWorld();
+	if(World && World->LineTraceSingleByChannel(HitResult, MonsterLocation, EndLocation, ECC_Visibility))
+	{
+		float DistanceFromGround = MonsterLocation.Z - HitResult.Location.Z;
+		if(DistanceFromGround < 600) AddLocation.Z = FMath::FRandRange(0.f, 50.f);
+		else if(DistanceFromGround > 900) AddLocation.Z = FMath::FRandRange(-50.f, 0.f);
+	}
+	else return EBTNodeResult::Failed; //임시
+	
+	ControllingPawn->SetActorRotation(AddLocation.Rotation());
+	ControllingPawn->GetMovementComponent()->Velocity = AddLocation;
 	
 	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;

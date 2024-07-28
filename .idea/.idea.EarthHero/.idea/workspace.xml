@@ -78,28 +78,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4591bad7-fd9f-4860-903f-8700cd913377" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Content/Assets/Icons/Ef_Bind.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/Icons/Ef_IncreaseDamageTaken.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/Icons/Ef_ReduceDamageTaken.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Assets/Icons/Ef_SpeedBoost.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/Data/Effect/DT_EffectTable.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/EarthHero/Stat/Structure/EffectStructure.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/EarthHero/Stat/Structure/EffectStructure.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Assets/Icons/God_Speed.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Assets/Icons/Guardian.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Assets/Icons/Rip_Original.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Assets/Icons/icon03.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/EHGameInstance.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/EHGameInstance.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/EHGameInstance.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/EHGameInstance.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Enum/Enums.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Enum/Enums.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Stat/Effect/Ef_Bind.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Stat/Effect/Ef_Bind.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Stat/Effect/Ef_IncreaseDamageTaken.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Stat/Effect/Ef_IncreaseDamageTaken.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Stat/Effect/Ef_ReduceDamageTaken.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Stat/Effect/Ef_ReduceDamageTaken.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Stat/Effect/Ef_SpeedBoost.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Stat/Effect/Ef_SpeedBoost.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Stat/Effect/EffectBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Stat/Effect/EffectBase.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Stat/Effect/EffectBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Stat/Effect/EffectBase.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Stat/Structure/HeroUpgrageStructure.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Stat/Structure/HeroUpgrageStructure.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Ai/BT_FlyingEnemy.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Ai/BT_FlyingEnemy.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/FindFlyingPatrolPos.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/FindFlyingPatrolPos.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/Monster/DummyFlyingMonster.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Monster/DummyFlyingMonster.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -153,9 +135,9 @@
   },
   &quot;keyToStringList&quot;: {
     &quot;rider.external.source.directories&quot;: [
-      &quot;C:\\Users\\doban\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\DecompilerCache&quot;,
-      &quot;C:\\Users\\doban\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\SourcesCache&quot;,
-      &quot;C:\\Users\\doban\\AppData\\Local\\Symbols\\src&quot;
+      &quot;C:\\Users\\Nasutcho\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\DecompilerCache&quot;,
+      &quot;C:\\Users\\Nasutcho\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\SourcesCache&quot;,
+      &quot;C:\\Users\\Nasutcho\\AppData\\Local\\Symbols\\src&quot;
     ]
   }
 }</component>
@@ -343,6 +325,8 @@
       <workItem from="1721809912405" duration="257000" />
       <workItem from="1721882683284" duration="16274000" />
       <workItem from="1722043813980" duration="1865000" />
+      <workItem from="1722137493528" duration="782000" />
+      <workItem from="1722153172812" duration="3604000" />
     </task>
     <servers />
   </component>
