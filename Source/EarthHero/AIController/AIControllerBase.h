@@ -20,14 +20,12 @@ class EARTHHERO_API AAIControllerBase : public AAIController
 
 protected:
 	AAIControllerBase(FObjectInitializer const& ObjectInitializer);
+	virtual void BeginPlay() override;
 	
 private:
-	virtual void BeginPlay() override;
 	virtual void OnPossess(APawn* InPawn) override;
 	
 	void UpdatePerceptionSystem();
-
-	UBlackboardComponent* GetBlackBoardComponent() const;
 	
 	UFUNCTION()
 	void OnTargetDetected(AActor* Actor, FAIStimulus Stimulus);
@@ -35,7 +33,10 @@ private:
 	
 	UBehaviorTreeComponent* BehaviorTreeComponent;
 	UBlackboardComponent* BlackBoardComponent;
+	
 protected:
+	UBlackboardComponent* GetBlackBoardComponent() const;
+	
 	UBehaviorTree* BehavirTree;
 	
 	void SetPerceptionSystem();
