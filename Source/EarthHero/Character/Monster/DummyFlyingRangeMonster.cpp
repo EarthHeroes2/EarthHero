@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "DummyFlyingMonster.h"
+#include "DummyFlyingRangeMonster.h"
 
-ADummyFlyingMonster::ADummyFlyingMonster()
+ADummyFlyingRangeMonster::ADummyFlyingRangeMonster()
 {
 	static ConstructorHelpers::FClassFinder<AActor> TestBulletAsset(TEXT("Actor'/Game/Blueprints/Character/Dummy/BP_TestBullet.BP_TestBullet_C'"));
 	if (TestBulletAsset.Succeeded()) TestBulletClass = TestBulletAsset.Class;
@@ -16,7 +16,7 @@ ADummyFlyingMonster::ADummyFlyingMonster()
 	AILastSeenLocation = 2200.f;
 }
 
-void ADummyFlyingMonster::Attack(FVector SpawnNormalVector)
+void ADummyFlyingRangeMonster::Attack(FVector SpawnNormalVector)
 {
 	UWorld* World = GetWorld();
 	if (World != nullptr && TestBulletClass)

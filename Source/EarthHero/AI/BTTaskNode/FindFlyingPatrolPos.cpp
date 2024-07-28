@@ -5,7 +5,7 @@
 
 #include "BehaviorTree/BlackboardComponent.h"
 #include "EarthHero/AIController/AIControllerBase.h"
-#include "EarthHero/Character/Monster/DummyFlyingMonster.h"
+#include "EarthHero/Character/Monster/DummyFlyingRangeMonster.h"
 #include "GameFramework/PawnMovementComponent.h"
 
 UFindFlyingPatrolPos::UFindFlyingPatrolPos(FObjectInitializer const& ObjectInitializer)
@@ -21,10 +21,6 @@ EBTNodeResult::Type UFindFlyingPatrolPos::ExecuteTask(UBehaviorTreeComponent& Ow
 
 	APawn* ControllingPawn = AIController->GetPawn();
 	if (ControllingPawn == nullptr) return EBTNodeResult::Failed;
-
-	ADummyFlyingMonster* ControllingFlyingMonster = Cast<ADummyFlyingMonster>(ControllingPawn);
-	if (ControllingFlyingMonster == nullptr) return EBTNodeResult::Failed;
-	
 	
 	FVector AddLocation;
 	

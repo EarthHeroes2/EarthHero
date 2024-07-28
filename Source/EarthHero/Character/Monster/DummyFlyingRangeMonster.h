@@ -4,20 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "MonsterBase.h"
-#include "DummyFlyingMonster.generated.h"
+#include "DummyFlyingRangeMonster.generated.h"
 
-class UFloatingPawnMovement;
 /**
  * 
  */
 UCLASS()
-class EARTHHERO_API ADummyFlyingMonster : public AMonsterBase
+class EARTHHERO_API ADummyFlyingRangeMonster : public AMonsterBase
 {
 	GENERATED_BODY()
 
-	ADummyFlyingMonster();
-	
-	
+	ADummyFlyingRangeMonster();
 
 	virtual void Attack(FVector SpawnNormalVector) override;
 

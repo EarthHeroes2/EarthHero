@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "AIControllerBase.h"
-#include "FlyingAIController.generated.h"
+#include "FlyingRangeAIController.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class EARTHHERO_API AFlyingAIController : public AAIControllerBase
+class EARTHHERO_API AFlyingRangeAIController : public AAIControllerBase
 {
 	GENERATED_BODY()
 
-	AFlyingAIController(FObjectInitializer const& ObjectInitializer);
+	AFlyingRangeAIController(FObjectInitializer const& ObjectInitializer);
 	
 };
