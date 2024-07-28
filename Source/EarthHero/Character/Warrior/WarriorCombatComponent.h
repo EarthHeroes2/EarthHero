@@ -52,7 +52,6 @@ protected:
 	void NetMulticast_Whirlwind(FHitResult HitResult);
 
 	void ResetWhirlWind();
-
 private:
 	UPROPERTY()
 	AEHWarrior* Warrior;
@@ -72,9 +71,19 @@ private:
 	bool bIsWhirlwind = false;
 	UPROPERTY()
 	bool bCanWhirlwind = true;
+	
 	float TotalWhirlwindDuration = 3.f;
+
+	UFUNCTION(Client, Reliable)
+	void Client_TotalWhirlwindDuration(float ServerDuration);
+	UFUNCTION(Client, Reliable)
+	void Client_WhirlwindTick(float ServerTick);
+	
+	
 	float CurrentWhirlwindDuration = 0;
+	
 	float WhirlwindCooldown = 14.f;
+	
 	float WhirlwindTick = 0.25f;
 	
 	
@@ -94,8 +103,8 @@ public:
 	FORCEINLINE void SetWarrior(AEHWarrior* NewWarrior) { Warrior = NewWarrior; }
 	FORCEINLINE bool GetIsWhirlwind() { return bIsWhirlwind; }
 	
-	UFUNCTION(Client, Reliable)
+	UFUNCTION(Server, Reliable)
 	void SetWheelWindTick(float WR_WheelWindTick);
-	UFUNCTION(Client, Reliable)
+	UFUNCTION(Server, Reliable)
 	void SetWheelWindDuration(float WR_WheelWindDuration);
 };

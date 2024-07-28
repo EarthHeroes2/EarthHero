@@ -205,6 +205,7 @@ void UInGameHUD::AddChatMessage(const FText& Text)
 void UInGameHUD::AddStatusImage(UTexture2D* EffectImage, int EffectType, float CoolDown)
 {
 	EffectCount += 1;
+	UE_LOG(LogClass, Warning, TEXT("EffectType = %d, EffectCount = %d"), EffectType, EffectCount);
 	StatusArray[EffectCount - 1] = FStatus(EffectType, StatusArray[EffectCount - 1].CoolDownWidget);
 	StatusArray[EffectCount - 1].CoolDownWidget->SetImage(EffectImage);
 	StatusArray[EffectCount - 1].CoolDownWidget->StartCoolDown(CoolDown, EffectType);

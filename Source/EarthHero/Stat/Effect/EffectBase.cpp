@@ -72,15 +72,31 @@ void AEffectBase::ApplyEffect(AActor* InTargetActor, float InEffectValue, float 
 				}
 				bRefresh = true;
 			}
-			
-			return;
 		}
+		else
+		{
+			if (!bIsPermanent)
+			{
+				GetWorld()->GetTimerManager().SetTimer(EffectTimerHandle, this, &AEffectBase::ResetEffect, InDuration, false);
+			}
+
+			//효과 적용 목록에 추가
+			EffectMap.Add(TargetActor, TMap<TSubclassOf<AEffectBase>, AEffectBase*>());
+			TargetMap = EffectMap.Find(TargetActor);
+			if (AEHCharacter *Hero = Cast<AEHCharacter>(TargetActor))
+			{
+				if (AEHPlayerController *PlayerController = Cast<AEHPlayerController>(Hero->GetController()))
+				{
+					PlayerController->Client_AddEffect(EffectArray[EffectType]->EffectImage, EffectArray[EffectType]->EffectType, InDuration);
+				}
+			}
+		}
+		return;
 	}
 	else //첫 효과 적용
 	{
 		if (!bIsPermanent)
 		{
-			// Timer 설정
 			GetWorld()->GetTimerManager().SetTimer(EffectTimerHandle, this, &AEffectBase::ResetEffect, InDuration, false);
 		}
 

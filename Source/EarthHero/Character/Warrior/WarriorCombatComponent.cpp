@@ -10,6 +10,7 @@
 #include "EarthHero/Stat/Effect/Ef_SpeedBoost.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Net/UnrealNetwork.h"
 
 UWarriorCombatComponent::UWarriorCombatComponent()
 {
@@ -45,7 +46,11 @@ void UWarriorCombatComponent::Attack()
 			}
 		}
 
-		AttackCombo  = (AttackCombo + 1) % FPS_AttackAnimMontage.Num();
+		//승언 Divided by zero 오류 발생해서 조치함
+		if (FPS_AttackAnimMontage.Num())
+		{
+			AttackCombo  = (AttackCombo + 1) % FPS_AttackAnimMontage.Num();
+		}
 
 		bCanAttack = false;
 		Warrior->GetWorldTimerManager().SetTimer(AttackCooldownTimerHandle,this, &ThisClass::ResetAttack, AttackCooldown);
@@ -207,7 +212,7 @@ void UWarriorCombatComponent::Whirlwind()
 	if(CurrentWhirlwindDuration <= TotalWhirlwindDuration)
 	{
 		CurrentWhirlwindDuration += WhirlwindTick;
-		//UE_LOG(LogClass, Warning, TEXT("CUrrentWhirlwindDuration = %f, WhirlWindTick = %f, TotalWhirlWindDuration = %f"), CurrentWhirlwindDuration, WhirlwindTick, TotalWhirlwindDuration);
+		UE_LOG(LogClass, Warning, TEXT("CUrrentWhirlwindDuration = %f, WhirlWindTick = %f, TotalWhirlWindDuration = %f"), CurrentWhirlwindDuration, WhirlwindTick, TotalWhirlwindDuration);
 
 		if(Warrior && Warrior->GetFPSCamera())
 		{
@@ -282,12 +287,22 @@ void UWarriorCombatComponent::ResetWhirlWind()
 	bCanWhirlwind = true;
 }
 
+
 void UWarriorCombatComponent::SetWheelWindDuration_Implementation(float WR_WheelWindDuration)
 {
 	TotalWhirlwindDuration = WR_WheelWindDuration;
+	Client_TotalWhirlwindDuration(TotalWhirlwindDuration);
 }
-
+void UWarriorCombatComponent::Client_TotalWhirlwindDuration_Implementation(float ServerDuration)
+{
+	TotalWhirlwindDuration = ServerDuration;
+}
 void UWarriorCombatComponent::SetWheelWindTick_Implementation(float WR_WheelWindTick)
 {
 	WhirlwindTick = WR_WheelWindTick;
+	Client_WhirlwindTick(WhirlwindTick);
+}
+void UWarriorCombatComponent::Client_WhirlwindTick_Implementation(float ServerTick)
+{
+	WhirlwindTick = ServerTick;
 }

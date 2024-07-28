@@ -40,7 +40,7 @@ void UCoolDown::Loop()
 	RemainingTime -= 0.1f;
 	Percent -= SubtractPercent;
 	ProgressBar_CoolDown->SetPercent(Percent);
-	Text_RemainingTime->SetText(FText::AsNumber(Percent));
+	Text_RemainingTime->SetText(FText::AsNumber(RemainingTime));
 }
 
 void UCoolDown::End()
