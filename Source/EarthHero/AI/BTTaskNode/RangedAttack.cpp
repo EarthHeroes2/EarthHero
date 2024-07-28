@@ -6,6 +6,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "EarthHero/AIController/AIControllerBase.h"
 #include "EarthHero/BlackBoard/BlackBoardKeys.h"
+#include "EarthHero/Character/EHCharacter.h"
 #include "EarthHero/Character/Monster/MonsterBase.h"
 
 URangedAttack::URangedAttack(FObjectInitializer const& ObjectInitializer)
@@ -15,17 +16,24 @@ URangedAttack::URangedAttack(FObjectInitializer const& ObjectInitializer)
 
 EBTNodeResult::Type URangedAttack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	AAIControllerBase* AIController = Cast<AAIControllerBase>(OwnerComp.GetAIOwner());
+	AAIControllerBase* const AIController = Cast<AAIControllerBase>(OwnerComp.GetAIOwner());
 	if(AIController == nullptr) return EBTNodeResult::Failed;
 
-	AMonsterBase* ControllingMonster = Cast<AMonsterBase>(AIController->GetPawn());
+	APawn* const ControllingPawn = AIController->GetPawn();
+	if (ControllingPawn == nullptr) return EBTNodeResult::Failed;
+
+	AMonsterBase* const ControllingMonster = Cast<AMonsterBase>(ControllingPawn);
 	if(ControllingMonster == nullptr) return EBTNodeResult::Failed;
 
-	AActor* const TargetPlayer = Cast<AActor>(AIController->GetBlackboardComponent()->GetValueAsObject(BlackboardKeys::TargetPlayer));
+	AEHCharacter* const TargetPlayer = Cast<AEHCharacter>(AIController->GetBlackboardComponent()->GetValueAsObject(BlackboardKeys::TargetPlayer));
 	if (TargetPlayer == nullptr) return EBTNodeResult::Failed;
 
-	FVector SpawnNormalVector = (TargetPlayer->GetActorLocation() - ControllingMonster->GetActorLocation()).GetSafeNormal();
 	
+	FVector const MonsterLocation = ControllingMonster->GetActorLocation();
+	FVector const PlayerLocation = TargetPlayer->GetActorLocation();
+	FVector const SpawnNormalVector = (PlayerLocation - MonsterLocation).GetSafeNormal();
+
+	//공격을 날릴 방향을 넘겨줌
 	ControllingMonster->Attack(SpawnNormalVector);
 	
 	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);

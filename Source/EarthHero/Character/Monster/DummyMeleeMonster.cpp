@@ -13,7 +13,7 @@ ADummyMeleeMonster::ADummyMeleeMonster()
 	AILastSeenLocation = 900.f;
 }
 
-void ADummyMeleeMonster::Attack(FVector SpawnNormalVector)
+void ADummyMeleeMonster::Attack()
 {
 	
 }

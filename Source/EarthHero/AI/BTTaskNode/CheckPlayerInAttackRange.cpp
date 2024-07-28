@@ -6,6 +6,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "EarthHero/AIController/AIControllerBase.h"
 #include "EarthHero/BlackBoard/BlackBoardKeys.h"
+#include "EarthHero/Character/EHCharacter.h"
 #include "EarthHero/Character/Monster/MonsterBase.h"
 
 UCheckPlayerInAttackRange::UCheckPlayerInAttackRange(FObjectInitializer const& ObjectInitializer)
@@ -15,21 +16,23 @@ UCheckPlayerInAttackRange::UCheckPlayerInAttackRange(FObjectInitializer const& O
 
 EBTNodeResult::Type UCheckPlayerInAttackRange::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	AAIControllerBase* AIController = Cast<AAIControllerBase>(OwnerComp.GetAIOwner());
+	AAIControllerBase* const AIController = Cast<AAIControllerBase>(OwnerComp.GetAIOwner());
 	if(AIController == nullptr) return EBTNodeResult::Failed;
 
-	APawn* ControllingPawn = AIController->GetPawn();
+	APawn* const ControllingPawn = AIController->GetPawn();
 	if (ControllingPawn == nullptr) return EBTNodeResult::Failed;
+
+	AMonsterBase* const ControllingMonsterPawn = Cast<AMonsterBase>(ControllingPawn);
+	if(ControllingMonsterPawn == nullptr) return EBTNodeResult::Failed;
 	
-	AActor* const TargetPlayer = Cast<AActor>(AIController->GetBlackboardComponent()->GetValueAsObject(BlackboardKeys::TargetPlayer));
+	AEHCharacter* const TargetPlayer = Cast<AEHCharacter>(AIController->GetBlackboardComponent()->GetValueAsObject(BlackboardKeys::TargetPlayer));
 	if (TargetPlayer == nullptr) return EBTNodeResult::Failed;
 
-	FVector const CurrentLocation = ControllingPawn->GetActorLocation();
+	
+	FVector const CurrentLocation = ControllingMonsterPawn->GetActorLocation();
 	FVector const TargetLocation = TargetPlayer->GetActorLocation();
+	
 	float const Distance = FVector::Dist(CurrentLocation, TargetLocation);
-
-	AMonsterBase* ControllingMonsterPawn = Cast<AMonsterBase>(ControllingPawn);
-	if(ControllingMonsterPawn == nullptr) return EBTNodeResult::Failed;
 	float const AttackRange = ControllingMonsterPawn->AttackRange;
 	
 	if(Distance <= AttackRange)

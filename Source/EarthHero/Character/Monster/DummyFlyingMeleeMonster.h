@@ -15,5 +15,5 @@ class EARTHHERO_API ADummyFlyingMeleeMonster : public AMonsterBase
 	GENERATED_BODY()
 
 	ADummyFlyingMeleeMonster();
-	virtual void Attack(FVector SpawnNormalVector) override;
+	virtual void Attack() override;
 };

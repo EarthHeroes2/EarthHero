@@ -36,6 +36,12 @@ void AMonsterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 }
 
+//자식에서 구현해주세요 (근거리용)
+void AMonsterBase::Attack()
+{
+}
+
+//자식에서 구현해주세요 (원거리용)
 void AMonsterBase::Attack(FVector SpawnNormalVector)
 {
 }

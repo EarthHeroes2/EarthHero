@@ -11,15 +11,15 @@
 UFindPatrolPos::UFindPatrolPos(FObjectInitializer const& ObjectInitializer)
 {
 	//BTTaskNode의 이름
-	NodeName = TEXT("FindPatrolPos");
+	NodeName = TEXT("Find Patrol Pos");
 }
 
 EBTNodeResult::Type UFindPatrolPos::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	AAIControllerBase* AIController = Cast<AAIControllerBase>(OwnerComp.GetAIOwner());
+	AAIControllerBase* const AIController = Cast<AAIControllerBase>(OwnerComp.GetAIOwner());
 	if (AIController == nullptr) return EBTNodeResult::Failed;
 
-	APawn* ControllingPawn = AIController->GetPawn();
+	APawn* const ControllingPawn = AIController->GetPawn();
 	if (ControllingPawn == nullptr) return EBTNodeResult::Failed;
 	
 	UNavigationSystemV1* const NavSystem = UNavigationSystemV1::GetCurrent(GetWorld());
@@ -31,14 +31,10 @@ EBTNodeResult::Type UFindPatrolPos::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 	
 	FVector const CurrentLocation = ControllingPawn->GetActorLocation();
 	FNavLocation NextPatrolLocation;
-
 	
-	//다음 순찰 위치 찾고 (현재 주변 1000 주변 임의 지점)
+	//다음 순찰 위치 찾고 (현재 주변 1000 주변 임의 지점) TargetLocation에 위치 값 저장
 	if (NavSystem->GetRandomPointInNavigableRadius(CurrentLocation, SearchRadius, NextPatrolLocation,nullptr))
-	{
-		//TargetLocation에 위치 값 저장
 		AIController->GetBlackboardComponent()->SetValueAsVector(BlackboardKeys::TargetLocation, NextPatrolLocation.Location);
-	}
 	
 	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;

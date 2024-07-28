@@ -6,6 +6,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "EarthHero/AIController/AIControllerBase.h"
 #include "EarthHero/BlackBoard/BlackBoardKeys.h"
+#include "EarthHero/Character/EHCharacter.h"
 #include "EarthHero/Character/Monster/MonsterBase.h"
 #include "GameFramework/PawnMovementComponent.h"
 
@@ -16,36 +17,35 @@ UFlyChasePlayer::UFlyChasePlayer(FObjectInitializer const& ObjectInitializer)
 
 EBTNodeResult::Type UFlyChasePlayer::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	AAIControllerBase* AIController = Cast<AAIControllerBase>(OwnerComp.GetAIOwner());
+	AAIControllerBase* const AIController = Cast<AAIControllerBase>(OwnerComp.GetAIOwner());
 	if(AIController == nullptr) return EBTNodeResult::Failed;
 
-	AMonsterBase* ControllingMonster = Cast<AMonsterBase>(AIController->GetPawn());
+	APawn* const ControllingPawn = AIController->GetPawn();
+	if (ControllingPawn == nullptr) return EBTNodeResult::Failed;
+
+	AMonsterBase* const ControllingMonster = Cast<AMonsterBase>(ControllingPawn);
 	if(ControllingMonster == nullptr) return EBTNodeResult::Failed;
 	
-	AActor* const TargetPlayer = Cast<AActor>(AIController->GetBlackboardComponent()->GetValueAsObject(BlackboardKeys::TargetPlayer));
+	AEHCharacter* const TargetPlayer = Cast<AEHCharacter>(AIController->GetBlackboardComponent()->GetValueAsObject(BlackboardKeys::TargetPlayer));
 	if (TargetPlayer == nullptr) return EBTNodeResult::Failed;
 
+	
 	FVector const MonsterLocation = ControllingMonster->GetActorLocation();
 	FVector const PlayerLocation = TargetPlayer->GetActorLocation();
-	
-	float const DistanceToPlayer = FVector::Dist(MonsterLocation, PlayerLocation);
-	
-	//방향을 돌려줌
-	FRotator LookAtRotation = (PlayerLocation - MonsterLocation).Rotation();
-	ControllingMonster->SetActorRotation(LookAtRotation);
-	
-	FVector ChaseDirection = PlayerLocation - MonsterLocation; 
+	FVector ChaseDirection = PlayerLocation - MonsterLocation;
 
+	//플레이어를 바라보며
+	ControllingMonster->SetActorRotation(ChaseDirection.Rotation());
+	
 	//땅과 너무 가까우면 안됨
 	FHitResult HitResult;
-	FVector EndLocation = MonsterLocation;
-	EndLocation.Z -= 3000.f;
+	FVector const EndLocation = FVector(MonsterLocation.X, MonsterLocation.Y, MonsterLocation.Z - 3000.f);
 
 	UWorld* World = GetWorld();
 	if(World && World->LineTraceSingleByChannel(HitResult, MonsterLocation, EndLocation, ECC_Visibility))
 	{
-		float DistanceFromGround = MonsterLocation.Z - HitResult.Location.Z;
-		if(DistanceFromGround < 150) ChaseDirection.Z = (150 - DistanceFromGround);
+		float const DistanceFromGround = MonsterLocation.Z - HitResult.Location.Z;
+		if(DistanceFromGround < 200) ChaseDirection.Z = (200 - DistanceFromGround);
 	}
 	else return EBTNodeResult::Failed; //임시
 	

@@ -6,6 +6,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "EarthHero/AIController/AIControllerBase.h"
 #include "EarthHero/BlackBoard/BlackBoardKeys.h"
+#include "EarthHero/Character/EHCharacter.h"
 #include "EarthHero/Character/Monster/MonsterBase.h"
 #include "GameFramework/PawnMovementComponent.h"
 
@@ -16,31 +17,33 @@ UKeepSafeFlyDistance::UKeepSafeFlyDistance(FObjectInitializer const& ObjectIniti
 
 EBTNodeResult::Type UKeepSafeFlyDistance::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	AAIControllerBase* AIController = Cast<AAIControllerBase>(OwnerComp.GetAIOwner());
+	AAIControllerBase* const AIController = Cast<AAIControllerBase>(OwnerComp.GetAIOwner());
 	if(AIController == nullptr) return EBTNodeResult::Failed;
 
-	AMonsterBase* ControllingMonster = Cast<AMonsterBase>(AIController->GetPawn());
+	APawn* const ControllingPawn = AIController->GetPawn();
+	if (ControllingPawn == nullptr) return EBTNodeResult::Failed;
+
+	AMonsterBase* const ControllingMonster = Cast<AMonsterBase>(ControllingPawn);
 	if(ControllingMonster == nullptr) return EBTNodeResult::Failed;
 	
-	AActor* const TargetPlayer = Cast<AActor>(AIController->GetBlackboardComponent()->GetValueAsObject(BlackboardKeys::TargetPlayer));
+	AEHCharacter* const TargetPlayer = Cast<AEHCharacter>(AIController->GetBlackboardComponent()->GetValueAsObject(BlackboardKeys::TargetPlayer));
 	if (TargetPlayer == nullptr) return EBTNodeResult::Failed;
 
-	
-	float AttackRange = ControllingMonster->AttackRange;
 	
 	FVector const MonsterLocation = ControllingMonster->GetActorLocation();
 	FVector const PlayerLocation = TargetPlayer->GetActorLocation();
 	
-	float const DistanceToPlayer = FVector::Dist(MonsterLocation, PlayerLocation);
-	
 	//방향을 돌려줌
-	FRotator LookAtRotation = (PlayerLocation - MonsterLocation).Rotation();
+	FRotator const LookAtRotation = (PlayerLocation - MonsterLocation).Rotation();
 	ControllingMonster->SetActorRotation(LookAtRotation);
 
-
+	
 	FVector SafeVector;
+	float const DistanceToPlayer = FVector::Dist(MonsterLocation, PlayerLocation);
+	float const AttackRange = ControllingMonster->AttackRange;
 
-	if(AttackRange >= DistanceToPlayer) //사거리 안에 플레이어가 존재하면 도망
+	//사거리 안에 플레이어가 존재하면 도망
+	if(AttackRange >= DistanceToPlayer)
 	{
 		FVector const SafeDirection = MonsterLocation - PlayerLocation; 
 		SafeVector = SafeDirection.GetSafeNormal() * (AttackRange - DistanceToPlayer);
@@ -51,23 +54,22 @@ EBTNodeResult::Type UKeepSafeFlyDistance::ExecuteTask(UBehaviorTreeComponent& Ow
 		SafeVector = ChaseDirection.GetSafeNormal() * (DistanceToPlayer - AttackRange + 50); //쏘기 좋게 50 더 접근
 	}
 
+	
 	//땅과의 일정 거리 유지
 	FHitResult HitResult;
-	FVector EndLocation = MonsterLocation;
-	EndLocation.Z -= 3000.f;
+	FVector const EndLocation = FVector(MonsterLocation.X, MonsterLocation.Y, MonsterLocation.Z - 3000.f);
 
 	UWorld* World = GetWorld();
 	if(World && World->LineTraceSingleByChannel(HitResult, MonsterLocation, EndLocation, ECC_Visibility))
 	{
-		float DistanceFromGround = MonsterLocation.Z - HitResult.Location.Z;
+		float const DistanceFromGround = MonsterLocation.Z - HitResult.Location.Z;
+		
 		if(DistanceFromGround < 600) SafeVector.Z = (600 - DistanceFromGround);
 		else if(DistanceFromGround > 900) SafeVector.Z = (DistanceFromGround - 900);
 	}
-	else return EBTNodeResult::Failed; //임시
-
-
+	else return EBTNodeResult::Failed;
+	
 	ControllingMonster->GetMovementComponent()->Velocity = SafeVector;
-
 	
 	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;
