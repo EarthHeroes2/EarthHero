@@ -70,5 +70,6 @@ enum EBossName
 	MidBoss4,
 	MidBoss5,
 	MidBoss6,
-	Max_Boss
+	Max_Boss,
+	NotBoss,
 };

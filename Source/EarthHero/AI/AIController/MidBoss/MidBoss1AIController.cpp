@@ -10,7 +10,7 @@ AMidBoss1AIController::AMidBoss1AIController(FObjectInitializer const& ObjectIni
 {
 	if(GetNetMode() != NM_Client)
 	{
-		static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(TEXT("BehaviorTree'/Game/Ai/BT_TestBoss.BT_TestBoss'"));
+		static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(TEXT("BehaviorTree'/Game/Ai/BT_MidBoss1.BT_MidBoss1'"));
 		if (BTObject.Succeeded()) BehavirTree = BTObject.Object;
 	}
 	

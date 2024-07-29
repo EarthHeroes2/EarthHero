@@ -8,5 +8,5 @@
 AGroundMonster::AGroundMonster()
 {
 	NavigationInvoker = CreateDefaultSubobject<UNavigationInvokerComponent>(TEXT("NavigationInvoker"));
-	NavigationInvoker->SetGenerationRadii(2000.0f, 2500.0f); //생성, 제거 범위
+	NavigationInvoker->SetGenerationRadii(1500.0f, 2000.0f); //생성, 제거 범위
 }

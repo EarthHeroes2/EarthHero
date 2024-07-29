@@ -13,6 +13,12 @@ AMonsterBase::AMonsterBase()
 	MonsterStatComponent = CreateDefaultSubobject<UMonsterStatComponent>(TEXT("MonsterStatComponent"));
 	
 	MonsterStatComponent->SetIsReplicated(true);
+
+	//이 값은 자식에서 변경해줘야함. 기본값을 위해 존재할 뿐임
+
+	UE_LOG(LogTemp, Warning, TEXT("PARENT"));
+	
+	BossNumber = NotBoss;
 }
 
 // Called when the game starts or when spawned
@@ -36,13 +42,28 @@ void AMonsterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 }
 
-//자식에서 구현해주세요 (근거리용)
+//자식에서 구현 (근거리용)
 void AMonsterBase::Attack()
 {
 }
-
-//자식에서 구현해주세요 (원거리용)
+//자식에서 구현 (원거리용)
+//SpawnNormalVector는 타겟 플레이어를 향하는 단위벡터
 void AMonsterBase::Attack(FVector SpawnNormalVector)
 {
 }
+
+//스킬들 (자식에서 필요하다면 구현)
+void AMonsterBase::Skill1()
+{
+}
+void AMonsterBase::Skill2()
+{
+}
+void AMonsterBase::Skill3()
+{
+}
+void AMonsterBase::Skill4()
+{
+}
+
 

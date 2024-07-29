@@ -45,10 +45,20 @@ public:
 	//시야는 ai 컨트롤러에서 상속받아서 처리합니다
 	float AttackRange = 100.0f;
 
+	//기본공격
 	//상속받아서 구현해주기
 	virtual void Attack(); //근거리용
 	virtual void Attack(FVector SpawnNormalVector); //원거리용
 
-	//보스의 번호를 의미 (임시)
+	//보스의 번호를 의미
+	//상속받아서 값을 지정해줘야함
 	EBossName BossNumber;
+
+	//스킬
+	//상속받아서 구현해주기
+	virtual void Skill1();
+	virtual void Skill2();
+	virtual void Skill3();
+	virtual void Skill4();
+
 };
