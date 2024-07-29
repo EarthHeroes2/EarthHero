@@ -45,7 +45,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Component")
 	UHeroUpgradeComponent *GetHeroUpgradeComponent();
 
-	UPROPERTY(Replicated)
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "Player")
 	int PlayerClass;
 
 	UPROPERTY()
