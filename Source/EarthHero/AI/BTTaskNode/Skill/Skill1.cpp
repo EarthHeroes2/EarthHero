@@ -34,6 +34,7 @@ EBTNodeResult::Type USkill1::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint
 			ControllingMonster->Skill1();
 			break;
 		case MidBoss2:
+			ControllingMonster->Skill1();
 			break;
 		case MidBoss3:
 			break;

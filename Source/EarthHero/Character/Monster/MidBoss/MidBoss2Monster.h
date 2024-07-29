@@ -17,5 +17,5 @@ class EARTHHERO_API AMidBoss2Monster : public AGroundMonster
 	AMidBoss2Monster();
 	virtual void Attack() override;
 	virtual void Skill1() override;
-	virtual void Skill2() override;
+	virtual void Skill2(AEHCharacter* TargetCharacter) override;
 };

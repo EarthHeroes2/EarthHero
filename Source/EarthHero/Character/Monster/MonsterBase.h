@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "EarthHero/Character/EHCharacter.h"
 #include "EarthHero/Enum/Enums.h"
 #include "GameFramework/Character.h"
 #include "MonsterBase.generated.h"
@@ -60,5 +61,12 @@ public:
 	virtual void Skill2();
 	virtual void Skill3();
 	virtual void Skill4();
-
+	virtual void Skill1(FVector SpawnNormalVector); //향할 단위벡터
+	virtual void Skill2(FVector SpawnNormalVector);
+	virtual void Skill3(FVector SpawnNormalVector);
+	virtual void Skill4(FVector SpawnNormalVector);
+	virtual void Skill1(AEHCharacter* TargetCharacter); //타겟팅 대상
+	virtual void Skill2(AEHCharacter* TargetCharacter);
+	virtual void Skill3(AEHCharacter* TargetCharacter);
+	virtual void Skill4(AEHCharacter* TargetCharacter);
 };

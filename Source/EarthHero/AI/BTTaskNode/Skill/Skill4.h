@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BehaviorTree/BTTaskNode.h"
+#include "SkillBase.h"
 #include "Skill4.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class EARTHHERO_API USkill4 : public UBTTaskNode
+class EARTHHERO_API USkill4 : public USkillBase
 {
 	GENERATED_BODY()
 	

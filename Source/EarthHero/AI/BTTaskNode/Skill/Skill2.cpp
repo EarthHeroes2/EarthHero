@@ -24,7 +24,8 @@ EBTNodeResult::Type USkill2::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint
 
 	AMonsterBase* const ControllingMonster = Cast<AMonsterBase>(ControllingPawn);
 	if(ControllingMonster == nullptr) return EBTNodeResult::Failed;
-
+	
+	AEHCharacter* TargetPlayer;
 	
 	switch (ControllingMonster->BossNumber)
 	{
@@ -34,6 +35,8 @@ EBTNodeResult::Type USkill2::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint
 		ControllingMonster->Skill2();
 		break;
 	case MidBoss2:
+		if((TargetPlayer = GetTargetPlayer(AIController)) == nullptr) return EBTNodeResult::Failed;
+		ControllingMonster->Skill2(TargetPlayer);
 		break;
 	case MidBoss3:
 		break;
@@ -52,3 +55,4 @@ EBTNodeResult::Type USkill2::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint
 	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;
 }
+

@@ -19,7 +19,8 @@ void AMidBoss2Monster::Skill1()
 {
 	UE_LOG(LogTemp, Error, TEXT("SKILL 1 !"));
 }
-void AMidBoss2Monster::Skill2()
+
+void AMidBoss2Monster::Skill2(AEHCharacter* TargetCharacter)
 {
 	UE_LOG(LogTemp, Error, TEXT("SKILL 2 !"));
 }
