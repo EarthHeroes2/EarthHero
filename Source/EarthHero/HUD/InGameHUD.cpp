@@ -224,11 +224,10 @@ void UInGameHUD::DeleteStatusImage(int EffectType)
 
 void UInGameHUD::UpdatePlayerHealths(const TArray<float>& PlayerMaxHealths, const TArray<float>& PlayerCurrentHealths)
 {
-	int i = 0;
+	int i;
 	for (i = 0; i < PlayerMaxHealths.Num(); i++)
 	{
 		InGamePlayerInfoArray[i]->SetProgress(PlayerCurrentHealths[i] / PlayerMaxHealths[i]);
-		i++;
 	}
 	for (int j = i; j <= 3; j++)
 	{
