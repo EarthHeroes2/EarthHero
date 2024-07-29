@@ -8,6 +8,7 @@
 #include "EarthHero/Character/EHCharacter.h"
 #include "SkillBase.generated.h"
 
+class AMonsterBase;
 /**
  * 
  */
@@ -18,4 +19,5 @@ class EARTHHERO_API USkillBase : public UBTTaskNode
 
 protected:
 	AEHCharacter* GetTargetPlayer(AAIControllerBase* AIController);
+	FVector GetSpawnNormalVector(AAIControllerBase* AIController, AMonsterBase* ControllingMonster);
 };

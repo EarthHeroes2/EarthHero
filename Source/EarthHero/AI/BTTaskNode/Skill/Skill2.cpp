@@ -15,7 +15,6 @@ USkill2::USkill2(FObjectInitializer const& ObjectInitializer)
 
 EBTNodeResult::Type USkill2::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	
 	AAIControllerBase* const AIController = Cast<AAIControllerBase>(OwnerComp.GetAIOwner());
 	if(AIController == nullptr) return EBTNodeResult::Failed;
 
@@ -26,6 +25,7 @@ EBTNodeResult::Type USkill2::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint
 	if(ControllingMonster == nullptr) return EBTNodeResult::Failed;
 	
 	AEHCharacter* TargetPlayer;
+	//FVector SpawnNormalVector;
 	
 	switch (ControllingMonster->BossNumber)
 	{

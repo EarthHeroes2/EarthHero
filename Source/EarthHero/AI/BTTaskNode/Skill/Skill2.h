@@ -4,8 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "SkillBase.h"
-#include "EarthHero/AI/AIController/AIControllerBase.h"
-#include "EarthHero/Character/EHCharacter.h"
 #include "Skill2.generated.h"
 
 /**
