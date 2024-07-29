@@ -63,4 +63,30 @@ void AMonsterBase::Skill4()
 {
 }
 
+void AMonsterBase::Skill1(FVector SpawnNormalVector)
+{
+}
+void AMonsterBase::Skill2(FVector SpawnNormalVector)
+{
+}
+void AMonsterBase::Skill3(FVector SpawnNormalVector)
+{
+}
+void AMonsterBase::Skill4(FVector SpawnNormalVector)
+{
+}
+
+void AMonsterBase::Skill1(AEHCharacter* TargetCharacter)
+{
+}
+void AMonsterBase::Skill2(AEHCharacter* TargetCharacter)
+{
+}
+void AMonsterBase::Skill3(AEHCharacter* TargetCharacter)
+{
+}
+void AMonsterBase::Skill4(AEHCharacter* TargetCharacter)
+{
+}
+
 

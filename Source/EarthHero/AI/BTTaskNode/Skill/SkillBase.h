@@ -3,19 +3,19 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "SkillBase.h"
+#include "BehaviorTree/BTTaskNode.h"
 #include "EarthHero/AI/AIController/AIControllerBase.h"
 #include "EarthHero/Character/EHCharacter.h"
-#include "Skill2.generated.h"
+#include "SkillBase.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class EARTHHERO_API USkill2 : public USkillBase
+class EARTHHERO_API USkillBase : public UBTTaskNode
 {
 	GENERATED_BODY()
 
-	USkill2(FObjectInitializer const& ObjectInitializer);
-	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
+protected:
+	AEHCharacter* GetTargetPlayer(AAIControllerBase* AIController);
 };
