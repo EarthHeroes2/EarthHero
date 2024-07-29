@@ -4,21 +4,13 @@
 #include "EHCharacterBase.h"
 #include "Components/PostProcessComponent.h"
 #include "EarthHero/ForceField/BossZone.h"
+#include "EarthHero/EHComponents/SpawningComponent.h"
 #include "EHCharacter.generated.h"
 
 class UWidgetComponent;
 class UCameraComponent;
 class USpringArmComponent;
 class ADifficultyZone;
-
-USTRUCT(BlueprintType)
-struct FSpawnConfiguration
-{
-    GENERATED_BODY()
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")
-    TArray<TSubclassOf<AActor>> ActorClasses;
-};
 
 UCLASS()
 class EARTHHERO_API AEHCharacter : public AEHCharacterBase
@@ -50,6 +42,8 @@ public:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
     class UStatComponent *StatComponent;
 
+    float AverageDifficulty = 1.0f;
+
 protected:
     virtual void BeginPlay() override;
 
@@ -57,29 +51,8 @@ protected:
 
     void Initialize();
 
-    void SpawnActorsForDifficulty(float Difficulty);
-
-    UPROPERTY(EditAnywhere, Category = "Spawning")
-    float SpawnRadius;
-
-    UPROPERTY(EditAnywhere, Category = "Debug")
-    bool bShowDebugCircle;
-
-    UPROPERTY(EditAnywhere, Category = "Spawning")
-    float SpawnInterval;
-
-    UPROPERTY(EditAnywhere, Category = "Spawning")
-    FSpawnConfiguration Difficulty1Config;
-
-    UPROPERTY(EditAnywhere, Category = "Spawning")
-    FSpawnConfiguration Difficulty2Config;
-
-    UPROPERTY(EditAnywhere, Category = "Spawning")
-    FSpawnConfiguration Difficulty3Config;
-
 private:
     FTimerHandle SetStatComponentTimerHandle;
-    FTimerHandle SpawnTimerHandle;
 
     void SetStatComponent();
 
@@ -114,17 +87,16 @@ private:
     bool bIsInBossZone;
     UPROPERTY()
     bool bIsInForceField;
-    
-    float AverageDifficulty = 1.0f;
 
     TArray<ADifficultyZone*> OverlappingDifficultyZones; // To store overlapping zones
     
     UFUNCTION(Client, Reliable)
     void Client_DisableAllInput(APlayerController* PlayerController);
 
-    void SpawnActorsForDifficultyWrapper();
-
 public:
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
+    USpawningComponent* SpawningComponent;
+
     FORCEINLINE USkeletalMeshComponent* GetEquippedWeapon() { return WeaponMesh; }
     FORCEINLINE USkeletalMeshComponent* GetFirstPersonMesh() { return FirstPersonHand; }
     FORCEINLINE UCameraComponent* GetFPSCamera() { return FPSCamera; }
