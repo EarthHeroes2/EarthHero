@@ -59,3 +59,16 @@ enum EffectType
 	Ef_ReduceDamageTaken,
 	Ef_SpeedBoost,
 };
+
+
+enum EBossName
+{
+	MainBoss,
+	MidBoss1,
+	MidBoss2,
+	MidBoss3,
+	MidBoss4,
+	MidBoss5,
+	MidBoss6,
+	Max_Boss
+};

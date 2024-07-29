@@ -3,18 +3,18 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AIControllerBase.h"
-#include "TestBossAIController.generated.h"
+#include "EarthHero/AI/AIController/AIControllerBase.h"
+#include "MidBoss1AIController.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class EARTHHERO_API ATestBossAIController : public AAIControllerBase
+class EARTHHERO_API AMidBoss1AIController : public AAIControllerBase
 {
 	GENERATED_BODY()
 	
-	ATestBossAIController(FObjectInitializer const& ObjectInitializer);
+	AMidBoss1AIController(FObjectInitializer const& ObjectInitializer);
 	virtual void BeginPlay() override;
 
 

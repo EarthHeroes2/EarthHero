@@ -1,12 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "TestBossAIController.h"
+#include "MidBoss1AIController.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "EarthHero/AI/BlackBoard/BlackBoardKeys.h"
 
-ATestBossAIController::ATestBossAIController(FObjectInitializer const& ObjectInitializer) : Super(ObjectInitializer)
+AMidBoss1AIController::AMidBoss1AIController(FObjectInitializer const& ObjectInitializer) : Super(ObjectInitializer)
 {
 	if(GetNetMode() != NM_Client)
 	{
@@ -21,16 +21,16 @@ ATestBossAIController::ATestBossAIController(FObjectInitializer const& ObjectIni
 	AILastSeenLocation = 900.f;
 }
 
-void ATestBossAIController::BeginPlay()
+void AMidBoss1AIController::BeginPlay()
 {
 	Super::BeginPlay();
 
 	//스킬 1 : 2.5초에 1회씩 본인에게 걸려있는 모든 디버프를 해제
-	GetWorldTimerManager().SetTimer(TimerHandle1, this, &ATestBossAIController::Cleanser, 2.5f, true, 0.0f);
+	GetWorldTimerManager().SetTimer(TimerHandle1, this, &AMidBoss1AIController::Cleanser, 2.5f, true, 0.0f);
 }
 
 //스킬 1 : 2.5초에 1회씩 본인에게 걸려있는 모든 디버프를 해제
-void ATestBossAIController::Cleanser()
+void AMidBoss1AIController::Cleanser()
 {
 	GetBlackBoardComponent()->SetValueAsBool(BlackboardKeys::IsSkill1Ready, true);
 }

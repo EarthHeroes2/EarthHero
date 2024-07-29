@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "EarthHero/Enum/Enums.h"
 #include "GameFramework/Character.h"
 #include "MonsterBase.generated.h"
 
@@ -18,6 +19,7 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	
 
 public:	
 	// Called every frame
@@ -30,6 +32,7 @@ public:
 	class UMonsterStatComponent *MonsterStatComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Type")
+
 	int MonsterType;
 
 
@@ -45,4 +48,7 @@ public:
 	//상속받아서 구현해주기
 	virtual void Attack(); //근거리용
 	virtual void Attack(FVector SpawnNormalVector); //원거리용
+
+	//보스의 번호를 의미 (임시)
+	EBossName BossNumber;
 };
