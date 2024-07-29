@@ -30,7 +30,7 @@ void AMidBoss1AIController::BeginPlay()
 
 	//스킬 2 : 10초에 1회씩 전투의 함성을 크게 지름. 주변 넓은 범위의 모든 몬스터에게
 	//			광폭화 부여하여 이동 속도와 공격 속도를 소폭 향상 시킴.
-	GetWorldTimerManager().SetTimer(TimerHandle2, this, &AMidBoss1AIController::Skill2, 5.f, true, 0.f);
+	GetWorldTimerManager().SetTimer(TimerHandle2, this, &AMidBoss1AIController::Skill2, 10.f, true, 0.f);
 }
 
 //스킬 1 : 2.5초에 1회씩 본인에게 걸려있는 모든 디버프를 해제

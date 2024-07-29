@@ -5,12 +5,12 @@
 #include "UObject/ConstructorHelpers.h"
 #include "EarthHero/Character/EHCharacter.h"
 
-const TCHAR* const USpawningComponent::Difficulty1Path = TEXT("/Game/Blueprints/Item/BP_ExpItem.BP_ExpItem_C");
-const TCHAR* const USpawningComponent::Difficulty2Path1 = TEXT("/Game/Blueprints/Character/Dummy/BP_DummyRangeMonster.BP_DummyRangeMonster_C");
-const TCHAR* const USpawningComponent::Difficulty2Path2 = TEXT("/Game/Blueprints/Character/Dummy/BP_DummyMeleeMonster.BP_DummyMeleeMonster_C");
-const TCHAR* const USpawningComponent::Difficulty2Path3 = TEXT("/Game/Blueprints/Character/Dummy/BP_DummyFlyingRangeMonster.BP_DummyFlyingRangeMonster_C");
-const TCHAR* const USpawningComponent::Difficulty2Path4 = TEXT("/Game/Blueprints/Character/Dummy/BP_DummyFlyingMeleeMonster.BP_DummyFlyingMeleeMonster_C");
-const TCHAR* const USpawningComponent::Difficulty3Path = TEXT("/Game/Blueprints/Character/MidBoss/BP_MidBoss1Monster.BP_MidBoss1Monster_C");
+const TCHAR* const USpawningComponent::Difficulty1Path = TEXT("Actor'/Game/Blueprints/Item/BP_ExpItem.BP_ExpItem_C'");
+const TCHAR* const USpawningComponent::Difficulty2Path1 = TEXT("Actor'/Game/Blueprints/Character/Dummy/BP_DummyRangeMonster.BP_DummyRangeMonster_C'");
+const TCHAR* const USpawningComponent::Difficulty2Path2 = TEXT("Actor'/Game/Blueprints/Character/Dummy/BP_DummyMeleeMonster.BP_DummyMeleeMonster_C'");
+const TCHAR* const USpawningComponent::Difficulty2Path3 = TEXT("Actor'/Game/Blueprints/Character/Dummy/BP_DummyFlyingRangeMonster.BP_DummyFlyingRangeMonster_C'");
+const TCHAR* const USpawningComponent::Difficulty2Path4 = TEXT("Actor'/Game/Blueprints/Character/Dummy/BP_DummyFlyingMeleeMonster.BP_DummyFlyingMeleeMonster_C'");
+const TCHAR* const USpawningComponent::Difficulty3Path = TEXT("Actor'/Game/Blueprints/Character/MidBoss/BP_MidBoss1Monster.BP_MidBoss1Monster_C'");
 
 USpawningComponent::USpawningComponent()
 {
