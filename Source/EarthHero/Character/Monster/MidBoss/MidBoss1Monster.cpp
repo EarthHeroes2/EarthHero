@@ -5,8 +5,6 @@
 
 AMidBoss1Monster::AMidBoss1Monster() : Super()
 {
-	UE_LOG(LogTemp, Warning, TEXT("CHILD"));
-	
 	MonsterType = Boss;
 	BossNumber = MidBoss1;
 	
@@ -23,5 +21,5 @@ void AMidBoss1Monster::Skill1()
 }
 void AMidBoss1Monster::Skill2()
 {
-	
+	UE_LOG(LogTemp, Error, TEXT("SKILL 2 !"));
 }

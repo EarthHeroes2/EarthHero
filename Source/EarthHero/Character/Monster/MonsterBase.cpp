@@ -15,9 +15,6 @@ AMonsterBase::AMonsterBase()
 	MonsterStatComponent->SetIsReplicated(true);
 
 	//이 값은 자식에서 변경해줘야함. 기본값을 위해 존재할 뿐임
-
-	UE_LOG(LogTemp, Warning, TEXT("PARENT"));
-	
 	BossNumber = NotBoss;
 }
 

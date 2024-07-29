@@ -19,7 +19,8 @@ class EARTHHERO_API AMidBoss1AIController : public AAIControllerBase
 
 
 	
-	void Cleanser();
+	void Skill1();
+	void Skill2();
 
 
 	FTimerHandle TimerHandle1, TimerHandle2;

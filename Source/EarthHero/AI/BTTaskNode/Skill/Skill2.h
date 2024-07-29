@@ -13,5 +13,7 @@ UCLASS()
 class EARTHHERO_API USkill2 : public UBTTaskNode
 {
 	GENERATED_BODY()
-	
+
+	USkill2(FObjectInitializer const& ObjectInitializer);
+	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 };
