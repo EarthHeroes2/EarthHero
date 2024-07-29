@@ -247,6 +247,7 @@ void APlayingGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(APlayingGameState, GameTimerSec);
+	DOREPLIFETIME(APlayingGameState, AllPlayerMaxHealths);
 	DOREPLIFETIME(APlayingGameState, AllPlayerCurrentHealths);
 	DOREPLIFETIME(APlayingGameState, AllPlayerLevels);
 	DOREPLIFETIME(APlayingGameState, AllPlayerExps);
