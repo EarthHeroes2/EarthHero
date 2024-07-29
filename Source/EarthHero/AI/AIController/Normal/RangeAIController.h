@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AIControllerBase.h"
+#include "EarthHero/AI/AIController/AIControllerBase.h"
 #include "RangeAIController.generated.h"
 
 /**

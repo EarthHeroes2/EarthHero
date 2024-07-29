@@ -3,18 +3,19 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GroundMonster.h"
-#include "DummyRangeMonster.generated.h"
+#include "EarthHero/Character/Monster/AirMonster.h"
+#include "DummyFlyingRangeMonster.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class EARTHHERO_API ADummyRangeMonster : public AGroundMonster
+class EARTHHERO_API ADummyFlyingRangeMonster : public AAirMonster
 {
 	GENERATED_BODY()
 
-	ADummyRangeMonster();
+	ADummyFlyingRangeMonster();
+
 	virtual void Attack(FVector SpawnNormalVector) override;
 
 	TSubclassOf<AActor> TestBulletClass;

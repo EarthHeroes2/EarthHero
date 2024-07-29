@@ -3,18 +3,17 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GroundMonster.h"
-#include "DummyMeleeMonster.generated.h"
+#include "EarthHero/Character/Monster/AirMonster.h"
+#include "DummyFlyingMeleeMonster.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class EARTHHERO_API ADummyMeleeMonster : public AGroundMonster
+class EARTHHERO_API ADummyFlyingMeleeMonster : public AAirMonster
 {
 	GENERATED_BODY()
 
-	ADummyMeleeMonster();
-
+	ADummyFlyingMeleeMonster();
 	virtual void Attack() override;
 };
