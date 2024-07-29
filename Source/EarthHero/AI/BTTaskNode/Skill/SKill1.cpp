@@ -1,19 +1,18 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "MeleeAttack.h"
+#include "SKill1.h"
 
 #include "BehaviorTree/BlackboardComponent.h"
-#include "EarthHero/AI/AIController/AIControllerBase.h"
-#include "EarthHero/Character/Monster/MonsterBase.h"
 
-UMeleeAttack::UMeleeAttack(FObjectInitializer const& ObjectInitializer)
+USKill1::USKill1(FObjectInitializer const& ObjectInitializer)
 {
-	NodeName = TEXT("Melee Attack");
+	NodeName = TEXT("Skill 1");
 }
 
-EBTNodeResult::Type UMeleeAttack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
+EBTNodeResult::Type USKill1::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
+	/*
 	AAIControllerBase* const AIController = Cast<AAIControllerBase>(OwnerComp.GetAIOwner());
 	if(AIController == nullptr) return EBTNodeResult::Failed;
 
@@ -27,7 +26,7 @@ EBTNodeResult::Type UMeleeAttack::ExecuteTask(UBehaviorTreeComponent& OwnerComp,
 	//공격을 날릴 방향을 넘겨줌
 	ControllingMonster->Attack();
 	
-	
+	*/
 	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;
 }

@@ -6,11 +6,6 @@
 ADummyMeleeMonster::ADummyMeleeMonster() : Super()
 {
 	AttackRange = 200.f;
-	AISightRadius = 500.f;
-	AILoseSightRadius = 700.f;
-	AIFieldOfView = 90.f;
-	AISightAge = 3.f;
-	AILastSeenLocation = 900.f;
 }
 
 void ADummyMeleeMonster::Attack()

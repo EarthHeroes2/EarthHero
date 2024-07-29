@@ -12,5 +12,11 @@ AFlyingMeleeAIController::AFlyingMeleeAIController(FObjectInitializer const& Obj
 		static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(TEXT("BehaviorTree'/Game/Ai/BT_FlyingMeleeEnemy.BT_FlyingMeleeEnemy'"));
 		if (BTObject.Succeeded()) BehavirTree = BTObject.Object;
 	}
+	
+	AISightRadius = 1600.f;
+	AILoseSightRadius = 1900.f;
+	AIFieldOfView = 110.f;
+	AISightAge = 3.f;
+	AILastSeenLocation = 2200.f;
 }
 

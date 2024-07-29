@@ -6,9 +6,8 @@
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "EarthHero/BlackBoard/BlackBoardKeys.h"
+#include "EarthHero/AI/BlackBoard/BlackBoardKeys.h"
 #include "EarthHero/Character/EHCharacter.h"
-#include "EarthHero/Character/Monster/MonsterBase.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AIPerceptionTypes.h"
 #include "Perception/AISenseConfig_Sight.h"
@@ -101,15 +100,14 @@ void AAIControllerBase::SetPerceptionSystem()
 
 void AAIControllerBase::UpdatePerceptionSystem()
 {
-	AMonsterBase* ControllingMonster = Cast<AMonsterBase>(GetPawn());
-	if(ControllingMonster && SightConfig)
+	if(SightConfig)
 	{
 		//시야 거리, 목표 상실 거리, 시야각, 감각을 잃는 기간, 마지막으로 감지된 객체의 위치 탐지 성공 거리?
-		SightConfig->SightRadius = ControllingMonster->AISightRadius;
-		SightConfig->LoseSightRadius = ControllingMonster->AILoseSightRadius;
-		SightConfig->PeripheralVisionAngleDegrees = ControllingMonster->AIFieldOfView;
-		SightConfig->SetMaxAge(ControllingMonster->AISightAge);
-		SightConfig->AutoSuccessRangeFromLastSeenLocation = ControllingMonster->AILastSeenLocation;
+		SightConfig->SightRadius = AISightRadius;
+		SightConfig->LoseSightRadius = AILoseSightRadius;
+		SightConfig->PeripheralVisionAngleDegrees = AIFieldOfView;
+		SightConfig->SetMaxAge(AISightAge);
+		SightConfig->AutoSuccessRangeFromLastSeenLocation = AILastSeenLocation;
 		GetPerceptionComponent()->ConfigureSense(*SightConfig);
 	}
 }

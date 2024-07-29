@@ -78,7 +78,56 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4591bad7-fd9f-4860-903f-8700cd913377" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Content/Ai/BB_BossEnemy.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Ai/BB_Enemy.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Blueprints/Character/Dummy/BP_TestBossGroundMonster.uasset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/Skill/SKill1.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/Skill/SKill1.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/Skill/Skill2.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/Skill/Skill2.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/Skill/Skill3.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/Skill/Skill3.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/Skill/Skill4.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/Skill/Skill4.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Ai/BB_MeleeEnemy.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Ai/BT_FlyingMeleeEnemy.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Ai/BT_FlyingMeleeEnemy.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Ai/BT_FlyingRangeEnemy.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Ai/BT_FlyingRangeEnemy.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Ai/BT_MeleeEnemy.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Ai/BT_MeleeEnemy.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Ai/BT_RangedEnemy.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Ai/BT_RangedEnemy.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Ai/BT_TestBoss.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Ai/BT_TestBoss.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/TestMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/TestMap.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/CheckPlayerInAttackRange.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/CheckPlayerInAttackRange.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/FindFlyingPatrolPos.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/FindFlyingPatrolPos.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/FindPatrolPos.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/FindPatrolPos.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/FindSafeWay.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/FindSafeWay.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/FlyChasePlayer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/FlyChasePlayer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/KeepSafeDistance.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/KeepSafeDistance.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/KeepSafeFlyDistance.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/KeepSafeFlyDistance.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/MeleeAttack.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/MeleeAttack.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/RangedAttack.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/RangedAttack.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/AIController/AIControllerBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/AI/AIController/AIControllerBase.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/AIController/AIControllerBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/AI/AIController/AIControllerBase.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/AIController/FlyingMeleeAIController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/AI/AIController/FlyingMeleeAIController.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/AIController/FlyingMeleeAIController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/AI/AIController/FlyingMeleeAIController.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/AIController/FlyingRangeAIController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/AI/AIController/FlyingRangeAIController.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/AIController/FlyingRangeAIController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/AI/AIController/FlyingRangeAIController.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/AIController/MeleeAIController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/AI/AIController/MeleeAIController.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/AIController/MeleeAIController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/AI/AIController/MeleeAIController.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/AIController/RangeAIController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/AI/AIController/RangeAIController.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/AIController/RangeAIController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/AI/AIController/RangeAIController.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/AIController/TestBossAIController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/AI/AIController/TestBossAIController.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/AIController/TestBossAIController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/AI/AIController/TestBossAIController.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/BlackBoard/BlackBoardKeys.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/AI/BlackBoard/BlackBoardKeys.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/BlackBoard/BlackBoardKeys.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/AI/BlackBoard/BlackBoardKeys.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/EHCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/EHCharacter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/Monster/DummyFlyingMeleeMonster.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Monster/DummyFlyingMeleeMonster.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/Monster/DummyFlyingRangeMonster.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Monster/DummyFlyingRangeMonster.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/Monster/DummyMeleeMonster.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Monster/DummyMeleeMonster.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/Monster/DummyRangeMonster.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Monster/DummyRangeMonster.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/Monster/MonsterBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Monster/MonsterBase.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/Monster/TestBossGroundMonster.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Monster/TestBossGroundMonster.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Stat/Monster/MonsterStatComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Stat/Monster/MonsterStatComponent.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -112,32 +161,32 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "C++ Project.EarthHero.executor": "Run",
-    "C++ 프로젝트.EarthHero.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "ServerTest",
-    "ignore.virus.scanning.warn.message": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "advanced.settings",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;C++ Project.EarthHero.executor&quot;: &quot;Run&quot;,
+    &quot;C++ 프로젝트.EarthHero.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;ServerTest&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;advanced.settings&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "rider.external.source.directories": [
-      "C:\\Users\\Nasutcho\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\DecompilerCache",
-      "C:\\Users\\Nasutcho\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\SourcesCache",
-      "C:\\Users\\Nasutcho\\AppData\\Local\\Symbols\\src"
+  &quot;keyToStringList&quot;: {
+    &quot;rider.external.source.directories&quot;: [
+      &quot;C:\\Users\\Nasutcho\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\DecompilerCache&quot;,
+      &quot;C:\\Users\\Nasutcho\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\SourcesCache&quot;,
+      &quot;C:\\Users\\Nasutcho\\AppData\\Local\\Symbols\\src&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="EarthHero" type="CppProject" factoryName="C++ Project">
       <configuration_1>
@@ -324,6 +373,7 @@
       <workItem from="1722043813980" duration="1865000" />
       <workItem from="1722137493528" duration="782000" />
       <workItem from="1722153172812" duration="8086000" />
+      <workItem from="1722223591531" duration="5288000" />
     </task>
     <servers />
   </component>

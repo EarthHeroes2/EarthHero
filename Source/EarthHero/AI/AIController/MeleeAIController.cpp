@@ -13,4 +13,11 @@ AMeleeAIController::AMeleeAIController(FObjectInitializer const& ObjectInitializ
 		
 		if (BTObject.Succeeded()) BehavirTree = BTObject.Object;
 	}
+
+	
+	AISightRadius = 500.f;
+	AILoseSightRadius = 700.f;
+	AIFieldOfView = 90.f;
+	AISightAge = 3.f;
+	AILastSeenLocation = 900.f;
 }

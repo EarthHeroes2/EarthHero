@@ -12,4 +12,11 @@ ARangeAIController::ARangeAIController(FObjectInitializer const& ObjectInitializ
 		static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(TEXT("BehaviorTree'/Game/Ai/BT_RangedEnemy.BT_RangedEnemy'"));
 		if (BTObject.Succeeded()) BehavirTree = BTObject.Object;
 	}
+
+	
+	AISightRadius = 700.f;
+	AILoseSightRadius = 850.f;
+	AIFieldOfView = 90.f;
+	AISightAge = 3.f;
+	AILastSeenLocation = 1000.f;
 }

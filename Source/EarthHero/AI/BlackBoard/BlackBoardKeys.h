@@ -12,4 +12,9 @@ namespace BlackboardKeys
 	TCHAR const * const CanSeePlayer = TEXT("CanSeePlayer");
 	TCHAR const * const TargetPlayer = TEXT("TargetPlayer");
 	TCHAR const * const IsPlayerInAttackRange = TEXT("IsPlayerInAttackRange");
+
+	//중간 보스 이상급
+	TCHAR const * const IsSkill1Ready = TEXT("IsSkill1Ready");
+	TCHAR const * const IsSkill2Ready = TEXT("IsSkill2Ready");
+	TCHAR const * const IsSkill3Ready = TEXT("IsSkill3Ready");
 }

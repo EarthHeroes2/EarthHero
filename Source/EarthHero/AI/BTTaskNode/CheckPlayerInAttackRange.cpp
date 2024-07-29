@@ -4,8 +4,8 @@
 #include "CheckPlayerInAttackRange.h"
 
 #include "BehaviorTree/BlackboardComponent.h"
-#include "EarthHero/AIController/AIControllerBase.h"
-#include "EarthHero/BlackBoard/BlackBoardKeys.h"
+#include "EarthHero/AI/AIController/AIControllerBase.h"
+#include "EarthHero/AI/BlackBoard/BlackBoardKeys.h"
 #include "EarthHero/Character/EHCharacter.h"
 #include "EarthHero/Character/Monster/MonsterBase.h"
 

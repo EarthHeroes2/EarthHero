@@ -1,4 +1,6 @@
 #include "EHCharacter.h"
+
+#include "AIController.h"
 #include "Camera/CameraComponent.h"
 #include "Components/WidgetComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -8,10 +10,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "../ForceField/BossZone.h"
 #include "EarthHero/Player/EHPlayerState.h"
-#include "EarthHero/Player/EHPlayerController.h"
 #include "EarthHero/ForceField/DifficultyZone.h"
 #include "DrawDebugHelpers.h"
-#include "EarthHero/AIController/MeleeAIController.h"
 
 AEHCharacter::AEHCharacter()
 {

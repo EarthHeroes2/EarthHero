@@ -10,11 +10,6 @@ ADummyFlyingRangeMonster::ADummyFlyingRangeMonster() : Super()
 	if (TestBulletAsset.Succeeded()) TestBulletClass = TestBulletAsset.Class;
 
 	AttackRange = 1800.f;
-	AISightRadius = 1600.f;
-	AILoseSightRadius = 1900.f;
-	AIFieldOfView = 110.f;
-	AISightAge = 3.f;
-	AILastSeenLocation = 2200.f;
 }
 
 void ADummyFlyingRangeMonster::Attack(FVector SpawnNormalVector)

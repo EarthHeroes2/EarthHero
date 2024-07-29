@@ -4,7 +4,7 @@
 #include "FindFlyingPatrolPos.h"
 
 #include "BehaviorTree/BlackboardComponent.h"
-#include "EarthHero/AIController/AIControllerBase.h"
+#include "EarthHero/AI/AIController/AIControllerBase.h"
 #include "GameFramework/PawnMovementComponent.h"
 
 UFindFlyingPatrolPos::UFindFlyingPatrolPos(FObjectInitializer const& ObjectInitializer)

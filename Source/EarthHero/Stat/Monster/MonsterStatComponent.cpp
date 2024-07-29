@@ -4,7 +4,7 @@
 #include "MonsterStatComponent.h"
 
 #include "EarthHero/EHGameInstance.h"
-#include "EarthHero/AIController/AIControllerBase.h"
+#include "EarthHero/AI/AIController/AIControllerBase.h"
 #include "EarthHero/Character/Monster/MonsterBase.h"
 #include "EarthHero/GameMode/PlayingGameMode.h"
 #include "EarthHero/Stat/StatCalculationLibrary.h"
