@@ -68,6 +68,8 @@ public:
 	UPROPERTY()
 	TArray<UInGamePlayerInfo*> InGamePlayerInfoArray;
 
+	void UpdatePlayerEffectState(const TArray<FEffectStatus> EffectStatuses);
+
 
 	//플레이어 캐릭터 Effect 표시
 	UPROPERTY(meta = (BindWidget))

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "EarthHero/Character/EHCharacter.h"
+#include "EarthHero/HUD/Structure/Status.h"
 #include "GameFramework/GameStateBase.h"
 #include "PlayingGameState.generated.h"
 
@@ -33,7 +34,8 @@ public:
 	void UpdateGameStateHeal(const TArray<float> PlayerHeal);
 	void UpdateGameStateWorldMaps(const TArray<FVector2D> ActorLocations, const TArray<float> ActorRotations, const int32 PlayerNumbers);
 	void SetGameStateForceField(const TArray<float> ExpansionDurations, const TArray<FVector2D> ForceFieldLocations);
-	void UpatePlayerClassImage(const TArray<UTexture2D*> PlayerClassImages);
+	void UpdatePlayerClassImage(const TArray<UTexture2D*> PlayerClassImages);
+	void UpdatePlayerEffectState(const TArray<FEffectStatus> EffectStatuses);
 
 	UPROPERTY(ReplicatedUsing = OnRep_GameTimerSec)
 	int GameTimerSec;
@@ -69,6 +71,8 @@ public:
 	TArray<FVector2D> AllForceFieldLocations;
 	UPROPERTY(ReplicatedUsing = OnRep_GameStatePlayerClassImages)
 	TArray<UTexture2D*> AllPlayerClassImages;
+	UPROPERTY(ReplicatedUsing = OnRep_GameStateEffectStatuses)
+	TArray<FEffectStatus> AllEffectStatuses;
 
 	UFUNCTION()
 	void OnRep_GameTimerSec() const;
@@ -100,4 +104,6 @@ public:
 	void OnRep_GameStateForceFieldLocations() const;
 	UFUNCTION()
 	void  OnRep_GameStatePlayerClassImages() const;
+	UFUNCTION()
+	void OnRep_GameStateEffectStatuses() const;
 };

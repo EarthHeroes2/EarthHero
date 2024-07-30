@@ -33,3 +33,19 @@ public:
 		return EffectType == InEffectType;
 	}
 };
+
+USTRUCT(BlueprintType)
+struct FEffectStatus
+{
+	GENERATED_BODY()
+	
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<UTexture2D*> EffectImage;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<int> EffectType;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<float> EffectDuration;
+};

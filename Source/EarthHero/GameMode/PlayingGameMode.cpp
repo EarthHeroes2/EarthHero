@@ -6,8 +6,10 @@
 #include "EarthHero/ForceField/ForceField.h"
 #include "EarthHero/GameSession/PlayingGameSession.h"
 #include "EarthHero/GameState/PlayingGameState.h"
+#include "EarthHero/HUD/Structure/Status.h"
 #include "EarthHero/Player/EHPlayerController.h"
 #include "EarthHero/Player/EHPlayerState.h"
+#include "EarthHero/Stat/Effect/EffectBase.h"
 #include "Kismet/GameplayStatics.h"
 
 APlayingGameMode::APlayingGameMode()
@@ -604,6 +606,48 @@ void APlayingGameMode::UpdatePlayerClassImage()
 	}
 	
 	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
-	PlayingGameState->UpatePlayerClassImage(ClassImage);
+	PlayingGameState->UpdatePlayerClassImage(ClassImage);
 }
 
+void APlayingGameMode::UpdatePlayerStateImage()
+{
+	TArray<FEffectStatus> EffectStatuses;
+	EffectStatuses.SetNum(EHPlayerControllers.Num());
+	
+	// EffectMap의 각 Actor의 Effect 상태를 모니터링합니다.
+	for (const auto& EffectEntry : AEffectBase::EffectMap)
+	{
+		AActor* TargetActor = EffectEntry.Key;
+		int32 Index = FindControllerForTargetActor(TargetActor);
+		const TMap<TSubclassOf<AEffectBase>, AEffectBase*>& Effects = EffectEntry.Value;
+
+		for (const auto& Effect : Effects)
+		{
+			AEffectBase* EffectInstance = Effect.Value;
+
+			// Effect가 존재하는 지 확인하고 GameState로 전달합니다.
+			// 예: EffectInstance->bRefresh가 true인지 확인
+			if (EffectInstance)
+			{
+				int CurEffectType = EffectInstance->EffectType;
+				EffectStatuses[Index].EffectImage.Add(EffectInstance->EffectArray[CurEffectType]->EffectImage);
+				EffectStatuses[Index].EffectType.Add(EffectInstance->EffectArray[CurEffectType]->EffectType);
+				EffectStatuses[Index].EffectDuration.Add(EffectInstance->EffectDuration);
+			}
+		}
+	}
+	
+	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
+}
+
+int32 APlayingGameMode::FindControllerForTargetActor(AActor* TargetActor)
+{
+	for (int32 Index = 0; Index < EHPlayerControllers.Num(); ++Index)
+	{
+		if (EHPlayerControllers[Index] && EHPlayerControllers[Index]->GetPawn() == TargetActor)
+		{
+			return Index;
+		}
+	}
+	return -1;
+}

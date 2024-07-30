@@ -70,6 +70,8 @@ public:
 	void UpdateGameStateReceiveDamage();
 	void UpdateGameStateHeal();
 	void UpdatePlayerClassImage();
+	void UpdatePlayerStateImage();
+	int32 FindControllerForTargetActor(AActor* TargetActor);
 
 	void PlayerControllerReady();
 	void EnableAllInput();

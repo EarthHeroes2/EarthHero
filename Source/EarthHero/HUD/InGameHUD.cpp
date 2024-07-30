@@ -202,6 +202,15 @@ void UInGameHUD::AddChatMessage(const FText& Text)
 	}
 }
 
+void UInGameHUD::UpdatePlayerEffectState(const TArray<FEffectStatus> EffectStatuses)
+{
+	for(int i = 0; i < EffectStatuses.Num(); i++)
+	{
+		//InGamePlayerInfoArray[i] 에 상태 관리 함수 만들어서 업데이트
+		InGamePlayerInfoArray[i]->UpdatePlayerEffects(EffectStatuses[i]);
+	}
+}
+
 void UInGameHUD::AddStatusImage(UTexture2D* EffectImage, int EffectType, float CoolDown)
 {
 	EffectCount += 1;
@@ -234,9 +243,9 @@ void UInGameHUD::UpdatePlayerHealths(const TArray<float>& PlayerMaxHealths, cons
 		InGamePlayerInfoArray[j]->PlayerClass->SetVisibility(ESlateVisibility::Collapsed);
 		InGamePlayerInfoArray[j]->PlayerName->SetVisibility(ESlateVisibility::Collapsed);
 		InGamePlayerInfoArray[j]->HealthProgressBar->SetVisibility(ESlateVisibility::Collapsed);
-		for (auto CoolDownWidget : InGamePlayerInfoArray[j]->PLayerStatusArray)
+		for (FStatus PlayerStatus : InGamePlayerInfoArray[j]->PLayerStatusArray)
 		{
-			CoolDownWidget->SetVisibility(ESlateVisibility::Collapsed);
+			PlayerStatus.CoolDownWidget->SetVisibility(ESlateVisibility::Collapsed);
 		}
 	}
 }
