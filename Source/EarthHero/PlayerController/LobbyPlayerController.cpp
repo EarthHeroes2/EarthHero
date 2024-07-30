@@ -304,7 +304,7 @@ void ALobbyPlayerController::Client_FadeOut_Implementation()
 	if (World)
 	{
 		UCustomGameViewportClient* GameViewportClient = Cast<UCustomGameViewportClient>(World->GetGameViewport());
-		//if (GameViewportClient) GameViewportClient->Fade(1.5, true);
+		if (GameViewportClient) GameViewportClient->Fade(1.5, true);
 	}
 }
 

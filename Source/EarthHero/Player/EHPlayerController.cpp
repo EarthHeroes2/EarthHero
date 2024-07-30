@@ -5,6 +5,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/EditableTextBox.h"
+#include "EarthHero/CustomGameViewportClient.h"
 #include "EarthHero/Character/EHCharacter.h"
 #include "EarthHero/GameMode/PlayingGameMode.h"
 #include "EarthHero/HUD/InGameHUD.h"
@@ -26,6 +27,8 @@ void AEHPlayerController::Client_AddEffect_Implementation(UTexture2D* EffectImag
 {
 	HUD->AddStatusImage(EffectImage, ServerEffectType, Duration);
 }
+
+
 
 void AEHPlayerController::BeginPlay()
 {
@@ -300,8 +303,15 @@ void AEHPlayerController::SelectHU_3()
 	}
 }
 
+//클라이언트들이 전부 완료가 되면 해야할 것들
 void AEHPlayerController::Client_EnableInput_Implementation()
 {
+	const UWorld* World = GetWorld();
+	if (World)
+	{
+		UCustomGameViewportClient* GameViewportClient = Cast<UCustomGameViewportClient>(World->GetGameViewport());
+		if (GameViewportClient) GameViewportClient->Fade(1.5, false);
+	}
 	EnableInput(this);
 }
 

@@ -10,7 +10,8 @@ const TCHAR* const USpawningComponent::Difficulty2Path1 = TEXT("Actor'/Game/Blue
 const TCHAR* const USpawningComponent::Difficulty2Path2 = TEXT("Actor'/Game/Blueprints/Character/Dummy/BP_DummyMeleeMonster.BP_DummyMeleeMonster_C'");
 const TCHAR* const USpawningComponent::Difficulty2Path3 = TEXT("Actor'/Game/Blueprints/Character/Dummy/BP_DummyFlyingRangeMonster.BP_DummyFlyingRangeMonster_C'");
 const TCHAR* const USpawningComponent::Difficulty2Path4 = TEXT("Actor'/Game/Blueprints/Character/Dummy/BP_DummyFlyingMeleeMonster.BP_DummyFlyingMeleeMonster_C'");
-const TCHAR* const USpawningComponent::Difficulty3Path = TEXT("Actor'/Game/Blueprints/Character/MidBoss/BP_MidBoss1Monster.BP_MidBoss1Monster_C'");
+//const TCHAR* const USpawningComponent::Difficulty3Path = TEXT("Actor'/Game/Blueprints/Character/MidBoss/BP_MidBoss1Monster.BP_MidBoss1Monster_C'");
+// 이거 미완성이라 꺼내면 안돼, fatal error 남.
 
 USpawningComponent::USpawningComponent()
 {
@@ -55,11 +56,12 @@ void USpawningComponent::InitializeDifficultyActors()
     }
 
     // Load difficulty 3 actors
+    /*
     static ConstructorHelpers::FClassFinder<AActor> Difficulty3ActorClass(Difficulty3Path);
     if (Difficulty3ActorClass.Succeeded())
     {
         Difficulty3Config.ActorClasses.Add(Difficulty3ActorClass.Class);
-    }
+    }*/
 }
 
 void USpawningComponent::BeginPlay()

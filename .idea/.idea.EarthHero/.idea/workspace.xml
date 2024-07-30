@@ -79,10 +79,7 @@
   <component name="ChangeListManager">
     <list default="true" id="4591bad7-fd9f-4860-903f-8700cd913377" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/Skill/Skill2.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/Skill/Skill2.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/Skill/Skill2.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/Skill/Skill2.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/Skill/SkillBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/Skill/SkillBase.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/Skill/SkillBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/AI/BTTaskNode/Skill/SkillBase.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Socket/SocketClient.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Socket/SocketClient.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -206,6 +203,18 @@
         <option name="USE_EXTERNAL_CONSOLE" value="0" />
         <option name="TERMINAL_INTERACTION_BEHAVIOR" value="FORCE_CONSOLE" />
       </configuration_5>
+      <configuration_6>
+        <option name="CONFIGURATION" value="Development Server" />
+        <option name="PLATFORM" value="Win64" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/EarthHero.vcxproj" />
+        <option name="CURRENT_LAUNCH_PROFILE" value="Local" />
+        <option name="EXE_PATH" value="$(TargetPath)" />
+        <option name="PROGRAM_PARAMETERS" value="" />
+        <option name="WORKING_DIRECTORY" value="$(ProjectDir)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+        <option name="TERMINAL_INTERACTION_BEHAVIOR" value="AUTO_DETECT" />
+      </configuration_6>
       <option name="DEFAULT_PROJECT_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/EarthHero.vcxproj" />
       <option name="AUTO_SELECT_PRIORITY" value="0" />
       <method v="2">
@@ -333,7 +342,9 @@
       <workItem from="1722223591531" duration="12714000" />
       <workItem from="1722252612838" duration="290000" />
       <workItem from="1722252917630" duration="45000" />
-      <workItem from="1722253016381" duration="10532000" />
+      <workItem from="1722253016381" duration="11841000" />
+      <workItem from="1722315642642" duration="1207000" />
+      <workItem from="1722329401216" duration="6223000" />
     </task>
     <servers />
   </component>
