@@ -638,6 +638,7 @@ void APlayingGameMode::UpdatePlayerStateImage()
 	}
 	
 	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
+	PlayingGameState->UpdatePlayerEffectState(EffectStatuses);
 }
 
 int32 APlayingGameMode::FindControllerForTargetActor(AActor* TargetActor)
