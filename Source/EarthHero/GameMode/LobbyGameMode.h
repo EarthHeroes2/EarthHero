@@ -66,4 +66,6 @@ public:
 	ALobbyPlayerController* GetFirstLobbyPlayerController();
 
 	void Kick(int PlayerNumber);
+
+	void ShowFadeOut();
 };

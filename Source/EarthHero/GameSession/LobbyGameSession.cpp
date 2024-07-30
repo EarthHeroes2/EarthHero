@@ -214,6 +214,13 @@ void ALobbyGameSession::HandleStartSessionCompleted(FName EOSSessionName, bool b
             {
                 UE_LOG(LogTemp, Log, TEXT("Lobby Started!"));
 
+                // 게임모드의 관리 리스트에서 제거
+                ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
+                if(LobbyGameMode)
+                {
+                    LobbyGameMode->ShowFadeOut();
+                }
+                
                 GetWorld()->ServerTravel(InGameMap, true);
             }
             else UE_LOG(LogTemp, Warning, TEXT("Failed to start lobby!! (From Callback)"));

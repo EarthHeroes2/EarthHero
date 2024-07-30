@@ -8,10 +8,7 @@ void UCustomGameViewportClient::PostRender(UCanvas* Canvas)
 {
 	Super::PostRender(Canvas);
 	
-	if (bFading)
-	{
-		DrawScreenFade(Canvas);
-	}
+	if (bFading) DrawScreenFade(Canvas);
 }
 
 void UCustomGameViewportClient::ClearFade()
@@ -41,8 +38,11 @@ void UCustomGameViewportClient::DrawScreenFade(UCanvas* Canvas)
 			const float Time = World_->GetTimeSeconds();
 			const float Alpha = FMath::Clamp((Time - FadeStartTime) / FadeDuration, 0.f, 1.f);
 
+			//로그를 위해 임시로..
+			if(static_cast<int>(Time) % 15 == 0) UE_LOG(LogTemp, Log, TEXT("Time = %f"), Time);
+
 			//새 맵으로 이동한 시점이라면 페이드 인
-			if(Time == 0.f) Fade(1.f, false);
+			if(Time == 0.f) Fade(1.5f, false);
 			
 			if (Alpha == 1.f && !bToBlack) bFading = false;
 			else

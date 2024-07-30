@@ -639,7 +639,7 @@ void UMainMenuWidget::HandleJoinSessionCompleted(FName SessionName, EOnJoinSessi
                 		UCustomGameViewportClient* GameViewportClient = Cast<UCustomGameViewportClient>(World->GetGameViewport());
                 		if (GameViewportClient)
                 		{
-                			GameViewportClient->Fade(1, true);
+                			GameViewportClient->Fade(1.5, true);
                 		}
                 	}
 

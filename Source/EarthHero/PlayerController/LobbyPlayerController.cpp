@@ -6,6 +6,8 @@
 #include "GameFramework/PlayerState.h"
 #include <EarthHero/GameSession/LobbyGameSession.h>
 #include <EarthHero/GameMode/LobbyGameMode.h>
+
+#include "EarthHero/CustomGameViewportClient.h"
 #include "EarthHero/EHGameInstance.h"
 #include "EarthHero/Character/EHCharacter.h"
 #include "EarthHero/PlayerState/LobbyPlayerState.h"
@@ -295,6 +297,16 @@ void ALobbyPlayerController::Client_UpdateLobbyPasswordResult_Implementation(boo
 }
 
 
+
+void ALobbyPlayerController::Client_FadeOut_Implementation()
+{
+	const UWorld* World = GetWorld();
+	if (World)
+	{
+		UCustomGameViewportClient* GameViewportClient = Cast<UCustomGameViewportClient>(World->GetGameViewport());
+		//if (GameViewportClient) GameViewportClient->Fade(1.5, true);
+	}
+}
 
 
 

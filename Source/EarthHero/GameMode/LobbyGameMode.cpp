@@ -140,6 +140,12 @@ void ALobbyGameMode::Kick(int PlayerNumber)
 	else UE_LOG(LogTemp, Log, TEXT("Failed to %d Kick"), PlayerNumber);
 }
 
+void ALobbyGameMode::ShowFadeOut()
+{
+	for(ALobbyPlayerController* LobbyPlayerController : LobbyPlayerControllerArray)
+		if(LobbyPlayerController) LobbyPlayerController->Client_FadeOut();
+}
+
 
 void ALobbyGameMode::RemovePlayerInfo(const ALobbyPlayerController* ExitingLobbyPlayerController)
 {
@@ -229,6 +235,7 @@ bool ALobbyGameMode::PressGameStartButton()
 	if (LobbyGameSession)
 	{
 		//if (ReadyCount == (LobbyGameSession->MaxNumberOfPlayersInSession - 1)) //임시로 4명 아니라도 실행되게 함!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		if(ReadyCount == LobbyGameSession->GetNumPlayersInSession() - 1) //임시로...
 		{
 			UE_LOG(LogTemp, Log, TEXT("Lobby Start!"));
 			LobbyGameSession->StartSession();

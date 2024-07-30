@@ -86,6 +86,10 @@ public:
 	void Client_UpdateLobbyPasswordResult(bool bSuccess);
 
 
+	UFUNCTION(Client, Reliable)
+	void Client_FadeOut();
+
+
 
 	void SetHost();
 	void UpdateDifficulty(int Difficulty);
