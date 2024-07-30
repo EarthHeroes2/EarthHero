@@ -243,7 +243,7 @@ void UMainMenuWidget::CreateLobbyOKBtnClicked()
 	if(!ReceivedLobbyPort.IsEmpty())
 	{
 		FTimerHandle Handle;
-		GetWorld()->GetTimerManager().SetTimer(Handle, this, &ThisClass::CreateLobbyWait, 25.0f, false); //이거 나중에 방식을 바꾸자
+		GetWorld()->GetTimerManager().SetTimer(Handle, this, &ThisClass::CreateLobbyWait, 10.f, false); //이거 나중에 방식을 바꾸자
 	}
 	else
 	{

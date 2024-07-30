@@ -26,6 +26,7 @@ class EARTHHERO_API ALobbyGameMode : public AGameModeBase
 	TArray<AController*> ControllerArray;
 	TArray<ALobbyPlayerController*> LobbyPlayerControllerArray;
 	TArray<FString> PlayerNameArray;
+	TArray<int> PlayerLevelArray;
 	TArray<bool> PlayerReadyStateArray;
 	TArray<EClassType> PlayerClassArray;
 	TArray<int> PlayerSpotArray;
@@ -45,6 +46,8 @@ class EARTHHERO_API ALobbyGameMode : public AGameModeBase
 	void UpdatePlayerReadyState();
 	
 	int FindLobbyPlayerSpot();
+
+	int GetPlayerLevel(FUniqueNetIdRepl UniqueNetId);
 	
 public:
 	bool PressGameStartButton();

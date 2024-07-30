@@ -22,7 +22,8 @@ FString USocketClient::CreateSocket(const FString& RequestMessage, const FString
 		RequestMessage.Equals("GetPlayerData")) FIPv4Address::Parse("211.210.92.100", IP); //뭘로 감출까
 	else if(RequestMessage.Equals("DestroyServer") ||
 			RequestMessage.Equals("UpdatePlayerExp") ||
-			RequestMessage.Equals("UpdatePassword")) FIPv4Address::Parse("127.0.0.1", IP);
+			RequestMessage.Equals("UpdatePassword") ||
+			RequestMessage.Equals("GetPlayerLevel")) FIPv4Address::Parse("127.0.0.1", IP);
 
 	
 	TSharedRef<FInternetAddr> Address = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateInternetAddr();
@@ -56,7 +57,8 @@ FString USocketClient::CreateSocket(const FString& RequestMessage, const FString
 			//접속할 서버의 포트번호, 비번 비교 결과 등을 리턴함
 			if(RequestMessage.Equals("CreateLobby") || 
 				RequestMessage.Equals("ComparePassword") ||
-				RequestMessage.Equals("GetPlayerData")) return ReceiveMessage; 
+				RequestMessage.Equals("GetPlayerData") ||
+				RequestMessage.Equals("GetPlayerLevel")) return ReceiveMessage; 
 		}
 	}
 	else UE_LOG(LogTemp, Error, TEXT("Failed to connect to server"));

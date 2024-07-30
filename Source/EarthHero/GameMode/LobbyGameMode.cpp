@@ -6,6 +6,7 @@
 #include "EarthHero/Character/Shooter/EHShooter.h"
 #include "EarthHero/Character/Warrior/EHWarrior.h"
 #include "EarthHero/PlayerState/LobbyPlayerState.h"
+#include "EarthHero/Socket/SocketClient.h"
 
 ALobbyGameMode::ALobbyGameMode()
 {
@@ -47,6 +48,25 @@ void ALobbyGameMode::BeginPlay()
 	bUseSeamlessTravel = true;
 }
 
+int ALobbyGameMode::GetPlayerLevel(FUniqueNetIdRepl UniqueNetId)
+{
+	FString SteamId = UniqueNetId->ToString();
+	UE_LOG(LogTemp, Log, TEXT("My Steam ID: %s"), *SteamId);
+	
+	FString PlayerLevelString;
+	
+	USocketClient* NewSocket = NewObject<USocketClient>(this);
+	if(NewSocket) PlayerLevelString = NewSocket->CreateSocket("GetPlayerLevel", SteamId);
+
+	if(PlayerLevelString == "")
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to GetPlayerLevel"));
+		return -1;
+	}
+	
+	return FCString::Atoi(*PlayerLevelString);
+}
+
 //특정 스폰 지점 설정
 AActor* ALobbyGameMode::FindPlayerStart_Implementation(AController* Player, const FString& IncomingName)
 {
@@ -61,6 +81,7 @@ AActor* ALobbyGameMode::FindPlayerStart_Implementation(AController* Player, cons
 			ControllerArray.RemoveAt(PlayerIndex);
 			LobbyPlayerControllerArray.RemoveAt(PlayerIndex);
 			PlayerNameArray.RemoveAt(PlayerIndex);
+			PlayerLevelArray.RemoveAt(PlayerIndex);
 			PlayerReadyStateArray.RemoveAt(PlayerIndex);
 			PlayerClassArray.RemoveAt(PlayerIndex);
 			PlayerSpotArray.RemoveAt(PlayerIndex);
@@ -72,6 +93,7 @@ AActor* ALobbyGameMode::FindPlayerStart_Implementation(AController* Player, cons
 		ALobbyPlayerController* LobbyPlayerController = Cast<ALobbyPlayerController>(Player); //임시
 		LobbyPlayerControllerArray.Add(LobbyPlayerController);
 		PlayerNameArray.Add(Player->PlayerState->GetPlayerName());
+		PlayerLevelArray.Add(GetPlayerLevel(Player->PlayerState->GetUniqueId()));
 		PlayerReadyStateArray.Add(false);
 		PlayerClassArray.Add(Warrior); //ALobbyPlayerController::Client_SelectDefaultCharacter_Implementation() 기본값 변경이면 여기도 함께 변경해줘야함 (나중에 수정할수도)
 		PlayerSpotArray.Add(PlayerStart);
@@ -136,6 +158,7 @@ void ALobbyGameMode::RemovePlayerInfo(const ALobbyPlayerController* ExitingLobby
 			ControllerArray.RemoveAt(PlayerIndex);
 			LobbyPlayerControllerArray.RemoveAt(PlayerIndex);
 			PlayerNameArray.RemoveAt(PlayerIndex);
+			PlayerLevelArray.RemoveAt(PlayerIndex);
 			PlayerReadyStateArray.RemoveAt(PlayerIndex);
 			PlayerClassArray.RemoveAt(PlayerIndex);
 			PlayerSpotArray.RemoveAt(PlayerIndex);

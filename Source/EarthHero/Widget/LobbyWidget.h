@@ -61,6 +61,16 @@ private:
 	UTextBlock* Player3_Txt;
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* Player4_Txt;
+	
+	TArray<UTextBlock*> PlayerLevelTexts;
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* Player1Level_Txt;
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* Player2Level_Txt;
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* Player3Level_Txt;
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* Player4Level_Txt;
 
 	TArray<UButton*> KickButtons;
 	UPROPERTY(meta = (BindWidget))

@@ -33,6 +33,11 @@ bool ULobbyWidget::Initialize()
 	PlayerTexts.Add(Player2_Txt);
 	PlayerTexts.Add(Player3_Txt);
 	PlayerTexts.Add(Player4_Txt);
+	
+	PlayerLevelTexts.Add(Player1Level_Txt);
+	PlayerLevelTexts.Add(Player2Level_Txt);
+	PlayerLevelTexts.Add(Player3Level_Txt);
+	PlayerLevelTexts.Add(Player4Level_Txt);
 
 	DifficultyBtns.Add(Difficulty1_Btn);
 	DifficultyBtns.Add(Difficulty2_Btn);
@@ -494,7 +499,7 @@ void ULobbyWidget::UpdateReadyState(const TArray<bool>& PlayerReadyStateArray)
 
 	UE_LOG(LogTemp, Log, TEXT("Widget : update player ready state (%d players)"), NumberOfPlayers);
 
-	//방장은 첫 칸. 방장은 초록색 (임시)
+	//방장은 무조건 첫 칸. 방장은 초록색
 	PlayerTexts[0]->SetColorAndOpacity(FLinearColor::Green);
 	
 	for(i = 1; i < NumberOfPlayers; i++)
@@ -508,7 +513,6 @@ void ULobbyWidget::UpdateReadyState(const TArray<bool>& PlayerReadyStateArray)
 	}
 }
 
-//수정 필요
 void ULobbyWidget::UpdateDifficulty(const int Difficulty)
 {
 	for(UButton* DifficultyBtn : DifficultyBtns)
