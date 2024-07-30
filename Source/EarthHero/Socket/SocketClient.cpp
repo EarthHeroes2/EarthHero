@@ -16,7 +16,7 @@ FString USocketClient::CreateSocket(const FString& RequestMessage, const FString
 	Socket = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateSocket(NAME_Stream, "TCPSocket", false);
 	
 	FIPv4Address IP;
-	
+	//
 	if(RequestMessage.Equals("CreateLobby") ||
 		RequestMessage.Equals("ComparePassword") ||
 		RequestMessage.Equals("GetPlayerData")) FIPv4Address::Parse("211.210.92.100", IP); //뭘로 감출까
