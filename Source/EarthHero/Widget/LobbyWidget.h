@@ -52,7 +52,7 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	UButton* Player4_Btn;
 
-	TArray<UTextBlock*> PlayerTexts;
+	TArray<UTextBlock*> PlayerNameTexts;
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* Player1_Txt;
 	UPROPERTY(meta = (BindWidget))
@@ -220,7 +220,7 @@ protected:
 	void PasswordUpdateBtnClicked();
 	
 public:
-	void UpdatePlayerNameList(const TArray<FString>& PlayerNameList);
+	void UpdatePlayerNameList(const TArray<FString>& PlayerNameList, const TArray<int> PlayerLevelList);
 	void UpdateReadyState(const TArray<bool>& PlayerReadyStateArray);
 	void UpdateDifficulty(const int Difficulty);
 	

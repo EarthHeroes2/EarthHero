@@ -201,7 +201,7 @@ void ALobbyGameMode::UpdatePlayerNameListAndReadyState()
 	{
 		if (LobbyPlayerControllerArray[i])
 		{
-			LobbyPlayerControllerArray[i]->Client_UpdatePlayerNameList(PlayerNameArray);
+			LobbyPlayerControllerArray[i]->Client_UpdatePlayerNameList(PlayerNameArray, PlayerLevelArray);
 		}
 	}
 

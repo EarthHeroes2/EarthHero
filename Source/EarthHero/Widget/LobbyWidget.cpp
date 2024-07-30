@@ -2,6 +2,9 @@
 
 
 #include "LobbyWidget.h"
+
+#include <string>
+
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
 #include "OnlineSubsystem.h"
@@ -29,10 +32,10 @@ bool ULobbyWidget::Initialize()
 {
 	Super::Initialize();
 
-	PlayerTexts.Add(Player1_Txt);
-	PlayerTexts.Add(Player2_Txt);
-	PlayerTexts.Add(Player3_Txt);
-	PlayerTexts.Add(Player4_Txt);
+	PlayerNameTexts.Add(Player1_Txt);
+	PlayerNameTexts.Add(Player2_Txt);
+	PlayerNameTexts.Add(Player3_Txt);
+	PlayerNameTexts.Add(Player4_Txt);
 	
 	PlayerLevelTexts.Add(Player1Level_Txt);
 	PlayerLevelTexts.Add(Player2Level_Txt);
@@ -474,9 +477,7 @@ void ULobbyWidget::AddChatMessage(const FText& Text)
 	}
 }
 
-
-
-void ULobbyWidget::UpdatePlayerNameList(const TArray<FString>& PlayerNameList)
+void ULobbyWidget::UpdatePlayerNameList(const TArray<FString>& PlayerNameList, const TArray<int> PlayerLevelList)
 {
 	int i;
 	
@@ -485,10 +486,13 @@ void ULobbyWidget::UpdatePlayerNameList(const TArray<FString>& PlayerNameList)
 	UE_LOG(LogTemp, Log, TEXT("Widget : update player name list (%d players)"), NumberOfPlayers);
 
 	for (i = 0; i < NumberOfPlayers; i++)
-		PlayerTexts[i]->SetText(FText::FromString(PlayerNameList[i]));
+	{
+		PlayerNameTexts[i]->SetText(FText::FromString(PlayerNameList[i]));
+		PlayerLevelTexts[i]->SetText(FText::FromString(FString("Lv. ") + FString::FromInt(PlayerLevelList[i])));
+	}
 	
 	for (; i < MaxNumberOfPlayers; i++)
-		PlayerTexts[i]->SetText(FText::GetEmpty());
+		PlayerNameTexts[i]->SetText(FText::GetEmpty());
 }
 
 void ULobbyWidget::UpdateReadyState(const TArray<bool>& PlayerReadyStateArray)
@@ -500,16 +504,16 @@ void ULobbyWidget::UpdateReadyState(const TArray<bool>& PlayerReadyStateArray)
 	UE_LOG(LogTemp, Log, TEXT("Widget : update player ready state (%d players)"), NumberOfPlayers);
 
 	//방장은 무조건 첫 칸. 방장은 초록색
-	PlayerTexts[0]->SetColorAndOpacity(FLinearColor::Green);
+	PlayerNameTexts[0]->SetColorAndOpacity(FLinearColor::Green);
 	
 	for(i = 1; i < NumberOfPlayers; i++)
 	{
-		if(PlayerReadyStateArray[i]) PlayerTexts[i]->SetColorAndOpacity(FLinearColor::Red);
-		else PlayerTexts[i]->SetColorAndOpacity(FLinearColor::Black);
+		if(PlayerReadyStateArray[i]) PlayerNameTexts[i]->SetColorAndOpacity(FLinearColor::Red);
+		else PlayerNameTexts[i]->SetColorAndOpacity(FLinearColor::Black);
 	}
 	for (; i < MaxNumberOfPlayers; i++)
 	{
-		PlayerTexts[i]->SetColorAndOpacity(FLinearColor::Black);
+		PlayerNameTexts[i]->SetColorAndOpacity(FLinearColor::Black);
 	}
 }
 

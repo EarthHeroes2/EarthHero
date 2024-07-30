@@ -163,13 +163,13 @@ void ALobbyPlayerController::Server_ClientReadyButtonClicked_Implementation()
 }
 
 //서버로 부터 이름 리스트를 받음
-void ALobbyPlayerController::Client_UpdatePlayerNameList_Implementation(const TArray<FString>& PlayerNameList)
+void ALobbyPlayerController::Client_UpdatePlayerNameList_Implementation(const TArray<FString>& PlayerNameList, const TArray<int>& PlayerLevelList)
 {
 	UE_LOG(LogTemp, Log, TEXT("Player name list received"));
 
 	if (LobbyWidget)
 	{
-		LobbyWidget->UpdatePlayerNameList(PlayerNameList);
+		LobbyWidget->UpdatePlayerNameList(PlayerNameList, PlayerLevelList);
 	}
 	else UE_LOG(LogTemp, Log, TEXT("invalid LobbyWidget"));
 }

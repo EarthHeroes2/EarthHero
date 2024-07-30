@@ -47,7 +47,7 @@ public:
 	void Server_ClientReadyButtonClicked();
 
 	UFUNCTION(Client, Reliable)
-	void Client_UpdatePlayerNameList(const TArray<FString>& PlayerNameList);
+	void Client_UpdatePlayerNameList(const TArray<FString>& PlayerNameList, const TArray<int>& PlayerLevelList);
 
 	UFUNCTION(Client, Reliable)
 	void Client_UpdateReadyState(const TArray<bool>& PlayerReadyStateArray);
