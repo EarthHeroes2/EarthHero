@@ -221,9 +221,7 @@ void ULobbyWidget::HostAssignment(bool bHostAssignment, bool bAdvertise, int Dif
 		Difficulty4_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::Difficulty4BtnClicked);
 		Difficulty5_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::Difficulty5BtnClicked);
 
-		RoomSetting_Img->SetVisibility(ESlateVisibility::Visible);
-		Private_Hb->SetVisibility(ESlateVisibility::Visible);
-		PasswordSetting_Hb->SetVisibility(ESlateVisibility::Visible);
+		LobbySettings_Vb->SetVisibility(ESlateVisibility::Visible);
 	}
 	else
 	{

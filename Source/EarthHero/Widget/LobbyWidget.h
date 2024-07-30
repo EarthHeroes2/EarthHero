@@ -117,8 +117,10 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	UEditableTextBox* Chat_Etb;
 
-	
 
+	UPROPERTY(meta = (BindWidget))
+	UVerticalBox* LobbySettings_Vb;
+	
 	UPROPERTY(meta = (BindWidget))
 	UHorizontalBox* Private_Hb;
 public:
