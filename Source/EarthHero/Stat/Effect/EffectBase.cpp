@@ -65,6 +65,7 @@ void AEffectBase::ApplyEffect(AActor* InTargetActor, float InEffectValue, float 
 				ExistingEffect->GetWorld()->GetTimerManager().SetTimer(ExistingEffect->EffectTimerHandle, ExistingEffect, &AEffectBase::ResetEffect, InDuration, false);
 				if (AEHCharacter *Hero = Cast<AEHCharacter>(TargetActor))
 				{
+					//본인 HUD에 띄우고
 					if (AEHPlayerController *PlayerController = Cast<AEHPlayerController>(Hero->GetController()))
 					{
 						PlayerController->Client_AddEffect(EffectArray[EffectType]->EffectImage, EffectArray[EffectType]->EffectType, InDuration);

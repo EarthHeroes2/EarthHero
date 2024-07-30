@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Structure/Status.h"
 #include "InGamePlayerInfo.generated.h"
 
 /**
@@ -46,11 +47,16 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	class UCoolDown *Player_Status_10;
 
-	TArray<UCoolDown*> PLayerStatusArray;
+	TArray<FStatus> PLayerStatusArray;
 
 	void SetName(const FString& Name) const;
 	void SetProgress(const float Progress) const;
 	void SetImage(UTexture2D *Image) const;
+	void UpdatePlayerEffects(FEffectStatus PlayerStatus);
+	void DeletePlayerEffects(int EffectType);
+
+	UPROPERTY()
+	int EffectCount = 0;
 
 protected:
 	virtual bool Initialize() override;

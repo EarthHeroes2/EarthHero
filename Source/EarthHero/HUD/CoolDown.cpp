@@ -4,6 +4,7 @@
 #include "CoolDown.h"
 
 #include "InGameHUD.h"
+#include "InGamePlayerInfo.h"
 #include "Components/Image.h"
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
@@ -49,6 +50,13 @@ void UCoolDown::End()
 	GetWorld()->GetTimerManager().ClearTimer(EffectEndHandle);
 	ProgressBar_CoolDown->SetPercent(0.f);
 	Text_RemainingTime->SetText(FText::GetEmpty());
-	InGameHUD->DeleteStatusImage(EffectType);
+	if (InGameHUD)
+	{
+		InGameHUD->DeleteStatusImage(EffectType);
+	}
+	else if (InGamePlayerInfo)
+	{
+		InGamePlayerInfo->DeletePlayerEffects(EffectType);
+	}
 }
 

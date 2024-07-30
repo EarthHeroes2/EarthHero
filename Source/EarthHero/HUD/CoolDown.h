@@ -26,6 +26,9 @@ public:
 
 	UPROPERTY()
 	class UInGameHUD *InGameHUD;
+
+	UPROPERTY()
+	class UInGamePlayerInfo *InGamePlayerInfo;
 	
 	void SetImage(UTexture2D *Image);
 	void ClearImage();

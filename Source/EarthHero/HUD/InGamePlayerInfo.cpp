@@ -31,21 +31,45 @@ void UInGamePlayerInfo::SetImage(UTexture2D *Image) const
 	PlayerClass->SetBrush(Brush);
 }
 
+void UInGamePlayerInfo::UpdatePlayerEffects(FEffectStatus PlayerStatus)
+{
+	int Count = PlayerStatus.EffectType.Num();
+	for (int i = 0; i < Count; i++)
+	{
+		EffectCount += 1;
+		UE_LOG(LogClass, Warning, TEXT("InGamePlayerInfo: EffectType = %d, EffectCount = %d"), PlayerStatus.EffectType[i], EffectCount);
+		PLayerStatusArray[EffectCount - 1] = FStatus(PlayerStatus.EffectType[i], PLayerStatusArray[EffectCount - 1].CoolDownWidget);
+		PLayerStatusArray[EffectCount - 1].CoolDownWidget->SetImage(PlayerStatus.EffectImage[i]);
+		PLayerStatusArray[EffectCount - 1].CoolDownWidget->StartCoolDown(PlayerStatus.EffectDuration[i], PlayerStatus.EffectType[i]);
+		PLayerStatusArray[EffectCount - 1].CoolDownWidget->InGamePlayerInfo = this;
+	}
+}
+
+void UInGamePlayerInfo::DeletePlayerEffects(int EffectType)
+{
+	EffectCount -= 1;
+	FStatus *FindStatus = Algo::FindByPredicate(PLayerStatusArray, [EffectType](const FStatus& Status)
+	{
+		return Status.EffectType == EffectType;
+	});
+	FindStatus->CoolDownWidget->ClearImage();
+}
+
 bool UInGamePlayerInfo::Initialize()
 {
 	Super::Initialize();
 
-	PLayerStatusArray.Add(Player_Status);
-	PLayerStatusArray.Add(Player_Status_1);
-	PLayerStatusArray.Add(Player_Status_2);
-	PLayerStatusArray.Add(Player_Status_3);
-	PLayerStatusArray.Add(Player_Status_4);
-	PLayerStatusArray.Add(Player_Status_5);
-	PLayerStatusArray.Add(Player_Status_6);
-	PLayerStatusArray.Add(Player_Status_7);
-	PLayerStatusArray.Add(Player_Status_8);
-	PLayerStatusArray.Add(Player_Status_9);
-	PLayerStatusArray.Add(Player_Status_10);
+	PLayerStatusArray.Add(FStatus(0, Player_Status));
+	PLayerStatusArray.Add(FStatus(0, Player_Status_1));
+	PLayerStatusArray.Add(FStatus(0, Player_Status_2));
+	PLayerStatusArray.Add(FStatus(0, Player_Status_3));
+	PLayerStatusArray.Add(FStatus(0, Player_Status_4));
+	PLayerStatusArray.Add(FStatus(0, Player_Status_5));
+	PLayerStatusArray.Add(FStatus(0, Player_Status_6));
+	PLayerStatusArray.Add(FStatus(0, Player_Status_7));
+	PLayerStatusArray.Add(FStatus(0, Player_Status_8));
+	PLayerStatusArray.Add(FStatus(0, Player_Status_9));
+	PLayerStatusArray.Add(FStatus(0, Player_Status_10));
 
 	return true;
 }

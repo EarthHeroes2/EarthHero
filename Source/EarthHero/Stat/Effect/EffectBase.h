@@ -19,8 +19,16 @@ public:
 	virtual void ApplyEffect(AActor* InTargetActor, float InEffectValue, float InDuration, bool InbIsStackable = false, bool InbIsPermanent = false, bool InbShouldRefreshDuration = false);
 
 	virtual void UpgradeEffect(float InEffectValue);
+
+	// 동일한 대상에 적용된 효과를 관리하기 위한 맵 액터 -> 적용 효과 -> 효과 객체 주소
+	static TMap<AActor*, TMap<TSubclassOf<AEffectBase>, AEffectBase*>> EffectMap;
 	
 	static TArray<FEffectStructure*> EffectArray;
+	
+	int EffectType;
+	
+	// 효과 지속 시간
+	float EffectDuration;
 
 protected:
 	// Called when the game starts or when spawned
@@ -39,9 +47,6 @@ protected:
 	// 적용된 효과 값
 	float AppliedEffectValue;
 
-	// 효과 지속 시간
-	float EffectDuration;
-
 	// 중첩 가능 여부
 	bool bIsStackable;
 
@@ -57,10 +62,6 @@ protected:
 	// 갱신 여부
 	bool bRefresh = false;
 
-	// 동일한 대상에 적용된 효과를 관리하기 위한 맵 액터 -> 적용 효과 -> 효과 객체 주소
-	static TMap<AActor*, TMap<TSubclassOf<AEffectBase>, AEffectBase*>> EffectMap;
-
-	int EffectType;
 	
 public:	
 	// Called every frame
