@@ -16,6 +16,7 @@ void UCustomGameViewportClient::ClearFade()
 	bFading = false;
 }
 
+//수동으로 실행시켜 주면 됨
 void UCustomGameViewportClient::Fade(const float Duration, const bool bToBlack_)
 {
 	const UWorld* World_ = GetWorld();
@@ -39,7 +40,7 @@ void UCustomGameViewportClient::DrawScreenFade(UCanvas* Canvas)
 			const float Alpha = FMath::Clamp((Time - FadeStartTime) / FadeDuration, 0.f, 1.f);
 			
 			//새 맵으로 이동한 시점(seamless travel 아닐 때!!!!)이라면 자동으로 페이드 인
-			if(Time == 0.f) Fade(1.5f, false);
+			//if(Time == 0.f) Fade(1.5f, false);
 			
 			if (Alpha == 1.f && !bToBlack) bFading = false;
 			else

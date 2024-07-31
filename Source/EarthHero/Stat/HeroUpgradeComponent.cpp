@@ -163,7 +163,6 @@ void UHeroUpgradeComponent::PushHeroUpgrade_Implementation(const TArray<FHeroUpg
 
 void UHeroUpgradeComponent::OnRep_HeroUpgrades(const TArray<FHeroUpgradeStructure> &ServerHeroUpgrades)
 {
-	UE_LOG(LogClass, Warning, TEXT("OnRep_HeroUpgrades"));
 	if (GetNetMode() == NM_Client && TabHUD && !ServerHeroUpgrades.IsEmpty())
 	{
 		for (int32 i = 0; i < ServerHeroUpgrades.Num(); i++)
@@ -314,15 +313,18 @@ void UHeroUpgradeComponent::ApplyHeroUpgrade_Implementation(int index)
 	IsSelectDone = true;
 }
 
-void UHeroUpgradeComponent::RemoveUpgrade(int32 index)
+void UHeroUpgradeComponent::RemoveUpgrade(int32 Index)
 {
-	FHeroUpgradeStructure *FoundItem;
-	int32 Index;
-	
-	FoundItem = Algo::FindByPredicate(HeroUpgrades, [](FHeroUpgradeStructure Upgrade)
+	FHeroUpgradeStructure *FoundItem = nullptr;
+
+	for (FHeroUpgradeStructure HeroUpgrade : HeroUpgrades)
 	{
-		return Upgrade.HeroUpgradeType == 8;
-	});
+		if (HeroUpgrade.HeroUpgradeType == Index)
+		{
+			FoundItem = &HeroUpgrade;
+			break;
+		}
+	}
 	if (FoundItem)
 	{
 		Index = HeroUpgrades.IndexOfByKey(*FoundItem);

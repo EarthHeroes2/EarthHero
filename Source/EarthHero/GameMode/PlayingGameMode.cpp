@@ -624,6 +624,7 @@ void APlayingGameMode::UpdatePlayerStateImage()
 		for (const auto& Effect : Effects)
 		{
 			AEffectBase* EffectInstance = Effect.Value;
+			UE_LOG(LogClass, Warning, TEXT("GameMode : EffectInstance Name = %s"), *EffectInstance->GetName());
 
 			// Effect가 존재하는 지 확인하고 GameState로 전달합니다.
 			// 예: EffectInstance->bRefresh가 true인지 확인
@@ -636,7 +637,8 @@ void APlayingGameMode::UpdatePlayerStateImage()
 			}
 		}
 	}
-	
+
+	UE_LOG(LogClass, Warning, TEXT("GameMode : EffectStsatuses num = %d"), EffectStatuses.Num());
 	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
 	PlayingGameState->UpdatePlayerEffectState(EffectStatuses);
 }
