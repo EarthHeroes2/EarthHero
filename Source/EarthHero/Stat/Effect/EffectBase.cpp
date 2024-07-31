@@ -5,6 +5,7 @@
 
 #include "EarthHero/Character/EHCharacter.h"
 #include "EarthHero/Enum/Enums.h"
+#include "EarthHero/GameMode/PlayingGameMode.h"
 #include "EarthHero/HUD/InGameHUD.h"
 #include "EarthHero/Player/EHPlayerController.h"
 #include "EarthHero/Stat/Structure/EffectStructure.h"
@@ -71,13 +72,16 @@ void AEffectBase::ApplyEffect(AActor* InTargetActor, float InEffectValue, float 
 					{
 						if (EffectArray.Num() < EffectType)
 						{
-							UE_LOG(LogClass, Error, TEXT("AEffectBase::EffectArray has not initialized = %d"), EffectArray.Num());
+							UE_LOG(LogClass, Error, TEXT("AEffectBase::EffectArray has not initialized"));
 						}
 						else
 						{
-							PlayerController->HUD->AddStatusImage(EffectArray[EffectType]->EffectImage, EffectArray[EffectType]->EffectType, InDuration);
 							PlayerController->Client_AddEffect(EffectArray[EffectType]->EffectImage, EffectArray[EffectType]->EffectType, InDuration);
 						}
+					}
+					if (APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode()))
+					{
+						PlayingGameMode->UpdatePlayerStateImage();
 					}
 				}
 				bRefresh = true;
@@ -97,14 +101,20 @@ void AEffectBase::ApplyEffect(AActor* InTargetActor, float InEffectValue, float 
 			{
 				if (AEHPlayerController *PlayerController = Cast<AEHPlayerController>(Hero->GetController()))
 				{
-					if (EffectArray.Num() < EffectType)
+					if (AEHPlayerController *PlayerController = Cast<AEHPlayerController>(Hero->GetController()))
 					{
-						UE_LOG(LogClass, Error, TEXT("AEffectBase::EffectArray has not initialized"));
+						if (EffectArray.Num() < EffectType)
+						{
+							UE_LOG(LogClass, Error, TEXT("AEffectBase::EffectArray has not initialized"));
+						}
+						else
+						{
+							PlayerController->Client_AddEffect(EffectArray[EffectType]->EffectImage, EffectArray[EffectType]->EffectType, InDuration);
+						}
 					}
-					else
+					if (APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode()))
 					{
-						PlayerController->HUD->AddStatusImage(EffectArray[EffectType]->EffectImage, EffectArray[EffectType]->EffectType, InDuration);
-						PlayerController->Client_AddEffect(EffectArray[EffectType]->EffectImage, EffectArray[EffectType]->EffectType, InDuration);
+						PlayingGameMode->UpdatePlayerStateImage();
 					}
 				}
 			}
@@ -131,9 +141,12 @@ void AEffectBase::ApplyEffect(AActor* InTargetActor, float InEffectValue, float 
 				}
 				else
 				{
-					PlayerController->HUD->AddStatusImage(EffectArray[EffectType]->EffectImage, EffectArray[EffectType]->EffectType, InDuration);
 					PlayerController->Client_AddEffect(EffectArray[EffectType]->EffectImage, EffectArray[EffectType]->EffectType, InDuration);
 				}
+			}
+			if (APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode()))
+			{
+				PlayingGameMode->UpdatePlayerStateImage();
 			}
 		}
 	}

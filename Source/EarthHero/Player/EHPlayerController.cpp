@@ -25,7 +25,11 @@ void AEHPlayerController::Tick(float DeltaSeconds)
 
 void AEHPlayerController::Client_AddEffect_Implementation(UTexture2D* EffectImage, int ServerEffectType, float Duration)
 {
-	HUD->AddStatusImage(EffectImage, ServerEffectType, Duration);
+	HUD = Cast<UInGameHUD>(CreateWidget(this, InGameHUD));
+	if (HUD)
+	{
+		HUD->AddStatusImage(EffectImage, ServerEffectType, Duration);
+	}
 }
 
 
