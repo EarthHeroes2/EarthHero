@@ -4,6 +4,7 @@
 #include "Engine/DataTable.h"
 #include "UObject/ConstructorHelpers.h"
 //#include "Options.h"
+#include "MoviePlayer.h"
 #include "Blueprint/UserWidget.h"
 #include "GameFramework/GameUserSettings.h"
 #include "Kismet/GameplayStatics.h"
@@ -73,9 +74,19 @@ UEHGameInstance::UEHGameInstance()
     
     if(!IsRunningDedicatedServer())
     {
+        static ConstructorHelpers::FClassFinder<UUserWidget> SeamlessLoadingWidgetAsset(TEXT("UserWidget'/Game/Blueprints/HUD/BPW_SeamlessLoading.BPW_SeamlessLoading_C'"));
+        if (SeamlessLoadingWidgetAsset.Succeeded())
+            SeamlessLoadingWidgetClass = SeamlessLoadingWidgetAsset.Class;
+
         static ConstructorHelpers::FClassFinder<UUserWidget> LoadingWidgetAsset(TEXT("UserWidget'/Game/Blueprints/HUD/BPW_Loading.BPW_Loading_C'"));
         if (LoadingWidgetAsset.Succeeded())
             LoadingWidgetClass = LoadingWidgetAsset.Class;
+
+        if(GetMoviePlayer())
+        {
+            UE_LOG(LogTemp, Warning, TEXT("MOVIEPLAYER!!!!!"));
+            GetMoviePlayer()->OnPrepareLoadingScreen().AddUObject(this, &UEHGameInstance::ShowLoadingScreen);
+        }
     }
 }
 
@@ -86,13 +97,19 @@ FStatStructure* UEHGameInstance::GetStatStructure(FName HeroName) const
         UE_LOG(LogTemp, Warning, TEXT("No Such DataTable"));
         return nullptr;
     }
-    return  CharacterStatDataTable->FindRow<FStatStructure>(HeroName, TEXT(""));
+    return CharacterStatDataTable->FindRow<FStatStructure>(HeroName, TEXT(""));
 }
 
 void UEHGameInstance::Init()
 {
     Super::Init();
     LoadSettings();
+
+    /*
+    if(!IsRunningDedicatedServer())
+    {
+        GetMoviePlayer()->OnPrepareLoadingScreen().AddUObject(this, &UEHGameInstance::ShowLoadingScreen);
+    }*/
 }
 
 void UEHGameInstance::SaveSettings()
@@ -260,20 +277,36 @@ void UEHGameInstance::ApplySettings()
 
 
 //seamless travel 때 띄울 로딩화면
-void UEHGameInstance::ShowLoadingScreen()
+void UEHGameInstance::ShowSeamlessLoadingScreen()
 {
-    if (LoadingWidgetClass)
+    if (SeamlessLoadingWidgetClass)
     {
-        LoadingWidget = Cast<UUserWidget>(CreateWidget(GetWorld(), LoadingWidgetClass));
-        if (LoadingWidget)
+        SeamlessLoadingWidget = Cast<UUserWidget>(CreateWidget(GetWorld(), SeamlessLoadingWidgetClass));
+        if (SeamlessLoadingWidget)
         {
-            LoadingWidget->AddToViewport();
+            SeamlessLoadingWidget->AddToViewport();
             GetFirstLocalPlayerController()->bShowMouseCursor = false;
         }
     }
 }
+
 //seamless travel 때 띄운 로딩화면 제거
-void UEHGameInstance::RemoveLoadingScreen()
+void UEHGameInstance::RemoveSeamlessLoadingScreen()
 {
-    if (LoadingWidget) LoadingWidget->RemoveFromParent();
+    if (SeamlessLoadingWidget) SeamlessLoadingWidget->RemoveFromParent();
+}
+
+
+void UEHGameInstance::ShowLoadingScreen()
+{
+    if (LoadingWidgetClass)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("ShowLoadingScreen()"));
+        
+        FLoadingScreenAttributes LoadingScreen;
+        LoadingScreen.bAutoCompleteWhenLoadingCompletes = true;
+        LoadingScreen.WidgetLoadingScreen = CreateWidget<UUserWidget>(this, LoadingWidgetClass)->TakeWidget();
+
+        GetMoviePlayer()->SetupLoadingScreen(LoadingScreen);
+    }
 }

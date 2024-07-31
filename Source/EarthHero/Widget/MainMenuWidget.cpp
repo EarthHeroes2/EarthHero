@@ -632,7 +632,7 @@ void UMainMenuWidget::HandleJoinSessionCompleted(FName SessionName, EOnJoinSessi
                 	
                 	GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Yellow, FString::Printf(TEXT("Connect String : %s"), *ConnectString));
 
-                	
+                	/*
                 	const UWorld* World = GetWorld();
                 	if (World)
                 	{
@@ -641,7 +641,7 @@ void UMainMenuWidget::HandleJoinSessionCompleted(FName SessionName, EOnJoinSessi
                 		{
                 			GameViewportClient->Fade(1.5, true);
                 		}
-                	}
+                	}*/
 
                 	
                     FURL DedicatedServerURL(nullptr, *ConnectString, TRAVEL_Absolute);

@@ -28,7 +28,8 @@ public class EarthHero : ModuleRules
                 "Networking",
                 "AIModule",
                 "NavigationSystem",
-                "GameplayTasks"
+                "GameplayTasks",
+                "MoviePlayer"
             }
         );
 

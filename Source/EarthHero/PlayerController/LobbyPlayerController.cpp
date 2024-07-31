@@ -297,7 +297,7 @@ void ALobbyPlayerController::Client_UpdateLobbyPasswordResult_Implementation(boo
 void ALobbyPlayerController::Client_FadeOut_Implementation()
 {
 	UEHGameInstance* EHGameinstance = Cast<UEHGameInstance>(GetGameInstance());
-	if(EHGameinstance) EHGameinstance->ShowLoadingScreen();
+	if(EHGameinstance) EHGameinstance->ShowSeamlessLoadingScreen();
 	
 	if (LobbyWidget)
 	{

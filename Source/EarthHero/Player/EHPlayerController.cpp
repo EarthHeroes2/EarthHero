@@ -316,7 +316,7 @@ void AEHPlayerController::Client_EnableInput_Implementation()
 	
 	//로딩화면 제거
 	UEHGameInstance* EHGameinstance = Cast<UEHGameInstance>(GetGameInstance());
-	if(EHGameinstance) EHGameinstance->RemoveLoadingScreen();
+	if(EHGameinstance) EHGameinstance->RemoveSeamlessLoadingScreen();
 	
 	EnableInput(this);
 }

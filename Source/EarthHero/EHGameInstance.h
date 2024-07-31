@@ -21,8 +21,13 @@ public:
 
 	int Difficulty = 1; //기본 값 1
 
+	void ShowSeamlessLoadingScreen();
+	void RemoveSeamlessLoadingScreen();
+
 	void ShowLoadingScreen();
-	void RemoveLoadingScreen();
+
+	TSubclassOf<class UUserWidget> SeamlessLoadingWidgetClass;
+	UUserWidget* SeamlessLoadingWidget;
 
 	TSubclassOf<class UUserWidget> LoadingWidgetClass;
 	UUserWidget* LoadingWidget;
