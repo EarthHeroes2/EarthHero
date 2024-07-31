@@ -363,8 +363,7 @@ void APlayingGameMode::AddPlayerDead(AEHPlayerController* DeadEHPlayerController
 		CheckAllPlayerDead();
 	}
 
-	//죽은 놈으로 처리했으니 살아있는 놈들만 관전 가능해야함
-	
+	if(DeadEHPlayerController) DeadEHPlayerController->Client_UpdateSpectatorTarget();
 }
 
 void APlayingGameMode::CheckAllPlayerDead()

@@ -5,6 +5,7 @@
 #include "GameFramework/PlayerController.h"
 #include "EHPlayerController.generated.h"
 
+class AEHCharacter;
 struct FInputActionValue;
 class UInputAction;
 class UInputMappingContext;
@@ -31,6 +32,10 @@ public:
 	void Client_AddEffect(UTexture2D* EffectImage, int ServerEffectType, float Duration);
 
 	void Dead();
+	
+
+	UFUNCTION(Client, Reliable)
+	void Client_UpdateSpectatorTarget();
 
 protected:
 	virtual void BeginPlay() override;
@@ -102,6 +107,12 @@ private:
 	FTimerHandle PlayerStateCheckTimerHandle;
 
 	TObjectPtr<ACharacter> ControlledCharacter;
+
+	int SpectatorTargetIndex;
+	AEHCharacter* CurrentSpectatorTarget;
+	TArray<AEHCharacter*> SpectatorTargets;
+
+	void ChangeSpectatorTarget(bool bPrevious);
 
 protected:
 	void Jump();

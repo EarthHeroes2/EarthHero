@@ -13,6 +13,7 @@
 #include "EarthHero/HUD/EscMenu.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/Character.h"
+#include "Kismet/GameplayStatics.h"
 
 AEHPlayerController::AEHPlayerController()
 {
@@ -58,12 +59,6 @@ void AEHPlayerController::OnUnPossess()
 
 	APlayingGameMode* PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode());
 	if (PlayingGameMode) PlayingGameMode->AddPlayerDead(this);
-}
-
-//죽은 경우
-void AEHPlayerController::Dead()
-{
-	UnPossess();
 }
 
 //클라이언트에게 빙의됨을 알려줌
@@ -395,3 +390,99 @@ void AEHPlayerController::Server_DEBUG_Levelup_Implementation()
 
 
 
+
+
+
+
+
+
+
+//죽은 경우
+void AEHPlayerController::Dead()
+{
+	UnPossess();
+}
+
+//관전할 대상들을 찾아봄
+void AEHPlayerController::Client_UpdateSpectatorTarget_Implementation()
+{
+	SpectatorTargets.Empty();
+	
+	//일단은 이 방법으로 찾겠음
+	UWorld* World = GetWorld();
+	if(World)
+	{
+		TArray<AActor*> FoundActors;
+		UGameplayStatics::GetAllActorsOfClass(World, AEHCharacter::StaticClass(), FoundActors);
+
+		UE_LOG(LogTemp, Log, TEXT("Found EHCharacter : %d"), FoundActors.Num());
+		
+		for(AActor* FoundActor : FoundActors)
+		{
+			AEHCharacter* FoundEHCharacter = Cast<AEHCharacter>(FoundActor);
+
+			//여기서 살아있는 것만 골라줘야 하지만... 아직 로직이 없음
+			if (FoundEHCharacter && FoundEHCharacter->IsPlayerControlled())
+			{
+				SpectatorTargets.Add(FoundEHCharacter);
+			}
+		}
+		UE_LOG(LogTemp, Log, TEXT("SpectatorTargets : %d"), SpectatorTargets.Num());
+	}
+
+	if(CurrentSpectatorTarget)
+	{
+		int TargetIndex = SpectatorTargets.Find(CurrentSpectatorTarget);
+
+		SpectatorTargetIndex = TargetIndex;
+
+		//혹시몰라서
+		if(TargetIndex == INDEX_NONE) CurrentSpectatorTarget = nullptr;
+	}
+	else SpectatorTargetIndex = INDEX_NONE;
+
+	ChangeSpectatorTarget(false);
+}
+
+
+void AEHPlayerController::ChangeSpectatorTarget(bool bPrevious)
+{
+	UE_LOG(LogTemp, Log, TEXT("Before Target Index : %d"), SpectatorTargetIndex);
+	
+	//처음 고름 (-1)
+	if(SpectatorTargetIndex == INDEX_NONE) SpectatorTargetIndex = 0;
+	else if(SpectatorTargets.Num() > 0)
+	{
+		if(bPrevious) //이전 (왼쪽)
+		{
+			if(SpectatorTargetIndex == 0) SpectatorTargetIndex = SpectatorTargets.Num() - 1;
+			else SpectatorTargetIndex--;
+		}
+		else //이후 (오른쪽)
+		{
+			SpectatorTargetIndex = (SpectatorTargetIndex + 1) % SpectatorTargets.Num();
+		}
+	}
+	else //무언가 잘못된 경우
+	{
+		SpectatorTargetIndex = INDEX_NONE;
+		CurrentSpectatorTarget = nullptr;
+		return;
+	}
+
+	UE_LOG(LogTemp, Log, TEXT("Changed Target Index : %d"), SpectatorTargetIndex);
+
+	if(SpectatorTargets[SpectatorTargetIndex])
+	{
+		
+		CurrentSpectatorTarget = SpectatorTargets[SpectatorTargetIndex];
+		//CurrentSpectatorTarget->
+
+		//SetViewTargetWithBlend();
+	}
+	else //무언가 잘못된 경우
+	{
+		SpectatorTargetIndex = INDEX_NONE;
+		CurrentSpectatorTarget = nullptr;
+	}
+}
