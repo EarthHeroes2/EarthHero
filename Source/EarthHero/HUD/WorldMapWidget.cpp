@@ -14,26 +14,44 @@ void UWorldMapWidget::NativeConstruct()
     ForceFieldAlignments.Init(FVector2D(0.5f, 0.5f), 4);
 }
 
-FVector2D UWorldMapWidget::ConvertWorldToMapPosition(const FVector2D& WorldPosition) const
+FVector2D UWorldMapWidget::ConvertPlayerWorldToMapPosition(const FVector2D& WorldPosition) const
 {
     // Image Map dimensions
     float MapWidth = 689.5f;
     float MapHeight = 706.5f;
 
-    // World map boundaries
-    float WorldMinX = 0.0f;
-    float WorldMaxX = 403200.0f;
-    float WorldMinY = -403200.0f;
-    float WorldMaxY = 0.0f;
+    // World map size and center (in world space)
+    float MapLength = 403200.0f;
+    float MapCenterX = 201600.0f;
+    float MapCenterY = -201600.0f;
 
-    // Calculate the relative position as a percentage of the world map
-    float PercentX = (WorldPosition.X - WorldMinX) / (WorldMaxX - WorldMinX);
-    float PercentY = (WorldPosition.Y - WorldMinY) / (WorldMaxY - WorldMinY);
+    // Adjusting the calculations to accommodate the new map center
+    float MapX = (WorldPosition.Y - MapCenterY + MapLength / 2.0f) / MapLength * MapWidth - (MapWidth / 2.0f);
+    float MapY = (MapHeight / 2.0f) - (WorldPosition.X - MapCenterX + MapLength / 2.0f) / MapLength * MapHeight;
 
-    // Convert the percentages to image coordinates
-    float MapX = PercentX * MapWidth - (MapWidth / 2.0f);
-    float MapY = (1.0f - PercentY) * MapHeight - (MapHeight / 2.0f);
+    // Apply manual offsets
+    MapX -= 12.0f;
+    MapY -= 16.0f;
 
+    return FVector2D(MapX, MapY);
+}
+
+
+FVector2D UWorldMapWidget::ConvertForceFieldWorldToMapPosition(const FVector2D& WorldPosition) const
+{
+    // Image Map dimensions
+    float MapWidth = 689.5f;
+    float MapHeight = 706.5f;
+
+    // World map size and center (in world space)
+    float MapLength = 403200.0f;
+    float MapCenterX = 201600.0f;
+    float MapCenterY = -201600.0f;
+
+    // Adjusting the calculations to accommodate the new map center
+    float MapX = (WorldPosition.Y - MapCenterY + MapLength / 2.0f) / MapLength * MapWidth - (MapWidth / 2.0f);
+    float MapY = (MapHeight / 2.0f) - (WorldPosition.X - MapCenterX + MapLength / 2.0f) / MapLength * MapHeight;
+    
     return FVector2D(MapX, MapY);
 }
 
@@ -43,7 +61,7 @@ void UWorldMapWidget::SetPlayerPosition(int32 PlayerIndex, const FVector2D& Posi
 
     if (PlayerImages[PlayerIndex])
     {
-        FVector2D MapPosition = ConvertWorldToMapPosition(Position);
+        FVector2D MapPosition = ConvertPlayerWorldToMapPosition(Position);
         UCanvasPanelSlot* CanvasSlot = UWidgetLayoutLibrary::SlotAsCanvasSlot(PlayerImages[PlayerIndex]);
         if (CanvasSlot)
         {
@@ -87,7 +105,7 @@ void UWorldMapWidget::UpdateForceField(int32 ForceFieldIndex, float CurrentTime,
 
 void UWorldMapWidget::SetForceFieldAlignment(int32 ForceFieldIndex, const FVector2D& WorldPosition)
 {
-    FVector2D MapPosition = ConvertWorldToMapPosition(WorldPosition);
+    FVector2D MapPosition = ConvertForceFieldWorldToMapPosition(WorldPosition);
     ForceFieldAlignments[ForceFieldIndex] = MapPosition;
 
     UImage* ForceFieldImages[4] = { ForceField1Image, ForceField2Image, ForceField3Image, ForceField4Image };
