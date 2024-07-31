@@ -20,6 +20,12 @@ public:
 	FString ServerPortNumber;
 
 	int Difficulty = 1; //기본 값 1
+
+	void ShowLoadingScreen();
+	void RemoveLoadingScreen();
+
+	TSubclassOf<class UUserWidget> LoadingWidgetClass;
+	UUserWidget* LoadingWidget;
 	
 protected:
 	UEHGameInstance();

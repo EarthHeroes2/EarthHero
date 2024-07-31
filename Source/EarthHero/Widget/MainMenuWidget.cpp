@@ -80,7 +80,7 @@ bool UMainMenuWidget::Initialize()
 			}
 			else
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Failed to get Steam ID."));
+				GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, TEXT("Failed to get Steam ID."));
 				UE_LOG(LogTemp, Error, TEXT("Failed to get Steam ID."));
 			}
 		}

@@ -4,11 +4,12 @@
 #include "Engine/DataTable.h"
 #include "UObject/ConstructorHelpers.h"
 //#include "Options.h"
-#include "Character/EHCharacter.h"
+#include "Blueprint/UserWidget.h"
 #include "GameFramework/GameUserSettings.h"
 #include "Kismet/GameplayStatics.h"
 #include "Stat/Effect/EffectBase.h"
 #include "Stat/Structure/EffectStructure.h"
+#include "Widget/LobbyWidget.h"
 
 constexpr int32 DefaultResolutionWidth = 1920;
 constexpr int32 DefaultResolutionHeight = 1080;
@@ -20,6 +21,7 @@ constexpr int32 DefaultAntiAliasing = 2; // Medium
 constexpr int32 DefaultPostProcessing = 2; // Medium
 constexpr float DefaultVolume = 0.5f;
 constexpr float DefaultMouseSensitivity = 0.5f;
+
 
 UEHGameInstance::UEHGameInstance()
 {
@@ -67,6 +69,13 @@ UEHGameInstance::UEHGameInstance()
     if (SFXSoundClassFinder.Succeeded())
     {
         SFXVolumeSoundClass = SFXSoundClassFinder.Object;
+    }
+    
+    if(!IsRunningDedicatedServer())
+    {
+        static ConstructorHelpers::FClassFinder<UUserWidget> LoadingWidgetAsset(TEXT("UserWidget'/Game/Blueprints/HUD/BPW_Loading.BPW_Loading_C'"));
+        if (LoadingWidgetAsset.Succeeded())
+            LoadingWidgetClass = LoadingWidgetAsset.Class;
     }
 }
 
@@ -247,4 +256,24 @@ void UEHGameInstance::ApplySettings()
         GEngine->GetMainAudioDevice()->SetSoundMixClassOverride(MainSoundMix, SFXVolumeSoundClass, SFXVolume, 1.0f, 0.0f, true);
         UGameplayStatics::PushSoundMixModifier(this, MainSoundMix);
     }
+}
+
+
+//seamless travel 때 띄울 로딩화면
+void UEHGameInstance::ShowLoadingScreen()
+{
+    if (LoadingWidgetClass)
+    {
+        LoadingWidget = Cast<UUserWidget>(CreateWidget(GetWorld(), LoadingWidgetClass));
+        if (LoadingWidget)
+        {
+            LoadingWidget->AddToViewport();
+            GetFirstLocalPlayerController()->bShowMouseCursor = false;
+        }
+    }
+}
+//seamless travel 때 띄운 로딩화면 제거
+void UEHGameInstance::RemoveLoadingScreen()
+{
+    if (LoadingWidget) LoadingWidget->RemoveFromParent();
 }

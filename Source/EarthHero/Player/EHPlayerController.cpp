@@ -306,12 +306,18 @@ void AEHPlayerController::SelectHU_3()
 //클라이언트들이 전부 완료가 되면 해야할 것들
 void AEHPlayerController::Client_EnableInput_Implementation()
 {
+	//페이드 인
 	const UWorld* World = GetWorld();
 	if (World)
 	{
 		UCustomGameViewportClient* GameViewportClient = Cast<UCustomGameViewportClient>(World->GetGameViewport());
 		if (GameViewportClient) GameViewportClient->Fade(1.5, false);
 	}
+	
+	//로딩화면 제거
+	UEHGameInstance* EHGameinstance = Cast<UEHGameInstance>(GetGameInstance());
+	if(EHGameinstance) EHGameinstance->RemoveLoadingScreen();
+	
 	EnableInput(this);
 }
 

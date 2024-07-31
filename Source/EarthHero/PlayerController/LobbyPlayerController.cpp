@@ -6,8 +6,6 @@
 #include "GameFramework/PlayerState.h"
 #include <EarthHero/GameSession/LobbyGameSession.h>
 #include <EarthHero/GameMode/LobbyGameMode.h>
-
-#include "EarthHero/CustomGameViewportClient.h"
 #include "EarthHero/EHGameInstance.h"
 #include "EarthHero/Character/EHCharacter.h"
 #include "EarthHero/PlayerState/LobbyPlayerState.h"
@@ -19,9 +17,7 @@ ALobbyPlayerController::ALobbyPlayerController()
 	{
 		static ConstructorHelpers::FClassFinder<UUserWidget> LobbyWidgetAsset(TEXT("UserWidget'/Game/Blueprints/Menu/WBP_Lobby.WBP_Lobby_C'"));
 		if (LobbyWidgetAsset.Succeeded())
-		{
 			LobbyWidgetClass = LobbyWidgetAsset.Class;
-		}
 	}
 }
 
@@ -300,18 +296,15 @@ void ALobbyPlayerController::Client_UpdateLobbyPasswordResult_Implementation(boo
 
 void ALobbyPlayerController::Client_FadeOut_Implementation()
 {
-	const UWorld* World = GetWorld();
-	if (World)
+	UEHGameInstance* EHGameinstance = Cast<UEHGameInstance>(GetGameInstance());
+	if(EHGameinstance) EHGameinstance->ShowLoadingScreen();
+	
+	if (LobbyWidget)
 	{
-		UCustomGameViewportClient* GameViewportClient = Cast<UCustomGameViewportClient>(World->GetGameViewport());
-		if (GameViewportClient) GameViewportClient->Fade(1.5, true);
+		GetWorldTimerManager().ClearTimer(LobbyWidget->ReadFriendsListTimerHandle);
+		LobbyWidget->RemoveFromParent();
 	}
 }
-
-
-
-
-
 
 void ALobbyPlayerController::Client_SendToDebugMessage_Implementation(const FString& Message)
 {
@@ -319,17 +312,7 @@ void ALobbyPlayerController::Client_SendToDebugMessage_Implementation(const FStr
 		GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Yellow, Message);
 }
 
-
-
-
-
-
 void ALobbyPlayerController::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
-	if (LobbyWidget)
-	{
-		GetWorldTimerManager().ClearTimer(LobbyWidget->ReadFriendsListTimerHandle);
-		LobbyWidget->RemoveFromParent();
-	}
 	Super::EndPlay(EndPlayReason);
 }

@@ -38,8 +38,6 @@ void UCustomGameViewportClient::DrawScreenFade(UCanvas* Canvas)
 			const float Time = World_->GetTimeSeconds();
 			const float Alpha = FMath::Clamp((Time - FadeStartTime) / FadeDuration, 0.f, 1.f);
 			
-			//UE_LOG(LogTemp, Log, TEXT("Time = %f"), Time);
-
 			//새 맵으로 이동한 시점(seamless travel 아닐 때!!!!)이라면 자동으로 페이드 인
 			if(Time == 0.f) Fade(1.5f, false);
 			
@@ -53,17 +51,6 @@ void UCustomGameViewportClient::DrawScreenFade(UCanvas* Canvas)
 				Canvas->DrawTile(Canvas->DefaultTexture, 0, 0, Canvas->ClipX, Canvas->ClipY, 0, 0, Canvas->DefaultTexture->GetSizeX(), Canvas->DefaultTexture->GetSizeY());
 				Canvas->DrawColor = OldColor;
 			}
-		}
-		else
-		{
-			UE_LOG(LogTemp, Log, TEXT("No World"));
-
-			FColor OldColor = Canvas->DrawColor;
-			FLinearColor FadeColor = FLinearColor::Black;
-			FadeColor.A = bToBlack ? 1 : 0;
-			Canvas->DrawColor = FadeColor.ToFColor(true);
-			Canvas->DrawTile(Canvas->DefaultTexture, 0, 0, Canvas->ClipX, Canvas->ClipY, 0, 0, Canvas->DefaultTexture->GetSizeX(), Canvas->DefaultTexture->GetSizeY());
-			Canvas->DrawColor = OldColor;
 		}
 	}
 }
