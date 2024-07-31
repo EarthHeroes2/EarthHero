@@ -10,6 +10,8 @@
 #include "EarthHero/Player/EHPlayerState.h"
 #include "EarthHero/ForceField/DifficultyZone.h"
 #include "DrawDebugHelpers.h"
+#include "SpectatorCameraActor.h"
+#include "GameFramework/SpringArmComponent.h"
 
 AEHCharacter::AEHCharacter()
 {
@@ -25,6 +27,15 @@ AEHCharacter::AEHCharacter()
 
     FirstPersonHand = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FPS Hand"));
     FirstPersonHand->SetupAttachment(FPSCamera);
+
+    //박정익 - 관전용 카메라 (테스트용)
+    SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
+    SpringArm->SetupAttachment(RootComponent);
+    SpringArm->bUsePawnControlRotation = true;
+
+    SpectatorTarget = CreateDefaultSubobject<UChildActorComponent>(TEXT("SpectatorTarget"));
+    SpectatorTarget->SetupAttachment(SpringArm);
+    SpectatorTarget->SetChildActorClass(ASpectatorCameraActor::StaticClass());
 
     WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Weapon"));
     WeaponMesh->SetupAttachment(FirstPersonHand, FName("FPS_RightHand"));

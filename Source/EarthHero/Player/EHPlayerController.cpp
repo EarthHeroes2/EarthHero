@@ -13,6 +13,7 @@
 #include "EarthHero/HUD/EscMenu.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 AEHPlayerController::AEHPlayerController()
@@ -474,11 +475,9 @@ void AEHPlayerController::ChangeSpectatorTarget(bool bPrevious)
 
 	if(SpectatorTargets[SpectatorTargetIndex])
 	{
-		
 		CurrentSpectatorTarget = SpectatorTargets[SpectatorTargetIndex];
-		//CurrentSpectatorTarget->
-
-		//SetViewTargetWithBlend();
+		
+		SetViewTargetWithBlend(CurrentSpectatorTarget->SpectatorTarget->GetChildActor(), 0.5f, VTBlend_Linear, 0.f);
 	}
 	else //무언가 잘못된 경우
 	{

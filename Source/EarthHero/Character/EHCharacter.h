@@ -44,6 +44,11 @@ public:
 
     float AverageDifficulty = 1.0f;
 
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true), Category = "Spectator")
+    USpringArmComponent* SpringArm;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true), Category = "Spectator")
+    UChildActorComponent* SpectatorTarget;
+
 protected:
     virtual void BeginPlay() override;
 
