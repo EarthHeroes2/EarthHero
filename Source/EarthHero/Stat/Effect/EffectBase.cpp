@@ -4,9 +4,7 @@
 #include "EarthHero/Stat/Effect/EffectBase.h"
 
 #include "EarthHero/Character/EHCharacter.h"
-#include "EarthHero/Enum/Enums.h"
 #include "EarthHero/GameMode/PlayingGameMode.h"
-#include "EarthHero/HUD/InGameHUD.h"
 #include "EarthHero/Player/EHPlayerController.h"
 #include "EarthHero/Stat/Structure/EffectStructure.h"
 
@@ -101,21 +99,18 @@ void AEffectBase::ApplyEffect(AActor* InTargetActor, float InEffectValue, float 
 			{
 				if (AEHPlayerController *PlayerController = Cast<AEHPlayerController>(Hero->GetController()))
 				{
-					if (AEHPlayerController *PlayerController = Cast<AEHPlayerController>(Hero->GetController()))
+					if (EffectArray.Num() < EffectType)
 					{
-						if (EffectArray.Num() < EffectType)
-						{
-							UE_LOG(LogClass, Error, TEXT("AEffectBase::EffectArray has not initialized"));
-						}
-						else
-						{
-							PlayerController->Client_AddEffect(EffectArray[EffectType]->EffectImage, EffectArray[EffectType]->EffectType, InDuration);
-						}
+						UE_LOG(LogClass, Error, TEXT("AEffectBase::EffectArray has not initialized"));
 					}
-					if (APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode()))
+					else
 					{
-						PlayingGameMode->UpdatePlayerStateImage();
+						PlayerController->Client_AddEffect(EffectArray[EffectType]->EffectImage, EffectArray[EffectType]->EffectType, InDuration);
 					}
+				}
+				if (APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode()))
+				{
+					PlayingGameMode->UpdatePlayerStateImage();
 				}
 			}
 		}
