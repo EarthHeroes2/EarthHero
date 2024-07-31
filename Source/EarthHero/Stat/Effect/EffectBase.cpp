@@ -4,6 +4,7 @@
 #include "EarthHero/Stat/Effect/EffectBase.h"
 
 #include "EarthHero/Character/EHCharacter.h"
+#include "EarthHero/Enum/Enums.h"
 #include "EarthHero/HUD/InGameHUD.h"
 #include "EarthHero/Player/EHPlayerController.h"
 #include "EarthHero/Stat/Structure/EffectStructure.h"
@@ -68,7 +69,15 @@ void AEffectBase::ApplyEffect(AActor* InTargetActor, float InEffectValue, float 
 					//본인 HUD에 띄우고
 					if (AEHPlayerController *PlayerController = Cast<AEHPlayerController>(Hero->GetController()))
 					{
-						PlayerController->Client_AddEffect(EffectArray[EffectType]->EffectImage, EffectArray[EffectType]->EffectType, InDuration);
+						if (EffectArray.Num() < EffectType)
+						{
+							UE_LOG(LogClass, Error, TEXT("AEffectBase::EffectArray has not initialized = %d"), EffectArray.Num());
+						}
+						else
+						{
+							PlayerController->HUD->AddStatusImage(EffectArray[EffectType]->EffectImage, EffectArray[EffectType]->EffectType, InDuration);
+							PlayerController->Client_AddEffect(EffectArray[EffectType]->EffectImage, EffectArray[EffectType]->EffectType, InDuration);
+						}
 					}
 				}
 				bRefresh = true;
@@ -88,7 +97,15 @@ void AEffectBase::ApplyEffect(AActor* InTargetActor, float InEffectValue, float 
 			{
 				if (AEHPlayerController *PlayerController = Cast<AEHPlayerController>(Hero->GetController()))
 				{
-					PlayerController->Client_AddEffect(EffectArray[EffectType]->EffectImage, EffectArray[EffectType]->EffectType, InDuration);
+					if (EffectArray.Num() < EffectType)
+					{
+						UE_LOG(LogClass, Error, TEXT("AEffectBase::EffectArray has not initialized"));
+					}
+					else
+					{
+						PlayerController->HUD->AddStatusImage(EffectArray[EffectType]->EffectImage, EffectArray[EffectType]->EffectType, InDuration);
+						PlayerController->Client_AddEffect(EffectArray[EffectType]->EffectImage, EffectArray[EffectType]->EffectType, InDuration);
+					}
 				}
 			}
 		}
@@ -108,7 +125,15 @@ void AEffectBase::ApplyEffect(AActor* InTargetActor, float InEffectValue, float 
 		{
 			if (AEHPlayerController *PlayerController = Cast<AEHPlayerController>(Hero->GetController()))
 			{
-				PlayerController->Client_AddEffect(EffectArray[EffectType]->EffectImage, EffectArray[EffectType]->EffectType, InDuration);
+				if (EffectArray.Num() < EffectType)
+				{
+					UE_LOG(LogClass, Error, TEXT("AEffectBase::EffectArray has not initialized"));
+				}
+				else
+				{
+					PlayerController->HUD->AddStatusImage(EffectArray[EffectType]->EffectImage, EffectArray[EffectType]->EffectType, InDuration);
+					PlayerController->Client_AddEffect(EffectArray[EffectType]->EffectImage, EffectArray[EffectType]->EffectType, InDuration);
+				}
 			}
 		}
 	}

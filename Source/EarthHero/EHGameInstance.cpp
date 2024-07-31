@@ -37,16 +37,6 @@ UEHGameInstance::UEHGameInstance()
         if (DT_EffectTable.Succeeded())
         {
             EffectTable = DT_EffectTable.Object;
-            TArray<FEffectStructure*> AllEffects;
-            EffectTable->GetAllRows(TEXT(""), AllEffects);
-        
-            for (FEffectStructure* Effect : AllEffects)
-            {
-                if (Effect)
-                {
-                    AEffectBase::EffectArray.Add(Effect);
-                }
-            }
         }
     
         static ConstructorHelpers::FObjectFinder<USoundMix> SoundMixFinder(TEXT("/Game/Sounds/MainSoundMix.MainSoundMix"));
@@ -95,10 +85,29 @@ FStatStructure* UEHGameInstance::GetStatStructure(FName HeroName) const
     return CharacterStatDataTable->FindRow<FStatStructure>(HeroName, TEXT(""));
 }
 
+void UEHGameInstance::SetEffectArray()
+{
+    TArray<FEffectStructure*> AllEffects;
+    EffectTable->GetAllRows(TEXT(""), AllEffects);
+        
+    for (FEffectStructure* Effect : AllEffects)
+    {
+        if (Effect)
+        {
+            AEffectBase::EffectArray.Add(Effect);
+        }
+    }
+    UE_LOG(LogClass, Warning, TEXT("GameInstance : EffectArrayNums = %d"), AEffectBase::EffectArray.Num());
+}
+
 void UEHGameInstance::Init()
 {
     Super::Init();
     if(!IsRunningDedicatedServer()) LoadSettings();
+    else
+    {
+        SetEffectArray();
+    }
 }
 
 void UEHGameInstance::SaveSettings()
