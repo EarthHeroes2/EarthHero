@@ -306,7 +306,9 @@ void UEHGameInstance::ShowLoadingScreen()
         FLoadingScreenAttributes LoadingScreen;
         LoadingScreen.bAutoCompleteWhenLoadingCompletes = true;
         LoadingScreen.WidgetLoadingScreen = CreateWidget<UUserWidget>(this, LoadingWidgetClass)->TakeWidget();
+        LoadingScreen.MinimumLoadingScreenDisplayTime = 1.5f;
 
         GetMoviePlayer()->SetupLoadingScreen(LoadingScreen);
+        GetMoviePlayer()->PlayMovie();
     }
 }
