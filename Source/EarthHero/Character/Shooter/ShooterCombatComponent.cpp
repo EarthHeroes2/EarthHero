@@ -99,10 +99,10 @@ void UShooterCombatComponent::NetMulticast_Fire_Implementation(FVector HitLocati
 	if(FireParticle && BulletHitParticle)
 	{
 		FVector MuzzleLocation = Shooter->GetEquippedWeapon()->GetSocketLocation(FName("FireSocket"));
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), FireParticle, MuzzleLocation);
+		UGameplayStatics::SpawnEmitterAttached(FireParticle, Shooter->GetEquippedWeapon(), TEXT("FireSocket"), FVector::Zero(), FRotator::ZeroRotator, FVector(0.35f));
 		if(HitLocation != FVector::Zero())
 		{
-			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), BulletHitParticle,HitLocation);
+			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), BulletHitParticle,HitLocation, FRotator::ZeroRotator, FVector(2.f));
 		}
 	}
 

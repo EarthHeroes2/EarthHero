@@ -71,7 +71,7 @@ void AEHPlayerState::BeginPlay()
 	Super::BeginPlay();
 	
 	//패키징 시 주석 처리해야 함
-	PlayerClass = Warrior; ////
+	PlayerClass = Shooter; ////
 	IsCopyPropertiesEnd = true; ////
 	
 	GetWorldTimerManager().SetTimer(SetStatComponentTimerHandle, this, &AEHPlayerState::SetStatComponent, 0.5f,true);
