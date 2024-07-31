@@ -17,6 +17,7 @@
 #include "EarthHero/GameMode/PlayingGameMode.h"
 #include "EarthHero/HUD/InGameHUD.h"
 #include "EarthHero/HUD/TabHUDWidget.h"
+#include "EarthHero/Player/EHPlayerController.h"
 
 UStatComponent::UStatComponent()
 {
@@ -103,7 +104,16 @@ float UStatComponent::DamageTaken(float InDamage, TSubclassOf<UDamageType> Damag
 		APlayingGameMode *GameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode());
 		if (GameMode)
 		{
-			GameMode->AddPlayerDead();
+			AActor* Actor = GetOwner();
+			if(Actor)
+			{
+				AController* Controller = Actor->GetInstigatorController();
+				if(Controller)
+				{
+					AEHPlayerController* EHPlayerController = Cast<AEHPlayerController>(Controller);
+					if(EHPlayerController) GameMode->AddPlayerDead(EHPlayerController);
+				}
+			}
 		}
 		GEngine->AddOnScreenDebugMessage(-1, 1233223.f, FColor::Green, Message);
 	}

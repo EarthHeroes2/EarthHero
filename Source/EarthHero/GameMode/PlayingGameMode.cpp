@@ -349,9 +349,13 @@ void APlayingGameMode::SendChatMessage(const FText& Text)
 	}
 }
 
-void APlayingGameMode::AddPlayerDead()
+void APlayingGameMode::AddPlayerDead(AEHPlayerController* DeadEHPlayerController)
 {
+	int PlayerNumber = EHPlayerControllers.Find(DeadEHPlayerController);
+	
+	
 	NumDeadPlayers++;
+	
 	CheckAllPlayerDead();
 }
 

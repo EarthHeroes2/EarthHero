@@ -57,7 +57,7 @@ public:
 
 	void PlayerLogOut(const AEHPlayerController* ExitingEHPlayerController);
 	void SendChatMessage(const FText& Text);
-	void AddPlayerDead();
+	void AddPlayerDead(AEHPlayerController* DeadEHPlayerController);
 	void CheckAllPlayerDead();
 	void BossDead();
 	void UpdateGameStateHealths();

@@ -338,8 +338,6 @@ void AEHPlayerController::Client_SendChatMessage_Implementation(const FText& Tex
 	}
 }
 
-
-
 void AEHPlayerController::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	if (HUD) HUD->RemoveFromParent();
@@ -376,3 +374,6 @@ void AEHPlayerController::Server_DEBUG_Levelup_Implementation()
 		EHPlayerState->GetStatComponent()->UpdateExp(100);
 	}
 }
+
+
+
