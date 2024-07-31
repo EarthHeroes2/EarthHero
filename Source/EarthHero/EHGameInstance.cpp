@@ -25,20 +25,20 @@ constexpr float DefaultMouseSensitivity = 0.5f;
 
 UEHGameInstance::UEHGameInstance()
 {
+    static ConstructorHelpers::FObjectFinder<UDataTable> DT_GameTable(TEXT("/Game/Data/Character/DT_CharacterStat.DT_CharacterStat"));
+    if (DT_GameTable.Succeeded())
+    {
+        CharacterStatDataTable = DT_GameTable.Object;
+    }
+
+    static ConstructorHelpers::FObjectFinder<UDataTable> DT_EffectTable(TEXT("/Game/Data/Effect/DT_EffectTable.DT_EffectTable"));
+    if (DT_EffectTable.Succeeded())
+    {
+        EffectTable = DT_EffectTable.Object;
+    }
+    
     if(!IsRunningDedicatedServer())
     {
-        static ConstructorHelpers::FObjectFinder<UDataTable> DT_GameTable(TEXT("/Game/Data/Character/DT_CharacterStat.DT_CharacterStat"));
-        if (DT_GameTable.Succeeded())
-        {
-            CharacterStatDataTable = DT_GameTable.Object;
-        }
-
-        static ConstructorHelpers::FObjectFinder<UDataTable> DT_EffectTable(TEXT("/Game/Data/Effect/DT_EffectTable.DT_EffectTable"));
-        if (DT_EffectTable.Succeeded())
-        {
-            EffectTable = DT_EffectTable.Object;
-        }
-    
         static ConstructorHelpers::FObjectFinder<USoundMix> SoundMixFinder(TEXT("/Game/Sounds/MainSoundMix.MainSoundMix"));
         if (SoundMixFinder.Succeeded())
         {
