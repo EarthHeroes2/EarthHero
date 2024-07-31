@@ -251,6 +251,7 @@ void APlayingGameState::UpdatePlayerEffectState(const TArray<FEffectStatus> Effe
 }
 void APlayingGameState::OnRep_GameStateEffectStatuses() const
 {
+	UE_LOG(LogClass, Warning, TEXT("GameState : OnRep_GameStateEffectStatuses"));
 	if(EHPlayerController && EHPlayerController->HUD)
 	{
 		//UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateActorLocations"));

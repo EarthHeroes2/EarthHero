@@ -204,6 +204,7 @@ void UInGameHUD::AddChatMessage(const FText& Text)
 
 void UInGameHUD::UpdatePlayerEffectState(const TArray<FEffectStatus> EffectStatuses)
 {
+	UE_LOG(LogClass, Warning, TEXT("InGameHUD : EffectStatuses num : %d"), EffectStatuses.Num());
 	for(int i = 0; i < EffectStatuses.Num(); i++)
 	{
 		//InGamePlayerInfoArray[i] 에 상태 관리 함수 만들어서 업데이트
