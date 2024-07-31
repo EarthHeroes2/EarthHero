@@ -18,6 +18,7 @@
 #include "EarthHero/HUD/InGameHUD.h"
 #include "EarthHero/HUD/TabHUDWidget.h"
 #include "EarthHero/Player/EHPlayerController.h"
+#include "GameFramework/PawnMovementComponent.h"
 
 UStatComponent::UStatComponent()
 {
@@ -101,18 +102,23 @@ float UStatComponent::DamageTaken(float InDamage, TSubclassOf<UDamageType> Damag
 	if (HeroStat.Health <= 0.f)
 	{
 		FString Message = FString::Printf(TEXT("Dead"));
-		APlayingGameMode *GameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode());
-		if (GameMode)
+		
+		AActor* Actor = GetOwner();
+		if(Actor)
 		{
-			AActor* Actor = GetOwner();
-			if(Actor)
+			//즉시 행동을 멈추고
+			AEHCharacter* EHCharacter = Cast<AEHCharacter>(Actor);
+			if(EHCharacter)
 			{
-				AController* Controller = Actor->GetInstigatorController();
-				if(Controller)
-				{
-					AEHPlayerController* EHPlayerController = Cast<AEHPlayerController>(Controller);
-					if(EHPlayerController) GameMode->AddPlayerDead(EHPlayerController);
-				}
+				UPawnMovementComponent* MovementComponent = EHCharacter->GetMovementComponent();
+				if(MovementComponent) MovementComponent->StopMovementImmediately();
+			}
+			//죽음 처리 시작
+			AController* Controller = Actor->GetInstigatorController();
+			if(Controller)
+			{
+				AEHPlayerController* EHPlayerController = Cast<AEHPlayerController>(Controller);
+				if(EHPlayerController) EHPlayerController->Dead();
 			}
 		}
 		GEngine->AddOnScreenDebugMessage(-1, 1233223.f, FColor::Green, Message);

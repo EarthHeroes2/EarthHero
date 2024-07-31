@@ -30,10 +30,13 @@ public:
 	UFUNCTION(Client, Reliable)
 	void Client_AddEffect(UTexture2D* EffectImage, int ServerEffectType, float Duration);
 
+	void Dead();
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
 	virtual void OnPossess(APawn* InPawn) override;
+	virtual void OnUnPossess() override;
 
 	UFUNCTION(Client, Reliable)
 	void ClientPossess();

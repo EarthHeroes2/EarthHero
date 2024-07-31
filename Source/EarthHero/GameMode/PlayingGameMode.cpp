@@ -248,6 +248,7 @@ void APlayingGameMode::InitSeamlessTravelPlayer(AController* NewController) //�
 			if (PlayingGameSession)
 			{
 				EHPlayerControllers.Add(NewEHPlayerController);
+				bPlayerAlives.Add(true);
 				//세션 속 모든 플레이어가 레벨에 들어왔다면 레벨 초기 작업 시작
 				if(EHPlayerControllers.Num() == PlayingGameSession->GetNumPlayersInSession())
 				{
@@ -315,10 +316,18 @@ void APlayingGameMode::PlayerLogOut(const AEHPlayerController* ConstExitingEHPla
 	if(ExitingEHPlayerController)
 	{
 		UE_LOG(LogTemp, Log, TEXT("Remove exit player information..."));
-	
-		int PlayerIndex = EHPlayerControllers.IndexOfByKey(ExitingEHPlayerController);
+
+		//이거 indexofbykey맞아?
+		int PlayerIndex = EHPlayerControllers.Find(ExitingEHPlayerController);
 		
-		if (PlayerIndex != INDEX_NONE) EHPlayerControllers.RemoveAt(PlayerIndex);
+		if (PlayerIndex != INDEX_NONE)
+		{
+			if(bPlayerAlives[PlayerIndex] == true) CheckAllPlayerDead();
+			else NumDeadPlayers--;
+			
+			EHPlayerControllers.RemoveAt(PlayerIndex);
+			bPlayerAlives.RemoveAt(PlayerIndex);
+		}
 
 		//이러면 나간 자리는 초기화 해줘야겠네
 		UpdateGameStateNames();
@@ -326,11 +335,6 @@ void APlayingGameMode::PlayerLogOut(const AEHPlayerController* ConstExitingEHPla
 		UpdateGameStateExps();
 		UpdateGameStateLevels();
 		UpdateGameStateHealths();
-
-		/*
-		if(이미 죽은 플레이어) NumDeadPlayers--;
-		CheckAllPlayerDead();
-		*/
 	}
 }
 
@@ -351,12 +355,16 @@ void APlayingGameMode::SendChatMessage(const FText& Text)
 
 void APlayingGameMode::AddPlayerDead(AEHPlayerController* DeadEHPlayerController)
 {
-	int PlayerNumber = EHPlayerControllers.Find(DeadEHPlayerController);
+	int PlayerIndex = EHPlayerControllers.Find(DeadEHPlayerController);
+	if (PlayerIndex != INDEX_NONE)
+	{
+		bPlayerAlives[PlayerIndex] = false;
+		NumDeadPlayers++;
+		CheckAllPlayerDead();
+	}
+
+	//죽은 놈으로 처리했으니 살아있는 놈들만 관전 가능해야함
 	
-	
-	NumDeadPlayers++;
-	
-	CheckAllPlayerDead();
 }
 
 void APlayingGameMode::CheckAllPlayerDead()

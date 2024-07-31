@@ -23,6 +23,7 @@ class EARTHHERO_API APlayingGameMode : public AGameModeBase
 	void GameTimerCount();
 
 	TArray<AEHPlayerController*> EHPlayerControllers;
+	TArray<bool> bPlayerAlives;
 
 	int NumPlayerControllerReady = 0;
 	int NumDeadPlayers = 0;

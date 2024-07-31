@@ -52,6 +52,21 @@ void AEHPlayerController::OnPossess(APawn* InPawn)
 	ClientPossess();
 }
 
+//빙의 풀림 (죽은 경우)
+void AEHPlayerController::OnUnPossess()
+{
+	Super::OnUnPossess();
+
+	APlayingGameMode* PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode());
+	if (PlayingGameMode) PlayingGameMode->AddPlayerDead(this);
+}
+
+//죽은 경우
+void AEHPlayerController::Dead()
+{
+	UnPossess();
+}
+
 //클라이언트에게 빙의됨을 알려줌
 void AEHPlayerController::ClientPossess_Implementation()
 {
