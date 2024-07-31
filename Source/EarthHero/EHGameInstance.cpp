@@ -80,12 +80,8 @@ UEHGameInstance::UEHGameInstance()
         static ConstructorHelpers::FClassFinder<UUserWidget> LoadingWidgetAsset(TEXT("UserWidget'/Game/Blueprints/HUD/BPW_Loading.BPW_Loading_C'"));
         if (LoadingWidgetAsset.Succeeded())
             LoadingWidgetClass = LoadingWidgetAsset.Class;
-
-        if(GetMoviePlayer())
-        {
-            UE_LOG(LogTemp, Warning, TEXT("MOVIEPLAYER!!!!!"));
-            GetMoviePlayer()->OnPrepareLoadingScreen().AddUObject(this, &UEHGameInstance::ShowLoadingScreen);
-        }
+        
+        GetMoviePlayer()->OnPrepareLoadingScreen().AddUObject(this, &UEHGameInstance::ShowLoadingScreen);
     }
 }
 
@@ -289,7 +285,7 @@ void UEHGameInstance::RemoveSeamlessLoadingScreen()
     if (SeamlessLoadingWidget) SeamlessLoadingWidget->RemoveFromParent();
 }
 
-
+//seamless가 아닌 이동마다 실행됨
 void UEHGameInstance::ShowLoadingScreen()
 {
     if (LoadingWidgetClass)
@@ -297,7 +293,7 @@ void UEHGameInstance::ShowLoadingScreen()
         FLoadingScreenAttributes LoadingScreen;
         LoadingScreen.bAutoCompleteWhenLoadingCompletes = true;
         LoadingScreen.WidgetLoadingScreen = CreateWidget<UUserWidget>(this, LoadingWidgetClass)->TakeWidget();
-        LoadingScreen.MinimumLoadingScreenDisplayTime = 1.5f;
+        LoadingScreen.MinimumLoadingScreenDisplayTime = 1.5f; //최소 1.5초는 실행됨
 
         GetMoviePlayer()->SetupLoadingScreen(LoadingScreen);
         GetMoviePlayer()->PlayMovie();

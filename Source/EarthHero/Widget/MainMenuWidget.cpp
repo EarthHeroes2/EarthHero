@@ -15,7 +15,6 @@
 #include "Components/ScrollBox.h"
 #include "../Socket/SocketClient.h"
 #include "Components/TextBlock.h"
-#include "EarthHero/CustomGameViewportClient.h"
 
 
 UMainMenuWidget::UMainMenuWidget(const FObjectInitializer &ObjectInitializer)
@@ -243,7 +242,7 @@ void UMainMenuWidget::CreateLobbyOKBtnClicked()
 	if(!ReceivedLobbyPort.IsEmpty())
 	{
 		FTimerHandle Handle;
-		GetWorld()->GetTimerManager().SetTimer(Handle, this, &ThisClass::CreateLobbyWait, 5.f, false); //이거 나중에 방식을 바꾸자
+		GetWorld()->GetTimerManager().SetTimer(Handle, this, &ThisClass::CreateLobbyWait, 7.f, false); //이거 나중에 방식을 바꾸자
 	}
 	else
 	{
@@ -631,18 +630,6 @@ void UMainMenuWidget::HandleJoinSessionCompleted(FName SessionName, EOnJoinSessi
                     }
                 	
                 	GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Yellow, FString::Printf(TEXT("Connect String : %s"), *ConnectString));
-
-                	/*
-                	const UWorld* World = GetWorld();
-                	if (World)
-                	{
-                		UCustomGameViewportClient* GameViewportClient = Cast<UCustomGameViewportClient>(World->GetGameViewport());
-                		if (GameViewportClient)
-                		{
-                			GameViewportClient->Fade(1.5, true);
-                		}
-                	}*/
-
                 	
                     FURL DedicatedServerURL(nullptr, *ConnectString, TRAVEL_Absolute);
                     FString DedicatedServerJoinError;
