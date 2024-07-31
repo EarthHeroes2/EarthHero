@@ -137,15 +137,9 @@ void AEHPlayerController::SetupInputComponent()
 	EnhancedInputComponent->BindAction(EscapeAction, ETriggerEvent::Started, this, &ThisClass::ToggleEscMenu);
 	
 	EnhancedInputComponent->BindAction(DEBUG_LevelUp, ETriggerEvent::Triggered, this, &ThisClass::DEBUG_Levelup);
+	EnhancedInputComponent->BindAction(DEBUG_DieKey, ETriggerEvent::Started, this, &ThisClass::DEBUG_Die);
 }
 
-void AEHPlayerController::DEBUG_Levelup()
-{
-	if (MyPlayerState)
-	{
-		MyPlayerState->GetStatComponent()->UpdateExp(100);
-	}
-}
 
 void AEHPlayerController::ToggleEscMenu()
 {
@@ -352,4 +346,33 @@ void AEHPlayerController::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	else if(TabHUD) TabHUD->RemoveFromParent();
 	
 	Super::EndPlay(EndPlayReason);
+}
+
+void AEHPlayerController::DEBUG_Die()
+{
+	Server_DEBUG_Die();
+}
+
+void AEHPlayerController::Server_DEBUG_Die_Implementation()
+{
+	AEHPlayerState* EHPlayerState = Cast<AEHPlayerState>(PlayerState);
+	if (EHPlayerState)
+	{
+		FHitResult a;
+		EHPlayerState->GetStatComponent()->DamageTaken(50, nullptr, a, nullptr, nullptr);
+	}
+}
+
+void AEHPlayerController::DEBUG_Levelup()
+{
+	Server_DEBUG_Levelup();
+}
+
+void AEHPlayerController::Server_DEBUG_Levelup_Implementation()
+{
+	AEHPlayerState* EHPlayerState = Cast<AEHPlayerState>(PlayerState);
+	if (EHPlayerState)
+	{
+		EHPlayerState->GetStatComponent()->UpdateExp(100);
+	}
 }

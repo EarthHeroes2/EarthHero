@@ -63,6 +63,8 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> DEBUG_LevelUp;
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> DEBUG_DieKey;
 
 	//07 13 히어로 업그레이드 선택 맵핑 액션 추가
 	UPROPERTY(EditAnywhere, Category = "Input")
@@ -73,14 +75,14 @@ private:
 	TObjectPtr<UInputAction> SelectHUAction_3;
 
 	UPROPERTY(EditAnywhere, Category = "HUD")
-	TSubclassOf<class UUserWidget> InGameHUD;
+	TSubclassOf<UUserWidget> InGameHUD;
 
 	UPROPERTY(EditAnywhere, Category = "HUD")
-	TSubclassOf<class UUserWidget> TabHUDClass;
+	TSubclassOf<UUserWidget> TabHUDClass;
 
 	// Add the EscMenu widget class
 	UPROPERTY(EditAnywhere, Category = "HUD")
-	TSubclassOf<class UUserWidget> EscMenuClass;
+	TSubclassOf<UUserWidget> EscMenuClass;
 
 	// Add the EscMenu widget instance
 	UPROPERTY()
@@ -112,7 +114,14 @@ protected:
 	void SelectHU_3();
 	void ToggleEscMenu();
 	void DEBUG_Levelup();
+	void DEBUG_Die();
+	
 	virtual void EndPlay(EEndPlayReason::Type EndPlayReason) override;
+
+	UFUNCTION(Server, Reliable)
+	void Server_DEBUG_Die();
+	UFUNCTION(Server, Reliable)
+	void Server_DEBUG_Levelup();
 
 public:
 	UFUNCTION(Server, Reliable)

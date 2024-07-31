@@ -39,8 +39,6 @@ void UCustomGameViewportClient::DrawScreenFade(UCanvas* Canvas)
 			const float Time = World_->GetTimeSeconds();
 			const float Alpha = FMath::Clamp((Time - FadeStartTime) / FadeDuration, 0.f, 1.f);
 			
-			//새 맵으로 이동한 시점(seamless travel 아닐 때!!!!)이라면 자동으로 페이드 인
-			//if(Time == 0.f) Fade(1.5f, false);
 			
 			if (Alpha == 1.f && !bToBlack) bFading = false;
 			else
