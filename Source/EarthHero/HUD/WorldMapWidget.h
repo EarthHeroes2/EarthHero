@@ -44,7 +44,8 @@ public:
     UImage* ForceField4Image;
 
 private:
-    FVector2D ConvertWorldToMapPosition(const FVector2D& WorldPosition) const;
+    FVector2D ConvertPlayerWorldToMapPosition(const FVector2D& WorldPosition) const;
+    FVector2D ConvertForceFieldWorldToMapPosition(const FVector2D& WorldPosition) const;
 
     int32 NumberOfPlayers;
 
