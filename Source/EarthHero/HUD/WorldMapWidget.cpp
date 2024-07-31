@@ -14,7 +14,6 @@ void UWorldMapWidget::NativeConstruct()
     ForceFieldAlignments.Init(FVector2D(0.5f, 0.5f), 4);
 }
 
-/*
 FVector2D UWorldMapWidget::ConvertWorldToMapPosition(const FVector2D& WorldPosition) const
 {
     // Image Map dimensions
@@ -32,30 +31,6 @@ FVector2D UWorldMapWidget::ConvertWorldToMapPosition(const FVector2D& WorldPosit
 
     return FVector2D(MapX, MapY);
 }
-*/
-
-FVector2D UWorldMapWidget::ConvertWorldToMapPosition(const FVector2D& WorldPosition) const
-{
-    // Image Map dimensions
-    float MapWidth = 689.5f;
-    float MapHeight = 706.5f;
-
-    // Map center coordinates in world space
-    float MapLength = 403200.0f;
-    float MapCenterX = 201600.0f;
-    float MapCenterY = -201600.0f;
-
-    // Calculate the map coordinates
-    float MapX = (WorldPosition.Y - MapCenterY) / MapLength * MapWidth;
-    float MapY = (WorldPosition.X - MapCenterX) / MapLength * MapHeight;
-
-    // Adjust for the middle anchor
-    MapX += MapWidth / 2.0f;
-    MapY = MapHeight / 2.0f - MapY;
-
-    return FVector2D(MapX, MapY);
-}
-
 
 void UWorldMapWidget::SetPlayerPosition(int32 PlayerIndex, const FVector2D& Position)
 {
