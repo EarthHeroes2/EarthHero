@@ -20,14 +20,19 @@ FVector2D UWorldMapWidget::ConvertWorldToMapPosition(const FVector2D& WorldPosit
     float MapWidth = 689.5f;
     float MapHeight = 706.5f;
 
-    // Map center coordinates
-    float MapLength = 403200.0f;
-    float MapCenterX = 201600.0f;
-    float MapCenterY = -201600.0f;
+    // World map boundaries
+    float WorldMinX = 0.0f;
+    float WorldMaxX = 403200.0f;
+    float WorldMinY = -403200.0f;
+    float WorldMaxY = 0.0f;
 
-    // Adjusting the calculations to accommodate the new map center
-    float MapX = (WorldPosition.Y - MapCenterY + MapLength / 2.0f) / MapLength * MapWidth - (MapWidth / 2.0f);
-    float MapY = (MapHeight / 2.0f) - (WorldPosition.X - MapCenterX + MapLength / 2.0f) / MapLength * MapHeight;
+    // Calculate the relative position as a percentage of the world map
+    float PercentX = (WorldPosition.X - WorldMinX) / (WorldMaxX - WorldMinX);
+    float PercentY = (WorldPosition.Y - WorldMinY) / (WorldMaxY - WorldMinY);
+
+    // Convert the percentages to image coordinates
+    float MapX = PercentX * MapWidth - (MapWidth / 2.0f);
+    float MapY = (1.0f - PercentY) * MapHeight - (MapHeight / 2.0f);
 
     return FVector2D(MapX, MapY);
 }
