@@ -12,7 +12,7 @@ AGameOverGameMode::AGameOverGameMode()
 {
 	PlayerStateClass = AGameOverPlayerState::StaticClass();
 	PlayerControllerClass = AGameOverPlayerController::StaticClass();
-	GameSessionClass = AEHGameSession::StaticClass();
+	GameSessionClass = AGameOverGameSession::StaticClass();
 }
 
 void AGameOverGameMode::BeginPlay()
@@ -27,9 +27,21 @@ void AGameOverGameMode::InitSeamlessTravelPlayer(AController* NewController)
 {
 	Super::InitSeamlessTravelPlayer(NewController);
 	
-	AGameOverGameSession* GameOverGameSession = Cast<AGameOverGameSession>(GameSession);
-	if (GameOverGameSession)
-		GameOverGameSession->SeamlessTravelSuccessCount();
+	APlayerController* NewPlayerController = Cast<APlayerController>(NewController);
+	if(NewPlayerController)
+	{
+		AGameOverPlayerController* NewGameOverPlayerController = Cast<AGameOverPlayerController>(NewController);
+		if(NewGameOverPlayerController)
+		{
+			AGameOverGameSession* GameOverGameSession = Cast<AGameOverGameSession>(GameSession);
+			if (GameOverGameSession)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("444444444444444444444444"));
+				GameOverPlayerControllers.Add(NewGameOverPlayerController);
+				GameOverGameSession->SeamlessTravelSuccessCount();
+			}
+		}
+	}
 }
 
 void AGameOverGameMode::SendChatMessage(const FText& Text)
