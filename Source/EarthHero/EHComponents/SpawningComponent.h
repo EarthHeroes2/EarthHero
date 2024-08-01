@@ -55,10 +55,16 @@ private:
     void SpawnActorsForDifficultyWrapper();
 
     // Add path constants here
-    static const TCHAR* const Difficulty1Path;
+    static const TCHAR* const Difficulty1Path1;
+    static const TCHAR* const Difficulty1Path2;
+    static const TCHAR* const Difficulty1Path3;
+    static const TCHAR* const Difficulty1Path4;
     static const TCHAR* const Difficulty2Path1;
     static const TCHAR* const Difficulty2Path2;
     static const TCHAR* const Difficulty2Path3;
     static const TCHAR* const Difficulty2Path4;
-    static const TCHAR* const Difficulty3Path;
+    static const TCHAR* const Difficulty3Path1;
+    static const TCHAR* const Difficulty3Path2;
+    static const TCHAR* const Difficulty3Path3;
+    static const TCHAR* const Difficulty3Path4;
 };
