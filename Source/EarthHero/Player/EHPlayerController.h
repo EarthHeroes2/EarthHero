@@ -68,6 +68,11 @@ private:
 	TObjectPtr<UInputAction> ChatAction;
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> EscapeAction; // Added EscapeAction
+	
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> SpectatorLeft;
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> SpectatorRight;
 
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> DEBUG_LevelUp;
@@ -112,7 +117,12 @@ private:
 	AEHCharacter* CurrentSpectatorTarget;
 	TArray<AEHCharacter*> SpectatorTargets;
 
+	void UpdateSpectatorTarget();
 	void ChangeSpectatorTarget(bool bPrevious);
+	void ChangeSpectatorLeft();
+	void ChangeSpectatorRight();
+
+	bool bSpectating = false;
 
 protected:
 	void Jump();

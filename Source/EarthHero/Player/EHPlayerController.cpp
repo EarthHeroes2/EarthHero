@@ -13,7 +13,6 @@
 #include "EarthHero/HUD/EscMenu.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/Character.h"
-#include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 AEHPlayerController::AEHPlayerController()
@@ -149,6 +148,9 @@ void AEHPlayerController::SetupInputComponent()
 	EnhancedInputComponent->BindAction(SelectHUAction_3, ETriggerEvent::Started, this, &ThisClass::SelectHU_3);
 
 	EnhancedInputComponent->BindAction(EscapeAction, ETriggerEvent::Started, this, &ThisClass::ToggleEscMenu);
+
+	EnhancedInputComponent->BindAction(SpectatorLeft, ETriggerEvent::Started, this, &ThisClass::ChangeSpectatorLeft);
+	EnhancedInputComponent->BindAction(SpectatorRight, ETriggerEvent::Started, this, &ThisClass::ChangeSpectatorRight);
 	
 	EnhancedInputComponent->BindAction(DEBUG_LevelUp, ETriggerEvent::Triggered, this, &ThisClass::DEBUG_Levelup);
 	EnhancedInputComponent->BindAction(DEBUG_DieKey, ETriggerEvent::Started, this, &ThisClass::DEBUG_Die);
@@ -404,8 +406,16 @@ void AEHPlayerController::Dead()
 	UnPossess();
 }
 
-//관전할 대상들을 찾아봄
+//죽고 불리는 함수
 void AEHPlayerController::Client_UpdateSpectatorTarget_Implementation()
+{
+	UpdateSpectatorTarget();
+	ChangeSpectatorTarget(false);
+	bSpectating = true;
+}
+
+//관전할 대상들을 찾아봄
+void AEHPlayerController::UpdateSpectatorTarget()
 {
 	SpectatorTargets.Empty();
 	
@@ -441,8 +451,6 @@ void AEHPlayerController::Client_UpdateSpectatorTarget_Implementation()
 		if(TargetIndex == INDEX_NONE) CurrentSpectatorTarget = nullptr;
 	}
 	else SpectatorTargetIndex = INDEX_NONE;
-
-	ChangeSpectatorTarget(false);
 }
 
 
@@ -483,5 +491,26 @@ void AEHPlayerController::ChangeSpectatorTarget(bool bPrevious)
 	{
 		SpectatorTargetIndex = INDEX_NONE;
 		CurrentSpectatorTarget = nullptr;
+	}
+}
+
+
+void AEHPlayerController::ChangeSpectatorLeft()
+{
+	if(bSpectating)
+	{
+		UE_LOG(LogTemp, Log, TEXT("ChangeSpectatorLeft()"));
+		UpdateSpectatorTarget();
+		ChangeSpectatorTarget(true);
+	}
+}
+
+void AEHPlayerController::ChangeSpectatorRight()
+{
+	if(bSpectating)
+	{
+		UE_LOG(LogTemp, Log, TEXT("ChangeSpectatorRight()"));
+		UpdateSpectatorTarget();
+		ChangeSpectatorTarget(false);
 	}
 }
