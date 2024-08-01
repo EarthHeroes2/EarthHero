@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Interfaces/OnlineSessionInterface.h"
 #include "OnlineSessionSettings.h"
+#include "Components/CanvasPanel.h"
 #include "MainMenuWidget.generated.h"
 
 
@@ -52,6 +53,8 @@ class EARTHHERO_API UMainMenuWidget : public UUserWidget
 	
 	UUserWidget* OptionsWidget;
 
+	UPROPERTY(meta = (BindWidget))
+	UCanvasPanel* LoadingCp;
 	
 	UPROPERTY(meta = (BindWidget))
 	UButton* Play_Btn;
