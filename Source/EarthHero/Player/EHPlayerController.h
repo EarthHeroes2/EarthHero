@@ -78,6 +78,8 @@ private:
 	TObjectPtr<UInputAction> DEBUG_LevelUp;
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> DEBUG_DieKey;
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> DEBUG_RebirthKey;
 
 	//07 13 히어로 업그레이드 선택 맵핑 액션 추가
 	UPROPERTY(EditAnywhere, Category = "Input")
@@ -122,7 +124,7 @@ private:
 	void ChangeSpectatorTarget(bool bPrevious);
 	void ChangeSpectatorLeft();
 	void ChangeSpectatorRight();
-
+	
 	bool bSpectating = false;
 
 protected:
@@ -140,15 +142,23 @@ protected:
 	void ToggleEscMenu();
 	void DEBUG_Levelup();
 	void DEBUG_Die();
+	void DEBUG_Rebirth();
+	
+
 	
 	virtual void EndPlay(EEndPlayReason::Type EndPlayReason) override;
 
 	UFUNCTION(Server, Reliable)
 	void Server_DEBUG_Die();
 	UFUNCTION(Server, Reliable)
+	void Server_DEBUG_Rebirth();
+	UFUNCTION(Server, Reliable)
 	void Server_DEBUG_Levelup();
 
 public:
+	UFUNCTION(Client, Reliable)
+	void Client_GameOver();
+	
 	UFUNCTION(Server, Reliable)
 	void Server_SendChatMessage(const FText& Text);
 

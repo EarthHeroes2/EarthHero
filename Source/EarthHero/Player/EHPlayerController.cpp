@@ -154,6 +154,7 @@ void AEHPlayerController::SetupInputComponent()
 	
 	EnhancedInputComponent->BindAction(DEBUG_LevelUp, ETriggerEvent::Triggered, this, &ThisClass::DEBUG_Levelup);
 	EnhancedInputComponent->BindAction(DEBUG_DieKey, ETriggerEvent::Started, this, &ThisClass::DEBUG_Die);
+	EnhancedInputComponent->BindAction(DEBUG_RebirthKey, ETriggerEvent::Started, this, &ThisClass::DEBUG_Rebirth);
 }
 
 
@@ -356,11 +357,18 @@ void AEHPlayerController::Client_SendChatMessage_Implementation(const FText& Tex
 
 void AEHPlayerController::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
-	if (HUD) HUD->RemoveFromParent();
-	else if(TabHUD) TabHUD->RemoveFromParent();
-	
 	Super::EndPlay(EndPlayReason);
 }
+
+void AEHPlayerController::Client_GameOver_Implementation()
+{
+	UEHGameInstance* EHGameinstance = Cast<UEHGameInstance>(GetGameInstance());
+	if(EHGameinstance) EHGameinstance->ShowSeamlessLoadingScreen();
+	
+	if (HUD) HUD->RemoveFromParent();
+	else if(TabHUD) TabHUD->RemoveFromParent();
+}
+
 
 void AEHPlayerController::DEBUG_Die()
 {
@@ -400,7 +408,7 @@ void AEHPlayerController::Server_DEBUG_Levelup_Implementation()
 
 
 
-//죽은 경우
+//죽은 경우 (서버에서 실행됨)
 void AEHPlayerController::Dead()
 {
 	UnPossess();
@@ -520,4 +528,22 @@ void AEHPlayerController::ChangeSpectatorRight()
 		UpdateSpectatorTarget();
 		ChangeSpectatorTarget(false);
 	}
+}
+
+
+
+
+
+
+
+
+
+void AEHPlayerController::DEBUG_Rebirth()
+{
+	Server_DEBUG_Rebirth();
+}
+
+void AEHPlayerController::Server_DEBUG_Rebirth_Implementation()
+{
+	//죽음을 처리해주는 코드가 있어야 제작 가능
 }

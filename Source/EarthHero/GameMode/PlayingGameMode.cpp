@@ -373,6 +373,9 @@ void APlayingGameMode::CheckAllPlayerDead()
 		UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(GetGameInstance());
 		if(EHGameInstance)
 		{
+			for(AEHPlayerController* EHPlayerController : EHPlayerControllers)
+				if(EHPlayerController) EHPlayerController->Client_GameOver();
+
 			EHGameInstance->bGameClear = false;
 			GetWorld()->ServerTravel(GameOverMap, true);
 		}
@@ -384,6 +387,9 @@ void APlayingGameMode::BossDead()
 	UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(GetGameInstance());
 	if(EHGameInstance)
 	{
+		for(AEHPlayerController* EHPlayerController : EHPlayerControllers)
+			if(EHPlayerController) EHPlayerController->Client_GameOver();
+		
 		EHGameInstance->bGameClear = true;
 		GetWorld()->ServerTravel(GameOverMap, true);
 	}
