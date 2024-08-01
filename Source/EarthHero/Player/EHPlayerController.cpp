@@ -499,13 +499,15 @@ void AEHPlayerController::ChangeSpectatorTarget(bool bPrevious)
 
 	UE_LOG(LogTemp, Log, TEXT("Changed Target Index : %d"), SpectatorTargetIndex);
 
-	if(SpectatorTargets[SpectatorTargetIndex])
+	if(SpectatorTargets.Num() > SpectatorTargetIndex && SpectatorTargets[SpectatorTargetIndex])
 	{
 		CurrentSpectatorTarget = SpectatorTargets[SpectatorTargetIndex];
 		SetViewTargetWithBlend(CurrentSpectatorTarget->SpectatorTarget->GetChildActor(), 0.5f, VTBlend_Linear, 0.f);
 	}
 	else //무언가 잘못된 경우
 	{
+		UE_LOG(LogTemp, Log, TEXT("Wrong Target Index : Num = %d, Index = %d"), SpectatorTargets.Num(), SpectatorTargetIndex);
+		
 		SpectatorTargetIndex = INDEX_NONE;
 		CurrentSpectatorTarget = nullptr;
 	}
