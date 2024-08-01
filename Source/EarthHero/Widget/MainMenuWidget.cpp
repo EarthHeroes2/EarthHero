@@ -162,9 +162,13 @@ void UMainMenuWidget::Play_BtnClicked()
 			LobbySetting_Bd->SetVisibility(ESlateVisibility::Collapsed);
 	}
 	if(LobbyList_Bd)
+	{
 		LobbyList_Bd->SetVisibility(ESlateVisibility::Collapsed);
+	}
 	if(Password_Bd)
+	{
 		Password_Bd->SetVisibility(ESlateVisibility::Collapsed);
+	}
 }
 
 void UMainMenuWidget::Join_BtnClicked()
@@ -173,7 +177,7 @@ void UMainMenuWidget::Join_BtnClicked()
 
 	if(LoadingCp)
 	{
-		LoadingCp->SetVisibility(ESlateVisibility::Collapsed);
+		LoadingCp->SetVisibility(ESlateVisibility::Visible);
 	}
 	
 	LeaveSession("JoinLobby");
