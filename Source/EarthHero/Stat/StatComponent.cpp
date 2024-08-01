@@ -10,6 +10,7 @@
 
 #include "CoreMinimal.h"
 #include "HeroUpgradeComponent.h"
+//#include "SWarningOrErrorBox.h"  //박정익 : 이거 뭔지는 모르겠는데 fetal error나서 잠시 빼둠
 #include "GameFramework/Actor.h"
 #include "TimerManager.h"  // FTimerHandle과 TimerManager를 사용하기 위해 필요
 #include "Components/ProgressBar.h"
@@ -18,6 +19,7 @@
 #include "EarthHero/HUD/InGameHUD.h"
 #include "EarthHero/HUD/TabHUDWidget.h"
 #include "EarthHero/Player/EHPlayerController.h"
+#include "EarthHero/Player/EHPlayerState.h"
 #include "GameFramework/PawnMovementComponent.h"
 
 UStatComponent::UStatComponent()
@@ -88,6 +90,9 @@ float UStatComponent::DamageTaken(float InDamage, TSubclassOf<UDamageType> Damag
 {
 	//데미지 계산
 	float resultDamage = UStatCalculationLibrary::CalNormalDamage(HeroStat, InDamage * HeroStat.MoreDamageTaken);
+	
+	UE_LOG(LogTemp, Warning, TEXT("InDamage : %f   ResultDamage : %f"), InDamage, resultDamage);
+
 	if (resultDamage > 0)
 	{
 		APlayingGameMode *GameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode());
@@ -97,28 +102,43 @@ float UStatComponent::DamageTaken(float InDamage, TSubclassOf<UDamageType> Damag
 		}
 	}
 	
+	UE_LOG(LogTemp, Warning, TEXT("HeroStat.Health : %f"), HeroStat.Health);
+	
 	//FString Message = FString::Printf(TEXT("Health : %f"), HeroStat.Health);
 	//GEngine->AddOnScreenDebugMessage(-1, 1233223.f, FColor::Green, Message);
 	if (HeroStat.Health <= 0.f)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Dead : %s"), *GetOwner()->GetName());
 		FString Message = FString::Printf(TEXT("Dead"));
 		
 		AActor* Actor = GetOwner();
 		if(Actor)
 		{
-			//즉시 행동을 멈추고
-			AEHCharacter* EHCharacter = Cast<AEHCharacter>(Actor);
-			if(EHCharacter)
+			AEHPlayerState* EHPlayerState = Cast<AEHPlayerState>(Actor);
+			if(EHPlayerState)
 			{
-				UPawnMovementComponent* MovementComponent = EHCharacter->GetMovementComponent();
-				if(MovementComponent) MovementComponent->StopMovementImmediately();
-			}
-			//죽음 처리 시작
-			AController* Controller = Actor->GetInstigatorController();
-			if(Controller)
-			{
-				AEHPlayerController* EHPlayerController = Cast<AEHPlayerController>(Controller);
-				if(EHPlayerController) EHPlayerController->Dead();
+				AActor* Actor2 = EHPlayerState->GetOwner();
+				if(Actor2)
+				{
+					AEHPlayerController* EHPlayerController = Cast<AEHPlayerController>(Actor2);\
+					if(EHPlayerController)
+					{
+						ACharacter* Character = EHPlayerController->GetCharacter();
+						if(Character)
+						{
+							//즉시 행동을 멈추고
+							AEHCharacter* EHCharacter = Cast<AEHCharacter>(Character);
+							if(EHCharacter)
+							{
+								UPawnMovementComponent* MovementComponent = EHCharacter->GetMovementComponent();
+								if(MovementComponent) MovementComponent->StopMovementImmediately();
+
+								//죽음 처리 시작
+								EHPlayerController->Dead();
+							}
+						}
+					}
+				}
 			}
 		}
 		GEngine->AddOnScreenDebugMessage(-1, 1233223.f, FColor::Green, Message);
