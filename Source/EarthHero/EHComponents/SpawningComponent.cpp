@@ -5,7 +5,6 @@
 #include "UObject/ConstructorHelpers.h"
 #include "EarthHero/Character/EHCharacter.h"
 
-const TCHAR* const USpawningComponent::Difficulty1Path = TEXT("Actor'/Game/Blueprints/Item/BP_ExpItem.BP_ExpItem_C'");
 const TCHAR* const USpawningComponent::Difficulty2Path1 = TEXT("Actor'/Game/Blueprints/Character/Dummy/BP_DummyRangeMonster.BP_DummyRangeMonster_C'");
 const TCHAR* const USpawningComponent::Difficulty2Path2 = TEXT("Actor'/Game/Blueprints/Character/Dummy/BP_DummyMeleeMonster.BP_DummyMeleeMonster_C'");
 const TCHAR* const USpawningComponent::Difficulty2Path3 = TEXT("Actor'/Game/Blueprints/Character/Dummy/BP_DummyFlyingRangeMonster.BP_DummyFlyingRangeMonster_C'");
@@ -27,10 +26,25 @@ USpawningComponent::USpawningComponent()
 void USpawningComponent::InitializeDifficultyActors()
 {
     // Load difficulty 1 actors
-    static ConstructorHelpers::FClassFinder<AActor> Difficulty1ActorClass(Difficulty1Path);
-    if (Difficulty1ActorClass.Succeeded())
+    static ConstructorHelpers::FClassFinder<AActor> Difficulty1ActorClass1(Difficulty2Path1);
+    if (Difficulty1ActorClass1.Succeeded())
     {
-        Difficulty1Config.ActorClasses.Add(Difficulty1ActorClass.Class);
+        Difficulty1Config.ActorClasses.Add(Difficulty1ActorClass1.Class);
+    }
+    static ConstructorHelpers::FClassFinder<AActor> Difficulty1ActorClass2(Difficulty2Path2);
+    if (Difficulty1ActorClass2.Succeeded())
+    {
+        Difficulty1Config.ActorClasses.Add(Difficulty1ActorClass2.Class);
+    }
+    static ConstructorHelpers::FClassFinder<AActor> Difficulty1ActorClass3(Difficulty2Path3);
+    if (Difficulty1ActorClass3.Succeeded())
+    {
+        Difficulty1Config.ActorClasses.Add(Difficulty1ActorClass3.Class);
+    }
+    static ConstructorHelpers::FClassFinder<AActor> Difficulty1ActorClass4(Difficulty2Path4);
+    if (Difficulty1ActorClass4.Succeeded())
+    {
+        Difficulty1Config.ActorClasses.Add(Difficulty1ActorClass4.Class);
     }
 
     // Load difficulty 2 actors
@@ -56,12 +70,26 @@ void USpawningComponent::InitializeDifficultyActors()
     }
 
     // Load difficulty 3 actors
-    /*
-    static ConstructorHelpers::FClassFinder<AActor> Difficulty3ActorClass(Difficulty3Path);
-    if (Difficulty3ActorClass.Succeeded())
+    static ConstructorHelpers::FClassFinder<AActor> Difficulty3ActorClass1(Difficulty2Path1);
+    if (Difficulty3ActorClass1.Succeeded())
     {
-        Difficulty3Config.ActorClasses.Add(Difficulty3ActorClass.Class);
-    }*/
+        Difficulty3Config.ActorClasses.Add(Difficulty3ActorClass1.Class);
+    }
+    static ConstructorHelpers::FClassFinder<AActor> Difficulty3ActorClass2(Difficulty2Path2);
+    if (Difficulty3ActorClass2.Succeeded())
+    {
+        Difficulty3Config.ActorClasses.Add(Difficulty3ActorClass2.Class);
+    }
+    static ConstructorHelpers::FClassFinder<AActor> Difficulty3ActorClass3(Difficulty2Path3);
+    if (Difficulty3ActorClass3.Succeeded())
+    {
+        Difficulty3Config.ActorClasses.Add(Difficulty3ActorClass3.Class);
+    }
+    static ConstructorHelpers::FClassFinder<AActor> Difficulty3ActorClass4(Difficulty2Path4);
+    if (Difficulty3ActorClass4.Succeeded())
+    {
+        Difficulty3Config.ActorClasses.Add(Difficulty3ActorClass4.Class);
+    }
 }
 
 void USpawningComponent::BeginPlay()
