@@ -635,7 +635,13 @@ void APlayingGameMode::UpdatePlayerStateImage()
 	for (const auto& EffectEntry : AEffectBase::EffectMap)
 	{
 		AActor* TargetActor = EffectEntry.Key;
+		UE_LOG(LogClass, Warning, TEXT("GameMode : TargetActor %s"), *TargetActor->GetName());
 		int32 Index = FindControllerForTargetActor(TargetActor);
+		if (Index == -1)
+		{
+			UE_LOG(LogClass, Error, TEXT("GameMode : failed to find TargetActor %s"), *TargetActor->GetName());
+			continue;
+		}
 		const TMap<TSubclassOf<AEffectBase>, AEffectBase*>& Effects = EffectEntry.Value;
 
 		for (const auto& Effect : Effects)
@@ -655,7 +661,7 @@ void APlayingGameMode::UpdatePlayerStateImage()
 		}
 	}
 
-	UE_LOG(LogClass, Warning, TEXT("GameMode : EffectStsatuses num = %d"), EffectStatuses.Num());
+	UE_LOG(LogClass, Warning, TEXT("GameMode : EffectStsatuses num = %d, EffectMap Num = %d"), EffectStatuses.Num(), AEffectBase::EffectMap.Num());
 	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
 	PlayingGameState->UpdatePlayerEffectState(EffectStatuses);
 }

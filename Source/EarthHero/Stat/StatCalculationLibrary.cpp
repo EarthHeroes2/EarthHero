@@ -13,7 +13,7 @@ float UStatCalculationLibrary::	CalNormalDamage(FStatStructure& HeroStat, float 
 	// 남는 방어력이 있으면,
 	if (HeroStat.DefensePower > 0)
 	{
-		float leftDamage = HeroStat.DefensePower - inDamage; //반대?
+		float leftDamage = inDamage - HeroStat.DefensePower; //반대?
 
 		//방어력을 넘는 데미지가 들어올 시
 		if (leftDamage > 0)
@@ -29,7 +29,7 @@ float UStatCalculationLibrary::	CalNormalDamage(FStatStructure& HeroStat, float 
 			else
 			{
 				HeroStat.Health = 0;
-				return RealDamage;
+				return RealDamage * -1;
 			}
 		}
 		else
@@ -50,7 +50,7 @@ float UStatCalculationLibrary::	CalNormalDamage(FStatStructure& HeroStat, float 
 		else
 		{
 			HeroStat.Health = 0;
-			return RealDamage; //음수 리턴
+			return RealDamage * -1; //음수 리턴
 		}
 	}
 }

@@ -94,7 +94,6 @@ void AEffectBase::ApplyEffect(AActor* InTargetActor, float InEffectValue, float 
 
 			//효과 적용 목록에 추가
 			EffectMap.Add(TargetActor, TMap<TSubclassOf<AEffectBase>, AEffectBase*>());
-			TargetMap = EffectMap.Find(TargetActor);
 			if (AEHCharacter *Hero = Cast<AEHCharacter>(TargetActor))
 			{
 				if (AEHPlayerController *PlayerController = Cast<AEHPlayerController>(Hero->GetController()))
