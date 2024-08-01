@@ -161,12 +161,29 @@ void UMainMenuWidget::Play_BtnClicked()
 		else
 			LobbySetting_Bd->SetVisibility(ESlateVisibility::Collapsed);
 	}
+	if(LobbyList_Bd)
+		LobbyList_Bd->SetVisibility(ESlateVisibility::Collapsed);
+	if(Password_Bd)
+		Password_Bd->SetVisibility(ESlateVisibility::Collapsed);
 }
 
 void UMainMenuWidget::Join_BtnClicked()
 {
 	UE_LOG(LogTemp, Log, TEXT("Join Lobby Clicked"));
+
+	if(LoadingCp)
+	{
+		LoadingCp->SetVisibility(ESlateVisibility::Collapsed);
+	}
+	
 	LeaveSession("JoinLobby");
+
+	if(LobbyList_Bd)
+		LobbyList_Bd->SetVisibility(ESlateVisibility::Collapsed);
+	if(Password_Bd)
+		Password_Bd->SetVisibility(ESlateVisibility::Collapsed);
+	if(LobbySetting_Bd)
+		LobbySetting_Bd->SetVisibility(ESlateVisibility::Collapsed);
 }
 
 void UMainMenuWidget::OptionsBtnClicked()
@@ -210,12 +227,13 @@ void UMainMenuWidget::PrivateCbChanged(bool bChecked)
 	}
 }
 
-
-
-
-
 void UMainMenuWidget::CreateLobbyOKBtnClicked()
 {
+	if(LoadingCp)
+	{
+		LoadingCp->SetVisibility(ESlateVisibility::Visible);
+	}
+	
 	SetButtonsEnabled(false);
 	
 	FString LobbyName = LobbyName_Etb->GetText().ToString();
@@ -250,18 +268,19 @@ void UMainMenuWidget::CreateLobbyOKBtnClicked()
 		SetButtonsEnabled(true);
 	}
 }
+
 void UMainMenuWidget::CreateLobbyCancelBtnClicked()
 {
 	LobbySetting_Bd->SetVisibility(ESlateVisibility::Collapsed);
 }
 
-
-
-
-
-
 void UMainMenuWidget::PasswordOKBtnClicked()
 {
+	if(LoadingCp)
+	{
+		LoadingCp->SetVisibility(ESlateVisibility::Collapsed);
+	}
+	
 	SetButtonsEnabled(false);
 
 	//선택한 서버와 비번 비교
@@ -286,6 +305,10 @@ void UMainMenuWidget::PasswordOKBtnClicked()
 	if(CompareResult == "true")
 	{
 		UE_LOG(LogTemp, Error, TEXT("correct password!!!!!"));
+		if(LoadingCp)
+		{
+			LoadingCp->SetVisibility(ESlateVisibility::Visible);
+		}
 		JoinToSelectedServer();
 	}
 	else
@@ -299,13 +322,10 @@ void UMainMenuWidget::PasswordCancelBtnClicked()
 	Password_Bd->SetVisibility(ESlateVisibility::Collapsed);
 }
 
-
-
 void UMainMenuWidget::CreateLobbyWait()
 {
 	LeaveSession("CreateLobby");
 }
-
 
 void UMainMenuWidget::MenuTearDown()
 {
@@ -330,8 +350,6 @@ void UMainMenuWidget::NativeDestruct()
 	Super::NativeDestruct();
 }
 
-
-
 void UMainMenuWidget::LobbyListBtnClicked()
 {
 	if(LobbyList_Bd)
@@ -343,6 +361,11 @@ void UMainMenuWidget::LobbyListBtnClicked()
 		}
 		else LobbyList_Bd->SetVisibility(ESlateVisibility::Collapsed);
 	}
+	
+	if(Password_Bd)
+		Password_Bd->SetVisibility(ESlateVisibility::Collapsed);
+	if(LobbySetting_Bd)
+		LobbySetting_Bd->SetVisibility(ESlateVisibility::Collapsed);
 }
 
 void UMainMenuWidget::FindLobbyBtnClicked()
@@ -420,6 +443,11 @@ void UMainMenuWidget::PrivateServerRowClicked()
 
 void UMainMenuWidget::JoinToSelectedServer()
 {
+	if(LoadingCp)
+	{
+		LoadingCp->SetVisibility(ESlateVisibility::Visible);
+	}
+	
 	IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
 	if (Subsystem)
 	{
@@ -438,7 +466,7 @@ void UMainMenuWidget::JoinToSelectedServer()
 	}
 }
 
-//메인메뉴 모든 버튼의 enalbed 설정
+//메인메뉴 모든 버튼의 enabled 설정
 void UMainMenuWidget::SetButtonsEnabled(bool bEnabled)
 {
 	for(UButton* Button : ButtonArray)
@@ -446,6 +474,14 @@ void UMainMenuWidget::SetButtonsEnabled(bool bEnabled)
 		if(Button) Button->SetIsEnabled(bEnabled);
 	}
 	LobbyList_Scr->SetIsEnabled(bEnabled);
+
+	if (bEnabled)
+	{
+		if(LoadingCp)
+		{
+			LoadingCp->SetVisibility(ESlateVisibility::Collapsed);
+		}
+	}
 }
 
 
