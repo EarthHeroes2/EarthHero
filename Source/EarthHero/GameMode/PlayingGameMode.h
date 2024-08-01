@@ -74,6 +74,8 @@ public:
 	void UpdatePlayerStateImage();
 	int32 FindControllerForTargetActor(AActor* TargetActor);
 
+	void Rebirth(AEHPlayerController* EHPlayerController);
+
 	void PlayerControllerReady();
 	void EnableAllInput();
 

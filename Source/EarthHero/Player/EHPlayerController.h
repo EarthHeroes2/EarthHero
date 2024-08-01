@@ -143,9 +143,7 @@ protected:
 	void DEBUG_Levelup();
 	void DEBUG_Die();
 	void DEBUG_Rebirth();
-	
 
-	
 	virtual void EndPlay(EEndPlayReason::Type EndPlayReason) override;
 
 	UFUNCTION(Server, Reliable)
@@ -164,4 +162,6 @@ public:
 
 	UFUNCTION(Client, Reliable)
 	void Client_SendChatMessage(const FText& Text);
+
+	void Rebirth();
 };

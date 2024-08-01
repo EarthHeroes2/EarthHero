@@ -49,6 +49,8 @@ void AEHPlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
 
+	ControlledCharacter = GetCharacter();
+
 	ClientPossess();
 }
 
@@ -540,10 +542,27 @@ void AEHPlayerController::ChangeSpectatorRight()
 
 void AEHPlayerController::DEBUG_Rebirth()
 {
-	Server_DEBUG_Rebirth();
+	if(bSpectating)
+	{
+		bSpectating = false;
+		SpectatorTargets.Empty();
+		CurrentSpectatorTarget = nullptr;
+		SpectatorTargetIndex = INDEX_NONE;
+		Server_DEBUG_Rebirth();
+	}
 }
 
 void AEHPlayerController::Server_DEBUG_Rebirth_Implementation()
 {
-	//죽음을 처리해주는 코드가 있어야 제작 가능
+	APlayingGameMode* PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode());
+	if (PlayingGameMode)
+	{
+		PlayingGameMode->Rebirth(this);
+	}
+}
+
+//서버에서만 실행되어야 함
+void AEHPlayerController::Rebirth()
+{
+	Possess(ControlledCharacter);
 }

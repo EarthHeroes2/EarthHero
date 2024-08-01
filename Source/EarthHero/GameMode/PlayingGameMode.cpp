@@ -671,3 +671,19 @@ int32 APlayingGameMode::FindControllerForTargetActor(AActor* TargetActor)
 	}
 	return -1;
 }
+
+
+void APlayingGameMode::Rebirth(AEHPlayerController* EHPlayerController)
+{
+	int PlayerIndex = EHPlayerControllers.Find(EHPlayerController);
+	if (PlayerIndex != INDEX_NONE)
+	{
+		if(!bPlayerAlives[PlayerIndex]) //죽어 있다면
+		{
+			bPlayerAlives[PlayerIndex] = true;
+			NumDeadPlayers--;
+			
+			EHPlayerController->Rebirth();
+		}
+	}
+}
