@@ -42,11 +42,11 @@ void AEffectBase::ApplyEffect(AActor* InTargetActor, float InEffectValue, float 
 	bShouldRefreshDuration = InbShouldRefreshDuration;
 	
 	TMap<TSubclassOf<AEffectBase>, AEffectBase*>* TargetMap = EffectMap.Find(TargetActor);
-	if (TargetMap)
+	if (TargetMap) //액터 등록이 되었을 떄
 	{
 		// 이미 존재하는 효과이면..
 		AEffectBase** ExistingEffectPtr = TargetMap->Find(GetClass());
-		if (ExistingEffectPtr)
+		if (ExistingEffectPtr) //적용 효과 목록이 있을 떄
 		{
 			AEffectBase* ExistingEffect = *ExistingEffectPtr;
 
@@ -63,55 +63,20 @@ void AEffectBase::ApplyEffect(AActor* InTargetActor, float InEffectValue, float 
 			{
 				ExistingEffect->GetWorld()->GetTimerManager().ClearTimer(ExistingEffect->EffectTimerHandle);
 				ExistingEffect->GetWorld()->GetTimerManager().SetTimer(ExistingEffect->EffectTimerHandle, ExistingEffect, &AEffectBase::ResetEffect, InDuration, false);
-				if (AEHCharacter *Hero = Cast<AEHCharacter>(TargetActor))
-				{
-					//본인 HUD에 띄우고
-					if (AEHPlayerController *PlayerController = Cast<AEHPlayerController>(Hero->GetController()))
-					{
-						if (EffectArray.Num() < EffectType)
-						{
-							UE_LOG(LogClass, Error, TEXT("AEffectBase::EffectArray has not initialized"));
-						}
-						else
-						{
-							PlayerController->Client_AddEffect(EffectArray[EffectType]->EffectImage, EffectArray[EffectType]->EffectType, InDuration);
-						}
-					}
-					if (APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode()))
-					{
-						PlayingGameMode->UpdatePlayerStateImage();
-					}
-				}
+				AddEffect(InDuration);
 				bRefresh = true;
 			}
 		}
-		else
+		else // 액터는 있지만 적용 효과 목록이 없을 때
 		{
 			if (!bIsPermanent)
 			{
 				GetWorld()->GetTimerManager().SetTimer(EffectTimerHandle, this, &AEffectBase::ResetEffect, InDuration, false);
 			}
-
+			
+			AddEffect(InDuration);
 			//효과 적용 목록에 추가
-			EffectMap.Add(TargetActor, TMap<TSubclassOf<AEffectBase>, AEffectBase*>());
-			if (AEHCharacter *Hero = Cast<AEHCharacter>(TargetActor))
-			{
-				if (AEHPlayerController *PlayerController = Cast<AEHPlayerController>(Hero->GetController()))
-				{
-					if (EffectArray.Num() < EffectType)
-					{
-						UE_LOG(LogClass, Error, TEXT("AEffectBase::EffectArray has not initialized"));
-					}
-					else
-					{
-						PlayerController->Client_AddEffect(EffectArray[EffectType]->EffectImage, EffectArray[EffectType]->EffectType, InDuration);
-					}
-				}
-				if (APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode()))
-				{
-					PlayingGameMode->UpdatePlayerStateImage();
-				}
-			}
+			TargetMap->Add(GetClass(), this);
 		}
 		return;
 	}
@@ -121,31 +86,35 @@ void AEffectBase::ApplyEffect(AActor* InTargetActor, float InEffectValue, float 
 		{
 			GetWorld()->GetTimerManager().SetTimer(EffectTimerHandle, this, &AEffectBase::ResetEffect, InDuration, false);
 		}
-
 		//효과 적용 목록에 추가
 		EffectMap.Add(TargetActor, TMap<TSubclassOf<AEffectBase>, AEffectBase*>());
 		TargetMap = EffectMap.Find(TargetActor);
-		if (AEHCharacter *Hero = Cast<AEHCharacter>(TargetActor))
-		{
-			if (AEHPlayerController *PlayerController = Cast<AEHPlayerController>(Hero->GetController()))
-			{
-				if (EffectArray.Num() < EffectType)
-				{
-					UE_LOG(LogClass, Error, TEXT("AEffectBase::EffectArray has not initialized"));
-				}
-				else
-				{
-					PlayerController->Client_AddEffect(EffectArray[EffectType]->EffectImage, EffectArray[EffectType]->EffectType, InDuration);
-				}
-			}
-			if (APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode()))
-			{
-				PlayingGameMode->UpdatePlayerStateImage();
-			}
-		}
+		AddEffect(InDuration);
 	}
 	TargetMap->Add(GetClass(), this);
-	
+}
+
+void AEffectBase::AddEffect(float InDuration)
+{
+	if (AEHCharacter *Hero = Cast<AEHCharacter>(TargetActor))
+	{
+		//본인 HUD에 띄우고
+		if (AEHPlayerController *PlayerController = Cast<AEHPlayerController>(Hero->GetController()))
+		{
+			if (EffectArray.Num() < EffectType)
+			{
+				UE_LOG(LogClass, Error, TEXT("AEffectBase::EffectArray has not initialized"));
+			}
+			else
+			{
+				PlayerController->Client_AddEffect(EffectArray[EffectType]->EffectImage, EffectArray[EffectType]->EffectType, InDuration);
+			}
+		}
+		if (APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode()))
+		{
+			PlayingGameMode->UpdatePlayerStateImage();
+		}
+	}
 }
 
 void AEffectBase::UpgradeEffect(float InEffectValue)
