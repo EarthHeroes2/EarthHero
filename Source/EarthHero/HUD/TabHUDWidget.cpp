@@ -229,8 +229,12 @@ void UTabHUDWidget::UpdatePlayerImagesInWorldMap(const TArray<FVector2D>& Player
 			//InterpolatedRotations[i] = FMath::RInterpTo(FRotator(0,InterpolatedRotations[i],0), FRotator(0, PlayerRotations[i],0), DeltaTime, 10.f).Yaw;
 			//BP_WorldMap->SetPlayerPosition(i, InterpolatedPositions[i]);
 			//BP_WorldMap->SetPlayerRotation(i, InterpolatedRotations[i]);
-			BP_WorldMap->SetPlayerPosition(i, PlayerPositions[i]);
-			BP_WorldMap->SetPlayerRotation(i, PlayerRotations[i]);
+
+			//맵 이동 시 PlayerPositions[i]에서 잘못된 index 접근 발생해서 if문 만들었음. 나중에 바꿔줘 - 박정익
+			if(i < PlayerPositions.Num()) 
+				BP_WorldMap->SetPlayerPosition(i, PlayerPositions[i]);
+			if(i < PlayerRotations.Num())
+				BP_WorldMap->SetPlayerRotation(i, PlayerRotations[i]);
 		}
 
 		// 인원 수 보내면 인원 수 넘는 애들은 숨김
