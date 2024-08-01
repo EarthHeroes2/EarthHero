@@ -6,6 +6,5 @@
 
 void AGameOverGameSession::SeamlessTravelSuccessCount()
 {
-	UE_LOG(LogTemp, Warning, TEXT("555555555555555555555555"));
 	NumberOfPlayersInSession++;
 }

@@ -36,7 +36,6 @@ void AGameOverGameMode::InitSeamlessTravelPlayer(AController* NewController)
 			AGameOverGameSession* GameOverGameSession = Cast<AGameOverGameSession>(GameSession);
 			if (GameOverGameSession)
 			{
-				UE_LOG(LogTemp, Warning, TEXT("444444444444444444444444"));
 				GameOverPlayerControllers.Add(NewGameOverPlayerController);
 				GameOverGameSession->SeamlessTravelSuccessCount();
 			}

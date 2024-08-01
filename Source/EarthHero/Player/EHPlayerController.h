@@ -35,7 +35,7 @@ public:
 	
 
 	UFUNCTION(Client, Reliable)
-	void Client_UpdateSpectatorTarget();
+	void Client_StartSpectate();
 
 protected:
 	virtual void BeginPlay() override;
@@ -117,6 +117,7 @@ private:
 	AEHCharacter* CurrentSpectatorTarget;
 	TArray<AEHCharacter*> SpectatorTargets;
 
+	void StartSpectate();
 	void UpdateSpectatorTarget();
 	void ChangeSpectatorTarget(bool bPrevious);
 	void ChangeSpectatorLeft();

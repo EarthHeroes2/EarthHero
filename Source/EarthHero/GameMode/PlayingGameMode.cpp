@@ -363,7 +363,7 @@ void APlayingGameMode::AddPlayerDead(AEHPlayerController* DeadEHPlayerController
 		CheckAllPlayerDead();
 	}
 
-	if(DeadEHPlayerController) DeadEHPlayerController->Client_UpdateSpectatorTarget();
+	if(DeadEHPlayerController) DeadEHPlayerController->Client_StartSpectate();
 }
 
 void APlayingGameMode::CheckAllPlayerDead()
