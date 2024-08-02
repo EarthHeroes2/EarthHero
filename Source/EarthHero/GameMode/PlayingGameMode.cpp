@@ -10,6 +10,7 @@
 #include "EarthHero/Player/EHPlayerController.h"
 #include "EarthHero/Player/EHPlayerState.h"
 #include "EarthHero/Stat/Effect/EffectBase.h"
+#include "GameFramework/SpectatorPawn.h"
 #include "Kismet/GameplayStatics.h"
 
 APlayingGameMode::APlayingGameMode()
@@ -363,7 +364,19 @@ void APlayingGameMode::AddPlayerDead(AEHPlayerController* DeadEHPlayerController
 		CheckAllPlayerDead();
 	}
 
-	if(DeadEHPlayerController) DeadEHPlayerController->Client_StartSpectate();
+	if(DeadEHPlayerController)
+	{
+		//임시
+		FVector SpawnLocation = FVector::ZeroVector;
+		FRotator SpawnRotation = FRotator::ZeroRotator;
+		ASpectatorPawn* SpectatorPawn = GetWorld()->SpawnActor<ASpectatorPawn>(ASpectatorPawn::StaticClass(), SpawnLocation, SpawnRotation);
+
+		if (SpectatorPawn)
+		{
+			DeadEHPlayerController->Possess(SpectatorPawn);
+			DeadEHPlayerController->Client_StartSpectate();
+		}
+	}
 }
 
 void APlayingGameMode::CheckAllPlayerDead()

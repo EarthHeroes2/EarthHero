@@ -428,19 +428,29 @@ void AEHPlayerController::Dead()
 //죽고 불리는 함수
 void AEHPlayerController::Client_StartSpectate_Implementation()
 {
+
+
+
+
+
+
+	
+	//!!!!!현재 이 방향성은 보류함 (너무 멀면 제대로 작동안함)!!!!!
 	//정확한 이유는 모르겠지만 너무 빠르게 실행되면 관전이 안됨 (서버에서 unpossed 되어도 클라입장에서는 좀 느린가?)
 	//약간의 연출같은 것으로 자연스럽게 전환해줄 필요가 있을듯
-	FTimerHandle TimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AEHPlayerController::StartSpectate, 2.0f, false);
+	//FTimerHandle TimerHandle;
+	//GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AEHPlayerController::StartSpectate, 2.0f, false);
 }
+
 
 void AEHPlayerController::StartSpectate()
 {
-	UpdateSpectatorTarget();
-	ChangeSpectatorTarget(false);
+	//UpdateSpectatorTarget();
+	//ChangeSpectatorTarget(false);
 	bSpectating = true;
 }
 
+/*
 //관전할 대상들을 찾아봄
 void AEHPlayerController::UpdateSpectatorTarget()
 {
@@ -520,7 +530,7 @@ void AEHPlayerController::ChangeSpectatorTarget(bool bPrevious)
 		SpectatorTargetIndex = INDEX_NONE;
 		CurrentSpectatorTarget = nullptr;
 	}
-}
+}*/
 
 
 void AEHPlayerController::ChangeSpectatorLeft()
@@ -528,8 +538,8 @@ void AEHPlayerController::ChangeSpectatorLeft()
 	if(bSpectating)
 	{
 		UE_LOG(LogTemp, Log, TEXT("ChangeSpectatorLeft()"));
-		UpdateSpectatorTarget();
-		ChangeSpectatorTarget(true);
+		//UpdateSpectatorTarget();
+		//ChangeSpectatorTarget(true);
 	}
 }
 
@@ -538,8 +548,8 @@ void AEHPlayerController::ChangeSpectatorRight()
 	if(bSpectating)
 	{
 		UE_LOG(LogTemp, Log, TEXT("ChangeSpectatorRight()"));
-		UpdateSpectatorTarget();
-		ChangeSpectatorTarget(false);
+		//UpdateSpectatorTarget();
+		//ChangeSpectatorTarget(false);
 	}
 }
 

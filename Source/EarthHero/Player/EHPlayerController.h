@@ -122,8 +122,8 @@ private:
 	TArray<AEHCharacter*> SpectatorTargets;
 
 	void StartSpectate();
-	void UpdateSpectatorTarget();
-	void ChangeSpectatorTarget(bool bPrevious);
+	//void UpdateSpectatorTarget();
+	//void ChangeSpectatorTarget(bool bPrevious);
 	void ChangeSpectatorLeft();
 	void ChangeSpectatorRight();
 	
