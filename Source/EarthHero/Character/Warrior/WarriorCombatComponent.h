@@ -21,6 +21,8 @@ public:
 
 	void SwordHit();
 
+	void JumpAttack();
+
 	void ToggleWhirlwind();
 
 	UFUNCTION(Server, Reliable)
@@ -36,6 +38,9 @@ protected:
 	void NetMulticast_Attack(int32 ComboOfAttack);
 
 	void ResetAttack();
+
+	UFUNCTION(Server, Reliable)
+	void Server_JumpAttack(FVector LaunchVector);
 
 	UFUNCTION(Server, Reliable)
 	void Server_SwordHit(FVector CamLocation, FRotator CamRotation);
@@ -71,6 +76,10 @@ private:
 	bool bIsWhirlwind = false;
 	UPROPERTY()
 	bool bCanWhirlwind = true;
+
+	//Jump Attack
+	UPROPERTY()
+	
 	
 	float TotalWhirlwindDuration = 3.f;
 

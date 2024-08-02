@@ -246,3 +246,7 @@ void AEHCharacter::Shoot()
 void AEHCharacter::Skill()
 {
 }
+
+void AEHCharacter::Dash()
+{
+}

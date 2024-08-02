@@ -87,13 +87,17 @@
   <component name="ChangeListManager">
     <list default="true" id="0cbbd613-fc41-47be-bbe4-1434fbbd246c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.EarthHero.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EarthHero.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Animations/Warrior/TPS/ARPG_Warrior_Anim_UE_Attack_Combo1.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Animations/Warrior/TPS/ARPG_Warrior_Anim_UE_Attack_Combo1.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Animations/Warrior/TPS/ARPG_Warrior_Anim_UE_Attack_Combo2.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Animations/Warrior/TPS/ARPG_Warrior_Anim_UE_Attack_Combo2.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Character/Warrior/Animation/ABP_TPS_Warrior.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Character/Warrior/Animation/ABP_TPS_Warrior.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Character/Warrior/BP_Warrior.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Character/Warrior/BP_Warrior.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/TestMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/TestMap.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Input/IMC_EHContext.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Input/IMC_EHContext.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Player/BP_EHPlayerController.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Player/BP_EHPlayerController.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/EHCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/EHCharacter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/EHCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/EHCharacter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/Warrior/EHWarrior.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Warrior/EHWarrior.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/Warrior/EHWarrior.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Warrior/EHWarrior.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/Warrior/WarriorCombatComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Warrior/WarriorCombatComponent.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/Warrior/WarriorCombatComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Warrior/WarriorCombatComponent.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerController.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerController.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerState.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerState.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28827,7 +28831,7 @@
       <workItem from="1720295536939" duration="813000" />
       <workItem from="1721306057358" duration="11745000" />
       <workItem from="1722425938870" duration="5278000" />
-      <workItem from="1722490279426" duration="7111000" />
+      <workItem from="1722490279426" duration="13348000" />
     </task>
     <servers />
   </component>

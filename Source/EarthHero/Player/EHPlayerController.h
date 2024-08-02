@@ -63,6 +63,8 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> SkillAction;
 	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> DashAction;
+	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> TabAction;
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> ChatAction;
@@ -131,6 +133,7 @@ protected:
 	void Jump();
 	void Shoot();
 	void Skill();
+	void Dash();
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	void ShowTabHUD();
