@@ -28,6 +28,7 @@ AEHCharacter::AEHCharacter()
     FirstPersonHand = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FPS Hand"));
     FirstPersonHand->SetupAttachment(FPSCamera);
 
+    /*
     //박정익 - 관전용 카메라 (테스트용)
     SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
     SpringArm->SetupAttachment(RootComponent);
@@ -35,11 +36,11 @@ AEHCharacter::AEHCharacter()
     SpringArm->bUsePawnControlRotation = true;
     SpringArm->bEnableCameraLag = true;
     SpringArm->bEnableCameraRotationLag = true;
-
+    
     SpectatorTarget = CreateDefaultSubobject<UChildActorComponent>(TEXT("SpectatorTarget"));
     SpectatorTarget->SetupAttachment(SpringArm);
     SpectatorTarget->SetChildActorClass(ASpectatorCameraActor::StaticClass());
-    SpectatorTarget->SetRelativeRotation(FRotator(0.f, -5.f, 0.f));
+    SpectatorTarget->SetRelativeRotation(FRotator(0.f, -5.f, 0.f));*/
 
     WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Weapon"));
     WeaponMesh->SetupAttachment(FirstPersonHand, FName("FPS_RightHand"));
