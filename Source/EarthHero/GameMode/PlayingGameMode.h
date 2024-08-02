@@ -5,6 +5,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "PlayingGameMode.generated.h"
 
+class AEffectBase;
 class AEHShooter;
 class AEHWarrior;
 class AEHPlayerController;
@@ -71,7 +72,7 @@ public:
 	void UpdateGameStateReceiveDamage();
 	void UpdateGameStateHeal();
 	void UpdatePlayerClassImage();
-	void UpdatePlayerStateImage();
+	void UpdatePlayerStateImage(AActor *TargetActor, TSubclassOf<AEffectBase> EffectType);
 	int32 FindControllerForTargetActor(AActor* TargetActor);
 
 	void Rebirth(AEHPlayerController* EHPlayerController);
@@ -87,4 +88,6 @@ public:
 private:
 	TArray<float> ExpansionDurations;
 	TArray<FVector2D> ForceFieldLocations;
+
+	bool DebugMode;
 };

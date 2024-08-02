@@ -97,17 +97,15 @@ void UEHGameInstance::SetEffectArray()
             AEffectBase::EffectArray.Add(Effect);
         }
     }
-    UE_LOG(LogClass, Warning, TEXT("GameInstance : EffectArrayNums = %d"), AEffectBase::EffectArray.Num());
+    //UE_LOG(LogClass, Warning, TEXT("GameInstance : EffectArrayNums = %d"), AEffectBase::EffectArray.Num());
 }
 
 void UEHGameInstance::Init()
 {
     Super::Init();
     if(!IsRunningDedicatedServer()) LoadSettings();
-    else
-    {
-        SetEffectArray();
-    }
+   
+    SetEffectArray();
 }
 
 void UEHGameInstance::SaveSettings()

@@ -212,7 +212,7 @@ void UWarriorCombatComponent::Whirlwind()
 	if(CurrentWhirlwindDuration <= TotalWhirlwindDuration)
 	{
 		CurrentWhirlwindDuration += WhirlwindTick;
-		UE_LOG(LogClass, Warning, TEXT("CUrrentWhirlwindDuration = %f, WhirlWindTick = %f, TotalWhirlWindDuration = %f"), CurrentWhirlwindDuration, WhirlwindTick, TotalWhirlwindDuration);
+		//UE_LOG(LogClass, Warning, TEXT("CUrrentWhirlwindDuration = %f, WhirlWindTick = %f, TotalWhirlWindDuration = %f"), CurrentWhirlwindDuration, WhirlwindTick, TotalWhirlwindDuration);
 
 		if(Warrior && Warrior->GetFPSCamera())
 		{

@@ -626,48 +626,48 @@ void APlayingGameMode::UpdatePlayerClassImage()
 	PlayingGameState->UpdatePlayerClassImage(ClassImage);
 }
 
-void APlayingGameMode::UpdatePlayerStateImage()
+void APlayingGameMode::UpdatePlayerStateImage(AActor *TargetActor, TSubclassOf<AEffectBase> EffectType)
 {
-	TArray<FEffectStatus> EffectStatuses;
-	EffectStatuses.SetNum(EHPlayerControllers.Num());
+	DebugMode = false;
+	FEffectStatus EffectStatus;
 	
-	// EffectMap의 각 Actor의 Effect 상태를 모니터링합니다.
-	for (const auto& EffectEntry : AEffectBase::EffectMap)
+	//UE_LOG(LogClass, Warning, TEXT("GameMode : TargetActor %s"), *TargetActor->GetName());
+	int32 Index = FindControllerForTargetActor(TargetActor);
+	if (Index == -1)
 	{
-		AActor* TargetActor = EffectEntry.Key;
-		UE_LOG(LogClass, Warning, TEXT("GameMode : TargetActor %s"), *TargetActor->GetName());
-		int32 Index = FindControllerForTargetActor(TargetActor);
-		if (Index == -1)
-		{
-			UE_LOG(LogClass, Error, TEXT("GameMode : failed to find TargetActor %s"), *TargetActor->GetName());
-			continue;
-		}
-		const TMap<TSubclassOf<AEffectBase>, AEffectBase*>& Effects = EffectEntry.Value;
-
-		for (const auto& Effect : Effects)
-		{
-			AEffectBase* EffectInstance = Effect.Value;
-			UE_LOG(LogClass, Warning, TEXT("GameMode : EffectInstance Name = %s"), *EffectInstance->GetName());
-
-			// Effect가 존재하는 지 확인하고 GameState로 전달합니다.
-			// 예: EffectInstance->bRefresh가 true인지 확인
-			if (EffectInstance)
-			{
-				int CurEffectType = EffectInstance->EffectType;
-				EffectStatuses[Index].EffectImage.Add(EffectInstance->EffectArray[CurEffectType]->EffectImage);
-				EffectStatuses[Index].EffectType.Add(EffectInstance->EffectArray[CurEffectType]->EffectType);
-				EffectStatuses[Index].EffectDuration.Add(EffectInstance->EffectDuration);
-			}
-		}
+		UE_LOG(LogClass, Error, TEXT("GameMode : FindControllerForTargetActor failed"));
+		return;
 	}
+	TMap<TSubclassOf<AEffectBase>, AEffectBase*>* TargetMap = AEffectBase::EffectMap.Find(TargetActor);
+	
+	AEffectBase* EffectInstance = *TargetMap->Find(EffectType);
+	//UE_LOG(LogClass, Warning, TEXT("GameMode : EffectInstance Name = %s"), *EffectInstance->GetName());
 
-	UE_LOG(LogClass, Warning, TEXT("GameMode : EffectStsatuses num = %d, EffectMap Num = %d"), EffectStatuses.Num(), AEffectBase::EffectMap.Num());
+	// Effect가 존재하는 지 확인하고 GameState로 전달합니다.
+	// 예: EffectInstance->bRefresh가 true인지 확인
+	if (EffectInstance)
+	{
+		int CurEffectType = EffectInstance->EffectType;
+		EffectStatus.EffectImage = EffectInstance->EffectArray[CurEffectType]->EffectImage;
+		EffectStatus.EffectType = EffectInstance->EffectArray[CurEffectType]->EffectType;
+		EffectStatus.EffectDuration = EffectInstance->EffectDuration;
+	}
+	else
+	{
+		UE_LOG(LogClass, Error, TEXT("GameMode : Not Found EffectInstance"));
+		return;
+	}
+	
 	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
-	PlayingGameState->UpdatePlayerEffectState(EffectStatuses);
+	PlayingGameState->UpdatePlayerEffectState(EffectStatus, Index);
 }
 
 int32 APlayingGameMode::FindControllerForTargetActor(AActor* TargetActor)
 {
+	if (DebugMode)
+	{
+		return 0;
+	}
 	for (int32 Index = 0; Index < EHPlayerControllers.Num(); ++Index)
 	{
 		if (EHPlayerControllers[Index] && EHPlayerControllers[Index]->GetPawn() == TargetActor)

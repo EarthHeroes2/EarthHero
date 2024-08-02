@@ -6,6 +6,7 @@
 #include "Components/Image.h"
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
+#include "EarthHero/Stat/Effect/EffectBase.h"
 
 void UInGamePlayerInfo::SetName(const FString& Name) const
 {
@@ -33,16 +34,12 @@ void UInGamePlayerInfo::SetImage(UTexture2D *Image) const
 
 void UInGamePlayerInfo::UpdatePlayerEffects(FEffectStatus PlayerStatus)
 {
-	int Count = PlayerStatus.EffectType.Num();
-	for (int i = 0; i < Count; i++)
-	{
-		EffectCount += 1;
-		UE_LOG(LogClass, Warning, TEXT("InGamePlayerInfo: EffectType = %d, EffectCount = %d"), PlayerStatus.EffectType[i], EffectCount);
-		PLayerStatusArray[EffectCount - 1] = FStatus(PlayerStatus.EffectType[i], PLayerStatusArray[EffectCount - 1].CoolDownWidget);
-		PLayerStatusArray[EffectCount - 1].CoolDownWidget->SetImage(PlayerStatus.EffectImage[i]);
-		PLayerStatusArray[EffectCount - 1].CoolDownWidget->StartCoolDown(PlayerStatus.EffectDuration[i], PlayerStatus.EffectType[i]);
-		PLayerStatusArray[EffectCount - 1].CoolDownWidget->InGamePlayerInfo = this;
-	}
+	EffectCount += 1;
+	//UE_LOG(LogClass, Warning, TEXT("InGamePlayerInfo: EffectType = %d, EffectDuration = %f, EffectCount = %d"), PlayerStatus.EffectType, PlayerStatus.EffectDuration, EffectCount);
+	PLayerStatusArray[EffectCount - 1] = FStatus(PlayerStatus.EffectType, PLayerStatusArray[EffectCount - 1].CoolDownWidget);
+	PLayerStatusArray[EffectCount - 1].CoolDownWidget->SetImage(PlayerStatus.EffectImage);
+	PLayerStatusArray[EffectCount - 1].CoolDownWidget->StartCoolDown(PlayerStatus.EffectDuration, PlayerStatus.EffectType);
+	PLayerStatusArray[EffectCount - 1].CoolDownWidget->InGamePlayerInfo = this;
 }
 
 void UInGamePlayerInfo::DeletePlayerEffects(int EffectType)

@@ -68,7 +68,7 @@ public:
 	UPROPERTY()
 	TArray<UInGamePlayerInfo*> InGamePlayerInfoArray;
 
-	void UpdatePlayerEffectState(const TArray<FEffectStatus> EffectStatuses);
+	void UpdatePlayerEffectState(const FEffectStatus EffectStatus, const int32 TargetIndex);
 
 
 	//플레이어 캐릭터 Effect 표시

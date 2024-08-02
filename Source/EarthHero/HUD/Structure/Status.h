@@ -41,11 +41,11 @@ struct FEffectStatus
 	
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<UTexture2D*> EffectImage;
+	UTexture2D* EffectImage;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<int> EffectType;
+	int EffectType;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<float> EffectDuration;
+	float EffectDuration;
 };

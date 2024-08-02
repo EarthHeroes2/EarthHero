@@ -244,18 +244,16 @@ void APlayingGameState::OnRep_GameStatePlayerClassImages() const
 	}
 }
 
-void APlayingGameState::UpdatePlayerEffectState(const TArray<FEffectStatus> EffectStatuses)
+void APlayingGameState::UpdatePlayerEffectState(const FEffectStatus EffectStatus, const int32 index)
 {
-	AllEffectStatuses = EffectStatuses;
-	
+	GameStateEffectStatus(EffectStatus, index);
 }
-void APlayingGameState::OnRep_GameStateEffectStatuses() const
+void APlayingGameState::GameStateEffectStatus_Implementation(const FEffectStatus EffectStatus, const int32 index) const
 {
-	UE_LOG(LogClass, Warning, TEXT("GameState : OnRep_GameStateEffectStatuses"));
+	//UE_LOG(LogClass, Warning, TEXT("GameState : GameStateEffectStatuses"));
 	if(EHPlayerController && EHPlayerController->HUD)
 	{
-		//UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateActorLocations"));
-		EHPlayerController->HUD->UpdatePlayerEffectState(AllEffectStatuses);
+		EHPlayerController->HUD->UpdatePlayerEffectState(EffectStatus, index);
 	}
 }
 
@@ -279,7 +277,5 @@ void APlayingGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME(APlayingGameState, AllPlayerNumbers);
 	DOREPLIFETIME(APlayingGameState, AllExpansionDurations);
 	DOREPLIFETIME(APlayingGameState, AllForceFieldLocations);
-	DOREPLIFETIME(APlayingGameState, AllPlayerClassImages);
-	DOREPLIFETIME(APlayingGameState, AllEffectStatuses);
-
+	DOREPLIFETIME(APlayingGameState, AllPlayerClassImages)
 }

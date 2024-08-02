@@ -61,6 +61,7 @@ void AEffectBase::ApplyEffect(AActor* InTargetActor, float InEffectValue, float 
 			// 영구효과가 아니고, 갱신 가능한 효과인 경우, 기존 타이머를 클리어하고 다시 설정하여 지속 시간을 갱신
 			if (!ExistingEffect->bIsPermanent && bShouldRefreshDuration)
 			{
+				UE_LOG(LogClass, Warning, TEXT("효과 갱신, 이름 : %s"), *GetClass()->GetName());
 				ExistingEffect->GetWorld()->GetTimerManager().ClearTimer(ExistingEffect->EffectTimerHandle);
 				ExistingEffect->GetWorld()->GetTimerManager().SetTimer(ExistingEffect->EffectTimerHandle, ExistingEffect, &AEffectBase::ResetEffect, InDuration, false);
 				AddEffect(InDuration);
@@ -71,27 +72,26 @@ void AEffectBase::ApplyEffect(AActor* InTargetActor, float InEffectValue, float 
 		{
 			if (!bIsPermanent)
 			{
+				UE_LOG(LogClass, Warning, TEXT("효과 적용 액터 이미 존재, 이름 : %s"), *GetClass()->GetName());
 				GetWorld()->GetTimerManager().SetTimer(EffectTimerHandle, this, &AEffectBase::ResetEffect, InDuration, false);
 			}
-			
-			AddEffect(InDuration);
-			//효과 적용 목록에 추가
 			TargetMap->Add(GetClass(), this);
+			AddEffect(InDuration);
 		}
-		return;
 	}
 	else //첫 효과 적용
 	{
 		if (!bIsPermanent)
 		{
+			UE_LOG(LogClass, Warning, TEXT("첫 효과 적용, 이름 : %s"), *GetClass()->GetName());
 			GetWorld()->GetTimerManager().SetTimer(EffectTimerHandle, this, &AEffectBase::ResetEffect, InDuration, false);
 		}
 		//효과 적용 목록에 추가
 		EffectMap.Add(TargetActor, TMap<TSubclassOf<AEffectBase>, AEffectBase*>());
 		TargetMap = EffectMap.Find(TargetActor);
+		TargetMap->Add(GetClass(), this);
 		AddEffect(InDuration);
 	}
-	TargetMap->Add(GetClass(), this);
 }
 
 void AEffectBase::AddEffect(float InDuration)
@@ -112,7 +112,7 @@ void AEffectBase::AddEffect(float InDuration)
 		}
 		if (APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode()))
 		{
-			PlayingGameMode->UpdatePlayerStateImage();
+			PlayingGameMode->UpdatePlayerStateImage(TargetActor, GetClass());
 		}
 	}
 }

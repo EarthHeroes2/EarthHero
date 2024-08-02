@@ -202,20 +202,16 @@ void UInGameHUD::AddChatMessage(const FText& Text)
 	}
 }
 
-void UInGameHUD::UpdatePlayerEffectState(const TArray<FEffectStatus> EffectStatuses)
+void UInGameHUD::UpdatePlayerEffectState(const FEffectStatus EffectStatus, const int32 TargetIndex)
 {
-	UE_LOG(LogClass, Warning, TEXT("InGameHUD : EffectStatuses num : %d"), EffectStatuses.Num());
-	for(int i = 0; i < EffectStatuses.Num(); i++)
-	{
-		//InGamePlayerInfoArray[i] 에 상태 관리 함수 만들어서 업데이트
-		InGamePlayerInfoArray[i]->UpdatePlayerEffects(EffectStatuses[i]);
-	}
+	//UE_LOG(LogClass, Warning, TEXT("InGameHUD : GameStateEffectStatuses"));
+	InGamePlayerInfoArray[TargetIndex]->UpdatePlayerEffects(EffectStatus);
 }
 
 void UInGameHUD::AddStatusImage(UTexture2D* EffectImage, int EffectType, float CoolDown)
 {
 	EffectCount += 1;
-	UE_LOG(LogClass, Warning, TEXT("EffectType = %d, EffectCount = %d"), EffectType, EffectCount);
+	//UE_LOG(LogClass, Warning, TEXT("EffectType = %d, EffectCount = %d"), EffectType, EffectCount);
 	StatusArray[EffectCount - 1] = FStatus(EffectType, StatusArray[EffectCount - 1].CoolDownWidget);
 	StatusArray[EffectCount - 1].CoolDownWidget->SetImage(EffectImage);
 	StatusArray[EffectCount - 1].CoolDownWidget->StartCoolDown(CoolDown, EffectType);
