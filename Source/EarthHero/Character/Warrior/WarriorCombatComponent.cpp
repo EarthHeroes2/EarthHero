@@ -55,24 +55,31 @@ void UWarriorCombatComponent::Attack()
 		bCanAttack = false;
 		Warrior->GetWorldTimerManager().SetTimer(AttackCooldownTimerHandle,this, &ThisClass::ResetAttack, AttackCooldown);
 	
-		Server_Attack();
+		Server_Attack(AttackCombo);
 	}
 }
 
-void UWarriorCombatComponent::Server_Attack_Implementation()
+void UWarriorCombatComponent::Server_Attack_Implementation(int32 ComboOfAttack)
 {
-	
-	NetMulticast_Attack();
+	NetMulticast_Attack(ComboOfAttack);
 }
 
-void UWarriorCombatComponent::NetMulticast_Attack_Implementation()
+// UAnimInstance* WarriorAnimInstance = Warrior->GetFirstPersonMesh()->GetAnimInstance();
+// WarriorAnimInstance->Montage_Play(FPS_AttackAnimMontage[AttackCombo]);
+// WarriorAnimInstance->Montage_SetPlayRate(FPS_AttackAnimMontage[AttackCombo], PlayRate);
+
+void UWarriorCombatComponent::NetMulticast_Attack_Implementation(int32 ComboOfAttack)
 {
 	//TPS
 	if(!Warrior->IsLocallyControlled())
 	{
-		if(TPS_AttackAnimMontage)
+		if(TPS_AttackAnimMontage[ComboOfAttack])
 		{
-			Warrior->GetMesh()->GetAnimInstance()->Montage_Play(TPS_AttackAnimMontage);
+			float PlayRate = FMath::Clamp(0.3f * (1.f / AttackCooldown), 0.6f, 1.2f);
+			
+			UAnimInstance* WarriorAnimInstance = Warrior->GetMesh()->GetAnimInstance();
+			WarriorAnimInstance->Montage_Play(TPS_AttackAnimMontage[ComboOfAttack]);
+			WarriorAnimInstance->Montage_SetPlayRate(TPS_AttackAnimMontage[ComboOfAttack], PlayRate);
 		}
 	}
 }
@@ -82,6 +89,7 @@ void UWarriorCombatComponent::ResetAttack()
 	bCanAttack = true;
 }
 
+
 void UWarriorCombatComponent::SwordHit()
 {
 	if(Warrior && Warrior->GetFPSCamera())
@@ -89,6 +97,40 @@ void UWarriorCombatComponent::SwordHit()
 		Server_SwordHit(Warrior->GetFPSCamera()->GetComponentLocation(),
 			Warrior->GetFPSCamera()->GetComponentRotation());
 	}
+}
+
+void UWarriorCombatComponent::JumpAttack()
+{
+	float ControlPitch = 0.f;
+
+	AController* Controller = Warrior->GetController();
+
+	FRotator LaunchRotation = FRotator::ZeroRotator;
+	
+	if (Controller)
+	{
+		LaunchRotation = Controller->GetControlRotation();
+		if (LaunchRotation.Pitch < 180.f)
+		{
+			ControlPitch = FMath::Clamp(LaunchRotation.Pitch, 30.f, 80.f);
+		}
+		else
+		{
+			ControlPitch = FMath::Clamp(LaunchRotation.Pitch - 360.f, 30.f, 80.f);
+		}
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("Current Pitch : %f"), ControlPitch);
+	LaunchRotation.Pitch = ControlPitch;
+	
+	FVector LaunchDirection = LaunchRotation.Vector();
+
+	Server_JumpAttack(LaunchDirection);
+}
+
+void UWarriorCombatComponent::Server_JumpAttack_Implementation(FVector LaunchVector)
+{
+	Warrior->LaunchCharacter(LaunchVector * 1500.f, false, false);
 }
 
 void UWarriorCombatComponent::Server_SwordHit_Implementation(FVector CamLocation, FRotator CamRotation)

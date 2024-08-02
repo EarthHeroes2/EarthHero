@@ -38,6 +38,7 @@ public:
 
     virtual void Shoot();
     virtual void Skill();
+    virtual void Dash();
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
     class UStatComponent *StatComponent;

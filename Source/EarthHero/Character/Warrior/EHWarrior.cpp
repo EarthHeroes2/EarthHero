@@ -36,6 +36,15 @@ void AEHWarrior::Skill()
 	}
 }
 
+void AEHWarrior::Dash()
+{
+	Super::Dash();
+	if(CombatComponent)
+	{
+		CombatComponent->JumpAttack();
+	}
+}
+
 void AEHWarrior::BeginPlay()
 {
 	Super::BeginPlay();

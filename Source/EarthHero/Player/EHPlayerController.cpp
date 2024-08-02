@@ -139,6 +139,7 @@ void AEHPlayerController::SetupInputComponent()
 	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ThisClass::Look);
 	EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Triggered, this, &ThisClass::Shoot);
 	EnhancedInputComponent->BindAction(SkillAction, ETriggerEvent::Started, this, &ThisClass::Skill);
+	EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Started, this, &ThisClass::Dash);
 
 	EnhancedInputComponent->BindAction(TabAction, ETriggerEvent::Started, this, &ThisClass::ShowTabHUD);
 	EnhancedInputComponent->BindAction(TabAction, ETriggerEvent::Completed, this, &ThisClass::HideTabHUD);
@@ -221,6 +222,14 @@ void AEHPlayerController::Skill()
 	if (GetPawn())
 	{
 		Cast<AEHCharacter>(GetPawn())->Skill();
+	}
+}
+
+void AEHPlayerController::Dash()
+{
+	if(GetPawn())
+	{
+		Cast<AEHCharacter>(GetPawn())->Dash();
 	}
 }
 

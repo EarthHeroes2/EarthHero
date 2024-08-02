@@ -21,6 +21,8 @@ public:
 
 	void SwordHit();
 
+	void JumpAttack();
+
 	void ToggleWhirlwind();
 
 	UFUNCTION(Server, Reliable)
@@ -30,12 +32,15 @@ protected:
 	virtual void BeginPlay() override;
 	
 	UFUNCTION(Server, Reliable)
-	void Server_Attack();
+	void Server_Attack(int32 ComboOfAttack);
 
 	UFUNCTION(NetMulticast, Reliable)
-	void NetMulticast_Attack();
+	void NetMulticast_Attack(int32 ComboOfAttack);
 
 	void ResetAttack();
+
+	UFUNCTION(Server, Reliable)
+	void Server_JumpAttack(FVector LaunchVector);
 
 	UFUNCTION(Server, Reliable)
 	void Server_SwordHit(FVector CamLocation, FRotator CamRotation);
@@ -71,6 +76,10 @@ private:
 	bool bIsWhirlwind = false;
 	UPROPERTY()
 	bool bCanWhirlwind = true;
+
+	//Jump Attack
+	UPROPERTY()
+	
 	
 	float TotalWhirlwindDuration = 3.f;
 
@@ -94,7 +103,7 @@ private:
 	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true), Category = "Animation");
-	UAnimMontage* TPS_AttackAnimMontage;
+	TArray<UAnimMontage*> TPS_AttackAnimMontage;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true), Category = "Animation");
 	TArray<UAnimMontage*> FPS_AttackAnimMontage;
 
