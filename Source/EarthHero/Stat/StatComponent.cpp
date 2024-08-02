@@ -108,7 +108,6 @@ float UStatComponent::DamageTaken(float InDamage, TSubclassOf<UDamageType> Damag
 	//GEngine->AddOnScreenDebugMessage(-1, 1233223.f, FColor::Green, Message);
 	if (HeroStat.Health <= 0.f)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Dead : %s"), *GetOwner()->GetName());
 		FString Message = FString::Printf(TEXT("Dead"));
 		
 		AActor* Actor = GetOwner();

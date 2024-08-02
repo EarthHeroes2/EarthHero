@@ -1,6 +1,7 @@
 #include "PlayingGameMode.h"
 
 #include "EarthHero/Character/Shooter/EHShooter.h"
+#include "EarthHero/Character/Spectator/CustomSpectatorPawn.h"
 #include "EarthHero/Character/Warrior/EHWarrior.h"
 #include "EarthHero/Enum/Enums.h"
 #include "EarthHero/ForceField/ForceField.h"
@@ -10,7 +11,6 @@
 #include "EarthHero/Player/EHPlayerController.h"
 #include "EarthHero/Player/EHPlayerState.h"
 #include "EarthHero/Stat/Effect/EffectBase.h"
-#include "GameFramework/SpectatorPawn.h"
 #include "Kismet/GameplayStatics.h"
 
 APlayingGameMode::APlayingGameMode()
@@ -196,6 +196,22 @@ void APlayingGameMode::GenerateRandomDurations(int Count, float Min, float Max, 
     }
 }
 
+bool APlayingGameMode::GetPlayerLocation(int PlayerNumber, FVector& PlayerLocation)
+{
+	AEHPlayerController* TargetEHPlayerController = EHPlayerControllers[PlayerNumber - 1];
+	if(TargetEHPlayerController)
+	{
+		//캐릭터 조작이 아니면 (예 : 관전폰) 걸러짐
+		ACharacter* Character = TargetEHPlayerController->GetCharacter();
+		if(Character)
+		{
+			PlayerLocation = Character->GetActorLocation();
+			return true;
+		}
+	}
+	return false;
+}
+
 void APlayingGameMode::SpawnForceFieldAtLocation(FVector2D Location, float ExpansionDuration)
 {
 	if (ForceFieldActor == nullptr)
@@ -294,8 +310,8 @@ void APlayingGameMode::PlayerControllerReady() //조금 느리지만 안전하�
 		UpdateGameStateReceiveDamage();
 		UpdateGameStateHeal();
 	 
-		//모두의 움직임 풀어줌
-		EnableAllInput();
+		//모두에게 게임 시작을 알림
+		GameStart();
 
 		//게임 시간은 흐르기 시작
 		FTimerHandle Handle;
@@ -303,11 +319,11 @@ void APlayingGameMode::PlayerControllerReady() //조금 느리지만 안전하�
 	}
 }
 
-void APlayingGameMode::EnableAllInput() //모든 플레이어 input 허용
+void APlayingGameMode::GameStart() //모든 플레이어에게 게임 시작을 알림
 {
 	for(AEHPlayerController* EHPlayerController : EHPlayerControllers)
 	{
-		EHPlayerController->Client_EnableInput();
+		EHPlayerController->Client_GameStart();
 	}
 }
 
@@ -369,12 +385,16 @@ void APlayingGameMode::AddPlayerDead(AEHPlayerController* DeadEHPlayerController
 		//임시
 		FVector SpawnLocation = FVector::ZeroVector;
 		FRotator SpawnRotation = FRotator::ZeroRotator;
-		ASpectatorPawn* SpectatorPawn = GetWorld()->SpawnActor<ASpectatorPawn>(ASpectatorPawn::StaticClass(), SpawnLocation, SpawnRotation);
 
-		if (SpectatorPawn)
+		UWorld* World = GetWorld();
+		if(World)
 		{
-			DeadEHPlayerController->Possess(SpectatorPawn);
-			DeadEHPlayerController->Client_StartSpectate();
+			ACustomSpectatorPawn* CustomSpectatorPawn = World->SpawnActor<ACustomSpectatorPawn>(ACustomSpectatorPawn::StaticClass(), SpawnLocation, SpawnRotation);
+			if (CustomSpectatorPawn)
+			{
+				DeadEHPlayerController->Possess(CustomSpectatorPawn);
+				DeadEHPlayerController->Client_StartSpectate();
+			}
 		}
 	}
 }

@@ -26,13 +26,16 @@ public:
 	class UTabHUDWidget* TabHUD;
 
 	UFUNCTION(Client, Reliable)
-	void Client_EnableInput();
+	void Client_GameStart();
 
 	UFUNCTION(Client, Reliable)
 	void Client_AddEffect(UTexture2D* EffectImage, int ServerEffectType, float Duration);
 
 	void Dead();
-	
+
+	UFUNCTION(Client, Reliable)
+	void Client_DisableInput();
+
 
 	UFUNCTION(Client, Reliable)
 	void Client_StartSpectate();
@@ -167,4 +170,7 @@ public:
 	void Client_SendChatMessage(const FText& Text);
 
 	void Rebirth();
+
+	UFUNCTION(Server, Reliable)
+	void Server_SpectatePlayer(int PlayerNumber);
 };
