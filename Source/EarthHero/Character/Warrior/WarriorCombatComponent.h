@@ -30,10 +30,10 @@ protected:
 	virtual void BeginPlay() override;
 	
 	UFUNCTION(Server, Reliable)
-	void Server_Attack();
+	void Server_Attack(int32 ComboOfAttack);
 
 	UFUNCTION(NetMulticast, Reliable)
-	void NetMulticast_Attack();
+	void NetMulticast_Attack(int32 ComboOfAttack);
 
 	void ResetAttack();
 
@@ -94,7 +94,7 @@ private:
 	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true), Category = "Animation");
-	UAnimMontage* TPS_AttackAnimMontage;
+	TArray<UAnimMontage*> TPS_AttackAnimMontage;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true), Category = "Animation");
 	TArray<UAnimMontage*> FPS_AttackAnimMontage;
 

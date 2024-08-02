@@ -55,24 +55,31 @@ void UWarriorCombatComponent::Attack()
 		bCanAttack = false;
 		Warrior->GetWorldTimerManager().SetTimer(AttackCooldownTimerHandle,this, &ThisClass::ResetAttack, AttackCooldown);
 	
-		Server_Attack();
+		Server_Attack(AttackCombo);
 	}
 }
 
-void UWarriorCombatComponent::Server_Attack_Implementation()
+void UWarriorCombatComponent::Server_Attack_Implementation(int32 ComboOfAttack)
 {
-	
-	NetMulticast_Attack();
+	NetMulticast_Attack(ComboOfAttack);
 }
 
-void UWarriorCombatComponent::NetMulticast_Attack_Implementation()
+// UAnimInstance* WarriorAnimInstance = Warrior->GetFirstPersonMesh()->GetAnimInstance();
+// WarriorAnimInstance->Montage_Play(FPS_AttackAnimMontage[AttackCombo]);
+// WarriorAnimInstance->Montage_SetPlayRate(FPS_AttackAnimMontage[AttackCombo], PlayRate);
+
+void UWarriorCombatComponent::NetMulticast_Attack_Implementation(int32 ComboOfAttack)
 {
 	//TPS
 	if(!Warrior->IsLocallyControlled())
 	{
-		if(TPS_AttackAnimMontage)
+		if(TPS_AttackAnimMontage[ComboOfAttack])
 		{
-			Warrior->GetMesh()->GetAnimInstance()->Montage_Play(TPS_AttackAnimMontage);
+			float PlayRate = FMath::Clamp(0.3f * (1.f / AttackCooldown), 0.6f, 1.2f);
+			
+			UAnimInstance* WarriorAnimInstance = Warrior->GetMesh()->GetAnimInstance();
+			WarriorAnimInstance->Montage_Play(TPS_AttackAnimMontage[ComboOfAttack]);
+			WarriorAnimInstance->Montage_SetPlayRate(TPS_AttackAnimMontage[ComboOfAttack], PlayRate);
 		}
 	}
 }
