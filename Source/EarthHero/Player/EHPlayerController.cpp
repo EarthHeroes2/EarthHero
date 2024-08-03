@@ -49,24 +49,23 @@ void AEHPlayerController::BeginPlay()
 void AEHPlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
-	UE_LOG(LogTemp, Log, TEXT("OnPossess()1"));
-	
+
 	ACharacter* PossessCharacter = GetCharacter();
 	if(PossessCharacter)
 	{
 		if(ControlledCharacter) //부활 때라면
 		{
-			UE_LOG(LogTemp, Log, TEXT("OnPossess()2 : rebirth"));
+			UE_LOG(LogTemp, Log, TEXT("OnPossess() : rebirth"));
 			ClientPossess(false);
 		}
 		else //최초 빙의 (겜 시작 때)라면
 		{
-			UE_LOG(LogTemp, Log, TEXT("OnPossess()2 : init"));
+			UE_LOG(LogTemp, Log, TEXT("OnPossess() : init"));
 			ControlledCharacter = PossessCharacter;
 			ClientPossess(true);
 		}
 	}
-	else UE_LOG(LogClass, Warning, TEXT("spectator")); //이건 관전폰인 경우
+	else UE_LOG(LogClass, Warning, TEXT("OnPossess() : spectator")); //이건 관전폰인 경우
 }
 
 //빙의 풀림 (죽은 경우)
@@ -76,8 +75,14 @@ void AEHPlayerController::OnUnPossess()
 
 	UE_LOG(LogClass, Warning, TEXT("AEHPlayerController::OnUnPossess()"));
 
-	APlayingGameMode* PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode());
-	if (PlayingGameMode) PlayingGameMode->AddPlayerDead(this);
+	ACharacter* Character = GetCharacter();
+	if(Character)
+	{
+		UE_LOG(LogClass, Warning, TEXT("DeadLocation = %s, rotation = %s"), *DeadLocation.ToString(), *DeadLocation.Rotation().ToString());
+
+		APlayingGameMode* PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode());
+		if (PlayingGameMode) PlayingGameMode->AddPlayerDead(this, DeadLocation);
+	}
 }
 
 //클라이언트에게 빙의됨을 알려줌
@@ -177,7 +182,6 @@ void AEHPlayerController::SetupInputComponent()
 	
 	EnhancedInputComponent->BindAction(DEBUG_LevelUp, ETriggerEvent::Triggered, this, &ThisClass::DEBUG_Levelup);
 	EnhancedInputComponent->BindAction(DEBUG_DieKey, ETriggerEvent::Started, this, &ThisClass::DEBUG_Die);
-	EnhancedInputComponent->BindAction(DEBUG_RebirthKey, ETriggerEvent::Started, this, &ThisClass::DEBUG_Rebirth);
 }
 
 
@@ -433,8 +437,13 @@ void AEHPlayerController::Server_DEBUG_Levelup_Implementation()
 //죽은 경우 (서버에서 실행됨)
 void AEHPlayerController::Dead()
 {
-	Client_DisableInput();
-	UnPossess();
+	ACharacter* Character = GetCharacter();
+	if(Character)
+	{
+		Client_DisableInput();
+		DeadLocation = Character->GetActorLocation();
+		UnPossess();
+	}
 }
 
 void AEHPlayerController::Client_DisableInput_Implementation()
@@ -589,7 +598,18 @@ void AEHPlayerController::Server_DEBUG_Rebirth_Implementation()
 void AEHPlayerController::Rebirth()
 {
 	UE_LOG(LogTemp, Log, TEXT("AEHPlayerController::Rebirth()"));
-	Possess(ControlledCharacter);
+
+	APawn* ControlledPawn = GetPawn();
+	if(ControlledPawn)
+	{
+		ACustomSpectatorPawn* CustomSpectatorPawn = Cast<ACustomSpectatorPawn>(ControlledPawn);
+		if(CustomSpectatorPawn)
+		{
+			UnPossess();
+			CustomSpectatorPawn->Destroy();
+			Possess(ControlledCharacter);
+		}
+	}
 }
 
 //서버에게 해당 플레이어 위치를 물어보고 관람해도 된다면 해당 위치로 이동시킴

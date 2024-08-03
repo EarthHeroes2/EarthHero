@@ -132,6 +132,8 @@ private:
 	
 	bool bSpectating = false;
 
+	FVector DeadLocation;
+
 protected:
 	void Jump();
 	void Shoot();
