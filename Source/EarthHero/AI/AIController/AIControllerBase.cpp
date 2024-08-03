@@ -37,6 +37,12 @@ void AAIControllerBase::BeginPlay()
 	}
 }
 
+void AAIControllerBase::SetTargetPlayer(AEHCharacter* TargetPlayer)
+{
+	GetBlackBoardComponent()->SetValueAsBool(BlackboardKeys::CanSeePlayer, true);
+	GetBlackBoardComponent()->SetValueAsObject(BlackboardKeys::TargetPlayer, TargetPlayer);
+}
+
 void AAIControllerBase::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);

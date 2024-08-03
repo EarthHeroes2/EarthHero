@@ -1,26 +1,31 @@
 #include "SpawningComponent.h"
 #include "AIController.h"
 #include "DrawDebugHelpers.h"
+#include "EarthHero/AI/AIController/AIControllerBase.h"
 #include "GameFramework/Character.h"
 #include "UObject/ConstructorHelpers.h"
 #include "EarthHero/Character/EHCharacter.h"
+#include "EarthHero/Character/Monster/MonsterBase.h"
 
 const TCHAR* const USpawningComponent::Difficulty2Path1 = TEXT("Actor'/Game/Blueprints/Character/Dummy/BP_DummyRangeMonster.BP_DummyRangeMonster_C'");
 const TCHAR* const USpawningComponent::Difficulty2Path2 = TEXT("Actor'/Game/Blueprints/Character/Dummy/BP_DummyMeleeMonster.BP_DummyMeleeMonster_C'");
 const TCHAR* const USpawningComponent::Difficulty2Path3 = TEXT("Actor'/Game/Blueprints/Character/Dummy/BP_DummyFlyingRangeMonster.BP_DummyFlyingRangeMonster_C'");
 const TCHAR* const USpawningComponent::Difficulty2Path4 = TEXT("Actor'/Game/Blueprints/Character/Dummy/BP_DummyFlyingMeleeMonster.BP_DummyFlyingMeleeMonster_C'");
 //const TCHAR* const USpawningComponent::Difficulty3Path = TEXT("Actor'/Game/Blueprints/Character/MidBoss/BP_MidBoss1Monster.BP_MidBoss1Monster_C'");
-// 이거 미완성이라 꺼내면 안돼, fatal error 남.
+// 이거 미완성이라 꺼내면 안돼, fatal error 남. - 박정익
 
 USpawningComponent::USpawningComponent()
 {
-    PrimaryComponentTick.bCanEverTick = true;
-
     SpawnRadius = 5000.0f;
     SpawnInterval = 10.0f;
     bShowDebugCircle = true;
+    
+    PrimaryComponentTick.bCanEverTick = true;
 
-    InitializeDifficultyActors();
+    if(GetNetMode() != NM_Client)
+    {
+        InitializeDifficultyActors();
+    }
 }
 
 void USpawningComponent::InitializeDifficultyActors()
@@ -95,9 +100,9 @@ void USpawningComponent::InitializeDifficultyActors()
 void USpawningComponent::BeginPlay()
 {
     Super::BeginPlay();
-
-    // Set a timer to call the wrapper function
-    GetWorld()->GetTimerManager().SetTimer(SpawnTimerHandle, this, &USpawningComponent::SpawnActorsForDifficultyWrapper, SpawnInterval, true);
+    
+    if(GetNetMode() != NM_Client) //서버에서만 소환해야함 - 박정익
+        GetWorld()->GetTimerManager().SetTimer(SpawnTimerHandle, this, &USpawningComponent::SpawnActorsForDifficultyWrapper, SpawnInterval, true);
 }
 
 void USpawningComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -191,20 +196,32 @@ void USpawningComponent::SpawnActorsForDifficulty()
 
             TSubclassOf<AActor> ActorClassToSpawn = ActorClassesToSpawn[FMath::RandHelper(ActorClassesToSpawn.Num())];
             AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(ActorClassToSpawn, SpawnLocation, FRotator::ZeroRotator, SpawnParams);
-
+            
             if (SpawnedActor)
             {
-                // If the spawned actor is a character, ensure it is possessed by an AI controller
-                if (ACharacter* SpawnedCharacter = Cast<ACharacter>(SpawnedActor))
+                if (AMonsterBase* SpawnedMonsterBase = Cast<AMonsterBase>(SpawnedActor))
                 {
-                    AAIController* AIController = GetWorld()->SpawnActor<AAIController>(SpawnedCharacter->AIControllerClass, SpawnLocation, FRotator::ZeroRotator, SpawnParams);
-                    if (AIController)
+                    UWorld* World = GetWorld();
+                    TSubclassOf<AController> AIControllerClass = SpawnedMonsterBase->AIControllerClass;
+                    if(World && AIControllerClass)
                     {
-                        AIController->Possess(SpawnedCharacter);
-                    }
-                    else
-                    {
-                        UE_LOG(LogTemp, Warning, TEXT("Failed to spawn AI controller for %s"), *SpawnedCharacter->GetName());
+                        AAIControllerBase* AIControllerBase = World->SpawnActor<AAIControllerBase>(AIControllerClass, SpawnLocation, FRotator::ZeroRotator, SpawnParams);
+                        if(AIControllerBase)
+                        {
+                            AIControllerBase->Possess(SpawnedMonsterBase);
+
+                            AActor* Actor = GetOwner();
+                            if(Actor)
+                            {
+                                AEHCharacter* EHCharacter = Cast<AEHCharacter>(Actor);
+                                if(EHCharacter)
+                                {
+                                    UE_LOG(LogTemp, Warning, TEXT("AIControllerBase->SetTargetPlayer()"));
+                                    AIControllerBase->SetTargetPlayer(EHCharacter);
+                                }
+                            }
+                        }
+                        else UE_LOG(LogTemp, Warning, TEXT("Failed to spawn AI controller for %s"), *SpawnedMonsterBase->GetName());
                     }
                 }
             }
