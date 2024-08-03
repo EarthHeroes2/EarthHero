@@ -8,6 +8,7 @@
 #include "Perception/AIPerceptionTypes.h"
 #include "AIControllerBase.generated.h"
 
+class AEHCharacter;
 class UAISenseConfig_Sight;
 class UBehaviorTreeComponent;
 /**
@@ -59,4 +60,5 @@ protected:
 
 public:
 	void AttackedPlayer(AActor* AttackedPlayer);
+	void SetTargetPlayer(AEHCharacter* TargetPlayer);
 };
