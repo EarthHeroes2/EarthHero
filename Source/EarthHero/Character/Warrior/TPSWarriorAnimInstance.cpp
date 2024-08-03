@@ -17,8 +17,8 @@ void UTPSWarriorAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		if(CombatComponent)
 		{
 			bIsWhirlWind = CombatComponent->GetIsWhirlwind();
+			bIsSuperJump = CombatComponent->GetIsSuperJump();
 		}
-		
 	}
 }
 
@@ -31,6 +31,19 @@ void UTPSWarriorAnimInstance::AnimNotify_SwordHit()
 		{
 			UWarriorCombatComponent* CombatComponent = Warrior->GetCombatComponent();
 			CombatComponent->SwordHit();
+		}
+	}
+}
+
+void UTPSWarriorAnimInstance::AnimNotify_SuperJumpHit()
+{
+	if(Character)
+	{
+		AEHWarrior* Warrior = Cast<AEHWarrior>(Character);
+		UWarriorCombatComponent* CombatComponent = Warrior->GetCombatComponent();
+		if(CombatComponent)
+		{
+			CombatComponent->JumpAttackLanded();
 		}
 	}
 }

@@ -23,6 +23,8 @@ public:
 
 	void JumpAttack();
 
+	void JumpAttackLanded();
+
 	void ToggleWhirlwind();
 
 	UFUNCTION(Server, Reliable)
@@ -42,6 +44,17 @@ protected:
 	UFUNCTION(Server, Reliable)
 	void Server_JumpAttack(FVector LaunchVector);
 
+	UFUNCTION(NetMulticast, Reliable)
+	void NetMulticast_JumpAttack();
+
+	UFUNCTION(Server, Reliable)
+	void Server_JumpAttackLanded();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void NetMulticast_JumpAttackLanded();
+
+	void JumpAttackEnd();
+	
 	UFUNCTION(Server, Reliable)
 	void Server_SwordHit(FVector CamLocation, FRotator CamRotation);
 
@@ -64,6 +77,7 @@ private:
 	FTimerHandle AttackCooldownTimerHandle;
 	FTimerHandle WhirlwindCooldownTimerHandle;
 	FTimerHandle WhirlwindTimerHandle;
+	FTimerHandle JumpAttackEndTimerHandle;
 
 	//Normal Attack
 	UPROPERTY()
@@ -79,6 +93,7 @@ private:
 
 	//Jump Attack
 	UPROPERTY()
+	bool bIsSuperJump = false;
 	
 	
 	float TotalWhirlwindDuration = 3.f;
@@ -111,6 +126,8 @@ public:
 	
 	FORCEINLINE void SetWarrior(AEHWarrior* NewWarrior) { Warrior = NewWarrior; }
 	FORCEINLINE bool GetIsWhirlwind() { return bIsWhirlwind; }
+	FORCEINLINE bool GetIsSuperJump() { return bIsSuperJump; }
+	FORCEINLINE void SetIsSuperJump(bool bSuperJump) { bIsSuperJump = bSuperJump; }
 	
 	UFUNCTION(Server, Reliable)
 	void SetWheelWindTick(float WR_WheelWindTick);

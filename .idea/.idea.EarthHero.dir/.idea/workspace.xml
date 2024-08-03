@@ -87,16 +87,14 @@
   <component name="ChangeListManager">
     <list default="true" id="0cbbd613-fc41-47be-bbe4-1434fbbd246c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.EarthHero.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EarthHero.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Input/IMC_EHContext.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Input/IMC_EHContext.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Player/BP_EHPlayerController.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Player/BP_EHPlayerController.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/EHCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/EHCharacter.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/EHCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/EHCharacter.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/Warrior/EHWarrior.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Warrior/EHWarrior.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/Warrior/EHWarrior.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Warrior/EHWarrior.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Animations/Warrior/TPS/ARPG_Warrior_Anim_UE_Attack_Airborne_End.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Animations/Warrior/TPS/ARPG_Warrior_Anim_UE_Attack_Airborne_Start.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Character/Warrior/Animation/ABP_TPS_Warrior.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Character/Warrior/Animation/ABP_TPS_Warrior.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EarthHero.uproject" beforeDir="false" afterPath="$PROJECT_DIR$/EarthHero.uproject" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/Warrior/TPSWarriorAnimInstance.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Warrior/TPSWarriorAnimInstance.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/Warrior/TPSWarriorAnimInstance.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Warrior/TPSWarriorAnimInstance.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/Warrior/WarriorCombatComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Warrior/WarriorCombatComponent.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/Warrior/WarriorCombatComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Warrior/WarriorCombatComponent.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerController.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerController.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerState.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerState.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -108,8 +106,6 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/Plugins/MultiplayerSessions/Source/MultiplayerSessions/Private/Menu.cpp" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Plugins/MultiplayerSessions/Source/MultiplayerSessions/Public/Menu.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/EarthHero/Character/EHAnimInstanceBase.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/EarthHero/Character/EHAnimInstanceBase.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/EarthHero/Character/EHCharacter.cpp" root0="FORCE_HIGHLIGHTING" />
@@ -118,12 +114,15 @@
     <setting file="file://$PROJECT_DIR$/Source/EarthHero/Character/Shooter/EHShooterAnimInstance.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/EarthHero/Character/Shooter/EHShooterAnimInstance.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/EarthHero/Character/Shooter/ShooterCombatComponent.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/EarthHero/Character/Warrior/EHWarrior.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/EarthHero/Character/Warrior/TPSWarriorAnimInstance.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/EarthHero/Character/Warrior/WarriorCombatComponent.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/EarthHero/EHComponents/CombatComponent.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/EarthHero/EHComponents/CombatComponent.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/EarthHero/HUD/InGameHUD.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerController.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerController.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerState.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/EarthHero/Stat/StatComponent.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/EarthHero/Stat/StatComponent.h" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -28831,7 +28830,9 @@
       <workItem from="1720295536939" duration="813000" />
       <workItem from="1721306057358" duration="11745000" />
       <workItem from="1722425938870" duration="5278000" />
-      <workItem from="1722490279426" duration="13348000" />
+      <workItem from="1722490279426" duration="14010000" />
+      <workItem from="1722618808163" duration="667000" />
+      <workItem from="1722619486861" duration="7794000" />
     </task>
     <servers />
   </component>

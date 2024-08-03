@@ -21,7 +21,12 @@ public:
 protected:
 	UFUNCTION()
 	void AnimNotify_SwordHit();
+
+	UFUNCTION()
+	void AnimNotify_SuperJumpHit();
 	
 	UPROPERTY(BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
 	bool bIsWhirlWind = false;
+	UPROPERTY(BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
+	bool bIsSuperJump = false;
 };

@@ -31,10 +31,11 @@ void UWarriorCombatComponent::Attack()
 	{
 		Warrior = Cast<AEHWarrior>(GetOwner());
 	}
+	if(!Warrior) return;
 
 	float PlayRate = FMath::Clamp(0.3f * (1.f / AttackCooldown), 0.6f, 1.2f);
 	
-	if(Warrior && bCanAttack && !bIsWhirlwind)
+	if(Warrior && bCanAttack && !bIsWhirlwind && !bIsSuperJump)
 	{
 		if(Warrior->IsLocallyControlled())
 		{
@@ -89,7 +90,6 @@ void UWarriorCombatComponent::ResetAttack()
 	bCanAttack = true;
 }
 
-
 void UWarriorCombatComponent::SwordHit()
 {
 	if(Warrior && Warrior->GetFPSCamera())
@@ -101,12 +101,20 @@ void UWarriorCombatComponent::SwordHit()
 
 void UWarriorCombatComponent::JumpAttack()
 {
+	if(!Warrior)
+	{
+		Warrior = Cast<AEHWarrior>(GetOwner());
+	}
+	if(!Warrior) return;
+	
+	if(bIsWhirlwind) return;
+
+	bIsSuperJump = true;
+	
 	float ControlPitch = 0.f;
+	FRotator LaunchRotation = FRotator::ZeroRotator;
 
 	AController* Controller = Warrior->GetController();
-
-	FRotator LaunchRotation = FRotator::ZeroRotator;
-	
 	if (Controller)
 	{
 		LaunchRotation = Controller->GetControlRotation();
@@ -119,19 +127,88 @@ void UWarriorCombatComponent::JumpAttack()
 			ControlPitch = FMath::Clamp(LaunchRotation.Pitch - 360.f, 30.f, 80.f);
 		}
 	}
-
-	UE_LOG(LogTemp, Warning, TEXT("Current Pitch : %f"), ControlPitch);
 	LaunchRotation.Pitch = ControlPitch;
-	
 	FVector LaunchDirection = LaunchRotation.Vector();
-
+	
 	Server_JumpAttack(LaunchDirection);
 }
 
 void UWarriorCombatComponent::Server_JumpAttack_Implementation(FVector LaunchVector)
 {
 	Warrior->LaunchCharacter(LaunchVector * 1500.f, false, false);
+	NetMulticast_JumpAttack();
 }
+
+void UWarriorCombatComponent::NetMulticast_JumpAttack_Implementation()
+{
+	bIsSuperJump = true;
+}
+
+void UWarriorCombatComponent::JumpAttackLanded()
+{
+	Server_JumpAttackLanded();
+}
+
+void UWarriorCombatComponent::Server_JumpAttackLanded_Implementation()
+{
+	NetMulticast_JumpAttackLanded();
+
+	if(!Warrior)
+	{
+		Warrior = Cast<AEHWarrior>(GetOwner());
+	}
+	if(!Warrior) return;
+	
+	TArray<AActor*> ActorsToIgnore;
+	ActorsToIgnore.Add(Warrior);
+	TArray<FHitResult> HitArray;
+	
+	UWorld* World = GetWorld();
+	if(World)
+	{
+		const bool bHit = UKismetSystemLibrary::SphereTraceMulti(World, Warrior->GetActorLocation(),Warrior->GetActorLocation(), 500.f,
+			UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel4), false, ActorsToIgnore,
+			EDrawDebugTrace::ForDuration, HitArray, true, FLinearColor::Gray, FLinearColor::Blue, 5.f);
+
+		if(HitArray.Num() > 0)
+		{
+			TSet<AActor*> UniqueActors;
+			
+			for(const FHitResult HitResult : HitArray)
+			{
+				if(UniqueActors.Contains(HitResult.GetActor()))
+				{
+					continue;
+				}
+				UniqueActors.Add(HitResult.GetActor());
+
+				if(AMonsterBase* HitMonster = Cast<AMonsterBase>(HitResult.GetActor()))
+				{
+					// Damage Monster
+					// Launch Monster
+				}
+			}
+		}
+	}
+}
+
+void UWarriorCombatComponent::NetMulticast_JumpAttackLanded_Implementation()
+{
+	if(!Warrior)
+	{
+		Warrior = Cast<AEHWarrior>(GetOwner());
+	}
+	if(!Warrior) return;
+	
+	Warrior->GetWorldTimerManager().SetTimer(JumpAttackEndTimerHandle, this, &ThisClass::JumpAttackEnd, 0.6f);
+}
+
+
+void UWarriorCombatComponent::JumpAttackEnd()
+{
+	bIsSuperJump = false;
+}
+
 
 void UWarriorCombatComponent::Server_SwordHit_Implementation(FVector CamLocation, FRotator CamRotation)
 {
@@ -202,7 +279,7 @@ void UWarriorCombatComponent::NetMulticast_SwordHit_Implementation(FHitResult Hi
 
 void UWarriorCombatComponent::ToggleWhirlwind()
 {
-	if(bCanWhirlwind)
+	if(bCanWhirlwind && !bIsSuperJump)
 	{
 		bIsWhirlwind = true;
 		bCanWhirlwind = false;
@@ -242,6 +319,7 @@ void UWarriorCombatComponent::CheckWhirlWindLevel_Implementation()
 		}
 	}
 }
+
 
 void UWarriorCombatComponent::Whirlwind()
 {
@@ -328,7 +406,6 @@ void UWarriorCombatComponent::ResetWhirlWind()
 {
 	bCanWhirlwind = true;
 }
-
 
 void UWarriorCombatComponent::SetWheelWindDuration_Implementation(float WR_WheelWindDuration)
 {
