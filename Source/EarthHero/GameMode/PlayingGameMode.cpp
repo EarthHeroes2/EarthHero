@@ -291,8 +291,6 @@ void APlayingGameMode::PlayerControllerReady() //조금 느리지만 안전하�
 	//모든 플레이어가 준비 완료되었다면
 	if(NumPlayerControllerReady == EHPlayerControllers.Num())
 	{
-		SpawnForceFields();
-
 		//지도에 자기장 및 플레이어 표시를 위한 설정
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEHCharacter::StaticClass(), Players);
 		APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
@@ -429,6 +427,12 @@ void APlayingGameMode::GameTimerCount()
 
 	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
 	PlayingGameState->UpdateHUDGameTimer(GameTimer);
+
+	//15초가 되면 자기장 생성 테스트
+	if(GameTimer == 15)
+	{
+		SpawnForceFields();
+	}
 }
 
 void APlayingGameMode::UpdateGameStateHealths()
