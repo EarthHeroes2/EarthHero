@@ -88,66 +88,69 @@ void APlayingGameMode::UpdateWorldMapInfo()
 	PlayingGameState->UpdateGameStateWorldMaps(ActorLocations, ActorRotations, Players.Num());
 }
 
+void APlayingGameMode::InitForceFields()
+{
+	// 아래 값들은 실제 맵 크기 넣으면 됨
+	float MinX = 0.0f;
+	float MaxX = 403200.0f;
+	float MinY = -403200.0f;
+	float MaxY = 0.0f;
+	float Range = MaxX - MinX;
+
+	// 맵 크기를 스케일 10으로 전환
+	float Scale = 10.0f / Range;
+
+	// 자기장끼리 거리 최소 3
+	float SegmentMin = 3.0f / Scale;
+
+	// 위쪽 자기장
+	float InitialX = FMath::RandRange(MinX, MaxX);
+	FVector2D TopLocation = FVector2D(InitialX, MaxY);
+	ForceFieldLocations.Add(TopLocation);
+
+	// 오른쪽 자기장
+	float RightY = FMath::RandRange(MinY + SegmentMin, MaxY - SegmentMin);
+	FVector2D RightLocation = FVector2D(MaxX, RightY);
+	ForceFieldLocations.Add(RightLocation);
+
+	// 아래 자기장
+	float BottomX = FMath::RandRange(MinX + SegmentMin, MaxX - SegmentMin);
+	FVector2D BottomLocation = FVector2D(BottomX, MinY);
+	ForceFieldLocations.Add(BottomLocation);
+
+	// 왼쪽 자기장
+	float LeftY = FMath::RandRange(MinY + SegmentMin, MaxY - SegmentMin);
+	FVector2D LeftLocation = FVector2D(MinX, LeftY);
+	ForceFieldLocations.Add(LeftLocation);
+
+	// 각 자기장 거리 3 >= 아니면 재조정
+	while (!IsValidForceFieldDistance(ForceFieldLocations, SegmentMin))
+	{
+		ForceFieldLocations.Empty();
+        
+		InitialX = FMath::RandRange(MinX, MaxX);
+		TopLocation = FVector2D(InitialX, MaxY);
+		ForceFieldLocations.Add(TopLocation);
+
+		RightY = FMath::RandRange(MinY + SegmentMin, MaxY - SegmentMin);
+		RightLocation = FVector2D(MaxX, RightY);
+		ForceFieldLocations.Add(RightLocation);
+
+		BottomX = FMath::RandRange(MinX + SegmentMin, MaxX - SegmentMin);
+		BottomLocation = FVector2D(BottomX, MinY);
+		ForceFieldLocations.Add(BottomLocation);
+
+		LeftY = FMath::RandRange(MinY + SegmentMin, MaxY - SegmentMin);
+		LeftLocation = FVector2D(MinX, LeftY);
+		ForceFieldLocations.Add(LeftLocation);
+	}
+
+	// 각 자기장 확장 시간 생성 (하나의 확장 시간은 900, 나머지는 600~900 사이)
+	GenerateRandomDurations(4, 600.0f, 900.0f, ExpansionDurations);
+}
+
 void APlayingGameMode::SpawnForceFields()
 {
-    // 아래 값들은 실제 맵 크기 넣으면 됨
-    float MinX = 0.0f;
-    float MaxX = 403200.0f;
-    float MinY = -403200.0f;
-    float MaxY = 0.0f;
-    float Range = MaxX - MinX;
-
-    // 맵 크기를 스케일 10으로 전환
-    float Scale = 10.0f / Range;
-
-    // 자기장끼리 거리 최소 3
-    float SegmentMin = 3.0f / Scale;
-
-    // 위쪽 자기장
-    float InitialX = FMath::RandRange(MinX, MaxX);
-    FVector2D TopLocation = FVector2D(InitialX, MaxY);
-    ForceFieldLocations.Add(TopLocation);
-
-    // 오른쪽 자기장
-    float RightY = FMath::RandRange(MinY + SegmentMin, MaxY - SegmentMin);
-    FVector2D RightLocation = FVector2D(MaxX, RightY);
-    ForceFieldLocations.Add(RightLocation);
-
-    // 아래 자기장
-    float BottomX = FMath::RandRange(MinX + SegmentMin, MaxX - SegmentMin);
-    FVector2D BottomLocation = FVector2D(BottomX, MinY);
-    ForceFieldLocations.Add(BottomLocation);
-
-    // 왼쪽 자기장
-    float LeftY = FMath::RandRange(MinY + SegmentMin, MaxY - SegmentMin);
-    FVector2D LeftLocation = FVector2D(MinX, LeftY);
-    ForceFieldLocations.Add(LeftLocation);
-
-    // 각 자기장 거리 3 >= 아니면 재조정
-    while (!IsValidForceFieldDistance(ForceFieldLocations, SegmentMin))
-    {
-        ForceFieldLocations.Empty();
-        
-        InitialX = FMath::RandRange(MinX, MaxX);
-        TopLocation = FVector2D(InitialX, MaxY);
-        ForceFieldLocations.Add(TopLocation);
-
-        RightY = FMath::RandRange(MinY + SegmentMin, MaxY - SegmentMin);
-        RightLocation = FVector2D(MaxX, RightY);
-        ForceFieldLocations.Add(RightLocation);
-
-        BottomX = FMath::RandRange(MinX + SegmentMin, MaxX - SegmentMin);
-        BottomLocation = FVector2D(BottomX, MinY);
-        ForceFieldLocations.Add(BottomLocation);
-
-        LeftY = FMath::RandRange(MinY + SegmentMin, MaxY - SegmentMin);
-        LeftLocation = FVector2D(MinX, LeftY);
-        ForceFieldLocations.Add(LeftLocation);
-    }
-
-    // 각 자기장 확장 시간 생성 (하나의 확장 시간은 900, 나머지는 600~900 사이)
-    GenerateRandomDurations(4, 600.0f, 900.0f, ExpansionDurations);
-
     // 자기장 각 위치에 소환하기
     for (int i = 0; i < ForceFieldLocations.Num(); ++i)
     {
@@ -291,6 +294,8 @@ void APlayingGameMode::PlayerControllerReady() //조금 느리지만 안전하�
 	//모든 플레이어가 준비 완료되었다면
 	if(NumPlayerControllerReady == EHPlayerControllers.Num())
 	{
+		InitForceFields();
+		
 		//지도에 자기장 및 플레이어 표시를 위한 설정
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEHCharacter::StaticClass(), Players);
 		APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
