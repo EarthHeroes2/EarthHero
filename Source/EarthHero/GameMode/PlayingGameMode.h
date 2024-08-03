@@ -20,6 +20,9 @@ class EARTHHERO_API APlayingGameMode : public AGameModeBase
 	virtual APawn* SpawnDefaultPawnFor_Implementation(AController* NewPlayer, AActor* StartSpot) override;
 	virtual void InitSeamlessTravelPlayer(AController* NewController) override;
 
+	//테스트용
+	virtual void PostLogin(APlayerController* NewPlayer) override;
+
 	void InitLevelSetting();
 	void GameTimerCount();
 

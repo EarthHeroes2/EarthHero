@@ -6,6 +6,7 @@
 #include "GameFramework/SpectatorPawn.h"
 #include "CustomSpectatorPawn.generated.h"
 
+class UCameraComponent;
 class AEHPlayerController;
 /**
  * 
@@ -16,7 +17,10 @@ class EARTHHERO_API ACustomSpectatorPawn : public ASpectatorPawn
 	GENERATED_BODY()
 	
 	ACustomSpectatorPawn();
-	
+	virtual void Tick(float DeltaTime) override;
+
+	UCameraComponent* CameraComp;
+
 	virtual void SetupPlayerInputComponent(UInputComponent* InInputComponent) override;
 	virtual void BeginPlay() override;
 	void On1KeyPressed();

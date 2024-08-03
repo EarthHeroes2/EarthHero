@@ -256,7 +256,33 @@ void APlayingGameMode::InitSeamlessTravelPlayer(AController* NewController) //�
 
 	if(NewPlayerController)
 	{
-		AEHPlayerController* NewEHPlayerController = Cast<AEHPlayerController>(NewController);
+		AEHPlayerController* NewEHPlayerController = Cast<AEHPlayerController>(NewPlayerController);
+		if(NewEHPlayerController)
+		{
+			APlayingGameSession* PlayingGameSession = Cast<APlayingGameSession>(GameSession);
+			if (PlayingGameSession)
+			{
+				EHPlayerControllers.Add(NewEHPlayerController);
+				bPlayerAlives.Add(true);
+				//세션 속 모든 플레이어가 레벨에 들어왔다면 레벨 초기 작업 시작
+				if(EHPlayerControllers.Num() == PlayingGameSession->GetNumPlayersInSession())
+				{
+					InitLevelSetting();
+				}
+			}
+		}
+	}
+}
+
+void APlayingGameMode::PostLogin(APlayerController* NewPlayer)
+{
+	Super::PostLogin(NewPlayer);
+
+	APlayerController* NewPlayerController = Cast<APlayerController>(NewPlayer);
+
+	if(NewPlayerController)
+	{
+		AEHPlayerController* NewEHPlayerController = Cast<AEHPlayerController>(NewPlayerController);
 		if(NewEHPlayerController)
 		{
 			APlayingGameSession* PlayingGameSession = Cast<APlayingGameSession>(GameSession);

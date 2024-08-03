@@ -3,12 +3,29 @@
 
 #include "CustomSpectatorPawn.h"
 
+#include "Camera/CameraComponent.h"
 #include "EarthHero/Player/EHPlayerController.h"
 
 ACustomSpectatorPawn::ACustomSpectatorPawn()
 {
     SetReplicates(true);
-    SetReplicateMovement(true);
+    AActor::SetReplicateMovement(true);
+    
+    // 카메라 컴포넌트 생성 및 설정
+    CameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
+    CameraComp->SetupAttachment(RootComponent);
+}
+
+void ACustomSpectatorPawn::Tick(float DeltaTime)
+{
+    Super::Tick(DeltaTime);
+
+    // 필요한 경우 위치를 동기화
+    if (!HasAuthority())
+    {
+        FVector NewLocation = GetActorLocation();
+        CameraComp->SetRelativeLocation(NewLocation);
+    }
 }
 
 void ACustomSpectatorPawn::SetupPlayerInputComponent(UInputComponent* InInputComponent)

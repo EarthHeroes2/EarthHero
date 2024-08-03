@@ -188,6 +188,7 @@ void AEHPlayerController::SetupInputComponent()
 	
 	EnhancedInputComponent->BindAction(DEBUG_LevelUp, ETriggerEvent::Triggered, this, &ThisClass::DEBUG_Levelup);
 	EnhancedInputComponent->BindAction(DEBUG_DieKey, ETriggerEvent::Started, this, &ThisClass::DEBUG_Die);
+	EnhancedInputComponent->BindAction(DEBUG_RebirthKey, ETriggerEvent::Started, this, &ThisClass::DEBUG_Rebirth);
 }
 
 
@@ -582,24 +583,46 @@ void AEHPlayerController::ChangeSpectatorRight()
 void AEHPlayerController::DEBUG_Rebirth()
 {
 	UE_LOG(LogTemp, Log, TEXT("DEBUG_Rebirth()"));
-	if(bSpectating)
-	{
-		bSpectating = false; //나중?
-		//SpectatorTargets.Empty();
-		//CurrentSpectatorTarget = nullptr;
-		//SpectatorTargetIndex = INDEX_NONE;
-		Server_DEBUG_Rebirth();
-	}
+	
+	Server_DEBUG_Rebirth();
 }
 
 void AEHPlayerController::Server_DEBUG_Rebirth_Implementation()
 {
+	UE_LOG(LogTemp, Log, TEXT("Server_DEBUG_Rebirth_Implementation()"));
+	APlayingGameMode* PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode());
+	if(PlayingGameMode)
+	{
+		FVector PlayerLocation;
+		if(PlayingGameMode->GetPlayerLocation(1, PlayerLocation))
+		{
+			UE_LOG(LogTemp, Log, TEXT("Player %d Location : %s"), 1, *PlayerLocation.ToString());
+			ACharacter* ControlledPawn = GetCharacter();
+			if(ControlledPawn)
+			{
+				AEHCharacter* CustomSpectatorPawn = Cast<AEHCharacter>(ControlledPawn);
+				if(CustomSpectatorPawn)
+				{
+					UE_LOG(LogTemp, Log, TEXT("Before My Location = %s"), *CustomSpectatorPawn->GetActorLocation().ToString());
+					if(CustomSpectatorPawn->SetActorLocation(PlayerLocation, false, nullptr, ETeleportType::TeleportPhysics))
+					{
+						UE_LOG(LogTemp, Log, TEXT("SetActorLocation Seccess"));
+						UE_LOG(LogTemp, Log, TEXT("After My Location = %s"), *CustomSpectatorPawn->GetActorLocation().ToString());
+					}
+					else UE_LOG(LogTemp, Log, TEXT("SetActorLocation Failed"));
+				}
+			}
+		}
+		else UE_LOG(LogTemp, Log, TEXT("GetPlayerLocation Failed"));
+	}
+
+	/*
 	UE_LOG(LogTemp, Log, TEXT("AEHPlayerController::Server_DEBUG_Rebirth_Implementation()"));
 	APlayingGameMode* PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode());
 	if (PlayingGameMode)
 	{
 		PlayingGameMode->Rebirth(this);
-	}
+	}*/
 }
 
 //서버에서만 실행되어야 함
@@ -638,9 +661,14 @@ void AEHPlayerController::Server_SpectatePlayer_Implementation(int PlayerNumber)
 				ACustomSpectatorPawn* CustomSpectatorPawn = Cast<ACustomSpectatorPawn>(ControlledPawn);
 				if(CustomSpectatorPawn)
 				{
+					UE_LOG(LogTemp, Log, TEXT("Before My Location = %s"), *CustomSpectatorPawn->GetActorLocation().ToString());
 					if(CustomSpectatorPawn->SetActorLocation(PlayerLocation, false, nullptr, ETeleportType::TeleportPhysics))
 					{
+
+						//CustomSpectatorPawn->TeleportTo();
+						
 						UE_LOG(LogTemp, Log, TEXT("SetActorLocation Seccess"));
+						UE_LOG(LogTemp, Log, TEXT("After My Location = %s"), *CustomSpectatorPawn->GetActorLocation().ToString());
 					}
 					else UE_LOG(LogTemp, Log, TEXT("SetActorLocation Failed"));
 				}
