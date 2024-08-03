@@ -3,6 +3,8 @@
 
 #include "MonsterBase.h"
 
+#include "Components/WidgetComponent.h"
+#include "EarthHero/HUD/MonsterStatHUD.h"
 #include "EarthHero/Stat/Monster/MonsterStatComponent.h"
 
 // Sets default values
@@ -11,8 +13,10 @@ AMonsterBase::AMonsterBase()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	MonsterStatComponent = CreateDefaultSubobject<UMonsterStatComponent>(TEXT("MonsterStatComponent"));
-	
 	MonsterStatComponent->SetIsReplicated(true);
+
+	MonsterStatHUDComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("MonsterStatHUD"));
+	MonsterStatHUDComponent->SetupAttachment(RootComponent);
 
 	//이 값은 자식에서 변경해줘야함. 기본값을 위해 존재할 뿐임
 	BossNumber = NotBoss;
