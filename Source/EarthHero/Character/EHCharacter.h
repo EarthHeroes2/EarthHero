@@ -21,7 +21,6 @@ class EARTHHERO_API AEHCharacter : public AEHCharacterBase
 public:
     AEHCharacter();
     virtual void Tick(float DeltaSeconds) override;
-    virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
     void EnableForceFieldEffect();
     void DisableForceFieldEffect();
@@ -98,6 +97,8 @@ private:
     
     UFUNCTION(Client, Reliable)
     void Client_DisableAllInput(APlayerController* PlayerController);
+    
+    void PerformSphereTrace();
 
 public:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")

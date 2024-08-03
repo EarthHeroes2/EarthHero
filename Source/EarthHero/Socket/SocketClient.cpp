@@ -19,7 +19,7 @@ FString USocketClient::CreateSocket(const FString& RequestMessage, const FString
 	//
 	if(RequestMessage.Equals("CreateLobby") ||
 		RequestMessage.Equals("ComparePassword") ||
-		RequestMessage.Equals("GetPlayerData")) FIPv4Address::Parse("116.121.57.64", IP); //뭘로 감출까
+		RequestMessage.Equals("GetPlayerData")) FIPv4Address::Parse("211.210.92.100", IP); //뭘로 감출까
 	else if(RequestMessage.Equals("DestroyServer") ||
 			RequestMessage.Equals("UpdatePlayerExp") ||
 			RequestMessage.Equals("UpdatePassword") ||

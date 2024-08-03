@@ -90,11 +90,6 @@ void AEHCharacter::Tick(float DeltaSeconds)
     }
 }
 
-void AEHCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-}
-
 void AEHCharacter::BeginPlay()
 {
     Super::BeginPlay();
@@ -115,8 +110,7 @@ void AEHCharacter::PossessedBy(AController* NewController)
 
     MyPlayerState = Cast<AEHPlayerState>(NewController->PlayerState);
     GetWorldTimerManager().SetTimer(SetStatComponentTimerHandle, this, &AEHCharacter::SetStatComponent, 2.f, true);
-
-    APlayerController* NewPlayerController = Cast<APlayerController>(NewController);
+    
 }
 
 void AEHCharacter::Client_DisableAllInput_Implementation(APlayerController* PlayerController)
