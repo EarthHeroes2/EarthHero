@@ -623,8 +623,11 @@ void AEHPlayerController::Server_SpectatePlayer_Implementation(int PlayerNumber)
 			{
 				ACustomSpectatorPawn* CustomSpectatorPawn = Cast<ACustomSpectatorPawn>(ControlledPawn);
 				if(CustomSpectatorPawn)
+				{
 					CustomSpectatorPawn->SetActorLocation(PlayerLocation, false, nullptr, ETeleportType::TeleportPhysics);
+				}
 			}
 		}
+		else UE_LOG(LogTemp, Log, TEXT("GetPlayerLocation Failed"));
 	}
 }

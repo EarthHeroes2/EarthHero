@@ -15,6 +15,8 @@ class EARTHHERO_API ACustomSpectatorPawn : public ASpectatorPawn
 {
 	GENERATED_BODY()
 	
+	ACustomSpectatorPawn();
+	
 	virtual void SetupPlayerInputComponent(UInputComponent* InInputComponent) override;
 	virtual void BeginPlay() override;
 	void On1KeyPressed();
