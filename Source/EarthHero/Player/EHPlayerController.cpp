@@ -49,13 +49,22 @@ void AEHPlayerController::BeginPlay()
 void AEHPlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
-
-
+	UE_LOG(LogTemp, Log, TEXT("OnPossess()1"));
+	
 	ACharacter* PossessCharacter = GetCharacter();
 	if(PossessCharacter)
 	{
-		ControlledCharacter = PossessCharacter;
-		ClientPossess();
+		if(ControlledCharacter) //부활 때라면
+		{
+			UE_LOG(LogTemp, Log, TEXT("OnPossess()2 : rebirth"));
+			ClientPossess(false);
+		}
+		else //최초 빙의 (겜 시작 때)라면
+		{
+			UE_LOG(LogTemp, Log, TEXT("OnPossess()2 : init"));
+			ControlledCharacter = PossessCharacter;
+			ClientPossess(true);
+		}
 	}
 	else UE_LOG(LogClass, Warning, TEXT("spectator")); //이건 관전폰인 경우
 }
@@ -65,21 +74,23 @@ void AEHPlayerController::OnUnPossess()
 {
 	Super::OnUnPossess();
 
+	UE_LOG(LogClass, Warning, TEXT("AEHPlayerController::OnUnPossess()"));
+
 	APlayingGameMode* PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode());
 	if (PlayingGameMode) PlayingGameMode->AddPlayerDead(this);
 }
 
 //클라이언트에게 빙의됨을 알려줌
-void AEHPlayerController::ClientPossess_Implementation()
+void AEHPlayerController::ClientPossess_Implementation(bool bInit)
 {
-	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
+	if(bInit) //겜 시작 때 로직
 	{
-		Subsystem->AddMappingContext(HeroContext, 0);
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
+			Subsystem->AddMappingContext(HeroContext, 0);
+		
+		GetWorldTimerManager().SetTimer(PlayerStateCheckTimerHandle, this, &AEHPlayerController::InitializeHUD, 0.1f, true);
 	}
-	
 	EnableInput(this);
-	
-	GetWorldTimerManager().SetTimer(PlayerStateCheckTimerHandle, this, &AEHPlayerController::InitializeHUD, 0.1f, true);
 }
 
 //여기서 HUD 설정
@@ -443,7 +454,7 @@ void AEHPlayerController::Client_DisableInput_Implementation()
 //죽고 관전폰에 빙의한 뒤 불리는 함수
 void AEHPlayerController::Client_StartSpectate_Implementation()
 {
-
+	bSpectating = true;
 	//!!!!!현재 이 방향성은 보류함 (너무 멀면 제대로 작동안함)!!!!!
 	//정확한 이유는 모르겠지만 너무 빠르게 실행되면 관전이 안됨 (서버에서 unpossed 되어도 클라입장에서는 좀 느린가?)
 	//약간의 연출같은 것으로 자연스럽게 전환해줄 필요가 있을듯
@@ -456,7 +467,7 @@ void AEHPlayerController::StartSpectate()
 {
 	//UpdateSpectatorTarget();
 	//ChangeSpectatorTarget(false);
-	bSpectating = true;
+	//bSpectating = true;
 }
 
 /*
@@ -575,9 +586,9 @@ void AEHPlayerController::DEBUG_Rebirth()
 	if(bSpectating)
 	{
 		bSpectating = false;
-		SpectatorTargets.Empty();
-		CurrentSpectatorTarget = nullptr;
-		SpectatorTargetIndex = INDEX_NONE;
+		//SpectatorTargets.Empty();
+		//CurrentSpectatorTarget = nullptr;
+		//SpectatorTargetIndex = INDEX_NONE;
 		Server_DEBUG_Rebirth();
 	}
 }
@@ -594,6 +605,7 @@ void AEHPlayerController::Server_DEBUG_Rebirth_Implementation()
 //서버에서만 실행되어야 함
 void AEHPlayerController::Rebirth()
 {
+	UE_LOG(LogTemp, Log, TEXT("AEHPlayerController::Rebirth()"));
 	Possess(ControlledCharacter);
 }
 

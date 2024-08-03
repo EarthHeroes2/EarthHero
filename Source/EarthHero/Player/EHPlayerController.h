@@ -47,7 +47,7 @@ protected:
 	virtual void OnUnPossess() override;
 
 	UFUNCTION(Client, Reliable)
-	void ClientPossess();
+	void ClientPossess(bool bInit);
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Input")
@@ -148,8 +148,9 @@ protected:
 	void ToggleEscMenu();
 	void DEBUG_Levelup();
 	void DEBUG_Die();
+public:
 	void DEBUG_Rebirth();
-
+protected:
 	virtual void EndPlay(EEndPlayReason::Type EndPlayReason) override;
 
 	UFUNCTION(Server, Reliable)

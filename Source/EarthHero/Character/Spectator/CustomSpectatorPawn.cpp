@@ -13,6 +13,7 @@ void ACustomSpectatorPawn::SetupPlayerInputComponent(UInputComponent* InInputCom
     InInputComponent->BindKey(EKeys::Two, IE_Pressed, this, &ACustomSpectatorPawn::On2KeyPressed);
     InInputComponent->BindKey(EKeys::Three, IE_Pressed, this, &ACustomSpectatorPawn::On3KeyPressed);
     InInputComponent->BindKey(EKeys::Four, IE_Pressed, this, &ACustomSpectatorPawn::On4KeyPressed);
+    InInputComponent->BindKey(EKeys::Zero, IE_Pressed, this, &ACustomSpectatorPawn::On0KeyPressed);
 }
 
 void ACustomSpectatorPawn::BeginPlay()
@@ -25,24 +26,25 @@ void ACustomSpectatorPawn::BeginPlay()
 
 void ACustomSpectatorPawn::On1KeyPressed()
 {
-    UE_LOG(LogTemp, Log, TEXT("On1KeyPressed"));
     if(EHPlayerController) EHPlayerController->Server_SpectatePlayer(1);
 }
 
 void ACustomSpectatorPawn::On2KeyPressed()
 {
-    UE_LOG(LogTemp, Log, TEXT("On2KeyPressed"));
     if(EHPlayerController) EHPlayerController->Server_SpectatePlayer(2);
 }
 
 void ACustomSpectatorPawn::On3KeyPressed()
 {
-    UE_LOG(LogTemp, Log, TEXT("On3KeyPressed"));
     if(EHPlayerController) EHPlayerController->Server_SpectatePlayer(3);
 }
 
 void ACustomSpectatorPawn::On4KeyPressed()
 {
-    UE_LOG(LogTemp, Log, TEXT("On4KeyPressed"));
     if(EHPlayerController) EHPlayerController->Server_SpectatePlayer(4);
+}
+
+void ACustomSpectatorPawn::On0KeyPressed()
+{
+    if(EHPlayerController) EHPlayerController->DEBUG_Rebirth();
 }
