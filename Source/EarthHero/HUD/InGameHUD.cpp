@@ -66,15 +66,20 @@ void UInGameHUD::UpdateGameTimer(int GameTimerSec)
 
 void UInGameHUD::UpdatePlayerInfoVisibility(int32 AllPlayerNumbers)
 {
+	UE_LOG(LogTemp, Log, TEXT("junmoonhere1"));
 	for (int32 i = 0; i < InGamePlayerInfoArray.Num(); ++i)
 	{
+		UE_LOG(LogTemp, Log, TEXT("junmoonhere2"));
 		if (i < AllPlayerNumbers)
 		{
 			InGamePlayerInfoArray[i]->SetVisibility(ESlateVisibility::Visible);
+			UE_LOG(LogTemp, Log, TEXT("Visible: %d"), i);
+			
 		}
 		else
 		{
 			InGamePlayerInfoArray[i]->SetVisibility(ESlateVisibility::Collapsed);
+			UE_LOG(LogTemp, Log, TEXT("Collapsed: %d"), i);
 		}
 	}
 }

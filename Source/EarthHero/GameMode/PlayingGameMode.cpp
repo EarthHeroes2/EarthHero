@@ -420,7 +420,6 @@ void APlayingGameMode::BossDead()
 	}
 }
 
-
 void APlayingGameMode::GameTimerCount()
 {
 	GameTimer++;
@@ -431,6 +430,7 @@ void APlayingGameMode::GameTimerCount()
 	//15초가 되면 자기장 생성 테스트
 	if(GameTimer == 15)
 	{
+		UE_LOG(LogTemp, Log, TEXT("자기장 소환 됐다"));
 		SpawnForceFields();
 	}
 }

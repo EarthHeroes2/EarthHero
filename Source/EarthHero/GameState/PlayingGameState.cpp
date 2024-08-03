@@ -38,9 +38,10 @@ void APlayingGameState::OnRep_GameTimerSec() const
 	if (EHPlayerController && EHPlayerController->TabHUD && AllExpansionDurations.IsValidIndex(0))
 	{
 		// 15초가 지나야 시작
-		if(GameTimerSec >= 300)
+		if(GameTimerSec >= 15)
 		{
-			int TempGameTimerSec = GameTimerSec - 300;
+			int TempGameTimerSec = GameTimerSec - 15;
+			UE_LOG(LogTemp, Log, TEXT("junmoon tempgametimersec: %d"), TempGameTimerSec);
 			for (int index = 0; index <= 3; index++)
 			{
 				EHPlayerController->TabHUD->UpdateForceField(index, TempGameTimerSec, AllExpansionDurations[index]);
@@ -191,6 +192,12 @@ void APlayingGameState::UpdateGameStateWorldMaps(const TArray<FVector2D> ActorLo
 	AllActorLocations = ActorLocations;
 	AllActorRotations = ActorRotations;
 	AllPlayerNumbers = PlayerNumbers;
+
+	if(EHPlayerController && EHPlayerController->HUD)
+	{
+		UE_LOG(LogTemp, Log, TEXT("junmoon update player info"));
+		EHPlayerController->HUD->UpdatePlayerInfoVisibility(AllPlayerNumbers);
+	}
 }
 
 void APlayingGameState::OnRep_GameStateActorLocations() const
@@ -220,10 +227,8 @@ void APlayingGameState::OnRep_GameStateForceFieldLocations() const
 	UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateForceFieldLocations"));
 	if (EHPlayerController && EHPlayerController->TabHUD)
 	{
-		UE_LOG(LogTemp, Log, TEXT("EHPlayerController && EHPlayerController->TabHUD"));
 		for (int index = 0; index <= 3; index++)
 		{
-			UE_LOG(LogTemp, Log, TEXT("junmoon"));
 			EHPlayerController->TabHUD->SetForceFieldAlignment(index, AllForceFieldLocations[index]);
 		}
 	}
@@ -247,7 +252,6 @@ void APlayingGameState::OnRep_GameStatePlayerClassImages() const
 	{
 		//UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateActorLocations"));
 		EHPlayerController->HUD->UpdatePlayerClassImages(AllPlayerClassImages);
-		EHPlayerController->HUD->UpdatePlayerInfoVisibility(AllPlayerNumbers);
 	}
 }
 
@@ -255,6 +259,7 @@ void APlayingGameState::UpdatePlayerEffectState(const FEffectStatus EffectStatus
 {
 	GameStateEffectStatus(EffectStatus, index);
 }
+
 void APlayingGameState::GameStateEffectStatus_Implementation(const FEffectStatus EffectStatus, const int32 index) const
 {
 	//UE_LOG(LogClass, Warning, TEXT("GameState : GameStateEffectStatuses"));
@@ -263,7 +268,6 @@ void APlayingGameState::GameStateEffectStatus_Implementation(const FEffectStatus
 		EHPlayerController->HUD->UpdatePlayerEffectState(EffectStatus, index);
 	}
 }
-
 
 void APlayingGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
