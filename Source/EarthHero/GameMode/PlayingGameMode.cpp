@@ -717,7 +717,7 @@ void APlayingGameMode::Rebirth(AEHPlayerController* EHPlayerController)
 	int PlayerIndex = EHPlayerControllers.Find(EHPlayerController);
 	if (PlayerIndex != INDEX_NONE)
 	{
-		if(!bPlayerAlives[PlayerIndex]) //죽어 있다면
+		if(!bPlayerAlives[PlayerIndex])
 		{
 			bPlayerAlives[PlayerIndex] = true;
 			NumDeadPlayers--;

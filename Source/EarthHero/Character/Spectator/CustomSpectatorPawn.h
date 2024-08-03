@@ -22,5 +22,7 @@ class EARTHHERO_API ACustomSpectatorPawn : public ASpectatorPawn
 	void On3KeyPressed();
 	void On4KeyPressed();
 
+	void On0KeyPressed();
+	
 	AEHPlayerController* EHPlayerController;
 };
