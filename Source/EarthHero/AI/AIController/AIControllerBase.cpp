@@ -39,10 +39,6 @@ void AAIControllerBase::BeginPlay()
 
 void AAIControllerBase::SetTargetPlayer(AEHCharacter* TargetPlayer)
 {
-	if(TargetPlayer == nullptr) UE_LOG(LogTemp, Log, TEXT("TargetPlaye???????????????????????????"));
-
-	UE_LOG(LogTemp, Log, TEXT("TargetPlayer %s"), *TargetPlayer->GetName());
-
 	GetBlackBoardComponent()->SetValueAsBool(BlackboardKeys::CanSeePlayer, true);
 	GetBlackBoardComponent()->SetValueAsObject(BlackboardKeys::TargetPlayer, TargetPlayer);
 }

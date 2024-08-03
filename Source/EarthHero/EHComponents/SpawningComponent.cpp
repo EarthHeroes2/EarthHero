@@ -1,8 +1,6 @@
 #include "SpawningComponent.h"
-#include "AIController.h"
 #include "DrawDebugHelpers.h"
 #include "EarthHero/AI/AIController/AIControllerBase.h"
-#include "GameFramework/Character.h"
 #include "UObject/ConstructorHelpers.h"
 #include "EarthHero/Character/EHCharacter.h"
 #include "EarthHero/Character/Monster/MonsterBase.h"
