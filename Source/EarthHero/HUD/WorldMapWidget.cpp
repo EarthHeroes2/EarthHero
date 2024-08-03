@@ -36,6 +36,23 @@ FVector2D UWorldMapWidget::ConvertPlayerWorldToMapPosition(const FVector2D& Worl
     return FVector2D(MapX, MapY);
 }
 
+void UWorldMapWidget::ToggleForceFields(bool bToggle)
+{
+    if(bToggle == false)
+    {
+        ForceField1Image->SetVisibility(ESlateVisibility::Hidden);
+        ForceField2Image->SetVisibility(ESlateVisibility::Hidden);
+        ForceField3Image->SetVisibility(ESlateVisibility::Hidden);
+        ForceField4Image->SetVisibility(ESlateVisibility::Hidden);
+    }
+    if(bToggle == true)
+    {
+        ForceField1Image->SetVisibility(ESlateVisibility::Visible);
+        ForceField2Image->SetVisibility(ESlateVisibility::Visible);
+        ForceField3Image->SetVisibility(ESlateVisibility::Visible);
+        ForceField4Image->SetVisibility(ESlateVisibility::Visible);
+    }
+}
 
 FVector2D UWorldMapWidget::ConvertForceFieldWorldToMapPosition(const FVector2D& WorldPosition) const
 {

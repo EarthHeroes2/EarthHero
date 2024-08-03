@@ -98,6 +98,11 @@ void UTabHUDWidget::SetBasicStatsWidgetValues(int32 Index, FText KillScore, FTex
 	}
 }
 
+void UTabHUDWidget::ToggleForceFields(bool bToggle)
+{
+	BP_WorldMap->ToggleForceFields(bToggle);
+}
+
 // 계속 호출
 void UTabHUDWidget::UpdateForceField(int32 ForceFieldIndex, float CurrentTime, float GrowthDuration)
 {
