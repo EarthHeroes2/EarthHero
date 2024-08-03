@@ -16,6 +16,9 @@ AEHWarrior::AEHWarrior()
 void AEHWarrior::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if(GEngine) GEngine->AddOnScreenDebugMessage(120, 1.f, FColor::Green, FString::Printf(TEXT("Gravity Scale : %f"), GetCharacterMovement()->GravityScale));
+
 }
 
 void AEHWarrior::Shoot()
@@ -48,7 +51,11 @@ void AEHWarrior::Dash()
 void AEHWarrior::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	if(CombatComponent)
+	{
+		CombatComponent->SetWarrior(this);
+	}
 }
 
 void AEHWarrior::PostInitializeComponents()

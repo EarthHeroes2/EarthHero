@@ -26,14 +26,9 @@ void UWarriorCombatComponent::BeginPlay()
 	Warrior = Cast<AEHWarrior>(GetOwner());
 }
 
+
 void UWarriorCombatComponent::Attack()
 {
-	if(!Warrior)
-	{
-		Warrior = Cast<AEHWarrior>(GetOwner());
-	}
-	if(!Warrior) return;
-
 	float PlayRate = FMath::Clamp(0.3f * (1.f / AttackCooldown), 0.6f, 1.2f);
 	
 	if(Warrior && bCanAttack && !bIsWhirlwind && !bIsSuperJump)
@@ -102,12 +97,6 @@ void UWarriorCombatComponent::SwordHit()
 
 void UWarriorCombatComponent::JumpAttack()
 {
-	if(!Warrior)
-	{
-		Warrior = Cast<AEHWarrior>(GetOwner());
-	}
-	if(!Warrior) return;
-	
 	if(bIsWhirlwind) return;
 
 	bIsSuperJump = true;
@@ -136,8 +125,7 @@ void UWarriorCombatComponent::JumpAttack()
 
 void UWarriorCombatComponent::Server_JumpAttack_Implementation(FVector LaunchVector)
 {
-	Warrior->LaunchCharacter(LaunchVector * 2000.f, false, false);
-	Warrior->GetCharacterMovement()->GravityScale = 1.6f;
+	Warrior->LaunchCharacter(LaunchVector * 1500.f, false, false);
 	NetMulticast_JumpAttack();
 }
 
@@ -154,12 +142,6 @@ void UWarriorCombatComponent::JumpAttackLanded()
 void UWarriorCombatComponent::Server_JumpAttackLanded_Implementation()
 {
 	NetMulticast_JumpAttackLanded();
-
-	if(!Warrior)
-	{
-		Warrior = Cast<AEHWarrior>(GetOwner());
-	}
-	if(!Warrior) return;
 	
 	TArray<AActor*> ActorsToIgnore;
 	ActorsToIgnore.Add(Warrior);
@@ -188,6 +170,12 @@ void UWarriorCombatComponent::Server_JumpAttackLanded_Implementation()
 				{
 					// Damage Monster
 					// Launch Monster
+					FVector Direction = HitMonster->GetActorLocation() - Warrior->GetActorLocation();
+					Direction.Z = 0.f;
+					Direction.Normalize();
+					Direction.Z = 1.2f;
+					
+					HitMonster->LaunchCharacter(Direction * 450.f, false, false);
 				}
 			}
 		}
@@ -196,23 +184,13 @@ void UWarriorCombatComponent::Server_JumpAttackLanded_Implementation()
 
 void UWarriorCombatComponent::NetMulticast_JumpAttackLanded_Implementation()
 {
-	if(!Warrior)
-	{
-		Warrior = Cast<AEHWarrior>(GetOwner());
-	}
-	if(!Warrior) return;
-	
-	Warrior->GetWorldTimerManager().SetTimer(JumpAttackEndTimerHandle, this, &ThisClass::JumpAttackEnd, 0.6f);
+	Warrior->GetWorldTimerManager().SetTimer(JumpAttackEndTimerHandle, this, &ThisClass::JumpAttackEnd, 0.45f);
 }
 
 
 void UWarriorCombatComponent::JumpAttackEnd()
 {
 	bIsSuperJump = false;
-	if(Warrior)
-	{
-		Warrior->GetCharacterMovement()->GravityScale = 1.0f;
-	}
 }
 
 
