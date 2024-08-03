@@ -8,6 +8,7 @@
 #include "EarthHero/Stat/WarriorStatComponent.h"
 #include "EarthHero/Stat/Effect/Ef_ReduceDamageTaken.h"
 #include "EarthHero/Stat/Effect/Ef_SpeedBoost.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Net/UnrealNetwork.h"
@@ -135,7 +136,8 @@ void UWarriorCombatComponent::JumpAttack()
 
 void UWarriorCombatComponent::Server_JumpAttack_Implementation(FVector LaunchVector)
 {
-	Warrior->LaunchCharacter(LaunchVector * 1500.f, false, false);
+	Warrior->LaunchCharacter(LaunchVector * 2000.f, false, false);
+	Warrior->GetCharacterMovement()->GravityScale = 1.6f;
 	NetMulticast_JumpAttack();
 }
 
@@ -207,6 +209,10 @@ void UWarriorCombatComponent::NetMulticast_JumpAttackLanded_Implementation()
 void UWarriorCombatComponent::JumpAttackEnd()
 {
 	bIsSuperJump = false;
+	if(Warrior)
+	{
+		Warrior->GetCharacterMovement()->GravityScale = 1.0f;
+	}
 }
 
 

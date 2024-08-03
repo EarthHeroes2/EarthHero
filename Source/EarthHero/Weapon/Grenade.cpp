@@ -58,7 +58,7 @@ void AGrenade::Server_GrenadeHit_Implementation(FVector HitLocation)
 	if(World)
 	{
 		const bool bHit = UKismetSystemLibrary::SphereTraceMulti(World, HitLocation, HitLocation, GrenadeRange,
-			UEngineTypes::ConvertToTraceType(ECC_Pawn), false, ActorsToIgnore,
+			UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel4), false, ActorsToIgnore,
 			EDrawDebugTrace::ForDuration, HitArray, true, FLinearColor::Gray, FLinearColor::Blue, 5.f);
 	
 		if(bHit)
