@@ -102,7 +102,9 @@ void USpawningComponent::BeginPlay()
     Super::BeginPlay();
     
     if(GetNetMode() != NM_Client) //서버에서만 소환해야함 - 박정익
+    {
         GetWorld()->GetTimerManager().SetTimer(SpawnTimerHandle, this, &USpawningComponent::SpawnActorsForDifficultyWrapper, SpawnInterval, true);
+    }
 }
 
 void USpawningComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -191,44 +193,37 @@ void USpawningComponent::SpawnActorsForDifficulty()
             // Set the Z value of the SpawnLocation to the hit location's Z value
             SpawnLocation.Z = HitResult.Location.Z;
 
+            UWorld* World = GetWorld();
+            if(World == nullptr) return;
+            
             FActorSpawnParameters SpawnParams;
             SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-
             TSubclassOf<AActor> ActorClassToSpawn = ActorClassesToSpawn[FMath::RandHelper(ActorClassesToSpawn.Num())];
-            AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(ActorClassToSpawn, SpawnLocation, FRotator::ZeroRotator, SpawnParams);
-            
-            if (SpawnedActor)
-            {
-                if (AMonsterBase* SpawnedMonsterBase = Cast<AMonsterBase>(SpawnedActor))
-                {
-                    UWorld* World = GetWorld();
-                    TSubclassOf<AController> AIControllerClass = SpawnedMonsterBase->AIControllerClass;
-                    if(World && AIControllerClass)
-                    {
-                        AAIControllerBase* AIControllerBase = World->SpawnActor<AAIControllerBase>(AIControllerClass, SpawnLocation, FRotator::ZeroRotator, SpawnParams);
-                        if(AIControllerBase)
-                        {
-                            AIControllerBase->Possess(SpawnedMonsterBase);
 
-                            AActor* Actor = GetOwner();
-                            if(Actor)
+            if(OwnerCharacter)
+            {
+                AActor* SpawnedActor = World->SpawnActor<AActor>(ActorClassToSpawn, SpawnLocation, OwnerCharacter->GetActorLocation().Rotation(), SpawnParams);
+                if (SpawnedActor)
+                {
+                    if (AMonsterBase* SpawnedMonsterBase = Cast<AMonsterBase>(SpawnedActor))
+                    {
+                        TSubclassOf<AController> AIControllerClass = SpawnedMonsterBase->AIControllerClass;
+                        if(AIControllerClass)
+                        {
+                            AAIControllerBase* AIControllerBase = World->SpawnActor<AAIControllerBase>(AIControllerClass, SpawnLocation, FRotator::ZeroRotator, SpawnParams);
+                            if(AIControllerBase)
                             {
-                                AEHCharacter* EHCharacter = Cast<AEHCharacter>(Actor);
-                                if(EHCharacter)
-                                {
-                                    UE_LOG(LogTemp, Warning, TEXT("AIControllerBase->SetTargetPlayer()"));
-                                    AIControllerBase->SetTargetPlayer(EHCharacter);
-                                }
+                                AIControllerBase->SetTargetPlayer(OwnerCharacter);
+                                AIControllerBase->Possess(SpawnedMonsterBase);
+                                continue;
                             }
+                            AIControllerBase->Destroy();
                         }
-                        else UE_LOG(LogTemp, Warning, TEXT("Failed to spawn AI controller for %s"), *SpawnedMonsterBase->GetName());
                     }
                 }
+                SpawnedActor->Destroy();
             }
         }
-        else
-        {
-            UE_LOG(LogTemp, Warning, TEXT("No hit detected for spawn location. Actor will not be spawned."));
-        }
+        else UE_LOG(LogTemp, Warning, TEXT("No hit detected for spawn location. Actor will not be spawned."));
     }
 }

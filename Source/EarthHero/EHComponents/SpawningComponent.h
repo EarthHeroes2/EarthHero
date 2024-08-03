@@ -4,6 +4,8 @@
 #include "Components/ActorComponent.h"
 #include "SpawningComponent.generated.h"
 
+class AEHCharacter;
+
 USTRUCT(BlueprintType)
 struct FSpawnConfiguration
 {
