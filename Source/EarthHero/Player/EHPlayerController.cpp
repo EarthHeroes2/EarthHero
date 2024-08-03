@@ -594,7 +594,7 @@ void AEHPlayerController::DEBUG_Rebirth()
 
 void AEHPlayerController::Server_DEBUG_Rebirth_Implementation()
 {
-	UE_LOG(LogTemp, Log, TEXT("Server_DEBUG_Rebirth_Implementation()"));
+	UE_LOG(LogTemp, Log, TEXT("AEHPlayerController::Server_DEBUG_Rebirth_Implementation()"));
 	APlayingGameMode* PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode());
 	if (PlayingGameMode)
 	{
@@ -623,19 +623,26 @@ void AEHPlayerController::Rebirth()
 //서버에게 해당 플레이어 위치를 물어보고 관람해도 된다면 해당 위치로 이동시킴
 void AEHPlayerController::Server_SpectatePlayer_Implementation(int PlayerNumber)
 {
+	UE_LOG(LogTemp, Log, TEXT("Server_SpectatePlayer_Implementation(int PlayerNumber = %d)"), PlayerNumber);
+	
 	APlayingGameMode* PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode());
 	if(PlayingGameMode)
 	{
 		FVector PlayerLocation;
 		if(PlayingGameMode->GetPlayerLocation(PlayerNumber, PlayerLocation))
 		{
+			UE_LOG(LogTemp, Log, TEXT("Player %d Location : %s"), PlayerNumber, *PlayerLocation.ToString());
 			APawn* ControlledPawn = GetPawn();
 			if(ControlledPawn)
 			{
 				ACustomSpectatorPawn* CustomSpectatorPawn = Cast<ACustomSpectatorPawn>(ControlledPawn);
 				if(CustomSpectatorPawn)
 				{
-					CustomSpectatorPawn->SetActorLocation(PlayerLocation, false, nullptr, ETeleportType::TeleportPhysics);
+					if(CustomSpectatorPawn->SetActorLocation(PlayerLocation, false, nullptr, ETeleportType::TeleportPhysics))
+					{
+						UE_LOG(LogTemp, Log, TEXT("SetActorLocation Seccess"));
+					}
+					else UE_LOG(LogTemp, Log, TEXT("SetActorLocation Failed"));
 				}
 			}
 		}
