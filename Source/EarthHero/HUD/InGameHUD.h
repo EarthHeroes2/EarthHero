@@ -69,7 +69,9 @@ public:
 	TArray<UInGamePlayerInfo*> InGamePlayerInfoArray;
 
 	void UpdatePlayerEffectState(const FEffectStatus EffectStatus, const int32 TargetIndex);
-
+	
+	UFUNCTION(BlueprintCallable, Category = "HUD")
+	void UpdatePlayerInfoVisibility(int32 AllPlayerNumbers);
 
 	//플레이어 캐릭터 Effect 표시
 	UPROPERTY(meta = (BindWidget))

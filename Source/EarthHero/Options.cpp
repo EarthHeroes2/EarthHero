@@ -280,7 +280,8 @@ void UOptions::OnAntiAliasingChanged(FString SelectedItem, ESelectInfo::Type Sel
     auto GameInstance = Cast<UEHGameInstance>(GetGameInstance());
     if (GameInstance)
     {
-        GameInstance->AntiAliasing = QualityFromString(SelectedItem);
+        int32 SelectedQuality = QualityFromString(SelectedItem);
+        GameInstance->AntiAliasing = SelectedQuality;
         GameInstance->SaveSettings();
 
         UGameUserSettings* UserSettings = GEngine->GetGameUserSettings();
@@ -288,6 +289,17 @@ void UOptions::OnAntiAliasingChanged(FString SelectedItem, ESelectInfo::Type Sel
         {
             UserSettings->SetAntiAliasingQuality(GameInstance->AntiAliasing);
             UserSettings->ApplySettings(false);
+        }
+
+        // Check if the selected quality differs from the overall quality
+        if (GameInstance->OverallQuality != SelectedQuality)
+        {
+            // Set overall quality to "커스텀"
+            GameInstance->OverallQuality = 5; // Custom quality
+            if (OverallQualityComboBox)
+            {
+                OverallQualityComboBox->SetSelectedOption(TEXT("커스텀"));
+            }
         }
     }
 }
@@ -297,7 +309,8 @@ void UOptions::OnPostProcessingChanged(FString SelectedItem, ESelectInfo::Type S
     auto GameInstance = Cast<UEHGameInstance>(GetGameInstance());
     if (GameInstance)
     {
-        GameInstance->PostProcessing = QualityFromString(SelectedItem);
+        int32 SelectedQuality = QualityFromString(SelectedItem);
+        GameInstance->PostProcessing = SelectedQuality;
         GameInstance->SaveSettings();
 
         UGameUserSettings* UserSettings = GEngine->GetGameUserSettings();
@@ -305,6 +318,17 @@ void UOptions::OnPostProcessingChanged(FString SelectedItem, ESelectInfo::Type S
         {
             UserSettings->SetPostProcessingQuality(GameInstance->PostProcessing);
             UserSettings->ApplySettings(false);
+        }
+
+        // Check if the selected quality differs from the overall quality
+        if (GameInstance->OverallQuality != SelectedQuality)
+        {
+            // Set overall quality to "커스텀"
+            GameInstance->OverallQuality = 5;
+            if (OverallQualityComboBox)
+            {
+                OverallQualityComboBox->SetSelectedOption(TEXT("커스텀"));
+            }
         }
     }
 }

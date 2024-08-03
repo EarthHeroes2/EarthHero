@@ -235,12 +235,14 @@ void APlayingGameState::UpdatePlayerClassImage(const TArray<UTexture2D*> PlayerC
 {
 	AllPlayerClassImages = PlayerClassImages;
 }
+
 void APlayingGameState::OnRep_GameStatePlayerClassImages() const
 {
 	if(EHPlayerController && EHPlayerController->HUD)
 	{
 		//UE_LOG(LogTemp, Log, TEXT("OnRep_GameStateActorLocations"));
 		EHPlayerController->HUD->UpdatePlayerClassImages(AllPlayerClassImages);
+		EHPlayerController->HUD->UpdatePlayerInfoVisibility(AllPlayerNumbers);
 	}
 }
 

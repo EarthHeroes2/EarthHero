@@ -41,6 +41,12 @@ private:
 	class UButton* Ready_Btn;
 
 	UPROPERTY(meta = (BindWidget))
+	class UButton* Options_Btn;
+
+	UUserWidget* OptionsWidget;
+	TSubclassOf<UUserWidget> OptionsWidgetClass;
+
+	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* ReadyButton_Tb;
 
 	UPROPERTY(meta = (BindWidget))
@@ -144,6 +150,9 @@ private:
 	
 	UPROPERTY(meta = (BindWidget))
 	UScrollBox* Friend_Scr;
+
+	UFUNCTION()
+	void OptionsClicked();
 
 	UFUNCTION()
 	void ReadyClicked();

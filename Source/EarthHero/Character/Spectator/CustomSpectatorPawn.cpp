@@ -5,6 +5,12 @@
 
 #include "EarthHero/Player/EHPlayerController.h"
 
+ACustomSpectatorPawn::ACustomSpectatorPawn()
+{
+    SetReplicates(true);
+    SetReplicateMovement(true);
+}
+
 void ACustomSpectatorPawn::SetupPlayerInputComponent(UInputComponent* InInputComponent)
 {
     Super::SetupPlayerInputComponent(InInputComponent);

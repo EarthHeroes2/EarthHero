@@ -1,9 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "LobbyWidget.h"
-
-#include <string>
 
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
@@ -25,6 +20,13 @@ ULobbyWidget::ULobbyWidget(const FObjectInitializer &ObjectInitializer)
 	if (FriendRowWidgetAsset.Succeeded())
 	{
 		FriendRowWidgetClass = FriendRowWidgetAsset.Class;
+	}
+
+	// 설정
+	static ConstructorHelpers::FClassFinder<UUserWidget> OptionsWidgetAsset(TEXT("UserWidget'/Game/Blueprints/Menu/WBP_Options.WBP_Options_C'"));
+	if (OptionsWidgetAsset.Succeeded())
+	{
+		OptionsWidgetClass = OptionsWidgetAsset.Class;
 	}
 }
 
@@ -52,6 +54,8 @@ bool ULobbyWidget::Initialize()
 	ClassBtns.Add(Mechanic_Btn);
 	ClassBtns.Add(Shooter_Btn);
 	ClassBtns.Add(Archor_Btn);
+
+	Options_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::OptionsClicked);
 
 	Warrior_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::WarriorClicked);
 	Mechanic_Btn->OnClicked.AddDynamic(this, &ULobbyWidget::MechanicClicked);
@@ -358,6 +362,26 @@ void ULobbyWidget::SetDifficulty(const int Difficulty)
 	{
 		ALobbyPlayerController* LobbyPlayerController = Cast<ALobbyPlayerController>(PlayerController);
 		if (LobbyPlayerController) LobbyPlayerController->Server_SetDifficulty(Difficulty);
+	}
+}
+
+void ULobbyWidget::OptionsClicked()
+{
+	if (OptionsWidget)
+	{
+		if (OptionsWidget->IsVisible())
+			OptionsWidget->SetVisibility(ESlateVisibility::Hidden);
+		else
+			OptionsWidget->SetVisibility(ESlateVisibility::Visible);
+	}
+	else
+	{
+		OptionsWidget = Cast<UUserWidget>(CreateWidget(this, OptionsWidgetClass));
+		if (OptionsWidget)
+		{
+			OptionsWidget->AddToViewport();
+			OptionsWidget->SetVisibility(ESlateVisibility::Visible);
+		}
 	}
 }
 

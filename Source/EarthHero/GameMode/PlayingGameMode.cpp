@@ -42,7 +42,6 @@ void APlayingGameMode::BeginPlay()
 
 APawn* APlayingGameMode::SpawnDefaultPawnFor_Implementation(AController* NewPlayer, AActor* StartSpot)
 {
-	UE_LOG(LogClass, Warning, TEXT("SpawnDefaultPawnFor_Implementation"));
 	APlayerState* PlayerState = NewPlayer->PlayerState;
 	if(PlayerState)
 	{
@@ -57,11 +56,7 @@ APawn* APlayingGameMode::SpawnDefaultPawnFor_Implementation(AController* NewPlay
 			if(World)
 			{
 				APawn* SpawnedCharacter = World->SpawnActor<APawn>(CharacterClasses[EHPlayerState->PlayerClass], StartSpot->GetActorTransform(), SpawnParams);
-				if(SpawnedCharacter)
-				{
-					UE_LOG(LogClass, Warning, TEXT("SpawnDefaultPawnFor_Implementation Success!~~~~~"));
-					return SpawnedCharacter;
-				}
+				if(SpawnedCharacter) return SpawnedCharacter;
 			}
 		}
 	}
@@ -198,15 +193,18 @@ void APlayingGameMode::GenerateRandomDurations(int Count, float Min, float Max, 
 
 bool APlayingGameMode::GetPlayerLocation(int PlayerNumber, FVector& PlayerLocation)
 {
-	AEHPlayerController* TargetEHPlayerController = EHPlayerControllers[PlayerNumber - 1];
-	if(TargetEHPlayerController)
+	if(EHPlayerControllers.Num() > PlayerNumber - 1)
 	{
-		//캐릭터 조작이 아니면 (예 : 관전폰) 걸러짐
-		ACharacter* Character = TargetEHPlayerController->GetCharacter();
-		if(Character)
+		AEHPlayerController* TargetEHPlayerController = EHPlayerControllers[PlayerNumber - 1];
+		if(TargetEHPlayerController)
 		{
-			PlayerLocation = Character->GetActorLocation();
-			return true;
+			//캐릭터 조작이 아니면 (예 : 관전폰) 걸러짐
+			ACharacter* Character = TargetEHPlayerController->GetCharacter();
+			if(Character)
+			{
+				PlayerLocation = Character->GetActorLocation();
+				return true;
+			}
 		}
 	}
 	return false;
@@ -370,7 +368,7 @@ void APlayingGameMode::SendChatMessage(const FText& Text)
 	}
 }
 
-void APlayingGameMode::AddPlayerDead(AEHPlayerController* DeadEHPlayerController)
+void APlayingGameMode::AddPlayerDead(AEHPlayerController* DeadEHPlayerController, FVector DeadLocation)
 {
 	int PlayerIndex = EHPlayerControllers.Find(DeadEHPlayerController);
 	if (PlayerIndex != INDEX_NONE)
@@ -382,14 +380,10 @@ void APlayingGameMode::AddPlayerDead(AEHPlayerController* DeadEHPlayerController
 
 	if(DeadEHPlayerController)
 	{
-		//임시
-		FVector SpawnLocation = FVector::ZeroVector;
-		FRotator SpawnRotation = FRotator::ZeroRotator;
-
 		UWorld* World = GetWorld();
 		if(World)
 		{
-			ACustomSpectatorPawn* CustomSpectatorPawn = World->SpawnActor<ACustomSpectatorPawn>(ACustomSpectatorPawn::StaticClass(), SpawnLocation, SpawnRotation);
+			ACustomSpectatorPawn* CustomSpectatorPawn = World->SpawnActor<ACustomSpectatorPawn>(ACustomSpectatorPawn::StaticClass(), DeadLocation, DeadLocation.Rotation());
 			if (CustomSpectatorPawn)
 			{
 				DeadEHPlayerController->Possess(CustomSpectatorPawn);
