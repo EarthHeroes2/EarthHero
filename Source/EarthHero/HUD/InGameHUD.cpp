@@ -257,9 +257,7 @@ void UInGameHUD::UpdatePlayerHealths(const TArray<float>& PlayerMaxHealths, cons
 	}
 	for (int j = i; j <= 3; j++)
 	{
-		InGamePlayerInfoArray[j]->PlayerClass->SetVisibility(ESlateVisibility::Collapsed);
-		InGamePlayerInfoArray[j]->PlayerName->SetVisibility(ESlateVisibility::Collapsed);
-		InGamePlayerInfoArray[j]->HealthProgressBar->SetVisibility(ESlateVisibility::Collapsed);
+		InGamePlayerInfoArray[j]->SetVisibility(ESlateVisibility::Collapsed);
 		for (FStatus PlayerStatus : InGamePlayerInfoArray[j]->PLayerStatusArray)
 		{
 			PlayerStatus.CoolDownWidget->SetVisibility(ESlateVisibility::Collapsed);

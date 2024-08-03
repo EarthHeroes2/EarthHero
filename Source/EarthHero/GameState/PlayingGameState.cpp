@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "PlayingGameState.h"
 
 #include "EarthHero/Character/EHCharacter.h"
@@ -35,13 +34,12 @@ void APlayingGameState::OnRep_GameTimerSec() const
 	}
 
 	//Sec에 따라 forcefield 업데이트
-	if (EHPlayerController && EHPlayerController->TabHUD && AllExpansionDurations.IsValidIndex(0))
+	if (EHPlayerController && EHPlayerController->TabHUD)
 	{
 		// 15초가 지나야 시작
 		if(GameTimerSec >= 15)
 		{
 			int TempGameTimerSec = GameTimerSec - 15;
-			UE_LOG(LogTemp, Log, TEXT("junmoon tempgametimersec: %d"), TempGameTimerSec);
 			for (int index = 0; index <= 3; index++)
 			{
 				EHPlayerController->TabHUD->UpdateForceField(index, TempGameTimerSec, AllExpansionDurations[index]);
@@ -192,12 +190,6 @@ void APlayingGameState::UpdateGameStateWorldMaps(const TArray<FVector2D> ActorLo
 	AllActorLocations = ActorLocations;
 	AllActorRotations = ActorRotations;
 	AllPlayerNumbers = PlayerNumbers;
-
-	if(EHPlayerController && EHPlayerController->HUD)
-	{
-		UE_LOG(LogTemp, Log, TEXT("junmoon update player info"));
-		EHPlayerController->HUD->UpdatePlayerInfoVisibility(AllPlayerNumbers);
-	}
 }
 
 void APlayingGameState::OnRep_GameStateActorLocations() const
