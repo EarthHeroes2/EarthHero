@@ -120,6 +120,8 @@ private:
 
 	TObjectPtr<ACharacter> ControlledCharacter;
 
+	ACharacter* DeadCharacter;
+
 	int SpectatorTargetIndex;
 	AEHCharacter* CurrentSpectatorTarget;
 	TArray<AEHCharacter*> SpectatorTargets;

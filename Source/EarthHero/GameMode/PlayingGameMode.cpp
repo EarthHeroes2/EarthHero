@@ -712,6 +712,7 @@ int32 APlayingGameMode::FindControllerForTargetActor(AActor* TargetActor)
 
 void APlayingGameMode::Rebirth(AEHPlayerController* EHPlayerController)
 {
+	UE_LOG(LogTemp, Log, TEXT("Rebirth(AEHPlayerController* EHPlayerController)"));
 	int PlayerIndex = EHPlayerControllers.Find(EHPlayerController);
 	if (PlayerIndex != INDEX_NONE)
 	{

@@ -65,7 +65,11 @@ void AEHPlayerController::OnPossess(APawn* InPawn)
 			ClientPossess(true);
 		}
 	}
-	else UE_LOG(LogClass, Warning, TEXT("OnPossess() : spectator")); //이건 관전폰인 경우
+	else
+	{
+		UE_LOG(LogClass, Warning, TEXT("OnPossess() : spectator"));
+		Client_StartSpectate();
+	}
 }
 
 //빙의 풀림 (죽은 경우)
@@ -74,10 +78,11 @@ void AEHPlayerController::OnUnPossess()
 	Super::OnUnPossess();
 
 	UE_LOG(LogClass, Warning, TEXT("AEHPlayerController::OnUnPossess()"));
-
-	ACharacter* ContollingCharacter = GetCharacter();
-	if(ContollingCharacter)
+	
+	if(DeadCharacter)
 	{
+		DeadCharacter = nullptr;
+		
 		UE_LOG(LogClass, Warning, TEXT("DeadLocation = %s, rotation = %s"), *DeadLocation.ToString(), *DeadLocation.Rotation().ToString());
 
 		APlayingGameMode* PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode());
@@ -86,7 +91,7 @@ void AEHPlayerController::OnUnPossess()
 	else UE_LOG(LogClass, Warning, TEXT("Unpossess Spectator"));
 }
 
-//클라이언트에게 빙의됨을 알려줌
+//클라이언트에게 캐릭터에 빙의됨을 알려줌
 void AEHPlayerController::ClientPossess_Implementation(bool bInit)
 {
 	if(bInit) //겜 시작 때 로직
@@ -438,11 +443,11 @@ void AEHPlayerController::Server_DEBUG_Levelup_Implementation()
 //죽은 경우 (서버에서 실행됨)
 void AEHPlayerController::Dead()
 {
-	ACharacter* ContollingCharacter = GetCharacter();
-	if(ContollingCharacter)
+	DeadCharacter = GetCharacter();
+	if(DeadCharacter)
 	{
 		Client_DisableInput();
-		DeadLocation = ContollingCharacter->GetActorLocation();
+		DeadLocation = DeadCharacter->GetActorLocation();
 		UnPossess();
 	}
 }
@@ -576,9 +581,10 @@ void AEHPlayerController::ChangeSpectatorRight()
 
 void AEHPlayerController::DEBUG_Rebirth()
 {
+	UE_LOG(LogTemp, Log, TEXT("DEBUG_Rebirth()"));
 	if(bSpectating)
 	{
-		bSpectating = false;
+		bSpectating = false; //나중?
 		//SpectatorTargets.Empty();
 		//CurrentSpectatorTarget = nullptr;
 		//SpectatorTargetIndex = INDEX_NONE;
@@ -588,6 +594,7 @@ void AEHPlayerController::DEBUG_Rebirth()
 
 void AEHPlayerController::Server_DEBUG_Rebirth_Implementation()
 {
+	UE_LOG(LogTemp, Log, TEXT("Server_DEBUG_Rebirth_Implementation()"));
 	APlayingGameMode* PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode());
 	if (PlayingGameMode)
 	{
