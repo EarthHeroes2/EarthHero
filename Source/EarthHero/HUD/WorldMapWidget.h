@@ -15,6 +15,7 @@ public:
     void SetPlayerRotation(int32 PlayerIndex, float Rotation);
     void UpdateForceField(int32 ForceFieldIndex, float CurrentTime, float GrowthDuration);
     void SetForceFieldAlignment(int32 ForceFieldIndex, const FVector2D& Alignment);
+    void ToggleForceFields(bool bToggle);
 
     UPROPERTY(meta = (BindWidget))
     UImage* WorldMapImage;

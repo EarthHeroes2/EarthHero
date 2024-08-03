@@ -33,11 +33,19 @@ void APlayingGameState::OnRep_GameTimerSec() const
 		EHPlayerController->HUD->UpdateGameTimer(GameTimerSec);
 	}
 
+	// 자기장 시작할 시간
+	int ForceFieldStartTime = 15;
+
 	//Sec에 따라 forcefield 업데이트
-	if (EHPlayerController && EHPlayerController->TabHUD)
+	if (EHPlayerController && EHPlayerController->TabHUD && AllExpansionDurations.IsValidIndex(0))
 	{
+		// 자기장 모습 켜주기
+		if(GameTimerSec == ForceFieldStartTime)
+		{
+			EHPlayerController->TabHUD->ToggleForceFields(true);
+		}
 		// 15초가 지나야 시작
-		if(GameTimerSec >= 15)
+		if(GameTimerSec >= ForceFieldStartTime)
 		{
 			int TempGameTimerSec = GameTimerSec - 15;
 			for (int index = 0; index <= 3; index++)

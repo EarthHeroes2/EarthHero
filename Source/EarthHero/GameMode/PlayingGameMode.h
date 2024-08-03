@@ -82,7 +82,8 @@ public:
 
 	void PlayerControllerReady();
 	void GameStart();
-
+	
+	void InitForceFields();
 	void SpawnForceFields();
 	void SpawnForceFieldAtLocation(FVector2D Location, float ExpansionDuration);
     
