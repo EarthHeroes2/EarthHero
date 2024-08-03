@@ -42,7 +42,6 @@ void APlayingGameMode::BeginPlay()
 
 APawn* APlayingGameMode::SpawnDefaultPawnFor_Implementation(AController* NewPlayer, AActor* StartSpot)
 {
-	UE_LOG(LogClass, Warning, TEXT("SpawnDefaultPawnFor_Implementation"));
 	APlayerState* PlayerState = NewPlayer->PlayerState;
 	if(PlayerState)
 	{
@@ -57,11 +56,7 @@ APawn* APlayingGameMode::SpawnDefaultPawnFor_Implementation(AController* NewPlay
 			if(World)
 			{
 				APawn* SpawnedCharacter = World->SpawnActor<APawn>(CharacterClasses[EHPlayerState->PlayerClass], StartSpot->GetActorTransform(), SpawnParams);
-				if(SpawnedCharacter)
-				{
-					UE_LOG(LogClass, Warning, TEXT("SpawnDefaultPawnFor_Implementation Success!~~~~~"));
-					return SpawnedCharacter;
-				}
+				if(SpawnedCharacter) return SpawnedCharacter;
 			}
 		}
 	}

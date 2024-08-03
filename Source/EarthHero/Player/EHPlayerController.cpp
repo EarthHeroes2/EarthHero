@@ -75,14 +75,15 @@ void AEHPlayerController::OnUnPossess()
 
 	UE_LOG(LogClass, Warning, TEXT("AEHPlayerController::OnUnPossess()"));
 
-	ACharacter* Character = GetCharacter();
-	if(Character)
+	ACharacter* ContollingCharacter = GetCharacter();
+	if(ContollingCharacter)
 	{
 		UE_LOG(LogClass, Warning, TEXT("DeadLocation = %s, rotation = %s"), *DeadLocation.ToString(), *DeadLocation.Rotation().ToString());
 
 		APlayingGameMode* PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode());
 		if (PlayingGameMode) PlayingGameMode->AddPlayerDead(this, DeadLocation);
 	}
+	else UE_LOG(LogClass, Warning, TEXT("Unpossess Spectator"));
 }
 
 //클라이언트에게 빙의됨을 알려줌
@@ -437,11 +438,11 @@ void AEHPlayerController::Server_DEBUG_Levelup_Implementation()
 //죽은 경우 (서버에서 실행됨)
 void AEHPlayerController::Dead()
 {
-	ACharacter* Character = GetCharacter();
-	if(Character)
+	ACharacter* ContollingCharacter = GetCharacter();
+	if(ContollingCharacter)
 	{
 		Client_DisableInput();
-		DeadLocation = Character->GetActorLocation();
+		DeadLocation = ContollingCharacter->GetActorLocation();
 		UnPossess();
 	}
 }

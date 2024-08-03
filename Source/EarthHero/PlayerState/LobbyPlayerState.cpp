@@ -9,8 +9,6 @@
 void ALobbyPlayerState::CopyProperties(APlayerState* PlayerState)
 {
 	Super::CopyProperties(PlayerState);
-
-	UE_LOG(LogTemp, Error, TEXT("Copy Properties - Lobby"));
 	
 	AEHPlayerState* EHPlayerState = Cast<AEHPlayerState>(PlayerState);
 	if (EHPlayerState)
