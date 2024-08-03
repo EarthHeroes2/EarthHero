@@ -37,9 +37,14 @@ void APlayingGameState::OnRep_GameTimerSec() const
 	//Sec에 따라 forcefield 업데이트
 	if (EHPlayerController && EHPlayerController->TabHUD && AllExpansionDurations.IsValidIndex(0))
 	{
-		for (int index = 0; index <= 3; index++)
+		// 15초가 지나야 시작
+		if(GameTimerSec >= 300)
 		{
-			EHPlayerController->TabHUD->UpdateForceField(index, GameTimerSec, AllExpansionDurations[index]);
+			int TempGameTimerSec = GameTimerSec - 300;
+			for (int index = 0; index <= 3; index++)
+			{
+				EHPlayerController->TabHUD->UpdateForceField(index, TempGameTimerSec, AllExpansionDurations[index]);
+			}
 		}
 	}
 }
