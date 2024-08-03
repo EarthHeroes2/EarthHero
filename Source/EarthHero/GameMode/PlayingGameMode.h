@@ -78,13 +78,16 @@ public:
 	void Rebirth(AEHPlayerController* EHPlayerController);
 
 	void PlayerControllerReady();
-	void EnableAllInput();
+	void GameStart();
 
 	void SpawnForceFields();
 	void SpawnForceFieldAtLocation(FVector2D Location, float ExpansionDuration);
     
 	bool IsValidForceFieldDistance(const TArray<FVector2D>& Locations, float MinDistance);
 	void GenerateRandomDurations(int Count, float Min, float Max, TArray<float>& OutDurations);
+
+	bool GetPlayerLocation(int PlayerNumber, FVector& PlayerLocation);
+	
 private:
 	TArray<float> ExpansionDurations;
 	TArray<FVector2D> ForceFieldLocations;

@@ -7,13 +7,14 @@
 #include "Components/EditableTextBox.h"
 #include "EarthHero/CustomGameViewportClient.h"
 #include "EarthHero/Character/EHCharacter.h"
+#include "EarthHero/Character/Spectator/CustomSpectatorPawn.h"
 #include "EarthHero/GameMode/PlayingGameMode.h"
 #include "EarthHero/HUD/InGameHUD.h"
 #include "EarthHero/HUD/TabHUDWidget.h"
 #include "EarthHero/HUD/EscMenu.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/Character.h"
-#include "Kismet/GameplayStatics.h"
+
 
 AEHPlayerController::AEHPlayerController()
 {
@@ -49,9 +50,14 @@ void AEHPlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
 
-	ControlledCharacter = GetCharacter();
 
-	ClientPossess();
+	ACharacter* PossessCharacter = GetCharacter();
+	if(PossessCharacter)
+	{
+		ControlledCharacter = PossessCharacter;
+		ClientPossess();
+	}
+	else UE_LOG(LogClass, Warning, TEXT("spectator")); //이건 관전폰인 경우
 }
 
 //빙의 풀림 (죽은 경우)
@@ -70,6 +76,9 @@ void AEHPlayerController::ClientPossess_Implementation()
 	{
 		Subsystem->AddMappingContext(HeroContext, 0);
 	}
+	
+	EnableInput(this);
+	
 	GetWorldTimerManager().SetTimer(PlayerStateCheckTimerHandle, this, &AEHPlayerController::InitializeHUD, 0.1f, true);
 }
 
@@ -326,7 +335,7 @@ void AEHPlayerController::SelectHU_3()
 }
 
 //클라이언트들이 전부 완료가 되면 해야할 것들
-void AEHPlayerController::Client_EnableInput_Implementation()
+void AEHPlayerController::Client_GameStart_Implementation()
 {
 	//페이드 인
 	const UWorld* World = GetWorld();
@@ -422,19 +431,19 @@ void AEHPlayerController::Server_DEBUG_Levelup_Implementation()
 //죽은 경우 (서버에서 실행됨)
 void AEHPlayerController::Dead()
 {
+	Client_DisableInput();
 	UnPossess();
 }
 
-//죽고 불리는 함수
+void AEHPlayerController::Client_DisableInput_Implementation()
+{
+	DisableInput(this);
+}
+
+//죽고 관전폰에 빙의한 뒤 불리는 함수
 void AEHPlayerController::Client_StartSpectate_Implementation()
 {
 
-
-
-
-
-
-	
 	//!!!!!현재 이 방향성은 보류함 (너무 멀면 제대로 작동안함)!!!!!
 	//정확한 이유는 모르겠지만 너무 빠르게 실행되면 관전이 안됨 (서버에서 unpossed 되어도 클라입장에서는 좀 느린가?)
 	//약간의 연출같은 것으로 자연스럽게 전환해줄 필요가 있을듯
@@ -586,4 +595,24 @@ void AEHPlayerController::Server_DEBUG_Rebirth_Implementation()
 void AEHPlayerController::Rebirth()
 {
 	Possess(ControlledCharacter);
+}
+
+//서버에게 해당 플레이어 위치를 물어보고 관람해도 된다면 해당 위치로 이동시킴
+void AEHPlayerController::Server_SpectatePlayer_Implementation(int PlayerNumber)
+{
+	APlayingGameMode* PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode());
+	if(PlayingGameMode)
+	{
+		FVector PlayerLocation;
+		if(PlayingGameMode->GetPlayerLocation(PlayerNumber, PlayerLocation))
+		{
+			APawn* ControlledPawn = GetPawn();
+			if(ControlledPawn)
+			{
+				ACustomSpectatorPawn* CustomSpectatorPawn = Cast<ACustomSpectatorPawn>(ControlledPawn);
+				if(CustomSpectatorPawn)
+					CustomSpectatorPawn->SetActorLocation(PlayerLocation, false, nullptr, ETeleportType::TeleportPhysics);
+			}
+		}
+	}
 }
