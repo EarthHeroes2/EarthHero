@@ -64,6 +64,21 @@ void UInGameHUD::UpdateGameTimer(int GameTimerSec)
 	GameTimer_Tb->SetText(FText::Format(FText::FromString("{0} : {1}"), FText::AsNumber(GameTimerSec / 60), FText::AsNumber(GameTimerSec % 60)));
 }
 
+void UInGameHUD::UpdatePlayerInfoVisibility(int32 AllPlayerNumbers)
+{
+	for (int32 i = 0; i < InGamePlayerInfoArray.Num(); ++i)
+	{
+		if (i < AllPlayerNumbers)
+		{
+			InGamePlayerInfoArray[i]->SetVisibility(ESlateVisibility::Visible);
+		}
+		else
+		{
+			InGamePlayerInfoArray[i]->SetVisibility(ESlateVisibility::Collapsed);
+		}
+	}
+}
+
 //우선 세 개의 히어로 업그레이드 기준으로 만듦
 void UInGameHUD::SetIngameHUDHeroUpgrade(int Index, UTexture2D* UpgradeImage, int Level, FText UpgradeName, FText UpgradeDetail)
 {

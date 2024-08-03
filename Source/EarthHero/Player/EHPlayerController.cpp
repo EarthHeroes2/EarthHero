@@ -430,15 +430,6 @@ void AEHPlayerController::Server_DEBUG_Levelup_Implementation()
 	}
 }
 
-
-
-
-
-
-
-
-
-
 //죽은 경우 (서버에서 실행됨)
 void AEHPlayerController::Dead()
 {
@@ -572,14 +563,6 @@ void AEHPlayerController::ChangeSpectatorRight()
 		//ChangeSpectatorTarget(false);
 	}
 }
-
-
-
-
-
-
-
-
 
 void AEHPlayerController::DEBUG_Rebirth()
 {

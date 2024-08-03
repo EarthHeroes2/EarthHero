@@ -87,15 +87,8 @@
   <component name="ChangeListManager">
     <list default="true" id="0cbbd613-fc41-47be-bbe4-1434fbbd246c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.EarthHero.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EarthHero.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Animations/Warrior/TPS/ARPG_Warrior_Anim_UE_Attack_Airborne_End.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Animations/Warrior/TPS/ARPG_Warrior_Anim_UE_Attack_Airborne_Start.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Character/Warrior/Animation/ABP_TPS_Warrior.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Character/Warrior/Animation/ABP_TPS_Warrior.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EarthHero.uproject" beforeDir="false" afterPath="$PROJECT_DIR$/EarthHero.uproject" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/Warrior/TPSWarriorAnimInstance.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Warrior/TPSWarriorAnimInstance.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/Warrior/TPSWarriorAnimInstance.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Warrior/TPSWarriorAnimInstance.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/Warrior/WarriorCombatComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Warrior/WarriorCombatComponent.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/Warrior/WarriorCombatComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Warrior/WarriorCombatComponent.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerState.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerState.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Weapon/Grenade.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Weapon/Grenade.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28832,7 +28825,7 @@
       <workItem from="1722425938870" duration="5278000" />
       <workItem from="1722490279426" duration="14010000" />
       <workItem from="1722618808163" duration="667000" />
-      <workItem from="1722619486861" duration="7794000" />
+      <workItem from="1722619486861" duration="9012000" />
     </task>
     <servers />
   </component>
