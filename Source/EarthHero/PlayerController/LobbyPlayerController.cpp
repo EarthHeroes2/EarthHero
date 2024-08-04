@@ -32,21 +32,6 @@ void ALobbyPlayerController::BeginPlay()
 	{
 		ShowLobbyWidget(); //로비 위젯 생성
 		Server_InitSetup(); //서버에게 자신이 준비됨을 알림
-
-		//음성
-		IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
-		if (Subsystem)
-		{
-			IOnlineVoicePtr Voice = Subsystem->GetVoiceInterface();
-			if (Voice.IsValid())
-			{
-				if(Voice->RegisterRemoteTalker(*PlayerState->GetUniqueId().GetUniqueNetId()))
-				{
-					UE_LOG(LogTemp, Error, TEXT("RegisterRemoteTalker Success"));
-				}
-				else UE_LOG(LogTemp, Error, TEXT("RegisterRemoteTalker Failed"));
-			}
-		}
 	}
 }
 
