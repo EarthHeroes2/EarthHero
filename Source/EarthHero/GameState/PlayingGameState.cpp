@@ -51,6 +51,8 @@ void APlayingGameState::OnRep_GameTimerSec() const
 			for (int index = 0; index <= 3; index++)
 			{
 				EHPlayerController->TabHUD->UpdateForceField(index, TempGameTimerSec, AllExpansionDurations[index]);
+				FString ForceFieldMsg = "Death fields have been activated";
+				EHPlayerController->HUD->SetGameMessageText(ForceFieldMsg);
 			}
 		}
 	}
