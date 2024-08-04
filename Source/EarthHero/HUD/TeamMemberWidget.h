@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/Image.h"
 #include "Components/TextBlock.h"
 #include "Components/ProgressBar.h"
 #include "EarthHero/Enum/Enums.h"
@@ -17,6 +18,9 @@ class EARTHHERO_API UTeamMemberWidget : public UUserWidget
 public:
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* NameText;
+
+	UPROPERTY(meta = (BindWidget))
+	UImage* CircleImage;
 
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* ClassText;

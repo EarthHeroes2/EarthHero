@@ -36,6 +36,7 @@ public:
 	void SetGameStateForceField(const TArray<float> ExpansionDurations, const TArray<FVector2D> ForceFieldLocations);
 	void UpdatePlayerClassImage(const TArray<UTexture2D*> PlayerClassImages);
 	void UpdatePlayerEffectState(const FEffectStatus EffectStatus, const int32 index);
+	void UpdatePlayerNumbers();
 
 	UPROPERTY(ReplicatedUsing = OnRep_GameTimerSec)
 	int GameTimerSec;

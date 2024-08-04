@@ -25,6 +25,14 @@ void APlayingGameState::UpdateHUDGameTimer(const int GameTimer)
 	GameTimerSec = GameTimer;
 }
 
+void APlayingGameState::UpdatePlayerNumbers()
+{
+	if(EHPlayerController && EHPlayerController->TabHUD)
+	{
+		EHPlayerController->TabHUD->UpdatePlayerNumbers(AllPlayerNumbers);
+	}
+}
+
 void APlayingGameState::OnRep_GameTimerSec() const
 {
 	//UE_LOG(LogTemp, Log, TEXT("OnRep_GameTimerSec"));

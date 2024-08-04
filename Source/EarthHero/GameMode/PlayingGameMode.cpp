@@ -326,6 +326,7 @@ void APlayingGameMode::PlayerControllerReady() //조금 느리지만 안전하�
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEHCharacter::StaticClass(), Players);
 		APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
 		PlayingGameState->SetGameStateForceField(ExpansionDurations, ForceFieldLocations);
+		PlayingGameState->UpdatePlayerNumbers();
 		
 		UpdateGameStateNames();
 		UpdateGameStateClasses();

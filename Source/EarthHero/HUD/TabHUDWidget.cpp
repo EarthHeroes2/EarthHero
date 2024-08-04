@@ -260,6 +260,15 @@ void UTabHUDWidget::UpdatePlayerImagesInWorldMap(const TArray<FVector2D>& Player
 	}
 }
 
+void UTabHUDWidget::UpdatePlayerNumbers(int PlayerNumber)
+{
+	for(int i = 0; i < PlayerNumber; i++)
+	{
+		FText PlayerNumberText = FText::AsNumber(i+1);
+		TabUserInfoArray[i]->SetPlayerNumber(PlayerNumberText);
+	}
+}
+
 void UTabHUDWidget::UpdatePlayerHealths(const TArray<float>& PlayerMaxHealths, const TArray<float>& PlayerCurrentHealths)
 {
 	for(int i = 0; i < PlayerMaxHealths.Num(); i++)

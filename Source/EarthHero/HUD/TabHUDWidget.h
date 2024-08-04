@@ -107,6 +107,7 @@ public:
 	void UpdateGameStateReceiveDamage(const TArray<float> PlayerReceiveDamage);
 	void UpdateGameStateHeal(const TArray<float> PlayerHeal);
 	void ToggleForceFields(bool bToggle);
+	void UpdatePlayerNumbers(int PlayerNumber);
 	
 	UFUNCTION(BlueprintCallable, Category = "TabHUD")
 	void UpdatePlayerImagesInWorldMap(const TArray<FVector2D>& PlayerPositions, const TArray<float>& PlayerRotations, int32 NumPlayers);

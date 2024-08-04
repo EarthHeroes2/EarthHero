@@ -93,4 +93,8 @@ void UTeamMemberWidget::HideAllInfo()
 	{
 		HealthProgressBar->SetVisibility(ESlateVisibility::Collapsed);	
 	}
+	if(CircleImage)
+	{
+		CircleImage->SetVisibility(ESlateVisibility::Collapsed);
+	}
 }
