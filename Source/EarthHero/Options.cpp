@@ -290,17 +290,6 @@ void UOptions::OnAntiAliasingChanged(FString SelectedItem, ESelectInfo::Type Sel
             UserSettings->SetAntiAliasingQuality(GameInstance->AntiAliasing);
             UserSettings->ApplySettings(false);
         }
-
-        // Check if the selected quality differs from the overall quality
-        if (GameInstance->OverallQuality != SelectedQuality)
-        {
-            // Set overall quality to "커스텀"
-            GameInstance->OverallQuality = 5; // Custom quality
-            if (OverallQualityComboBox)
-            {
-                OverallQualityComboBox->SetSelectedOption(TEXT("커스텀"));
-            }
-        }
     }
 }
 
@@ -318,17 +307,6 @@ void UOptions::OnPostProcessingChanged(FString SelectedItem, ESelectInfo::Type S
         {
             UserSettings->SetPostProcessingQuality(GameInstance->PostProcessing);
             UserSettings->ApplySettings(false);
-        }
-
-        // Check if the selected quality differs from the overall quality
-        if (GameInstance->OverallQuality != SelectedQuality)
-        {
-            // Set overall quality to "커스텀"
-            GameInstance->OverallQuality = 5;
-            if (OverallQualityComboBox)
-            {
-                OverallQualityComboBox->SetSelectedOption(TEXT("커스텀"));
-            }
         }
     }
 }
