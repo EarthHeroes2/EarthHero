@@ -7,15 +7,13 @@
 #include "Components/EditableTextBox.h"
 #include "EarthHero/CustomGameViewportClient.h"
 #include "EarthHero/Character/EHCharacter.h"
-#include "EarthHero/Character/Spectator/SpectatorCharacter.h"
+#include "EarthHero/Character/Spectator/CustomSpectatorPawn.h"
 #include "EarthHero/GameMode/PlayingGameMode.h"
 #include "EarthHero/HUD/InGameHUD.h"
 #include "EarthHero/HUD/TabHUDWidget.h"
 #include "EarthHero/HUD/EscMenu.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/Character.h"
-#include "GameFramework/CharacterMovementComponent.h"
-#include "GameFramework/PawnMovementComponent.h"
 
 
 AEHPlayerController::AEHPlayerController()
@@ -284,7 +282,7 @@ void AEHPlayerController::Dash()
 
 void AEHPlayerController::Move(const FInputActionValue& Value)
 {
-	const FVector MovementVector = Value.Get<FVector>();
+	const FVector2D MovementVector = Value.Get<FVector2D>();
 
 	const FRotator Rotation = GetControlRotation();
 	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
@@ -517,7 +515,7 @@ void AEHPlayerController::Rebirth()
 	APawn* ControlledPawn = GetPawn();
 	if(ControlledPawn)
 	{
-		ASpectatorCharacter* CustomSpectatorPawn = Cast<ASpectatorCharacter>(ControlledPawn);
+		ACustomSpectatorPawn* CustomSpectatorPawn = Cast<ACustomSpectatorPawn>(ControlledPawn);
 		if(CustomSpectatorPawn)
 		{
 			UnPossess();
@@ -542,7 +540,7 @@ void AEHPlayerController::Server_SpectatePlayer_Implementation(int PlayerNumber)
 			APawn* ControlledPawn = GetPawn();
 			if(ControlledPawn)
 			{
-				ASpectatorCharacter* CustomSpectatorPawn = Cast<ASpectatorCharacter>(ControlledPawn);
+				ACustomSpectatorPawn* CustomSpectatorPawn = Cast<ACustomSpectatorPawn>(ControlledPawn);
 				if(CustomSpectatorPawn)
 				{
 					UE_LOG(LogTemp, Log, TEXT("Before My Location = %s"), *CustomSpectatorPawn->GetActorLocation().ToString());
@@ -550,6 +548,8 @@ void AEHPlayerController::Server_SpectatePlayer_Implementation(int PlayerNumber)
 					{
 						UE_LOG(LogTemp, Log, TEXT("SetActorLocation Seccess"));
 						UE_LOG(LogTemp, Log, TEXT("After My Location = %s"), *CustomSpectatorPawn->GetActorLocation().ToString());
+
+						CustomSpectatorPawn->Client_UpdateActorLocation(PlayerLocation);
 					}
 					else UE_LOG(LogTemp, Log, TEXT("SetActorLocation Failed"));
 				}
