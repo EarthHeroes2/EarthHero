@@ -87,11 +87,6 @@
   <component name="ChangeListManager">
     <list default="true" id="0cbbd613-fc41-47be-bbe4-1434fbbd246c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.EarthHero.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EarthHero.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Animations/Warrior/FPS/anim_attack_heavy_swing_down.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Character/Warrior/Animation/ABP_FPS_Warrior.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Character/Warrior/Animation/ABP_FPS_Warrior.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/TestMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/TestMap.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/Warrior/EHWarrior.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Warrior/EHWarrior.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/Warrior/WarriorCombatComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Warrior/WarriorCombatComponent.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28828,7 +28823,7 @@
       <workItem from="1722425938870" duration="5278000" />
       <workItem from="1722490279426" duration="14010000" />
       <workItem from="1722618808163" duration="667000" />
-      <workItem from="1722619486861" duration="12779000" />
+      <workItem from="1722619486861" duration="14890000" />
     </task>
     <servers />
   </component>
