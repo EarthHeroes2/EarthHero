@@ -17,6 +17,8 @@ USpawningComponent::USpawningComponent()
     SpawnRadius = 5000.0f;
     SpawnInterval = 10.0f;
     bShowDebugCircle = true;
+    MaxSpawnedActors = 10; // 인당 최대 몬스터 수
+    CurrentSpawnedActors = 0;
     
     PrimaryComponentTick.bCanEverTick = true;
 
@@ -150,13 +152,13 @@ void USpawningComponent::SpawnActorsForDifficulty()
     {
         ActorClassesToSpawn = Difficulty1Config.ActorClasses;
         ActorClassesToSpawn.Append(Difficulty2Config.ActorClasses);
-        TotalActorsToSpawn = 15; // 5 from Difficulty 1 and 10 from Difficulty 2
+        TotalActorsToSpawn = 15;
     }
     else if (Difficulty == 2.5f)
     {
         ActorClassesToSpawn = Difficulty2Config.ActorClasses;
         ActorClassesToSpawn.Append(Difficulty3Config.ActorClasses);
-        TotalActorsToSpawn = 25; // 10 from Difficulty 2 and 15 from Difficulty 3
+        TotalActorsToSpawn = 25;
     }
     else
     {
@@ -173,14 +175,13 @@ void USpawningComponent::SpawnActorsForDifficulty()
     float AngleStep = 360.0f / TotalActorsToSpawn;
     FVector CharacterLocation = GetOwner()->GetActorLocation();
 
-    for (int32 i = 0; i < TotalActorsToSpawn; ++i)
+    for (int32 i = 0; i < TotalActorsToSpawn && CurrentSpawnedActors < MaxSpawnedActors; ++i)
     {
         float Angle = AngleStep * i;
         FVector SpawnLocation = CharacterLocation + FVector(FMath::Cos(FMath::DegreesToRadians(Angle)) * SpawnRadius, FMath::Sin(FMath::DegreesToRadians(Angle)) * SpawnRadius, 0.0f);
 
-        // Perform a line trace to find the ground level at the spawn location
-        FVector StartLocation = SpawnLocation + FVector(0.0f, 0.0f, 100000.0f); // Start above the ground
-        FVector EndLocation = SpawnLocation - FVector(0.0f, 0.0f, 200000.0f); // End below the ground
+        FVector StartLocation = SpawnLocation + FVector(0.0f, 0.0f, 100000.0f);
+        FVector EndLocation = SpawnLocation - FVector(0.0f, 0.0f, 200000.0f);
 
         FHitResult HitResult;
         FCollisionQueryParams CollisionParams;
@@ -188,12 +189,11 @@ void USpawningComponent::SpawnActorsForDifficulty()
 
         if (bHit)
         {
-            // Set the Z value of the SpawnLocation to the hit location's Z value
             SpawnLocation.Z = HitResult.Location.Z + 150.f;
 
             UWorld* World = GetWorld();
             if(World == nullptr) return;
-            
+
             FActorSpawnParameters SpawnParams;
             SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
             TSubclassOf<AActor> ActorClassToSpawn = ActorClassesToSpawn[FMath::RandHelper(ActorClassesToSpawn.Num())];
@@ -213,6 +213,7 @@ void USpawningComponent::SpawnActorsForDifficulty()
                             {
                                 AIControllerBase->SetTargetPlayer(OwnerCharacter);
                                 AIControllerBase->Possess(SpawnedMonsterBase);
+                                ++CurrentSpawnedActors;
                                 continue;
                             }
                             AIControllerBase->Destroy();
@@ -223,5 +224,10 @@ void USpawningComponent::SpawnActorsForDifficulty()
             }
         }
         else UE_LOG(LogTemp, Warning, TEXT("No hit detected for spawn location. Actor will not be spawned."));
+    }
+
+    if (CurrentSpawnedActors >= MaxSpawnedActors)
+    {
+        GetWorld()->GetTimerManager().ClearTimer(SpawnTimerHandle);
     }
 }

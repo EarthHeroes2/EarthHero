@@ -49,6 +49,12 @@ public:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")
     FSpawnConfiguration Difficulty3Config;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")
+    int32 MaxSpawnedActors;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Spawning")
+    int32 CurrentSpawnedActors;
 
 private:
     FTimerHandle SpawnTimerHandle;
