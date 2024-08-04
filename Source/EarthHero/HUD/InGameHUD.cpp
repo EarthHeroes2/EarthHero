@@ -256,12 +256,32 @@ void UInGameHUD::UpdatePlayerEffectState(const FEffectStatus EffectStatus, const
 
 void UInGameHUD::AddStatusImage(UTexture2D* EffectImage, int EffectType, float CoolDown)
 {
-	EffectCount += 1;
-	//UE_LOG(LogClass, Warning, TEXT("EffectType = %d, EffectCount = %d"), EffectType, EffectCount);
-	StatusArray[EffectCount - 1] = FStatus(EffectType, StatusArray[EffectCount - 1].CoolDownWidget);
-	StatusArray[EffectCount - 1].CoolDownWidget->SetImage(EffectImage);
-	StatusArray[EffectCount - 1].CoolDownWidget->StartCoolDown(CoolDown, EffectType);
-	StatusArray[EffectCount - 1].CoolDownWidget->InGameHUD = this;
+	int Index = 0;
+	if ((Index = CheckEffectTypeAlreadyExists(EffectType)) == -1)
+	{
+		EffectCount += 1;
+		//UE_LOG(LogClass, Warning, TEXT("EffectType = %d, EffectCount = %d"), EffectType, EffectCount);
+		StatusArray[EffectCount - 1] = FStatus(EffectType, StatusArray[EffectCount - 1].CoolDownWidget);
+		StatusArray[EffectCount - 1].CoolDownWidget->SetImage(EffectImage);
+		StatusArray[EffectCount - 1].CoolDownWidget->StartCoolDown(CoolDown, EffectType);
+		StatusArray[EffectCount - 1].CoolDownWidget->InGameHUD = this;
+	}
+	else
+	{
+		StatusArray[Index].CoolDownWidget->UpdateCoolDown(CoolDown);
+	}
+}
+
+int UInGameHUD::CheckEffectTypeAlreadyExists(int EffectType)
+{
+	for (int index = 0; index < EffectCount; index++)
+	{
+		if (StatusArray[index].EffectType == EffectType)
+		{
+			return index;
+		}
+	}
+	return -1;
 }
 
 void UInGameHUD::DeleteStatusImage(int EffectType)

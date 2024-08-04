@@ -53,7 +53,9 @@ public:
 	void SetProgress(const float Progress) const;
 	void SetImage(UTexture2D *Image) const;
 	void UpdatePlayerEffects(FEffectStatus PlayerStatus);
+	int CheckEffectTypeAlreadyExists(int EffectType);
 	void DeletePlayerEffects(int EffectType);
+	
 
 	UPROPERTY()
 	int EffectCount = 0;
