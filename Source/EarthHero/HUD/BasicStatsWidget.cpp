@@ -31,3 +31,23 @@ void UBasicStatsWidget::SetTotalHeal(FText Value)
 		TotalHeal_Text->SetText(Value);
 	}
 }
+
+void UBasicStatsWidget::HideAll()
+{
+	if(KillScore_Text)
+	{
+		KillScore_Text->SetVisibility(ESlateVisibility::Collapsed);
+	}
+	if (TotalDamage_Text)
+	{
+		TotalDamage_Text->SetVisibility(ESlateVisibility::Collapsed);
+	}
+	if (TotalShield_Text)
+	{
+		TotalShield_Text->SetVisibility(ESlateVisibility::Collapsed);
+	}
+	if (TotalHeal_Text)
+	{
+		TotalHeal_Text->SetVisibility(ESlateVisibility::Collapsed);
+	}
+}

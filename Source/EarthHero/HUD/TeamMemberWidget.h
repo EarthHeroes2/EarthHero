@@ -39,4 +39,6 @@ public:
 	void SetLevel(const int32 Level) const;
 	void SetExp(const float ExpPercentage) const;
 	void SetProgress(const float Progress) const;
+
+	void HideAllInfo();
 };
