@@ -3,8 +3,9 @@
 
 #include "SpectatorCharacter.h"
 
-#include "EnhancedInputSubsystems.h"
+#include "Components/CapsuleComponent.h"
 #include "EarthHero/Player/EHPlayerController.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 ASpectatorCharacter::ASpectatorCharacter()
@@ -13,13 +14,19 @@ ASpectatorCharacter::ASpectatorCharacter()
 	
 	SetReplicates(true);
 	SetReplicateMovement(true);
+
+	GetCharacterMovement()->GravityScale = 0.0f;
+	GetCharacterMovement()->SetMovementMode(MOVE_Flying); //이거 바로 falling으로 바뀜
+	GetCharacterMovement()->AirControl = 1.0f;
+	
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 // Called when the game starts or when spawned
 void ASpectatorCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 	AController* MyController = GetController();
 	if(MyController) EHPlayerController = Cast<AEHPlayerController>(MyController);
 }

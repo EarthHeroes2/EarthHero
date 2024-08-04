@@ -14,6 +14,8 @@
 #include "EarthHero/HUD/EscMenu.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/PawnMovementComponent.h"
 
 
 AEHPlayerController::AEHPlayerController()
@@ -240,9 +242,19 @@ void AEHPlayerController::ToggleEscMenu()
 
 void AEHPlayerController::Jump()
 {
-	if (GetPawn())
+	ACharacter* PossessedCharacter = GetCharacter();
+	if(PossessedCharacter)
 	{
-		Cast<AEHCharacter>(GetPawn())->Jump();
+		if(!bSpectating)
+		{
+			AEHCharacter* PossessedEHCharacter = Cast<AEHCharacter>(PossessedCharacter);
+			PossessedEHCharacter->Jump();
+		}
+		else
+		{
+			//ASpectatorCharacter* PossessedSpectatorCharacter = Cast<ASpectatorCharacter>(PossessedCharacter);
+			//PossessedSpectatorCharacter->Jump();
+		}
 	}
 }
 
@@ -272,7 +284,7 @@ void AEHPlayerController::Dash()
 
 void AEHPlayerController::Move(const FInputActionValue& Value)
 {
-	const FVector2D MovementVector = Value.Get<FVector2D>();
+	const FVector MovementVector = Value.Get<FVector>();
 
 	const FRotator Rotation = GetControlRotation();
 	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);

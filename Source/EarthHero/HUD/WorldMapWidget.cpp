@@ -103,8 +103,8 @@ void UWorldMapWidget::UpdateForceField(int32 ForceFieldIndex, float CurrentTime,
     if (ForceFieldStartTimes[ForceFieldIndex] == 0.0f)
     {
         ForceFieldStartTimes[ForceFieldIndex] = CurrentTime;
-        ForceFieldTargetSizes[ForceFieldIndex] = 500.0f;
-        ForceFieldGrowthRates[ForceFieldIndex] = 500.0f / 10;
+        ForceFieldTargetSizes[ForceFieldIndex] = 820.0f;
+        ForceFieldGrowthRates[ForceFieldIndex] = 820.0f / GrowthDuration;
     }
 
     float ElapsedTime = CurrentTime - ForceFieldStartTimes[ForceFieldIndex];

@@ -48,6 +48,9 @@ public:
 	class UIngameHUDHeroUpgradeWidget* BP_IngameHUDHeroUpgrade;
 
 	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* GameMessage;
+
+	UPROPERTY(meta = (BindWidget))
 	class UIngameHUDHeroUpgradeWidget* BP_IngameHUDHeroUpgrade_1;
 
 	UPROPERTY(meta = (BindWidget))
@@ -69,6 +72,10 @@ public:
 	TArray<UInGamePlayerInfo*> InGamePlayerInfoArray;
 
 	void UpdatePlayerEffectState(const FEffectStatus EffectStatus, const int32 TargetIndex);
+
+	void SetGameMessageText(FString& Message);
+
+	void HideGameMessage();
 	
 	UFUNCTION(BlueprintCallable, Category = "HUD")
 	void UpdatePlayerInfoVisibility(int32 AllPlayerNumbers);
@@ -139,4 +146,6 @@ protected:
 private:
 	UPROPERTY()
 	class UStatComponent* StatComponentRef;
+	
+	FTimerHandle HideMessageTimerHandle;
 };
