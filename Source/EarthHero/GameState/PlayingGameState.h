@@ -73,7 +73,7 @@ public:
 	TArray<UTexture2D*> AllPlayerClassImages;
 
 	UFUNCTION()
-	void OnRep_GameTimerSec() const;
+	void OnRep_GameTimerSec();
 	UFUNCTION()
 	void OnRep_GameStateHealths() const;
 	UFUNCTION()
@@ -104,4 +104,7 @@ public:
 	void  OnRep_GameStatePlayerClassImages() const;
 	UFUNCTION(NetMulticast, Unreliable)
 	void GameStateEffectStatus(const FEffectStatus EffectStatus, const int32 index) const;
+
+private:
+	bool bForceFieldMessageShown = false;
 };

@@ -157,19 +157,22 @@ void UInGameHUD::SetGameMessageText(FString& Message)
 	if (GameMessage)
 	{
 		GameMessage->SetText(FText::FromString(Message));
-
 		GameMessage->SetVisibility(ESlateVisibility::Visible);
 
-		GetWorld()->GetTimerManager().SetTimer(HideMessageTimerHandle, this, &UInGameHUD::HideGameMessage, 5.0f, false);
+		if (!GetWorld()->GetTimerManager().IsTimerActive(HideMessageTimerHandle))
+		{
+			GetWorld()->GetTimerManager().SetTimer(HideMessageTimerHandle, this, &UInGameHUD::HideGameMessage, 5.0f, false);
+		}
 	}
 }
-
 
 void UInGameHUD::HideGameMessage()
 {
 	if (GameMessage)
 	{
-		GameMessage->SetVisibility(ESlateVisibility::Hidden);
+		GameMessage->SetVisibility(ESlateVisibility::Collapsed);
+
+		GetWorld()->GetTimerManager().ClearTimer(HideMessageTimerHandle);
 	}
 }
 
