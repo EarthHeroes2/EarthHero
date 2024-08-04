@@ -17,6 +17,8 @@ class EARTHHERO_API ALobbyPlayerController : public APlayerController
 	GENERATED_BODY()
 
 	virtual void BeginPlay() override;
+	virtual void SetupInputComponent() override;
+	void StartVoiceChat();
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	
 	ALobbyPlayerController();
@@ -32,7 +34,8 @@ class EARTHHERO_API ALobbyPlayerController : public APlayerController
 	
 	UFUNCTION(Server, Reliable)
 	void Server_InitSetup();
-	
+
+	void StopVoiceChat();
 	void ShowLobbyWidget();
 
 public:

@@ -19,6 +19,9 @@ public:
 
 	UFUNCTION()
 	static float CalWarriorWheelWindDamage(FStatStructure &HeroStat, float WR_WheelWindDamage);
+	
+	UFUNCTION()
+	static float CalWarriorDashDamage(FStatStructure &HeroStat, float WR_JumpDamageMulti, float WR_NormalDamage);
 
 	UFUNCTION()
 	static float CalShooterNormalDamage(FStatStructure &HeroStat, const FHitResult & HitInfo, float SH_HeadShot, float SH_NormalDamage);

@@ -37,6 +37,20 @@ void UCoolDown::StartCoolDown(float CoolDown, int InEffectType)
 	GetWorld()->GetTimerManager().SetTimer(EffectEndHandle, this, &UCoolDown::End, CoolDown, false);
 }
 
+void UCoolDown::UpdateCoolDown(float CoolDown)
+{
+	GetWorld()->GetTimerManager().ClearTimer(ProgressHandle);
+	GetWorld()->GetTimerManager().ClearTimer(EffectEndHandle);
+
+	//ClearImage();
+	
+	RemainingTime = CoolDown;
+	SubtractPercent = 0.1f / CoolDown;
+	Percent = 1.0f;
+	GetWorld()->GetTimerManager().SetTimer(ProgressHandle, this, &UCoolDown::Loop, 0.1f, true);
+	GetWorld()->GetTimerManager().SetTimer(EffectEndHandle, this, &UCoolDown::End, CoolDown, false);
+}
+
 void UCoolDown::Loop()
 {
 	RemainingTime -= 0.1f;

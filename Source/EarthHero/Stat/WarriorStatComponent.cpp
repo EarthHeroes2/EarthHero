@@ -9,6 +9,7 @@
 #include "EarthHero/Character/Warrior/EHWarrior.h"
 #include "EarthHero/Character/Warrior/WarriorCombatComponent.h"
 #include "EarthHero/GameMode/PlayingGameMode.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Monster/MonsterStatComponent.h"
 
 //워리어 생성자
@@ -29,10 +30,10 @@ void UWarriorStatComponent::BeginPlay()
 
 void UWarriorStatComponent::OnRep_HeroStat()
 {
-	Super::OnRep_HeroStat();
-	if (GetNetMode() != NM_Client && Warrior && Warrior->CombatComponent)
+	if (Warrior)
 	{
-		WR_JumpDamage = WR_JumpDamageMulti * HeroStat.NormalDamage;
+		Warrior->GetCharacterMovement()->MaxWalkSpeed = 600 * HeroStat.MovementSpeed;
+		//UE_LOG(LogClass, Warning, TEXT("walkSpeed : %f"), Warrior->GetCharacterMovement()->MaxWalkSpeed);
 	}
 }
 
@@ -141,4 +142,43 @@ void UWarriorStatComponent::WarriorWheelWindDamage_Implementation(AActor* Damage
 //워리어 대쉬
 void UWarriorStatComponent::WarriorDashDamage_Implementation(AActor* DamagedActor)
 {
+	float resultDamage = UStatCalculationLibrary::CalWarriorDashDamage(HeroStat,WR_NormalDamage, WR_WheelWindDamage);
+	float actualDamage = 0;
+	
+	if(AMonsterBase* HitMonster = Cast<AMonsterBase>(DamagedActor))
+	{
+		static FHitResult DummyHitResult;
+		actualDamage = HitMonster->MonsterStatComponent->DamageTaken(resultDamage, UNormalDamageType::StaticClass(), DummyHitResult, nullptr, Warrior, IsDead);
+		if (IsDead)
+		{
+			KillCount += 1;
+			if (APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode()))
+			{
+				PlayingGameMode->UpdateGameStateKillCount();
+			}
+		}
+
+		if (actualDamage > 0)
+		{
+			GivenDamage += actualDamage;
+			if (APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode()))
+			{
+				PlayingGameMode->UpdateGameStateDamage();
+			}
+
+			if (WR_Drain > 0)
+			{
+				if (HeroStat.Health + actualDamage * WR_Drain > HeroStat.MaxHealth)
+				{
+					HeroStat.Health = HeroStat.MaxHealth;
+				}
+				else
+				{
+					HeroStat.Health += actualDamage * WR_Drain; 
+				}
+			}
+		}
+		
+		UE_LOG(LogTemp, Error, TEXT("Acture Damage = %f"), actualDamage);
+	}
 }

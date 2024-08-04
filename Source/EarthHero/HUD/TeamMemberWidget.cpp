@@ -66,3 +66,31 @@ void UTeamMemberWidget::SetProgress(const float Progress) const
 		HealthProgressBar->SetPercent(Progress);
 	}
 }
+
+void UTeamMemberWidget::HideAllInfo()
+{
+	if(NameText)
+	{
+		NameText->SetVisibility(ESlateVisibility::Collapsed);	
+	}
+	if(ClassText)
+	{
+		ClassText->SetVisibility(ESlateVisibility::Collapsed);	
+	}
+	if(PlayerNumberText)
+	{
+		PlayerNumberText->SetVisibility(ESlateVisibility::Collapsed);	
+	}
+	if(LevelText)
+	{
+		LevelText->SetVisibility(ESlateVisibility::Collapsed);	
+	}
+	if(ExpText)
+	{
+		ExpText->SetVisibility(ESlateVisibility::Collapsed);	
+	}
+	if(HealthProgressBar)
+	{
+		HealthProgressBar->SetVisibility(ESlateVisibility::Collapsed);	
+	}
+}

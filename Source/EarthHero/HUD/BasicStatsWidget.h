@@ -36,4 +36,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Status")
 	void SetTotalHeal(FText Value);
+
+	void HideAll();
 };

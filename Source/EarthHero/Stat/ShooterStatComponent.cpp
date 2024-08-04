@@ -11,6 +11,7 @@
 #include "EarthHero/GameMode/PlayingGameMode.h"
 #include "Effect/Ef_Bind.h"
 #include "Effect/Ef_IncreaseDamageTaken.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Monster/MonsterStatComponent.h"
 
@@ -37,6 +38,11 @@ void UShooterStatComponent::OnRep_HeroStat()
 	if (GetNetMode() != NM_Client && Shooter && Shooter->CombatComponent)
 	{
 		Shooter->CombatComponent->SetFireRate(CalFireRate());
+	}
+	if (Shooter)
+	{
+		Shooter->GetCharacterMovement()->MaxWalkSpeed = 600 * HeroStat.MovementSpeed;
+		//UE_LOG(LogClass, Warning, TEXT("walkSpeed : %f"), Shooter->GetCharacterMovement()->MaxWalkSpeed);
 	}
 }
 

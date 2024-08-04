@@ -35,6 +35,7 @@ public:
 	void SetImage(UTexture2D *Image);
 	void ClearImage();
 	void StartCoolDown(float CoolDown, int InEffectType);
+	void UpdateCoolDown(float CoolDown);
 
 	FTimerHandle ProgressHandle;
 	FTimerHandle EffectEndHandle;

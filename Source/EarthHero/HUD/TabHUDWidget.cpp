@@ -226,16 +226,8 @@ void UTabHUDWidget::UpdatePlayerImagesInWorldMap(const TArray<FVector2D>& Player
 {
 	if (BP_WorldMap)
 	{
-		float DeltaTime = UGameplayStatics::GetWorldDeltaSeconds(this);
-
 		for (int32 i = 0; i < NumPlayers; ++i)
 		{
-			//InterpolatedPositions[i] = FMath::Vector2DInterpTo(InterpolatedPositions[i], PlayerPositions[i], DeltaTime, 10.f);
-			//InterpolatedRotations[i] = FMath::RInterpTo(FRotator(0,InterpolatedRotations[i],0), FRotator(0, PlayerRotations[i],0), DeltaTime, 10.f).Yaw;
-			//BP_WorldMap->SetPlayerPosition(i, InterpolatedPositions[i]);
-			//BP_WorldMap->SetPlayerRotation(i, InterpolatedRotations[i]);
-
-			//맵 이동 시 PlayerPositions[i]에서 잘못된 index 접근 발생해서 if문 만들었음. 나중에 바꿔줘 - 박정익
 			if(i < PlayerPositions.Num()) 
 				BP_WorldMap->SetPlayerPosition(i, PlayerPositions[i]);
 			if(i < PlayerRotations.Num())
@@ -250,7 +242,19 @@ void UTabHUDWidget::UpdatePlayerImagesInWorldMap(const TArray<FVector2D>& Player
 			UImage* PlayerImages[4] = { BP_WorldMap->Player1Image, BP_WorldMap->Player2Image, BP_WorldMap->Player3Image, BP_WorldMap->Player4Image };
 			if (PlayerImages[i])
 			{
-				PlayerImages[i]->SetVisibility(ESlateVisibility::Hidden);
+				PlayerImages[i]->SetVisibility(ESlateVisibility::Collapsed);
+			}
+
+			UTeamMemberWidget* TeamMembers[4] = { BP_TabUserInfo_1, BP_TabUserInfo_2, BP_TabUserInfo_3, BP_TabUserInfo_4 };
+			if (TeamMembers[i])
+			{
+				TeamMembers[i]->HideAllInfo();
+			}
+
+			UBasicStatsWidget* BasicStats[4] = { BP_TabBasicStatsInfo_1, BP_TabBasicStatsInfo_2, BP_TabBasicStatsInfo_3, BP_TabBasicStatsInfo_4};
+			if (BasicStats[i])
+			{
+				BasicStats[i]->HideAll();
 			}
 		}
 	}

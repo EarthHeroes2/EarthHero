@@ -34,12 +34,32 @@ void UInGamePlayerInfo::SetImage(UTexture2D *Image) const
 
 void UInGamePlayerInfo::UpdatePlayerEffects(FEffectStatus PlayerStatus)
 {
-	EffectCount += 1;
-	//UE_LOG(LogClass, Warning, TEXT("InGamePlayerInfo: EffectType = %d, EffectDuration = %f, EffectCount = %d"), PlayerStatus.EffectType, PlayerStatus.EffectDuration, EffectCount);
-	PLayerStatusArray[EffectCount - 1] = FStatus(PlayerStatus.EffectType, PLayerStatusArray[EffectCount - 1].CoolDownWidget);
-	PLayerStatusArray[EffectCount - 1].CoolDownWidget->SetImage(PlayerStatus.EffectImage);
-	PLayerStatusArray[EffectCount - 1].CoolDownWidget->StartCoolDown(PlayerStatus.EffectDuration, PlayerStatus.EffectType);
-	PLayerStatusArray[EffectCount - 1].CoolDownWidget->InGamePlayerInfo = this;
+	int Index = 0;
+	if ((Index = CheckEffectTypeAlreadyExists(PlayerStatus.EffectType)) == -1)
+	{
+		EffectCount += 1;
+		//UE_LOG(LogClass, Warning, TEXT("InGamePlayerInfo: EffectType = %d, EffectDuration = %f, EffectCount = %d"), PlayerStatus.EffectType, PlayerStatus.EffectDuration, EffectCount);
+		PLayerStatusArray[EffectCount - 1] = FStatus(PlayerStatus.EffectType, PLayerStatusArray[EffectCount - 1].CoolDownWidget);
+		PLayerStatusArray[EffectCount - 1].CoolDownWidget->SetImage(PlayerStatus.EffectImage);
+		PLayerStatusArray[EffectCount - 1].CoolDownWidget->StartCoolDown(PlayerStatus.EffectDuration, PlayerStatus.EffectType);
+		PLayerStatusArray[EffectCount - 1].CoolDownWidget->InGamePlayerInfo = this;
+	}
+	else
+	{
+		PLayerStatusArray[Index].CoolDownWidget->UpdateCoolDown(PlayerStatus.EffectDuration);
+	}
+}
+
+int UInGamePlayerInfo::CheckEffectTypeAlreadyExists(int EffectType)
+{
+	for (int index = 0; index < EffectCount; index++)
+	{
+		if (PLayerStatusArray[index].EffectType == EffectType)
+		{
+			return index;
+		}
+	}
+	return -1;
 }
 
 void UInGamePlayerInfo::DeletePlayerEffects(int EffectType)

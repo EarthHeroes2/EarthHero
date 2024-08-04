@@ -15,6 +15,9 @@ struct FStatStructure : public FTableRowBase
 	float RequiresExp[10] = {0, 20, 50, 120, 300, 750, 1800, 3600, 6000, 10000};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+	float HealthUpgrade = 1.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	float MaxHealth = 100.f;				//최대 체력
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")

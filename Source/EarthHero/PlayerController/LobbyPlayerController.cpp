@@ -6,9 +6,12 @@
 #include "GameFramework/PlayerState.h"
 #include <EarthHero/GameSession/LobbyGameSession.h>
 #include <EarthHero/GameMode/LobbyGameMode.h>
+
+#include "OnlineSubsystem.h"
 #include "EarthHero/EHGameInstance.h"
 #include "EarthHero/Character/EHCharacter.h"
 #include "EarthHero/PlayerState/LobbyPlayerState.h"
+#include "Interfaces/VoiceInterface.h"
 
 
 ALobbyPlayerController::ALobbyPlayerController()
@@ -29,8 +32,65 @@ void ALobbyPlayerController::BeginPlay()
 	{
 		ShowLobbyWidget(); //로비 위젯 생성
 		Server_InitSetup(); //서버에게 자신이 준비됨을 알림
+
+		//음성
+		IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
+		if (Subsystem)
+		{
+			IOnlineVoicePtr Voice = Subsystem->GetVoiceInterface();
+			if (Voice.IsValid())
+			{
+				if(Voice->RegisterRemoteTalker(*PlayerState->GetUniqueId().GetUniqueNetId()))
+				{
+					UE_LOG(LogTemp, Error, TEXT("RegisterRemoteTalker Success"));
+				}
+				else UE_LOG(LogTemp, Error, TEXT("RegisterRemoteTalker Failed"));
+			}
+		}
 	}
 }
+
+//음성
+void ALobbyPlayerController::SetupInputComponent()
+{
+	Super::SetupInputComponent();
+
+	if (!IsRunningDedicatedServer())
+	{
+		InputComponent->BindKey(EKeys::V, IE_Pressed, this, &ALobbyPlayerController::StartVoiceChat);
+		InputComponent->BindKey(EKeys::V, IE_Released, this, &ALobbyPlayerController::StopVoiceChat);
+	}
+}
+
+void ALobbyPlayerController::StartVoiceChat()
+{
+	IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
+	if (Subsystem)
+	{
+		IOnlineVoicePtr Voice = Subsystem->GetVoiceInterface();
+		if (Voice.IsValid())
+		{
+			UE_LOG(LogTemp, Log, TEXT("Voice ON"));
+			Voice->StartNetworkedVoice(0);
+		}
+	}
+}
+
+void ALobbyPlayerController::StopVoiceChat()
+{
+	IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
+	if (Subsystem)
+	{
+		IOnlineVoicePtr Voice = Subsystem->GetVoiceInterface();
+		if (Voice.IsValid())
+		{
+			UE_LOG(LogTemp, Log, TEXT("Voice OFF"));
+			Voice->StopNetworkedVoice(0);
+		}
+	}
+}
+
+
 
 void ALobbyPlayerController::ShowLobbyWidget()
 {

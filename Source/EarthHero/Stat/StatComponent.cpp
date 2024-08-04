@@ -20,6 +20,7 @@
 #include "EarthHero/HUD/TabHUDWidget.h"
 #include "EarthHero/Player/EHPlayerController.h"
 #include "EarthHero/Player/EHPlayerState.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PawnMovementComponent.h"
 
 UStatComponent::UStatComponent()
@@ -345,7 +346,7 @@ void UStatComponent::OnRep_HeroStat()
 {
 	//TabHUD의 정보 업데이트
 	// editor listen server 환경에선 서버는 클라이언트를 안가지고 있기 때문에 업데이트가 안되는 게 맞다.
-	if (GetNetMode() == NM_Client && TabHUD)
+	if (TabHUD)
 	{ 
 		TabHUD->SetStatusWidgetValues(
 			FText::Format(FText::FromString(TEXT("{0}%")),FText::AsNumber(HeroStat.NormalDamage * 100)),
@@ -359,7 +360,6 @@ void UStatComponent::OnRep_HeroStat()
 			FText::AsNumber(HeroStat.HealthRegeneration),
 			FText::Format(FText::FromString(TEXT("{0}%")),FText::AsNumber(HeroStat.MovementSpeed * 100)));
 	}
-
 	OnRep_HeroStat_Server();
 }
 

@@ -1,7 +1,7 @@
 #include "PlayingGameMode.h"
 
 #include "EarthHero/Character/Shooter/EHShooter.h"
-#include "EarthHero/Character/Spectator/SpectatorCharacter.h"
+#include "EarthHero/Character/Spectator/CustomSpectatorPawn.h"
 #include "EarthHero/Character/Warrior/EHWarrior.h"
 #include "EarthHero/Enum/Enums.h"
 #include "EarthHero/ForceField/ForceField.h"
@@ -412,7 +412,11 @@ void APlayingGameMode::AddPlayerDead(AEHPlayerController* DeadEHPlayerController
 		UWorld* World = GetWorld();
 		if(World)
 		{
-			ASpectatorCharacter* CustomSpectatorPawn = World->SpawnActor<ASpectatorCharacter>(ASpectatorCharacter::StaticClass(), DeadLocation + FVector(0.f, 0.f, 300.f), DeadLocation.Rotation());
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.Owner = this;
+			SpawnParams.Instigator = GetInstigator();
+			
+			ACustomSpectatorPawn* CustomSpectatorPawn = World->SpawnActor<ACustomSpectatorPawn>(ACustomSpectatorPawn::StaticClass(), DeadLocation + FVector(0.f, 0.f, 300.f), DeadLocation.Rotation(), SpawnParams);
 			if (CustomSpectatorPawn)
 			{
 				DeadEHPlayerController->Possess(CustomSpectatorPawn);
@@ -458,10 +462,9 @@ void APlayingGameMode::GameTimerCount()
 	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
 	PlayingGameState->UpdateHUDGameTimer(GameTimer);
 
-	//15초가 되면 자기장 생성 테스트
-	if(GameTimer == 15)
+	// 300초가 되면 자기장 생성 테스트
+	if(GameTimer == 300)
 	{
-		UE_LOG(LogTemp, Log, TEXT("자기장 소환 됐다"));
 		SpawnForceFields();
 	}
 }
