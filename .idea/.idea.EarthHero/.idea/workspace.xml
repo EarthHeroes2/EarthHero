@@ -78,16 +78,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4591bad7-fd9f-4860-903f-8700cd913377" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_MonsterStatHUD.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/MonsterStatHUD.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/MonsterStatHUD.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Character/Dummy/BP_DummyFlyingMeleeMonster.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Character/Dummy/BP_DummyFlyingMeleeMonster.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Character/Dummy/BP_DummyFlyingRangeMonster.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Character/Dummy/BP_DummyFlyingRangeMonster.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Character/Dummy/BP_DummyMeleeMonster.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Character/Dummy/BP_DummyMeleeMonster.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Character/Dummy/BP_DummyRangeMonster.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Character/Dummy/BP_DummyRangeMonster.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/Monster/MonsterBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Monster/MonsterBase.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/Monster/MonsterBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Monster/MonsterBase.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/TestMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/TestMap.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/Spectator/CustomSpectatorPawn.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Spectator/CustomSpectatorPawn.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Character/Spectator/CustomSpectatorPawn.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Character/Spectator/CustomSpectatorPawn.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/GameMode/PlayingGameMode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/GameMode/PlayingGameMode.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/GameMode/PlayingGameMode.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/GameMode/PlayingGameMode.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerController.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

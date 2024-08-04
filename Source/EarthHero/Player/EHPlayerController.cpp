@@ -7,7 +7,7 @@
 #include "Components/EditableTextBox.h"
 #include "EarthHero/CustomGameViewportClient.h"
 #include "EarthHero/Character/EHCharacter.h"
-#include "EarthHero/Character/Spectator/CustomSpectatorPawn.h"
+#include "EarthHero/Character/Spectator/SpectatorCharacter.h"
 #include "EarthHero/GameMode/PlayingGameMode.h"
 #include "EarthHero/HUD/InGameHUD.h"
 #include "EarthHero/HUD/TabHUDWidget.h"
@@ -53,23 +53,29 @@ void AEHPlayerController::OnPossess(APawn* InPawn)
 	ACharacter* PossessCharacter = GetCharacter();
 	if(PossessCharacter)
 	{
-		if(ControlledCharacter) //부활 때라면
+		AEHCharacter* PossessEHCharacter = Cast<AEHCharacter>(PossessCharacter);
+		if(PossessEHCharacter)
 		{
-			UE_LOG(LogTemp, Log, TEXT("OnPossess() : rebirth"));
-			ClientPossess(false);
+			if(ControlledCharacter) //부활 때라면
+			{
+				UE_LOG(LogTemp, Log, TEXT("OnPossess() : rebirth"));
+				Client_Possess(false);
+			}
+			else //최초 빙의 (겜 시작 때)라면
+			{
+				UE_LOG(LogTemp, Log, TEXT("OnPossess() : init"));
+				ControlledCharacter = PossessCharacter;
+				Client_Possess(true);
+			}
 		}
-		else //최초 빙의 (겜 시작 때)라면
+		else
 		{
-			UE_LOG(LogTemp, Log, TEXT("OnPossess() : init"));
-			ControlledCharacter = PossessCharacter;
-			ClientPossess(true);
+			UE_LOG(LogClass, Warning, TEXT("OnPossess() : spectator"));
+			Client_StartSpectate();
 		}
 	}
-	else
-	{
-		UE_LOG(LogClass, Warning, TEXT("OnPossess() : spectator"));
-		Client_StartSpectate();
-	}
+	else UE_LOG(LogClass, Error, TEXT("AEHPlayerController::OnPossess. PossessCharacter invalid"));
+
 }
 
 //빙의 풀림 (죽은 경우)
@@ -92,15 +98,19 @@ void AEHPlayerController::OnUnPossess()
 }
 
 //클라이언트에게 캐릭터에 빙의됨을 알려줌
-void AEHPlayerController::ClientPossess_Implementation(bool bInit)
+void AEHPlayerController::Client_Possess_Implementation(bool bInit)
 {
 	if(bInit) //겜 시작 때 로직
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
+		{
+			if(!bInit) Subsystem->RemoveMappingContext(SpectatorContext);
 			Subsystem->AddMappingContext(HeroContext, 0);
+		}
 		
 		GetWorldTimerManager().SetTimer(PlayerStateCheckTimerHandle, this, &AEHPlayerController::InitializeHUD, 0.1f, true);
 	}
+	UE_LOG(LogTemp, Warning, TEXT("EnableInput"));
 	EnableInput(this);
 }
 
@@ -164,7 +174,7 @@ void AEHPlayerController::SetupInputComponent()
 	Super::SetupInputComponent();
 
 	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
-
+	
 	EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ThisClass::Jump);
 	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ThisClass::Move);
 	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ThisClass::Look);
@@ -182,9 +192,6 @@ void AEHPlayerController::SetupInputComponent()
 	EnhancedInputComponent->BindAction(SelectHUAction_3, ETriggerEvent::Started, this, &ThisClass::SelectHU_3);
 
 	EnhancedInputComponent->BindAction(EscapeAction, ETriggerEvent::Started, this, &ThisClass::ToggleEscMenu);
-
-	EnhancedInputComponent->BindAction(SpectatorLeft, ETriggerEvent::Started, this, &ThisClass::ChangeSpectatorLeft);
-	EnhancedInputComponent->BindAction(SpectatorRight, ETriggerEvent::Started, this, &ThisClass::ChangeSpectatorRight);
 	
 	EnhancedInputComponent->BindAction(DEBUG_LevelUp, ETriggerEvent::Triggered, this, &ThisClass::DEBUG_Levelup);
 	EnhancedInputComponent->BindAction(DEBUG_DieKey, ETriggerEvent::Started, this, &ThisClass::DEBUG_Die);
@@ -454,6 +461,7 @@ void AEHPlayerController::Dead()
 
 void AEHPlayerController::Client_DisableInput_Implementation()
 {
+	UE_LOG(LogTemp, Warning, TEXT("DisableInput"));
 	DisableInput(this);
 }
 
@@ -461,135 +469,22 @@ void AEHPlayerController::Client_DisableInput_Implementation()
 void AEHPlayerController::Client_StartSpectate_Implementation()
 {
 	bSpectating = true;
-	//!!!!!현재 이 방향성은 보류함 (너무 멀면 제대로 작동안함)!!!!!
-	//정확한 이유는 모르겠지만 너무 빠르게 실행되면 관전이 안됨 (서버에서 unpossed 되어도 클라입장에서는 좀 느린가?)
-	//약간의 연출같은 것으로 자연스럽게 전환해줄 필요가 있을듯
-	//FTimerHandle TimerHandle;
-	//GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AEHPlayerController::StartSpectate, 2.0f, false);
+	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
+	{
+		Subsystem->RemoveMappingContext(HeroContext);
+		Subsystem->AddMappingContext(SpectatorContext, 0);
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("StartSpectate. EnableInput"));
+	EnableInput(this);
 }
 
-
-void AEHPlayerController::StartSpectate()
-{
-	//UpdateSpectatorTarget();
-	//ChangeSpectatorTarget(false);
-	//bSpectating = true;
-}
-
-/*
-//관전할 대상들을 찾아봄
-void AEHPlayerController::UpdateSpectatorTarget()
-{
-	SpectatorTargets.Empty();
-	
-	//일단은 이 방법으로 찾겠음
-	UWorld* World = GetWorld();
-	if(World)
-	{
-		TArray<AActor*> FoundActors;
-		UGameplayStatics::GetAllActorsOfClass(World, AEHCharacter::StaticClass(), FoundActors);
-
-		UE_LOG(LogTemp, Log, TEXT("Found EHCharacter : %d"), FoundActors.Num());
-		
-		for(AActor* FoundActor : FoundActors)
-		{
-			AEHCharacter* FoundEHCharacter = Cast<AEHCharacter>(FoundActor);
-
-			//여기서 살아있는 것만 골라줘야 하지만... 아직 로직이 없음
-			if (FoundEHCharacter && FoundEHCharacter->IsPlayerControlled())
-			{
-				SpectatorTargets.Add(FoundEHCharacter);
-			}
-		}
-		UE_LOG(LogTemp, Log, TEXT("SpectatorTargets : %d"), SpectatorTargets.Num());
-	}
-
-	if(CurrentSpectatorTarget)
-	{
-		int TargetIndex = SpectatorTargets.Find(CurrentSpectatorTarget);
-
-		SpectatorTargetIndex = TargetIndex;
-
-		//혹시몰라서
-		if(TargetIndex == INDEX_NONE) CurrentSpectatorTarget = nullptr;
-	}
-	else SpectatorTargetIndex = INDEX_NONE;
-}
-
-
-void AEHPlayerController::ChangeSpectatorTarget(bool bPrevious)
-{
-	UE_LOG(LogTemp, Log, TEXT("Before Target Index : %d"), SpectatorTargetIndex);
-	
-	//처음 고름 (-1)
-	if(SpectatorTargetIndex == INDEX_NONE) SpectatorTargetIndex = 0;
-	else if(SpectatorTargets.Num() > 0)
-	{
-		if(bPrevious) //이전 (왼쪽)
-		{
-			if(SpectatorTargetIndex == 0) SpectatorTargetIndex = SpectatorTargets.Num() - 1;
-			else SpectatorTargetIndex--;
-		}
-		else //이후 (오른쪽)
-		{
-			SpectatorTargetIndex = (SpectatorTargetIndex + 1) % SpectatorTargets.Num();
-		}
-	}
-	else //무언가 잘못된 경우
-	{
-		SpectatorTargetIndex = INDEX_NONE;
-		CurrentSpectatorTarget = nullptr;
-		return;
-	}
-
-	UE_LOG(LogTemp, Log, TEXT("Changed Target Index : %d"), SpectatorTargetIndex);
-
-	if(SpectatorTargets.Num() > SpectatorTargetIndex && SpectatorTargets[SpectatorTargetIndex])
-	{
-		CurrentSpectatorTarget = SpectatorTargets[SpectatorTargetIndex];
-		SetViewTargetWithBlend(CurrentSpectatorTarget->SpectatorTarget->GetChildActor(), 0.5f, VTBlend_Linear, 0.f);
-	}
-	else //무언가 잘못된 경우
-	{
-		UE_LOG(LogTemp, Log, TEXT("Wrong Target Index : Num = %d, Index = %d"), SpectatorTargets.Num(), SpectatorTargetIndex);
-		
-		SpectatorTargetIndex = INDEX_NONE;
-		CurrentSpectatorTarget = nullptr;
-	}
-}*/
-
-
-void AEHPlayerController::ChangeSpectatorLeft()
-{
-	if(bSpectating)
-	{
-		UE_LOG(LogTemp, Log, TEXT("ChangeSpectatorLeft()"));
-		//UpdateSpectatorTarget();
-		//ChangeSpectatorTarget(true);
-	}
-}
-
-void AEHPlayerController::ChangeSpectatorRight()
-{
-	if(bSpectating)
-	{
-		UE_LOG(LogTemp, Log, TEXT("ChangeSpectatorRight()"));
-		//UpdateSpectatorTarget();
-		//ChangeSpectatorTarget(false);
-	}
-}
 
 void AEHPlayerController::DEBUG_Rebirth()
 {
 	UE_LOG(LogTemp, Log, TEXT("DEBUG_Rebirth()"));
-	if(bSpectating)
-	{
-		bSpectating = false; //나중?
-		//SpectatorTargets.Empty();
-		//CurrentSpectatorTarget = nullptr;
-		//SpectatorTargetIndex = INDEX_NONE;
-		Server_DEBUG_Rebirth();
-	}
+	
+	Server_DEBUG_Rebirth();
 }
 
 void AEHPlayerController::Server_DEBUG_Rebirth_Implementation()
@@ -610,7 +505,7 @@ void AEHPlayerController::Rebirth()
 	APawn* ControlledPawn = GetPawn();
 	if(ControlledPawn)
 	{
-		ACustomSpectatorPawn* CustomSpectatorPawn = Cast<ACustomSpectatorPawn>(ControlledPawn);
+		ASpectatorCharacter* CustomSpectatorPawn = Cast<ASpectatorCharacter>(ControlledPawn);
 		if(CustomSpectatorPawn)
 		{
 			UnPossess();
@@ -635,12 +530,14 @@ void AEHPlayerController::Server_SpectatePlayer_Implementation(int PlayerNumber)
 			APawn* ControlledPawn = GetPawn();
 			if(ControlledPawn)
 			{
-				ACustomSpectatorPawn* CustomSpectatorPawn = Cast<ACustomSpectatorPawn>(ControlledPawn);
+				ASpectatorCharacter* CustomSpectatorPawn = Cast<ASpectatorCharacter>(ControlledPawn);
 				if(CustomSpectatorPawn)
 				{
+					UE_LOG(LogTemp, Log, TEXT("Before My Location = %s"), *CustomSpectatorPawn->GetActorLocation().ToString());
 					if(CustomSpectatorPawn->SetActorLocation(PlayerLocation, false, nullptr, ETeleportType::TeleportPhysics))
 					{
 						UE_LOG(LogTemp, Log, TEXT("SetActorLocation Seccess"));
+						UE_LOG(LogTemp, Log, TEXT("After My Location = %s"), *CustomSpectatorPawn->GetActorLocation().ToString());
 					}
 					else UE_LOG(LogTemp, Log, TEXT("SetActorLocation Failed"));
 				}

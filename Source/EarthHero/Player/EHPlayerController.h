@@ -47,11 +47,14 @@ protected:
 	virtual void OnUnPossess() override;
 
 	UFUNCTION(Client, Reliable)
-	void ClientPossess(bool bInit);
+	void Client_Possess(bool bInit);
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputMappingContext> HeroContext;
+
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputMappingContext> SpectatorContext;
 
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> JumpAction;
@@ -126,12 +129,6 @@ private:
 	AEHCharacter* CurrentSpectatorTarget;
 	TArray<AEHCharacter*> SpectatorTargets;
 
-	void StartSpectate();
-	//void UpdateSpectatorTarget();
-	//void ChangeSpectatorTarget(bool bPrevious);
-	void ChangeSpectatorLeft();
-	void ChangeSpectatorRight();
-	
 	bool bSpectating = false;
 
 	FVector DeadLocation;
