@@ -46,5 +46,12 @@ public:
 
 	UPROPERTY()
 	TArray<FStatus> StatusArray;
+	int EffectCount = 0;
+
+	void UpdateHealth(float HeathPercent);
+	
+	void AddStatusImage(UTexture2D* EffectImage, int EffectType, float CoolDown);
+	
+	void DeleteStatusImage(int EffectType);
 	
 };

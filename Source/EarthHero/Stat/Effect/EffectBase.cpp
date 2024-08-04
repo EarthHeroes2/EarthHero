@@ -4,6 +4,7 @@
 #include "EarthHero/Stat/Effect/EffectBase.h"
 
 #include "EarthHero/Character/EHCharacter.h"
+#include "EarthHero/Character/Monster/MonsterBase.h"
 #include "EarthHero/GameMode/PlayingGameMode.h"
 #include "EarthHero/Player/EHPlayerController.h"
 #include "EarthHero/Stat/Structure/EffectStructure.h"
@@ -96,6 +97,7 @@ void AEffectBase::ApplyEffect(AActor* InTargetActor, float InEffectValue, float 
 
 void AEffectBase::AddEffect(float InDuration)
 {
+	//히어로인 경우
 	if (AEHCharacter *Hero = Cast<AEHCharacter>(TargetActor))
 	{
 		//본인 HUD에 띄우고
@@ -107,13 +109,17 @@ void AEffectBase::AddEffect(float InDuration)
 			}
 			else
 			{
-				PlayerController->Client_AddEffect(EffectArray[EffectType]->EffectImage, EffectArray[EffectType]->EffectType, InDuration);
+				PlayerController->Client_AddEffect(EffectArray[EffectType]->EffectImage, EffectType, InDuration);
 			}
 		}
 		if (APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode()))
 		{
 			PlayingGameMode->UpdatePlayerStateImage(TargetActor, GetClass());
 		}
+	}
+	else if (AMonsterBase *Monster = Cast<AMonsterBase>(TargetActor)) //몬스터인 경우
+	{
+		Monster->AddEffect(EffectArray[EffectType]->EffectImage, EffectType, InDuration);
 	}
 }
 

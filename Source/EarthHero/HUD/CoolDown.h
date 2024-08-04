@@ -24,11 +24,13 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	class UProgressBar *ProgressBar_CoolDown;
 
+	//CoolDown이 속한 HUD
 	UPROPERTY()
 	class UInGameHUD *InGameHUD;
-
 	UPROPERTY()
 	class UInGamePlayerInfo *InGamePlayerInfo;
+	UPROPERTY()
+	class UMonsterStatHUD *MonsterStatHUD;
 	
 	void SetImage(UTexture2D *Image);
 	void ClearImage();

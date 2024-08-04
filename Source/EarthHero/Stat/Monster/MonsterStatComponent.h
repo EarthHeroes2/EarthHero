@@ -20,16 +20,17 @@ public:
 	FStatStructure &GetBaseMonsterStat();
 
 	FStatStructure &GetMonsterStat();
+
 	
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	UPROPERTY(Replicated)
+	UPROPERTY(ReplicatedUsing = "OnRep_BaseMonsterStat")
 	FStatStructure BaseMonsterStat;
 
-	UPROPERTY(Replicated)
+	UPROPERTY(ReplicatedUsing = "OnRep_MonsterStat")
 	FStatStructure MonsterStat;
 
 public:	
@@ -39,6 +40,20 @@ public:
 	//데미지 처리 함수
 	float DamageTaken(float InDamage, TSubclassOf<UDamageType> DamageTypeClass, const FHitResult & HitInfo, AController *Instigator, class AEHCharacter *DamageCausor, bool &IsDead);
 
+	UFUNCTION()
+	void OnRep_BaseMonsterStat();
+	UFUNCTION()
+	void OnRep_MonsterStat();
+	
+	UPROPERTY()
+	class AMonsterBase *Monster;
+
+	UFUNCTION(NetMulticast, Reliable)
+	void UpdateEffectImage(UTexture2D* EffectImage, int ServerEffectType, float Duration);
+
+	UFUNCTION(NetMulticast, Reliable)
+	void SetMonsterHUDVisTrue();
+
 	
 private:
 	//초기화 작업을 위한 DataTable과 함수
@@ -46,6 +61,7 @@ private:
 	void InitializeStatData();
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	
 
 		
 };
