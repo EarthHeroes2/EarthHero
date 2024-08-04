@@ -51,7 +51,7 @@ public:
 	void UpdateHealth(float HeathPercent);
 	
 	void AddStatusImage(UTexture2D* EffectImage, int EffectType, float CoolDown);
-	
+	int CheckEffectTypeAlreadyExists(int EffectType);
 	void DeleteStatusImage(int EffectType);
 	
 };

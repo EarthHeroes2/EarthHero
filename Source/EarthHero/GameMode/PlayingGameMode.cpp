@@ -462,10 +462,9 @@ void APlayingGameMode::GameTimerCount()
 	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
 	PlayingGameState->UpdateHUDGameTimer(GameTimer);
 
-	//15초가 되면 자기장 생성 테스트
-	if(GameTimer == 15)
+	// 300초가 되면 자기장 생성 테스트
+	if(GameTimer == 300)
 	{
-		UE_LOG(LogTemp, Log, TEXT("자기장 소환 됐다"));
 		SpawnForceFields();
 	}
 }

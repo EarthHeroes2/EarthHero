@@ -4,6 +4,7 @@
 #include "MonsterStatHUD.h"
 
 #include "Components/ProgressBar.h"
+#include "Components/TextBlock.h"
 #include "Structure/Status.h"
 
 bool UMonsterStatHUD::Initialize()
@@ -18,6 +19,12 @@ bool UMonsterStatHUD::Initialize()
 	StatusArray.Add(FStatus(0, Status_5));
 	StatusArray.Add(FStatus(0, Status_6));
 	StatusArray.Add(FStatus(0, Status_7));
+
+	for (FStatus EStatus : StatusArray)
+	{
+		EStatus.CoolDownWidget->Text_RemainingTime->SetVisibility(ESlateVisibility::Collapsed);
+		EStatus.CoolDownWidget->ProgressBar_CoolDown->SetVisibility(ESlateVisibility::Collapsed);
+	}
 	return true;
 }
 
@@ -28,12 +35,32 @@ void UMonsterStatHUD::UpdateHealth(float HeathPercent)
 
 void UMonsterStatHUD::AddStatusImage(UTexture2D* EffectImage, int EffectType, float CoolDown)
 {
-	EffectCount += 1;
-	//UE_LOG(LogClass, Warning, TEXT("Monster EffectType = %d, EffectCount = %d"), EffectType, EffectCount);
-	StatusArray[EffectCount - 1] = FStatus(EffectType, StatusArray[EffectCount - 1].CoolDownWidget);
-	StatusArray[EffectCount - 1].CoolDownWidget->SetImage(EffectImage);
-	StatusArray[EffectCount - 1].CoolDownWidget->StartCoolDown(CoolDown, EffectType);
-	StatusArray[EffectCount - 1].CoolDownWidget->MonsterStatHUD = this;
+	int Index = 0;
+	if ((Index = CheckEffectTypeAlreadyExists(EffectType)) == -1)
+	{
+		EffectCount += 1;
+		//UE_LOG(LogClass, Warning, TEXT("EffectType = %d, EffectCount = %d"), EffectType, EffectCount);
+		StatusArray[EffectCount - 1] = FStatus(EffectType, StatusArray[EffectCount - 1].CoolDownWidget);
+		StatusArray[EffectCount - 1].CoolDownWidget->SetImage(EffectImage);
+		StatusArray[EffectCount - 1].CoolDownWidget->StartCoolDown(CoolDown, EffectType);
+		StatusArray[EffectCount - 1].CoolDownWidget->MonsterStatHUD = this;
+	}
+	else
+	{
+		StatusArray[Index].CoolDownWidget->UpdateCoolDown(CoolDown);
+	}
+}
+
+int UMonsterStatHUD::CheckEffectTypeAlreadyExists(int EffectType)
+{
+	for (int index = 0; index < EffectCount; index++)
+	{
+		if (StatusArray[index].EffectType == EffectType)
+		{
+			return index;
+		}
+	}
+	return -1;
 }
 
 void UMonsterStatHUD::DeleteStatusImage(int EffectType)

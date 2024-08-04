@@ -148,4 +148,6 @@ private:
 	class UStatComponent* StatComponentRef;
 	
 	FTimerHandle HideMessageTimerHandle;
+
+	int CheckEffectTypeAlreadyExists(int EffectType);
 };
