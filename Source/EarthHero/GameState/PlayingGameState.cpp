@@ -25,45 +25,38 @@ void APlayingGameState::UpdateHUDGameTimer(const int GameTimer)
 	GameTimerSec = GameTimer;
 }
 
-void APlayingGameState::OnRep_GameTimerSec()
+void APlayingGameState::OnRep_GameTimerSec() const
 {
-	if (EHPlayerController && EHPlayerController->HUD)
+	//UE_LOG(LogTemp, Log, TEXT("OnRep_GameTimerSec"));
+	if(EHPlayerController && EHPlayerController->HUD)
 	{
 		EHPlayerController->HUD->UpdateGameTimer(GameTimerSec);
 	}
 
-	// Time when force field starts
-	int ForceFieldStartTime = 15;
+	// 자기장 시작할 시간
+	int ForceFieldStartTime = 300;
 
-	// Update force field based on time
+	//Sec에 따라 forcefield 업데이트
 	if (EHPlayerController && EHPlayerController->TabHUD && AllExpansionDurations.IsValidIndex(0))
 	{
-		// Show the force fields
-		if (GameTimerSec == ForceFieldStartTime)
+		// 자기장 모습 켜주기
+		if(GameTimerSec == ForceFieldStartTime)
 		{
 			EHPlayerController->TabHUD->ToggleForceFields(true);
+			FString ForceFieldMsg = "Death fields have been activated";
+			EHPlayerController->HUD->SetGameMessageText(ForceFieldMsg);
 		}
-
-		// Start updating force fields after 15 seconds
-		if (GameTimerSec >= ForceFieldStartTime)
+		// 300초가 지나야 시작
+		if(GameTimerSec >= ForceFieldStartTime)
 		{
-			int TempGameTimerSec = GameTimerSec - 15;
+			int TempGameTimerSec = GameTimerSec - ForceFieldStartTime;
 			for (int index = 0; index <= 3; index++)
 			{
 				EHPlayerController->TabHUD->UpdateForceField(index, TempGameTimerSec, AllExpansionDurations[index]);
-                
-				// Only show the message once
-				if (!bForceFieldMessageShown)
-				{
-					FString ForceFieldMsg = "Death fields have been activated";
-					EHPlayerController->HUD->SetGameMessageText(ForceFieldMsg);
-					bForceFieldMessageShown = true;
-				}
 			}
 		}
 	}
 }
-
 
 void APlayingGameState::UpdateGameStateHealths(const TArray<float>& PlayerMaxHealths, const TArray<float>& PlayerCurrentHealths)
 {
