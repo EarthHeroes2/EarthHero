@@ -45,8 +45,7 @@ public:
 	//휠윈드 공격 데미지
 	float WR_WheelWindDamage = 10.f;
 	//도약 데미지
-	float WR_JumpDamage = 0.f;
-	float WR_JumpDamageMulti = 20.f;
+	float WR_JumpDamageMulti = 0.f;
 	//휠윈드 지속 시간
 	float WR_WheelWindDuration = 3.f;
 	//휠 윈드 틱 간격

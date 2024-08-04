@@ -17,15 +17,15 @@ void UHeroUpgradeLibrary::Pb_NormalAttackDamage(FHeroUpgradeStructure& SelectHer
 	switch (SelectHeroUpgrade.UpgradeLevel)
 	{
 		case 1 :
-			BaseHeroStat.NormalDamage = 1.4f;
+			BaseHeroStat.NormalDamage += 0.4f;
 			HeroStat.NormalDamage = BaseHeroStat.NormalDamage;
 			break;
 		case 2 :
-			BaseHeroStat.NormalDamage = 1.96f;
+			BaseHeroStat.NormalDamage += 0.56f;
 			HeroStat.NormalDamage = BaseHeroStat.NormalDamage;
 			break;
 		case 3 :
-			BaseHeroStat.NormalDamage = 2.7f;
+			BaseHeroStat.NormalDamage += 0.84f;
 			HeroStat.NormalDamage = BaseHeroStat.NormalDamage;
 			break ;
 		default:
@@ -42,15 +42,15 @@ void UHeroUpgradeLibrary::Pb_NormalAttackSpeed(FHeroUpgradeStructure& SelectHero
 	switch (SelectHeroUpgrade.UpgradeLevel)
 	{
 		case 1 :
-			BaseHeroStat.AttackSpeed = 1.3f;
+			BaseHeroStat.AttackSpeed += 0.3f;
 			HeroStat.AttackSpeed = BaseHeroStat.AttackSpeed;
 			break;
 		case 2 :
-			BaseHeroStat.AttackSpeed = 1.72f;
+			BaseHeroStat.AttackSpeed += 0.42f;
 			HeroStat.AttackSpeed = BaseHeroStat.AttackSpeed;
 			break;
 		case 3 :
-			BaseHeroStat.AttackSpeed = 2.35f;
+			BaseHeroStat.AttackSpeed += 0.63f;
 			HeroStat.AttackSpeed = BaseHeroStat.AttackSpeed;
 			break ;
 		default:
@@ -67,15 +67,15 @@ void UHeroUpgradeLibrary::Pb_AttackSkillDamage(FHeroUpgradeStructure& SelectHero
 	switch (SelectHeroUpgrade.UpgradeLevel)
 	{
 		case 1 :
-			BaseHeroStat.SkillDamage = 1.75f;
+			BaseHeroStat.SkillDamage += 0.75f;
 			HeroStat.SkillDamage = BaseHeroStat.SkillDamage;
 			break;
 		case 2 :
-			BaseHeroStat.SkillDamage = 2.8f;
+			BaseHeroStat.SkillDamage += 1.05f;
 			HeroStat.SkillDamage = BaseHeroStat.SkillDamage;
 			break;
 		case 3 :
-			BaseHeroStat.SkillDamage = 4.38f;
+			BaseHeroStat.SkillDamage += 1.58f;
 			HeroStat.SkillDamage = BaseHeroStat.SkillDamage;	
 			break ;
 		default:
@@ -92,15 +92,15 @@ void UHeroUpgradeLibrary::Pb_AttackSkillCooldown(FHeroUpgradeStructure& SelectHe
 	switch (SelectHeroUpgrade.UpgradeLevel)
 	{
 		case 1 :
-			BaseHeroStat.SkillCoolTime = 0.94f;
+			BaseHeroStat.SkillCoolTime -= 0.06f;
 			HeroStat.SkillCoolTime = BaseHeroStat.SkillCoolTime;
 			break;
 		case 2 :
-			BaseHeroStat.SkillCoolTime = 0.85f;
+			BaseHeroStat.SkillCoolTime -= 0.09f;
 			HeroStat.SkillCoolTime = BaseHeroStat.SkillCoolTime;
 			break;
 		case 3 :
-			BaseHeroStat.SkillCoolTime = 0.73f;
+			BaseHeroStat.SkillCoolTime -= 0.12f;
 			HeroStat.SkillCoolTime = BaseHeroStat.SkillCoolTime;
 			break ;
 		default:
@@ -117,15 +117,15 @@ void UHeroUpgradeLibrary::Pb_MovementSkillCooldown(FHeroUpgradeStructure& Select
 	switch (SelectHeroUpgrade.UpgradeLevel)
 	{
 		case 1 :
-			BaseHeroStat.DashCoolTime = 0.92f;
+			BaseHeroStat.DashCoolTime -= 0.08f;
 			HeroStat.DashCoolTime = BaseHeroStat.DashCoolTime;
 			break;
 		case 2 :
-			BaseHeroStat.DashCoolTime = 0.8f;
+			BaseHeroStat.DashCoolTime -= 0.12f;
 			HeroStat.DashCoolTime = BaseHeroStat.DashCoolTime;
 			break;
 		case 3 :
-			BaseHeroStat.DashCoolTime = 0.64f;
+			BaseHeroStat.DashCoolTime -= 0.16f;
 			HeroStat.DashCoolTime = BaseHeroStat.DashCoolTime;
 			break ;
 		default:
@@ -142,15 +142,18 @@ void UHeroUpgradeLibrary::Pb_MaxHealth(FHeroUpgradeStructure& SelectHeroUpgrade,
 	switch (SelectHeroUpgrade.UpgradeLevel)
 	{
 		case 1 :
-			BaseHeroStat.MaxHealth = 160;
+			BaseHeroStat.HealthUpgrade += 0.6f;
+			BaseHeroStat.MaxHealth = 100 * BaseHeroStat.HealthUpgrade;
 			HeroStat.MaxHealth = BaseHeroStat.MaxHealth;
 			break;
 		case 2 :
-			BaseHeroStat.MaxHealth = 244;
+			BaseHeroStat.HealthUpgrade += 0.84f;
+			BaseHeroStat.MaxHealth = 100 * BaseHeroStat.HealthUpgrade;
 			HeroStat.MaxHealth = BaseHeroStat.MaxHealth;
 			break;
 		case 3 :
-			BaseHeroStat.MaxHealth = 370;
+			BaseHeroStat.HealthUpgrade += 1.26f;
+			BaseHeroStat.MaxHealth = 100 * BaseHeroStat.HealthUpgrade;
 			HeroStat.MaxHealth = BaseHeroStat.MaxHealth;
 			break ;
 		default:
@@ -167,15 +170,15 @@ void UHeroUpgradeLibrary::Pb_HealthRegenPerSecond(FHeroUpgradeStructure& SelectH
 	switch (SelectHeroUpgrade.UpgradeLevel)
 	{
 		case 1 :
-			BaseHeroStat.HealthRegeneration = 2.f;
+			BaseHeroStat.HealthRegeneration += 1.f;
 			HeroStat.HealthRegeneration = BaseHeroStat.HealthRegeneration;
 			break;
 		case 2 :
-			BaseHeroStat.HealthRegeneration = 3.4f;
+			BaseHeroStat.HealthRegeneration += 1.4f;
 			HeroStat.HealthRegeneration = BaseHeroStat.HealthRegeneration;
 			break;
 		case 3 :
-			BaseHeroStat.HealthRegeneration = 4.5f;
+			BaseHeroStat.HealthRegeneration += 2.1f;
 			HeroStat.HealthRegeneration = BaseHeroStat.HealthRegeneration;
 			break ;
 		default:
@@ -192,15 +195,15 @@ void UHeroUpgradeLibrary::Pb_MovementSpeed(FHeroUpgradeStructure& SelectHeroUpgr
 	switch (SelectHeroUpgrade.UpgradeLevel)
 	{
 		case 1 :
-			BaseHeroStat.MovementSpeed = 1.3f;
+			BaseHeroStat.MovementSpeed += 0.3f;
 			HeroStat.MovementSpeed = BaseHeroStat.MovementSpeed;
 			break;
 		case 2 :
-			BaseHeroStat.MovementSpeed = 1.72f;
+			BaseHeroStat.MovementSpeed += 0.42f;
 			HeroStat.MovementSpeed = BaseHeroStat.MovementSpeed;
 			break;
 		case 3 :
-			BaseHeroStat.MovementSpeed = 2.35f;
+			BaseHeroStat.MovementSpeed += 0.63f;
 			HeroStat.MovementSpeed = BaseHeroStat.MovementSpeed;
 			break ;
 		default:
@@ -219,7 +222,7 @@ void UHeroUpgradeLibrary::WR_Berserker(FHeroUpgradeStructure& SelectHeroUpgrade,
 	{
 		case 1 :
 			//최대 체력 0.5
-			BaseHeroStat.MaxHealth *= 0.5;
+			BaseHeroStat.MaxHealth = 50 * BaseHeroStat.HealthUpgrade;
 			HeroStat.MaxHealth = BaseHeroStat.MaxHealth;
 			if (HeroStat.Health > HeroStat.MaxHealth)
 			{
@@ -227,7 +230,7 @@ void UHeroUpgradeLibrary::WR_Berserker(FHeroUpgradeStructure& SelectHeroUpgrade,
 			}
 
 			//공격 속도 증가
-			BaseHeroStat.AttackSpeed = 1.2f;
+			BaseHeroStat.AttackSpeed += 0.2f;
 			HeroStat.AttackSpeed = BaseHeroStat.AttackSpeed;
 
 			//흡혈 추가
@@ -235,13 +238,13 @@ void UHeroUpgradeLibrary::WR_Berserker(FHeroUpgradeStructure& SelectHeroUpgrade,
 			break;
 			
 		case 2 :
-			BaseHeroStat.AttackSpeed = 1.5f;
+			BaseHeroStat.AttackSpeed += 0.3f;
 			HeroStat.AttackSpeed = BaseHeroStat.AttackSpeed;
 			WarriorStatComponent->WR_Drain = 0.025f;
 			break;
 			
 		case 3 :
-			BaseHeroStat.AttackSpeed = 2.0f;
+			BaseHeroStat.AttackSpeed += 0.5f;
 			HeroStat.AttackSpeed = BaseHeroStat.AttackSpeed;
 			WarriorStatComponent->WR_Drain = 0.05f;
 			break ;
@@ -265,7 +268,8 @@ void UHeroUpgradeLibrary::WR_Guardian(FHeroUpgradeStructure& SelectHeroUpgrade, 
 			HeroStat.AttackSpeed = BaseHeroStat.AttackSpeed;
 
 			//최대 체력 증가
-			BaseHeroStat.MaxHealth *= 1.3f;
+			BaseHeroStat.HealthUpgrade += 0.3f;
+			BaseHeroStat.MaxHealth = 100 * BaseHeroStat.HealthUpgrade;
 			HeroStat.MaxHealth = BaseHeroStat.MaxHealth;
 
 			//일반 공격 넉백 추가
@@ -273,12 +277,14 @@ void UHeroUpgradeLibrary::WR_Guardian(FHeroUpgradeStructure& SelectHeroUpgrade, 
 				
 		case 2 :
 			//최대 체력 증가
-			BaseHeroStat.MaxHealth *= 1.3f;
+			BaseHeroStat.MaxHealth += 0.35f;
+			BaseHeroStat.MaxHealth = 100 * BaseHeroStat.HealthUpgrade;
 			HeroStat.MaxHealth = BaseHeroStat.MaxHealth;
 			break;
 				
 		case 3 :
-			BaseHeroStat.MaxHealth *= 1.35f;
+			BaseHeroStat.MaxHealth += 0.65f;
+			BaseHeroStat.MaxHealth = 100 * BaseHeroStat.HealthUpgrade;
 			HeroStat.MaxHealth = BaseHeroStat.MaxHealth;
 			//휠 윈드 스킬 넉백 추가
 			break ;

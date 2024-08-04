@@ -65,6 +65,13 @@ float UStatCalculationLibrary::CalWarriorWheelWindDamage(FStatStructure& HeroSta
 	return WR_WheelWindDamage * HeroStat.SkillDamage;
 }
 
+float UStatCalculationLibrary::CalWarriorDashDamage(FStatStructure& HeroStat, float WR_JumpDamageMulti,
+	float WR_NormalDamage)
+{
+		return CalWarriorNormalDamage(HeroStat, WR_NormalDamage) * WR_JumpDamageMulti * HeroStat.SkillDamage;
+}
+
+
 
 float UStatCalculationLibrary::CalShooterNormalDamage(FStatStructure &HeroStat, const FHitResult & HitInfo, float SH_HeadShot, float SH_NormalDamage)
 {

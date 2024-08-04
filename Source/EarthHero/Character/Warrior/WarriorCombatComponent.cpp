@@ -169,6 +169,7 @@ void UWarriorCombatComponent::Server_JumpAttackLanded_Implementation()
 				if(AMonsterBase* HitMonster = Cast<AMonsterBase>(HitResult.GetActor()))
 				{
 					// Damage Monster
+					Warrior->WarriorStatComponent->WarriorDashDamage(HitMonster);
 					// Launch Monster
 					FVector Direction = HitMonster->GetActorLocation() - Warrior->GetActorLocation();
 					Direction.Z = 0.f;
