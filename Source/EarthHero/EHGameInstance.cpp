@@ -5,8 +5,10 @@
 #include "UObject/ConstructorHelpers.h"
 //#include "Options.h"
 #include "MoviePlayer.h"
+#include "OnlineSubsystem.h"
 #include "Blueprint/UserWidget.h"
 #include "GameFramework/GameUserSettings.h"
+#include "Interfaces/VoiceInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "Stat/Effect/EffectBase.h"
 #include "Stat/Structure/EffectStructure.h"
@@ -107,6 +109,7 @@ void UEHGameInstance::Init()
    
     SetEffectArray();
 }
+
 
 void UEHGameInstance::SaveSettings()
 {
