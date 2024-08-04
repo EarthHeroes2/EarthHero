@@ -12,11 +12,12 @@ AMonsterBase::AMonsterBase()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	MonsterStatComponent = CreateDefaultSubobject<UMonsterStatComponent>(TEXT("MonsterStatComponent"));
-	MonsterStatComponent->SetIsReplicated(true);
 
 	MonsterStatHUDComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("MonsterStatHUD"));
 	MonsterStatHUDComponent->SetupAttachment(RootComponent);
+	
+	MonsterStatComponent = CreateDefaultSubobject<UMonsterStatComponent>(TEXT("MonsterStatComponent"));
+	MonsterStatComponent->SetIsReplicated(true);
 
 	//이 값은 자식에서 변경해줘야함. 기본값을 위해 존재할 뿐임
 	BossNumber = NotBoss;
@@ -26,6 +27,9 @@ AMonsterBase::AMonsterBase()
 void AMonsterBase::BeginPlay()
 {
 	Super::BeginPlay();
+
+	MonsterStatHUDComponent->SetVisibility(false, true);
+	MonsterStatComponent->Monster = this;
 	
 }
 
@@ -41,6 +45,14 @@ void AMonsterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void AMonsterBase::AddEffect(UTexture2D* EffectImage, int ServerEffectType, float Duration)
+{
+	if (MonsterStatComponent)
+	{
+		MonsterStatComponent->UpdateEffectImage(EffectImage, ServerEffectType, Duration);
+	}
 }
 
 //자식에서 구현 (근거리용)

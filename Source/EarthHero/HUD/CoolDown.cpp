@@ -5,6 +5,7 @@
 
 #include "InGameHUD.h"
 #include "InGamePlayerInfo.h"
+#include "MonsterStatHUD.h"
 #include "Components/Image.h"
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
@@ -57,6 +58,10 @@ void UCoolDown::End()
 	else if (InGamePlayerInfo)
 	{
 		InGamePlayerInfo->DeletePlayerEffects(EffectType);
+	}
+	else if (MonsterStatHUD)
+	{
+		MonsterStatHUD->DeleteStatusImage(EffectType);
 	}
 }
 
