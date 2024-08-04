@@ -10,8 +10,6 @@
 #include "EarthHero/Player/EHPlayerState.h"
 #include "EarthHero/ForceField/DifficultyZone.h"
 #include "DrawDebugHelpers.h"
-#include "SpectatorCameraActor.h"
-#include "GameFramework/SpringArmComponent.h"
 
 AEHCharacter::AEHCharacter()
 {

@@ -9,28 +9,11 @@
 ACustomSpectatorPawn::ACustomSpectatorPawn()
 {
     SetReplicates(true);
-    AActor::SetReplicateMovement(true);
-    
-    // 카메라 컴포넌트 생성 및 설정
-    //CameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
-    //CameraComp->SetupAttachment(RootComponent);
 }
 
 void ACustomSpectatorPawn::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-
-    FVector NewLocation = GetActorLocation();
-
-    // 필요한 경우 위치를 동기화
-    if (!HasAuthority())
-    {
-        UE_LOG(LogTemp, Warning, TEXT("CLI = %s"), *NewLocation.ToString());
-    }
-    else
-    {
-        UE_LOG(LogTemp, Warning, TEXT("Ser = %s"), *NewLocation.ToString());
-    }
 }
 
 void ACustomSpectatorPawn::SetupPlayerInputComponent(UInputComponent* InInputComponent)
@@ -79,10 +62,6 @@ void ACustomSpectatorPawn::On0KeyPressed()
 
 void ACustomSpectatorPawn::Client_UpdateActorLocation_Implementation(const FVector& NewLocation)
 {
-    // 서버의 위치를 강제로 반영
-
-    UE_LOG(LogTemp, Log, TEXT("Update Before My Location = %s"), *GetActorLocation().ToString());
+    // 서버의 위치를 강제로 반영 (아마.. 빙의중이라 이렇게안하면 위치 업데이트 적용안되는듯)
     SetActorLocation(NewLocation);
-
-    UE_LOG(LogTemp, Log, TEXT("Updated My Location = %s"), *GetActorLocation().ToString());
 }

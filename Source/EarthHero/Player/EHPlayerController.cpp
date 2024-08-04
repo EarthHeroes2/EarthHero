@@ -243,16 +243,8 @@ void AEHPlayerController::Jump()
 	ACharacter* PossessedCharacter = GetCharacter();
 	if(PossessedCharacter)
 	{
-		if(!bSpectating)
-		{
-			AEHCharacter* PossessedEHCharacter = Cast<AEHCharacter>(PossessedCharacter);
-			PossessedEHCharacter->Jump();
-		}
-		else
-		{
-			//ASpectatorCharacter* PossessedSpectatorCharacter = Cast<ASpectatorCharacter>(PossessedCharacter);
-			//PossessedSpectatorCharacter->Jump();
-		}
+		AEHCharacter* PossessedEHCharacter = Cast<AEHCharacter>(PossessedCharacter);
+		PossessedEHCharacter->Jump();
 	}
 }
 
@@ -543,11 +535,9 @@ void AEHPlayerController::Server_SpectatePlayer_Implementation(int PlayerNumber)
 				ACustomSpectatorPawn* CustomSpectatorPawn = Cast<ACustomSpectatorPawn>(ControlledPawn);
 				if(CustomSpectatorPawn)
 				{
-					UE_LOG(LogTemp, Log, TEXT("Before My Location = %s"), *CustomSpectatorPawn->GetActorLocation().ToString());
 					if(CustomSpectatorPawn->SetActorLocation(PlayerLocation, false, nullptr, ETeleportType::TeleportPhysics))
 					{
 						UE_LOG(LogTemp, Log, TEXT("SetActorLocation Seccess"));
-						UE_LOG(LogTemp, Log, TEXT("After My Location = %s"), *CustomSpectatorPawn->GetActorLocation().ToString());
 
 						CustomSpectatorPawn->Client_UpdateActorLocation(PlayerLocation);
 					}
