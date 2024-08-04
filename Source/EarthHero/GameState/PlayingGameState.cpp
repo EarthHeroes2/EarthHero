@@ -27,7 +27,7 @@ void APlayingGameState::UpdateHUDGameTimer(const int GameTimer)
 
 void APlayingGameState::OnRep_GameTimerSec() const
 {
-	UE_LOG(LogTemp, Log, TEXT("OnRep_GameTimerSec"));
+	//UE_LOG(LogTemp, Log, TEXT("OnRep_GameTimerSec"));
 	if(EHPlayerController && EHPlayerController->HUD)
 	{
 		EHPlayerController->HUD->UpdateGameTimer(GameTimerSec);

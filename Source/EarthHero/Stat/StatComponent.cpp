@@ -20,6 +20,7 @@
 #include "EarthHero/HUD/TabHUDWidget.h"
 #include "EarthHero/Player/EHPlayerController.h"
 #include "EarthHero/Player/EHPlayerState.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PawnMovementComponent.h"
 
 UStatComponent::UStatComponent()
@@ -359,7 +360,6 @@ void UStatComponent::OnRep_HeroStat()
 			FText::AsNumber(HeroStat.HealthRegeneration),
 			FText::Format(FText::FromString(TEXT("{0}%")),FText::AsNumber(HeroStat.MovementSpeed * 100)));
 	}
-	
 	OnRep_HeroStat_Server();
 }
 

@@ -9,6 +9,7 @@
 #include "EarthHero/Character/Warrior/EHWarrior.h"
 #include "EarthHero/Character/Warrior/WarriorCombatComponent.h"
 #include "EarthHero/GameMode/PlayingGameMode.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Monster/MonsterStatComponent.h"
 
 //워리어 생성자
@@ -29,6 +30,11 @@ void UWarriorStatComponent::BeginPlay()
 
 void UWarriorStatComponent::OnRep_HeroStat()
 {
+	if (Warrior)
+	{
+		Warrior->GetCharacterMovement()->MaxWalkSpeed = 600 * HeroStat.MovementSpeed;
+		//UE_LOG(LogClass, Warning, TEXT("walkSpeed : %f"), Warrior->GetCharacterMovement()->MaxWalkSpeed);
+	}
 }
 
 //워리어 데미지 받는 함수(오버라이드)
