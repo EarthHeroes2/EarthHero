@@ -108,6 +108,14 @@ public:
 	UPROPERTY()
 	int EffectCount = 0;
 
+	//내일 스킬 UI 설정해야함
+	UPROPERTY(meta = (BindWidget))
+	class UCoolDown* SkillCoolDown;
+	UPROPERTY(meta = (BindWidget))
+	class UCoolDown* SkillCoolDown_1;
+	UPROPERTY(meta = (BindWidget))
+	class UCoolDown* SkillCoolDown_2;
+
 	void AddStatusImage(UTexture2D *EffectImage, int EffectType, float CoolDown);
 	void DeleteStatusImage(int EffectType);
 
