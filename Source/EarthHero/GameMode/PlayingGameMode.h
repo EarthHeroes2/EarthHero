@@ -8,6 +8,7 @@
 class AEffectBase;
 class AEHShooter;
 class AEHWarrior;
+class AEHArcher;
 class AEHPlayerController;
 
 UCLASS()
@@ -42,7 +43,7 @@ class EARTHHERO_API APlayingGameMode : public AGameModeBase
 	TSubclassOf<AEHWarrior> EHWarriorClass;
 	//TSubclassOf<class AEHMechanic> EHMechanicClass;
 	TSubclassOf<AEHShooter> EHShooterClass;
-	//TSubclassOf<class AEHArchor> EHArchorClass;
+	TSubclassOf<AEHArcher> EHArcherClass;
 
 protected:
 	virtual void Tick(float DeltaSeconds) override;

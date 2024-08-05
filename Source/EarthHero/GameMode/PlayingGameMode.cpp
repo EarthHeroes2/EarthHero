@@ -1,5 +1,6 @@
 #include "PlayingGameMode.h"
 
+#include "EarthHero/Character/Archer/EHArcher.h"
 #include "EarthHero/Character/Shooter/EHShooter.h"
 #include "EarthHero/Character/Spectator/CustomSpectatorPawn.h"
 #include "EarthHero/Character/Warrior/EHWarrior.h"
@@ -28,7 +29,10 @@ APlayingGameMode::APlayingGameMode()
 	static ConstructorHelpers::FClassFinder<AEHShooter> EHShooterAsset(TEXT("/Game/Blueprints/Character/Shooter/BP_Shooter.BP_Shooter_C"));
 	if (EHShooterAsset.Succeeded()) CharacterClasses[Shooter] = EHShooterClass = EHShooterAsset.Class;
 
-	//Archor
+	//Archer
+	static ConstructorHelpers::FClassFinder<AEHArcher> EHArcherAsset(TEXT("/Game/Blueprints/Character/Archer/BP_Archer.BP_Archer_C"));
+	if(EHArcherAsset.Succeeded()) CharacterClasses[Archer] = EHArcherClass = EHArcherAsset.Class;
+	
 	
 	PrimaryActorTick.bCanEverTick = true;
 }
