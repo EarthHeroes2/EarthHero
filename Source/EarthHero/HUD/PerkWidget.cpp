@@ -21,13 +21,11 @@ UPerkWidget::UPerkWidget(const FObjectInitializer &ObjectInitializer)
 	if(EHGameInstance)
 	{
 		Level = EHGameInstance->GetPlayerLevel();
-		Point = Level + 2;
+		if(Level > 0) Point = Level + 2;
+		else Point = -1;
 		
-		if(Level > 0)
-		{
-			Level_Tb->SetText(FText::FromString(FString("Lv. ") + FString::FromInt(Level)));
-			Point_Tb->SetText(FText::FromString(FString("Point. ") + FString::FromInt(Point)));
-		}
+		Level_Tb->SetText(FText::FromString(FString("Lv. ") + FString::FromInt(Level)));
+		Point_Tb->SetText(FText::FromString(FString("Point. ") + FString::FromInt(Point)));
 	}
 }
 
@@ -94,17 +92,15 @@ void UPerkWidget::PerkSaveBtnClicked()
 
 void UPerkWidget::PerkCancelBtnClicked()
 {
+	SetVisibility(ESlateVisibility::Collapsed);
+	
 	int64 CheckBit = 1;
 
 	//누른 애들 전부 빼주고
 	for(int i = 0; i < 50; i++)
-	{
 		if(SelectInfo & (CheckBit << i))
-		{
 			Buttons[i]->IndexBtnClicked();
-		}
-	}
 
-	SetVisibility(ESlateVisibility::Collapsed);
+	Point_Tb->SetText(FText::FromString(FString("Point. ") + FString::FromInt(Point)));
 }
 

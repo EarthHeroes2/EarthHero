@@ -34,7 +34,10 @@ private:
 	TArray<UIndexButton*> Buttons;
 
 	void CreateButtons();
+
+	UFUNCTION()
 	void PerkSaveBtnClicked();
+	UFUNCTION()
 	void PerkCancelBtnClicked();
 
 	UPROPERTY(meta = (BindWidget))

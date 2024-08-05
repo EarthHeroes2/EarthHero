@@ -14,6 +14,7 @@ void ALobbyPlayerState::CopyProperties(APlayerState* PlayerState)
 	if (EHPlayerState)
 	{
 		EHPlayerState->PlayerClass = PlayerClass;
+		EHPlayerState->PerkInfo = PerkInfo;
 	}
 
 	EHPlayerState->IsCopyPropertiesEnd = true; //임시

@@ -9,6 +9,7 @@
 #include "LobbyPlayerController.generated.h"
 
 
+class UEHGameInstance;
 class AEHCharacter;
 
 UCLASS()
@@ -23,6 +24,8 @@ class EARTHHERO_API ALobbyPlayerController : public APlayerController
 	
 	ALobbyPlayerController();
 
+	UEHGameInstance* EHGameInstance;
+
 	
 	TSubclassOf<class UUserWidget> LobbyWidgetClass;
 	ULobbyWidget* LobbyWidget;
@@ -33,7 +36,7 @@ class EARTHHERO_API ALobbyPlayerController : public APlayerController
 
 	
 	UFUNCTION(Server, Reliable)
-	void Server_InitSetup();
+	void Server_InitSetup(int64 PerkInfo);
 
 	void StopVoiceChat();
 	void ShowLobbyWidget();
@@ -96,4 +99,5 @@ public:
 
 	void SetHost();
 	void UpdateDifficulty(int Difficulty);
+	bool PerkInfoVerification(int64 PerkInfo);
 };

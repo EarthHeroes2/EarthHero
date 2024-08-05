@@ -47,9 +47,10 @@ class EARTHHERO_API ALobbyGameMode : public AGameModeBase
 	
 	int FindLobbyPlayerSpot();
 
-	int GetPlayerLevel(FUniqueNetIdRepl UniqueNetId);
-	
 public:
+	int GetPlayerLevel(FUniqueNetIdRepl UniqueNetId);
+
+	
 	bool PressGameStartButton();
 	void TogglePlayerReady(APlayerController* Player);
 

@@ -48,6 +48,8 @@ public:
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "Player")
 	int PlayerClass;
 
+	int64 PerkInfo; //비트단위로 나타낸 반영구업그레이드 정보
+
 	UPROPERTY()
 	bool IsSetStatComponentEnd = false;
 

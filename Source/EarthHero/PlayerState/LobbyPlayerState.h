@@ -13,8 +13,11 @@ UCLASS()
 class EARTHHERO_API ALobbyPlayerState : public APlayerState
 {
 	GENERATED_BODY()
+	
 public:
 	int PlayerClass;
+	int64 PerkInfo;
+	
 private:
 	virtual void CopyProperties(APlayerState* PlayerState) override;
 };

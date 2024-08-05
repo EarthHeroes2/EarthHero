@@ -4,34 +4,43 @@
 #include "IndexButton.h"
 
 #include "PerkWidget.h"
+#include "EarthHero/EHGameInstance.h"
 
 UIndexButton::UIndexButton()
 {
-	OnClicked.AddDynamic(this, &UIndexButton::IndexBtnClicked);
+	EHGameInstance = Cast<UEHGameInstance>(GetGameInstance());
+	if(EHGameInstance)
+	{
+		NeedPoint = EHGameInstance->NeedPoint[Index];
+		OnClicked.AddDynamic(this, &UIndexButton::IndexBtnClicked);
+	}
 }
 
 void UIndexButton::IndexBtnClicked()
 {
+	if(EHGameInstance == nullptr) return;
+	
 	bSelected = !bSelected;
 	
 	if(bSelected)
 	{
-		if(PerkWidget->Point >= NeedPoint[Index])
+		if(PerkWidget->Point >= NeedPoint)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Index = %d, Need Point = %d"), Index, NeedPoint[Index]);
+			SetRenderOpacity(0.5);
 			
-			PerkWidget->Point -= NeedPoint[Index];
+			PerkWidget->Point -= NeedPoint;
 			PerkWidget->UpdateSelectInfo(Index);
 		}
 		else
 		{
 			bSelected = false;
-			UE_LOG(LogTemp, Warning, TEXT("Need Point : %d  Point : %d"), NeedPoint[Index], PerkWidget->Point);
 		}
 	}
 	else
 	{
-		PerkWidget->Point += NeedPoint[Index];
+		SetRenderOpacity(1);
+		
+		PerkWidget->Point += NeedPoint;
 		PerkWidget->UpdateSelectInfo(Index);
 	}
 }
