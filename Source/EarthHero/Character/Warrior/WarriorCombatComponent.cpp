@@ -97,9 +97,10 @@ void UWarriorCombatComponent::SwordHit()
 
 void UWarriorCombatComponent::JumpAttack()
 {
-	if(bIsWhirlwind) return;
+	if(bIsWhirlwind || !bCanSuperJump) return;
 
 	bIsSuperJump = true;
+	bCanSuperJump = false;
 	
 	float ControlPitch = 0.f;
 	FRotator LaunchRotation = FRotator::ZeroRotator;
@@ -119,6 +120,8 @@ void UWarriorCombatComponent::JumpAttack()
 	}
 	LaunchRotation.Pitch = ControlPitch;
 	FVector LaunchDirection = LaunchRotation.Vector();
+
+	Warrior->GetWorldTimerManager().SetTimer(JumpAttackCooldownTimerHandle, this, &ThisClass::ResetJumpAttack, JumpAttackCooldown);
 	
 	Server_JumpAttack(LaunchDirection);
 }
@@ -192,6 +195,12 @@ void UWarriorCombatComponent::NetMulticast_JumpAttackLanded_Implementation()
 void UWarriorCombatComponent::JumpAttackEnd()
 {
 	bIsSuperJump = false;
+}
+
+void UWarriorCombatComponent::ResetJumpAttack()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, TEXT("Jump REset"));
+	bCanSuperJump = true;
 }
 
 
