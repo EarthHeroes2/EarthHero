@@ -4,34 +4,44 @@
 #include "IndexButton.h"
 
 #include "PerkWidget.h"
+#include "Perk/PerkInfomation.h"
 
-UIndexButton::UIndexButton()
+void UIndexButton::InitSetting(int ReceivedIndex, UPerkWidget* ParentWidget)
 {
-	OnClicked.AddDynamic(this, &UIndexButton::IndexBtnClicked);
+	Index = ReceivedIndex;
+	PerkWidget = ParentWidget;
+	
+	PerkInfomation* PerkInfo = new PerkInfomation();
+	if(PerkInfo)
+	{
+		NeedPoint = PerkInfo->NeedPoint[Index];
+		OnClicked.AddDynamic(this, &UIndexButton::IndexBtnClicked);
+	}
 }
+
 
 void UIndexButton::IndexBtnClicked()
 {
+	if(NeedPoint < 0) return;
+	
 	bSelected = !bSelected;
 	
 	if(bSelected)
 	{
-		if(PerkWidget->Point >= NeedPoint[Index])
+		if(PerkWidget->Point >= NeedPoint)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Index = %d, Need Point = %d"), Index, NeedPoint[Index]);
+			SetRenderOpacity(0.5);
 			
-			PerkWidget->Point -= NeedPoint[Index];
+			PerkWidget->Point -= NeedPoint;
 			PerkWidget->UpdateSelectInfo(Index);
 		}
-		else
-		{
-			bSelected = false;
-			UE_LOG(LogTemp, Warning, TEXT("Need Point : %d  Point : %d"), NeedPoint[Index], PerkWidget->Point);
-		}
+		else bSelected = false;
 	}
 	else
 	{
-		PerkWidget->Point += NeedPoint[Index];
+		SetRenderOpacity(1);
+		
+		PerkWidget->Point += NeedPoint;
 		PerkWidget->UpdateSelectInfo(Index);
 	}
 }

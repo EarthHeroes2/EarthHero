@@ -10,6 +10,7 @@
 #include "OnlineSubsystem.h"
 #include "EarthHero/EHGameInstance.h"
 #include "EarthHero/Character/EHCharacter.h"
+#include "EarthHero/HUD/Perk/PerkInfomation.h"
 #include "EarthHero/PlayerState/LobbyPlayerState.h"
 #include "Interfaces/VoiceInterface.h"
 
@@ -28,10 +29,14 @@ void ALobbyPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (!IsRunningDedicatedServer())
+	EHGameInstance = Cast<UEHGameInstance>(GetGameInstance());
+	if(EHGameInstance)
 	{
-		ShowLobbyWidget(); //로비 위젯 생성
-		Server_InitSetup(); //서버에게 자신이 준비됨을 알림
+		if (!IsRunningDedicatedServer())
+		{
+			ShowLobbyWidget(); //로비 위젯 생성
+			Server_InitSetup(EHGameInstance->PerkInfo); //서버에게 자신이 준비됨을 알림
+		}
 	}
 }
 
@@ -116,10 +121,41 @@ void ALobbyPlayerController::UpdateDifficulty(int Difficulty)
 
 
 
+bool ALobbyPlayerController::PerkInfoVerification(int64 PerkInfo)
+{
+	ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
+	if (LobbyGameMode)
+	{
+		PerkInfomation* PerkInfomations = new PerkInfomation(); //이름 정하기 어려워서...
+		if(PerkInfomations != nullptr)
+		{
+			int Level = LobbyGameMode->GetPlayerLevel(PlayerState->GetUniqueId());
+			int Point = Level + 2;
 
+			if(Level > 0)
+			{
+				int64 CheckBit = 1;
+				int SelectableRange = Level * 5; //임시
+				int Cnt = 0;
+				int i;
+			
+				for(i = 0; i < SelectableRange; i++)
+					if(PerkInfo & (CheckBit << i))
+						Cnt += PerkInfomations->NeedPoint[i];
+			
+				for( ; i < 50; i++)
+					if(PerkInfo & (CheckBit << i))
+						Cnt += 100000;
+
+				if(Point >= Cnt) return true;
+			}
+		}
+	}
+	return false;
+}
 
 //클라이언트가 서버에게 준비됨을 알리며 실행되는 함수
-void ALobbyPlayerController::Server_InitSetup_Implementation()
+void ALobbyPlayerController::Server_InitSetup_Implementation(int64 PerkInfo)
 {
 	ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
 	if (LobbyGameMode)
@@ -129,19 +165,33 @@ void ALobbyPlayerController::Server_InitSetup_Implementation()
 		{	
 			bool bAdvertise = LobbyGameSession->GetAdvertiseState();
 			int Difficulty = 1;
-
-			UEHGameInstance* EHGameinstance = Cast<UEHGameInstance>(GetGameInstance());
-			if(EHGameinstance) Difficulty = EHGameinstance->Difficulty;
 			
+			if(EHGameInstance)
+			{
+				Difficulty = EHGameInstance->Difficulty;
 
-			//클라이언트에게 방장 유무와 현재 광고 상태를 알림
-			if (bHost) Client_HostAssignment(true, bAdvertise, Difficulty); 
-			else Client_HostAssignment(false, bAdvertise, Difficulty);
+				if(PerkInfoVerification(PerkInfo))
+				{
+					UE_LOG(LogTemp, Log, TEXT("Verified Perk Info"));
+
+					//검증된 반영구 업그레이드 정보를 저장
+					ALobbyPlayerState* LobbyPlayerState = Cast<ALobbyPlayerState>(PlayerState);
+					if (LobbyPlayerState)
+					{
+						UE_LOG(LogTemp, Log, TEXT("Save Perk Info at PlayerState"));
+						LobbyPlayerState->PerkInfo = PerkInfo;
+
+						//클라이언트에게 방장 유무와 현재 광고 상태를 알림
+						if (bHost) Client_HostAssignment(true, bAdvertise, Difficulty); 
+						else Client_HostAssignment(false, bAdvertise, Difficulty);
+						
+						LobbyGameMode->JoinedPlayerInitSetup(this);
+					}
+				}
+				else UE_LOG(LogTemp, Log, TEXT("Strange Perk Info"));
+			}
 		}
 	}
-	
-	//게임모드에 플레이어 정보 등록
-	if (LobbyGameMode) LobbyGameMode->JoinedPlayerInitSetup(this);
 }
 
 //서버에게서 방장 유무를 받음 (Server_InitSetup에서 불리거나 게임 세션에서 새로운 방장 할당 후에 불림)
@@ -181,7 +231,7 @@ void ALobbyPlayerController::Server_ChangeAdvertiseState_Implementation(bool bAd
 	}
 }
 
-//기본으로 슈터 선택 (임시)
+//기본으로 워리어 선택 (임시)
 void ALobbyPlayerController::Client_SelectDefaultCharacter_Implementation()
 {
 	if (LobbyWidget)
@@ -341,8 +391,7 @@ void ALobbyPlayerController::Client_UpdateLobbyPasswordResult_Implementation(boo
 
 void ALobbyPlayerController::Client_FadeOut_Implementation()
 {
-	UEHGameInstance* EHGameinstance = Cast<UEHGameInstance>(GetGameInstance());
-	if(EHGameinstance) EHGameinstance->ShowSeamlessLoadingScreen();
+	if(EHGameInstance) EHGameInstance->ShowSeamlessLoadingScreen();
 	
 	if (LobbyWidget)
 	{

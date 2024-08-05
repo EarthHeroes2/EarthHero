@@ -90,7 +90,7 @@ AActor* ALobbyGameMode::FindPlayerStart_Implementation(AController* Player, cons
 		int PlayerStart = FindLobbyPlayerSpot();
 
 		ControllerArray.Add(Player);
-		ALobbyPlayerController* LobbyPlayerController = Cast<ALobbyPlayerController>(Player); //임시
+		ALobbyPlayerController* LobbyPlayerController = Cast<ALobbyPlayerController>(Player);
 		LobbyPlayerControllerArray.Add(LobbyPlayerController);
 		PlayerNameArray.Add(Player->PlayerState->GetPlayerName());
 		PlayerLevelArray.Add(GetPlayerLevel(Player->PlayerState->GetUniqueId()));

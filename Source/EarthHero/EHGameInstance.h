@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
+#include "Stat/Structure/HeroSkillImage.h"
 #include "Stat/Structure/StatStructure.h"
 #include "EHGameInstance.generated.h"
 
@@ -17,6 +18,7 @@ class EARTHHERO_API UEHGameInstance : public UGameInstance
 
 public:
 	FStatStructure* GetStatStructure(FName HeroName) const;
+	FHeroSkillImage* GetSkillImageStructure(FName HeroName) const;
 	FString ServerPortNumber;
 
 	void SetEffectArray();
@@ -44,6 +46,8 @@ private:
 	class UDataTable* CharacterStatDataTable = nullptr;
 	UPROPERTY()
 	class UDataTable* EffectTable = nullptr;
+	UPROPERTY()
+	class UDataTable* SkillImageTable = nullptr;
 
 	void SetDefaultSettings();
 	void SetRecommendedResolution();
@@ -105,5 +109,4 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Settings")
 	void LoadSettings();
-	
 };

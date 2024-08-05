@@ -10,7 +10,9 @@
 #include "Components/VerticalBox.h"
 #include "TimerManager.h"
 #include "Components/TextBlock.h"
+#include "EarthHero/Enum/Enums.h"
 #include "EarthHero/Player/EHPlayerController.h"
+#include "Kismet/GameplayStatics.h"
 
 bool UInGameHUD::Initialize()
 {
@@ -48,6 +50,40 @@ void UInGameHUD::InitializePlayerState(UStatComponent* StatComponent)
 		UE_LOG(LogClass, Warning, TEXT("InGameHUD: ERROR!! StatComponent is NULL"));
 	}
 	StatComponentRef = StatComponent;
+
+	UEHGameInstance* ABGameInstance = Cast<UEHGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	if (nullptr == ABGameInstance)
+	{
+		return ;
+	}
+	FHeroSkillImage *HeroSkillImage;
+	switch (HeroType)
+	{
+		case Warrior:
+			HeroSkillImage = ABGameInstance->GetSkillImageStructure("Warrior");
+			SkillCoolDown->SetImage(HeroSkillImage->NormalAttackImage);
+			SkillCoolDown_1->SetImage(HeroSkillImage->SkillImage);
+			SkillCoolDown_2->SetImage(HeroSkillImage->DashImage);
+			break;
+		case Mechanic:
+			HeroSkillImage = ABGameInstance->GetSkillImageStructure("Mechanic");
+			SkillCoolDown->SetImage(HeroSkillImage->NormalAttackImage);
+			SkillCoolDown_1->SetImage(HeroSkillImage->SkillImage);
+			SkillCoolDown_2->SetImage(HeroSkillImage->DashImage);
+			break;
+		case Shooter:
+			HeroSkillImage = ABGameInstance->GetSkillImageStructure("Shooter");
+			SkillCoolDown->SetImage(HeroSkillImage->NormalAttackImage);
+			SkillCoolDown_1->SetImage(HeroSkillImage->SkillImage);
+			SkillCoolDown_2->SetImage(HeroSkillImage->DashImage);
+			break;
+		case Archer:
+			HeroSkillImage = ABGameInstance->GetSkillImageStructure("Archer");
+			SkillCoolDown->SetImage(HeroSkillImage->NormalAttackImage);
+			SkillCoolDown_1->SetImage(HeroSkillImage->SkillImage);
+			SkillCoolDown_2->SetImage(HeroSkillImage->DashImage);
+			break;
+	}
 }
 
 void UInGameHUD::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
