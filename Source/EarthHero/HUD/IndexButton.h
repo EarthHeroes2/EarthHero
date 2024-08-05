@@ -16,10 +16,8 @@ class EARTHHERO_API UIndexButton : public UButton
 {
 	GENERATED_BODY()
 
-	UIndexButton();
-
 	UEHGameInstance* EHGameInstance;
-	int NeedPoint;
+	int NeedPoint = -1;
 	
 	bool bSelected = false;
 
@@ -27,6 +25,7 @@ public:
 	int Index;
 	UPerkWidget* PerkWidget;
 
+	void InitSetting(int ReceivedIndex, UPerkWidget* ParentWidget);
 	UFUNCTION()
 	void IndexBtnClicked();
 };

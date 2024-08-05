@@ -78,18 +78,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4591bad7-fd9f-4860-903f-8700cd913377" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Content/Data/Character/DT_CharacterSkillImage.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/EarthHero/Stat/Structure/HeroSkillImage.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/EarthHero/Stat/Structure/HeroSkillImage.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_InGameHUD.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_InGameHUD.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_SkillCoolDown.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_SkillCoolDown.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/EHGameInstance.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/EHGameInstance.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/EHGameInstance.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/EHGameInstance.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/HUD/InGameHUD.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/InGameHUD.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/HUD/InGameHUD.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/HUD/InGameHUD.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerController.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerState.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Player/EHPlayerState.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/BPW_Perk.uasset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -145,9 +134,9 @@
   },
   "keyToStringList": {
     "rider.external.source.directories": [
-      "C:\\Users\\doban\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\DecompilerCache",
-      "C:\\Users\\doban\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\SourcesCache",
-      "C:\\Users\\doban\\AppData\\Local\\Symbols\\src"
+      "C:\\Users\\Nasutcho\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\DecompilerCache",
+      "C:\\Users\\Nasutcho\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\SourcesCache",
+      "C:\\Users\\Nasutcho\\AppData\\Local\\Symbols\\src"
     ]
   }
 }]]></component>
@@ -356,7 +345,7 @@
       <workItem from="1722315642642" duration="1207000" />
       <workItem from="1722329401216" duration="6223000" />
       <workItem from="1722671715973" duration="1133000" />
-      <workItem from="1722856671446" duration="10339000" />
+      <workItem from="1722744563591" duration="32715000" />
     </task>
     <servers />
   </component>

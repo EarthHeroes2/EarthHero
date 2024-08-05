@@ -20,7 +20,7 @@ class EARTHHERO_API UPerkWidget : public UUserWidget
 	GENERATED_BODY()
 
 	UPerkWidget(const FObjectInitializer &ObjectInitializer);
-	virtual void NativeConstruct() override;
+	virtual bool Initialize() override;
 
 	UEHGameInstance* EHGameInstance;
 

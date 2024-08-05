@@ -10,6 +10,7 @@
 #include "OnlineSubsystem.h"
 #include "EarthHero/EHGameInstance.h"
 #include "EarthHero/Character/EHCharacter.h"
+#include "EarthHero/HUD/Perk/PerkInfomation.h"
 #include "EarthHero/PlayerState/LobbyPlayerState.h"
 #include "Interfaces/VoiceInterface.h"
 
@@ -125,25 +126,29 @@ bool ALobbyPlayerController::PerkInfoVerification(int64 PerkInfo)
 	ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
 	if (LobbyGameMode)
 	{
-		int Level = LobbyGameMode->GetPlayerLevel(PlayerState->GetUniqueId());
-		int Point = Level + 2;
-
-		if(Level > 0)
+		PerkInfomation* PerkInfomations = new PerkInfomation(); //이름 정하기 어려워서...
+		if(PerkInfomations != nullptr)
 		{
-			int64 CheckBit = 1;
-			int SelectableRange = Level * 5; //임시
-			int Cnt = 0;
-			int i;
-			
-			for(i = 0; i < SelectableRange; i++)
-				if(PerkInfo & (CheckBit << i))
-					Cnt += EHGameInstance->NeedPoint[i];
-			
-			for( ; i < 50; i++)
-				if(PerkInfo & (CheckBit << i))
-					Cnt += 100000;
+			int Level = LobbyGameMode->GetPlayerLevel(PlayerState->GetUniqueId());
+			int Point = Level + 2;
 
-			if(Point >= Cnt) return true;
+			if(Level > 0)
+			{
+				int64 CheckBit = 1;
+				int SelectableRange = Level * 5; //임시
+				int Cnt = 0;
+				int i;
+			
+				for(i = 0; i < SelectableRange; i++)
+					if(PerkInfo & (CheckBit << i))
+						Cnt += PerkInfomations->NeedPoint[i];
+			
+				for( ; i < 50; i++)
+					if(PerkInfo & (CheckBit << i))
+						Cnt += 100000;
+
+				if(Point >= Cnt) return true;
+			}
 		}
 	}
 	return false;

@@ -16,7 +16,15 @@
 UPerkWidget::UPerkWidget(const FObjectInitializer &ObjectInitializer)
 	: Super(ObjectInitializer)
 {
+}
 
+bool UPerkWidget::Initialize()
+{
+	Super::Initialize();
+
+	// 버튼 생성 및 초기화
+	CreateButtons();
+	
 	EHGameInstance = Cast<UEHGameInstance>(GetGameInstance());
 	if(EHGameInstance)
 	{
@@ -27,17 +35,11 @@ UPerkWidget::UPerkWidget(const FObjectInitializer &ObjectInitializer)
 		Level_Tb->SetText(FText::FromString(FString("Lv. ") + FString::FromInt(Level)));
 		Point_Tb->SetText(FText::FromString(FString("Point. ") + FString::FromInt(Point)));
 	}
-}
-
-void UPerkWidget::NativeConstruct()
-{
-	Super::NativeConstruct();
-
-	// 버튼 생성 및 초기화
-	CreateButtons();
 
 	PerkSave_Btn->OnClicked.AddDynamic(this, &UPerkWidget::PerkSaveBtnClicked);
 	PerkCancel_Btn->OnClicked.AddDynamic(this, &UPerkWidget::PerkCancelBtnClicked);
+	
+	return true;
 }
 
 
@@ -62,8 +64,7 @@ void UPerkWidget::CreateButtons()
 					UIndexButton* IndexButton = NewObject<UIndexButton>(this);
 					if(IndexButton)
 					{
-						IndexButton->Index = (NumOfPerkPerLevel * i) + j;
-						IndexButton->PerkWidget = this;
+						IndexButton->InitSetting((NumOfPerkPerLevel * i) + j, this);
 						
 						Buttons.Add(IndexButton);
 						
