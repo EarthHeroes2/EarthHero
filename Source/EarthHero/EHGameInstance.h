@@ -33,6 +33,8 @@ public:
 
 	TSubclassOf<class UUserWidget> LoadingWidgetClass;
 	UUserWidget* LoadingWidget;
+
+	int64 PerkInfo;
 	
 protected:
 	UEHGameInstance();

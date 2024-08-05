@@ -6,6 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include "PerkWidget.generated.h"
 
+class UEHGameInstance;
+class UTextBlock;
 class UButton;
 class UIndexButton;
 class UHorizontalBox;
@@ -20,13 +22,18 @@ class EARTHHERO_API UPerkWidget : public UUserWidget
 	UPerkWidget(const FObjectInitializer &ObjectInitializer);
 	virtual void NativeConstruct() override;
 
+	UEHGameInstance* EHGameInstance;
+
 	int NumOfLevels = 10;
 	int NumOfPerkPerLevel = 5;
-
+	
+	int Level;
+public:
+	int Point;
+private:
 	TArray<UIndexButton*> Buttons;
 
 	void CreateButtons();
-	void PerkBtnClicked();
 	void PerkSaveBtnClicked();
 	void PerkCancelBtnClicked();
 
@@ -35,13 +42,16 @@ class EARTHHERO_API UPerkWidget : public UUserWidget
 
 	UPROPERTY(meta = (BindWidget))
 	UButton* PerkSave_Btn;
-
 	UPROPERTY(meta = (BindWidget))
 	UButton* PerkCancel_Btn;
+	
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* Level_Tb;
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* Point_Tb;
 
 	int64 SelectInfo;
 
 public:
 	void UpdateSelectInfo(int Index);
-	
 };

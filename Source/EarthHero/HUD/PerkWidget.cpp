@@ -8,6 +8,7 @@
 #include "Components/HorizontalBox.h"
 #include "Components/SizeBox.h"
 #include "Components/SizeBoxSlot.h"
+#include "Components/TextBlock.h"
 #include "Components/VerticalBox.h"
 #include "EarthHero/EHGameInstance.h"
 
@@ -16,11 +17,17 @@ UPerkWidget::UPerkWidget(const FObjectInitializer &ObjectInitializer)
 	: Super(ObjectInitializer)
 {
 
-	UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(GetGameInstance());
+	EHGameInstance = Cast<UEHGameInstance>(GetGameInstance());
 	if(EHGameInstance)
 	{
-		int Level = EHGameInstance->GetPlayerLevel();
+		Level = EHGameInstance->GetPlayerLevel();
+		Point = Level + 2;
 		
+		if(Level > 0)
+		{
+			Level_Tb->SetText(FText::FromString(FString("Lv. ") + FString::FromInt(Level)));
+			Point_Tb->SetText(FText::FromString(FString("Point. ") + FString::FromInt(Point)));
+		}
 	}
 }
 
@@ -57,7 +64,7 @@ void UPerkWidget::CreateButtons()
 					UIndexButton* IndexButton = NewObject<UIndexButton>(this);
 					if(IndexButton)
 					{
-						IndexButton->Index = (NumOfLevels * i) + j;
+						IndexButton->Index = (NumOfPerkPerLevel * i) + j;
 						IndexButton->PerkWidget = this;
 						
 						Buttons.Add(IndexButton);
@@ -76,17 +83,28 @@ void UPerkWidget::CreateButtons()
 
 void UPerkWidget::UpdateSelectInfo(int Index)
 {
+	Point_Tb->SetText(FText::FromString(FString("Point. ") + FString::FromInt(Point)));
 	SelectInfo ^= ((int64)1 << Index);
 }
 
-
 void UPerkWidget::PerkSaveBtnClicked()
 {
-	
+	if(EHGameInstance) EHGameInstance->PerkInfo = SelectInfo;
 }
 
 void UPerkWidget::PerkCancelBtnClicked()
 {
-	
+	int64 CheckBit = 1;
+
+	//누른 애들 전부 빼주고
+	for(int i = 0; i < 50; i++)
+	{
+		if(SelectInfo & (CheckBit << i))
+		{
+			Buttons[i]->IndexBtnClicked();
+		}
+	}
+
+	SetVisibility(ESlateVisibility::Collapsed);
 }
 
