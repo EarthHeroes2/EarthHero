@@ -4,21 +4,25 @@
 #include "IndexButton.h"
 
 #include "PerkWidget.h"
-#include "EarthHero/EHGameInstance.h"
+#include "Perk/PerkInfomation.h"
 
-UIndexButton::UIndexButton()
+void UIndexButton::InitSetting(int ReceivedIndex, UPerkWidget* ParentWidget)
 {
-	EHGameInstance = Cast<UEHGameInstance>(GetGameInstance());
-	if(EHGameInstance)
+	Index = ReceivedIndex;
+	PerkWidget = ParentWidget;
+	
+	PerkInfomation* PerkInfo = new PerkInfomation();
+	if(PerkInfo)
 	{
-		NeedPoint = EHGameInstance->NeedPoint[Index];
+		NeedPoint = PerkInfo->NeedPoint[Index];
 		OnClicked.AddDynamic(this, &UIndexButton::IndexBtnClicked);
 	}
 }
 
+
 void UIndexButton::IndexBtnClicked()
 {
-	if(EHGameInstance == nullptr) return;
+	if(NeedPoint < 0) return;
 	
 	bSelected = !bSelected;
 	
@@ -31,10 +35,7 @@ void UIndexButton::IndexBtnClicked()
 			PerkWidget->Point -= NeedPoint;
 			PerkWidget->UpdateSelectInfo(Index);
 		}
-		else
-		{
-			bSelected = false;
-		}
+		else bSelected = false;
 	}
 	else
 	{

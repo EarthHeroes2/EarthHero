@@ -10,6 +10,7 @@
 #include "MainMenuWidget.generated.h"
 
 
+class UPerkWidget;
 class UCheckBox;
 class UButton;
 class UTextBlock;
@@ -31,11 +32,15 @@ class EARTHHERO_API UMainMenuWidget : public UUserWidget
 
 	UMainMenuWidget(const FObjectInitializer &ObjectInitializer);
 	virtual bool Initialize() override;
+	virtual void NativeConstruct() override;
 	virtual void NativeDestruct() override;
+
+	UPerkWidget* PerkWidget;
 	
 	
 	TSubclassOf<UUserWidget> OptionsWidgetClass;
 	TSubclassOf<UUserWidget> LobbyRowWidgetClass;
+	TSubclassOf<UUserWidget> PerkWidgetClass;
 
 	TArray<FString> LobbyIdList;
 	TArray<ULobbyRowWidget*> LobbyRowList;
@@ -100,6 +105,9 @@ class EARTHHERO_API UMainMenuWidget : public UUserWidget
 	UTextBlock* Lev_Tb;
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* Exp_Tb;
+
+	UPROPERTY(meta = (BindWidget))
+	UButton* Perk_Btn;
 	
 	
 	UFUNCTION()
@@ -128,6 +136,9 @@ class EARTHHERO_API UMainMenuWidget : public UUserWidget
 	void LobbyListBtnClicked();
 	UFUNCTION()
 	void FindLobbyBtnClicked();
+
+	UFUNCTION()
+	void PerkBtnClicked();
 
 	
 	void CreateLobbyWait();

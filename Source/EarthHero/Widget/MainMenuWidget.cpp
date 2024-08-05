@@ -15,6 +15,7 @@
 #include "Components/ScrollBox.h"
 #include "../Socket/SocketClient.h"
 #include "Components/TextBlock.h"
+#include "EarthHero/HUD/PerkWidget.h"
 
 
 UMainMenuWidget::UMainMenuWidget(const FObjectInitializer &ObjectInitializer)
@@ -32,6 +33,13 @@ UMainMenuWidget::UMainMenuWidget(const FObjectInitializer &ObjectInitializer)
 	if (LobbyRowWidgetAsset.Succeeded())
 	{
 		LobbyRowWidgetClass = LobbyRowWidgetAsset.Class;
+	}
+
+	//친구 초대 row 블루프린트
+	static ConstructorHelpers::FClassFinder<UUserWidget> PerkWidgetAsset(TEXT("UserWidget'/Game/Blueprints/HUD/BPW_Perk.BPW_Perk_C'"));
+	if (PerkWidgetAsset.Succeeded())
+	{
+		PerkWidgetClass = PerkWidgetAsset.Class;
 	}
 }
 
@@ -145,7 +153,21 @@ bool UMainMenuWidget::Initialize()
 		Private_Cb->OnCheckStateChanged.AddDynamic(this, &ThisClass::PrivateCbChanged);
 	}
 
+	PerkWidget = Cast<UPerkWidget>(CreateWidget(this, PerkWidgetClass));
+	if (PerkWidget)
+	{
+		PerkWidget->SetVisibility(ESlateVisibility::Collapsed);
+		PerkWidget->AddToViewport(1);
+	}
+	
+	Perk_Btn->OnClicked.AddDynamic(this, &ThisClass::PerkBtnClicked);
+	
 	return true;
+}
+
+void UMainMenuWidget::NativeConstruct()
+{
+	Super::NativeConstruct();
 }
 
 void UMainMenuWidget::Play_BtnClicked()
@@ -375,6 +397,17 @@ void UMainMenuWidget::LobbyListBtnClicked()
 void UMainMenuWidget::FindLobbyBtnClicked()
 {
 	FindLobbys("FindLobby");
+}
+
+void UMainMenuWidget::PerkBtnClicked()
+{
+	if(PerkWidget)
+	{
+		if(PerkWidget->GetVisibility() == ESlateVisibility::Visible)
+			PerkWidget->SetVisibility(ESlateVisibility::Collapsed);
+		else
+			PerkWidget->SetVisibility(ESlateVisibility::Visible);
+	}
 }
 
 void UMainMenuWidget::UpdateLobbyList(TArray<FOnlineSessionSearchResult> FindLobbyList)
