@@ -10,6 +10,7 @@
 #include "GameFramework/GameUserSettings.h"
 #include "Interfaces/OnlineIdentityInterface.h"
 #include "Kismet/GameplayStatics.h"
+#include "SaveGame/CustomSaveGame.h"
 #include "Socket/SocketClient.h"
 #include "Stat/Effect/EffectBase.h"
 #include "Stat/Structure/EffectStructure.h"
@@ -366,4 +367,26 @@ int UEHGameInstance::GetPlayerLevel()
         }
     }
     return -1;
+}
+
+
+
+
+//임시
+void UEHGameInstance::SaveGame(int64 SavePerkInfo)
+{
+    UCustomSaveGame* SaveGameInstance = Cast<UCustomSaveGame>(UGameplayStatics::CreateSaveGameObject(UCustomSaveGame::StaticClass()));
+    SaveGameInstance->PerkInfo = SavePerkInfo;
+    
+    UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("PerkInfo"), 0);
+}
+
+int64 UEHGameInstance::LoadGame()
+{
+    UCustomSaveGame* LoadGameInstance = Cast<UCustomSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("PerkInfo"), 0));
+
+    if (LoadGameInstance)
+        return LoadGameInstance->PerkInfo;
+    
+    return 0;
 }

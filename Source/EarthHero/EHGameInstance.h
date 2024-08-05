@@ -29,6 +29,9 @@ public:
 
 	void ShowLoadingScreen();
 	int GetPlayerLevel();
+	
+	void SaveGame(int64 SavePerkInfo);
+	int64 LoadGame();
 
 	TSubclassOf<class UUserWidget> SeamlessLoadingWidgetClass;
 	UUserWidget* SeamlessLoadingWidget;
