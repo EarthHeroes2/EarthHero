@@ -126,6 +126,7 @@ void AEHPlayerController::InitializeHUD()
 		HUD = Cast<UInGameHUD>(CreateWidget(this, InGameHUD));
 		if (HUD)
 		{
+			HUD->HeroType = MyPlayerState->PlayerClass;
 			HUD->InitializePlayerState(MyPlayerState->GetStatComponent());
 			HUD->AddToViewport();
 			MyPlayerState->GetStatComponent()->SetInGameHUD(HUD);

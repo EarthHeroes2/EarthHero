@@ -40,6 +40,12 @@ UEHGameInstance::UEHGameInstance()
         EffectTable = DT_EffectTable.Object;
     }
     
+    static ConstructorHelpers::FObjectFinder<UDataTable> DT_CharacterSkillTable(TEXT("/Game/Data/Character/DT_CharacterSkillImage.DT_CharacterSkillImage"));
+    if (DT_CharacterSkillTable.Succeeded())
+    {
+        SkillImageTable = DT_CharacterSkillTable.Object;
+    }
+    
     if(!IsRunningDedicatedServer())
     {
         static ConstructorHelpers::FObjectFinder<USoundMix> SoundMixFinder(TEXT("/Game/Sounds/MainSoundMix.MainSoundMix"));
@@ -86,6 +92,16 @@ FStatStructure* UEHGameInstance::GetStatStructure(FName HeroName) const
         return nullptr;
     }
     return CharacterStatDataTable->FindRow<FStatStructure>(HeroName, TEXT(""));
+}
+
+FHeroSkillImage* UEHGameInstance::GetSkillImageStructure(FName HeroName) const
+{
+    if (!SkillImageTable)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("No Such DataTable"));
+        return nullptr;
+    }
+    return SkillImageTable->FindRow<FHeroSkillImage>(HeroName, TEXT(""));
 }
 
 void UEHGameInstance::SetEffectArray()

@@ -13,6 +13,9 @@ class EARTHHERO_API UInGameHUD : public UUserWidget
 	virtual bool Initialize() override;
 
 public:
+	UPROPERTY()
+	int HeroType;
+	
 	UPROPERTY(meta = (BindWidget))
 	class UProgressBar* HealthBar;
 
@@ -107,8 +110,7 @@ public:
 
 	UPROPERTY()
 	int EffectCount = 0;
-
-	//내일 스킬 UI 설정해야함
+	
 	UPROPERTY(meta = (BindWidget))
 	class UCoolDown* SkillCoolDown;
 	UPROPERTY(meta = (BindWidget))
