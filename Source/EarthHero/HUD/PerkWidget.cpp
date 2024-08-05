@@ -28,12 +28,22 @@ bool UPerkWidget::Initialize()
 	EHGameInstance = Cast<UEHGameInstance>(GetGameInstance());
 	if(EHGameInstance)
 	{
+		//플레이어 레벨 정보 가져오기
 		Level = EHGameInstance->GetPlayerLevel();
 		if(Level > 0) Point = Level + 2;
 		else Point = -1;
 		
 		Level_Tb->SetText(FText::FromString(FString("Lv. ") + FString::FromInt(Level)));
 		Point_Tb->SetText(FText::FromString(FString("Point. ") + FString::FromInt(Point)));
+
+		//이전 저장값 불러오기
+		SelectInfo = EHGameInstance->LoadGame();
+
+		//전부 눌러주기
+		int64 CheckBit = 1;
+		for(int i = 0; i < 50; i++)
+			if(SelectInfo & (CheckBit << i))
+				Buttons[i]->IndexBtnClicked();
 	}
 
 	PerkSave_Btn->OnClicked.AddDynamic(this, &UPerkWidget::PerkSaveBtnClicked);
@@ -88,20 +98,15 @@ void UPerkWidget::UpdateSelectInfo(int Index)
 
 void UPerkWidget::PerkSaveBtnClicked()
 {
-	if(EHGameInstance) EHGameInstance->PerkInfo = SelectInfo;
+	if(EHGameInstance)
+	{
+		EHGameInstance->PerkInfo = SelectInfo;
+		EHGameInstance->SaveGame(SelectInfo);
+	}
 }
 
 void UPerkWidget::PerkCancelBtnClicked()
 {
 	SetVisibility(ESlateVisibility::Collapsed);
-	
-	int64 CheckBit = 1;
-
-	//누른 애들 전부 빼주고
-	for(int i = 0; i < 50; i++)
-		if(SelectInfo & (CheckBit << i))
-			Buttons[i]->IndexBtnClicked();
-
-	Point_Tb->SetText(FText::FromString(FString("Point. ") + FString::FromInt(Point)));
 }
 
