@@ -26,6 +26,7 @@ public:
 	void RemoveSeamlessLoadingScreen();
 
 	void ShowLoadingScreen();
+	int GetPlayerLevel();
 
 	TSubclassOf<class UUserWidget> SeamlessLoadingWidgetClass;
 	UUserWidget* SeamlessLoadingWidget;

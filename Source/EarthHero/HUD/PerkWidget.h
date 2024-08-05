@@ -6,7 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include "PerkWidget.generated.h"
 
-class UPerkButtonWidget;
+class UButton;
+class UIndexButton;
 class UHorizontalBox;
 /**
  * 
@@ -22,10 +23,25 @@ class EARTHHERO_API UPerkWidget : public UUserWidget
 	int NumOfLevels = 10;
 	int NumOfPerkPerLevel = 5;
 
-	void CreateButtons();
+	TArray<UIndexButton*> Buttons;
 
-	TSubclassOf<UPerkButtonWidget> PerkButtonClass;
+	void CreateButtons();
+	void PerkBtnClicked();
+	void PerkSaveBtnClicked();
+	void PerkCancelBtnClicked();
 
 	UPROPERTY(meta = (BindWidget))
 	UHorizontalBox* Perk_Hb;
+
+	UPROPERTY(meta = (BindWidget))
+	UButton* PerkSave_Btn;
+
+	UPROPERTY(meta = (BindWidget))
+	UButton* PerkCancel_Btn;
+
+	int64 SelectInfo;
+
+public:
+	void UpdateSelectInfo(int Index);
+	
 };

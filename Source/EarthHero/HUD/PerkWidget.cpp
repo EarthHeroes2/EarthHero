@@ -3,18 +3,24 @@
 
 #include "PerkWidget.h"
 
-#include "PerkButtonWidget.h"
+#include "IndexButton.h"
+#include "Components/Button.h"
 #include "Components/HorizontalBox.h"
+#include "Components/SizeBox.h"
+#include "Components/SizeBoxSlot.h"
 #include "Components/VerticalBox.h"
+#include "EarthHero/EHGameInstance.h"
+
 
 UPerkWidget::UPerkWidget(const FObjectInitializer &ObjectInitializer)
 	: Super(ObjectInitializer)
 {
-	//친구 초대 row 블루프린트
-	static ConstructorHelpers::FClassFinder<UUserWidget> PerkButtonAsset(TEXT("UserWidget'/Game/Blueprints/HUD/BPW_PerkButton.BPW_PerkButton_C'"));
-	if (PerkButtonAsset.Succeeded())
+
+	UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(GetGameInstance());
+	if(EHGameInstance)
 	{
-		PerkButtonClass = PerkButtonAsset.Class;
+		int Level = EHGameInstance->GetPlayerLevel();
+		
 	}
 }
 
@@ -24,31 +30,63 @@ void UPerkWidget::NativeConstruct()
 
 	// 버튼 생성 및 초기화
 	CreateButtons();
+
+	PerkSave_Btn->OnClicked.AddDynamic(this, &UPerkWidget::PerkSaveBtnClicked);
+	PerkCancel_Btn->OnClicked.AddDynamic(this, &UPerkWidget::PerkCancelBtnClicked);
 }
 
 
 void UPerkWidget::CreateButtons()
 {
-	if(!PerkButtonClass) return;
-	
 	int i, j;
 	for(i = 0; i < NumOfLevels; i++)
 	{
 		UVerticalBox* NewVerticalBox = NewObject<UVerticalBox>(this);
 		Perk_Hb->AddChild(NewVerticalBox);
+		
 		if(NewVerticalBox)
 		{
 			for(j = 0; j < NumOfPerkPerLevel; j++)
 			{
-				UPerkButtonWidget* NewButton = Cast<UPerkButtonWidget>(CreateWidget(this, PerkButtonClass));
-				if(NewButton)
+				USizeBox* SizeBox = NewObject<USizeBox>(this);
+				if (SizeBox)
 				{
-					UE_LOG(LogTemp, Warning, TEXT("index = %d"), i * NumOfLevels + NumOfPerkPerLevel);
-					NewButton->Index = i * NumOfLevels + NumOfPerkPerLevel;
-					NewButton->AddOnClick();
-					NewVerticalBox->AddChild(NewButton);
+					SizeBox->SetWidthOverride(50);
+					SizeBox->SetHeightOverride(50);
+					
+					UIndexButton* IndexButton = NewObject<UIndexButton>(this);
+					if(IndexButton)
+					{
+						IndexButton->Index = (NumOfLevels * i) + j;
+						IndexButton->PerkWidget = this;
+						
+						Buttons.Add(IndexButton);
+						
+						UPanelSlot* PanelSlot = SizeBox->AddChild(IndexButton);
+						NewVerticalBox->AddChild(SizeBox);
+						
+						USizeBoxSlot* SizeBoxSlot = Cast<USizeBoxSlot>(PanelSlot);
+						if(SizeBoxSlot) SizeBoxSlot->SetPadding(FMargin(10,10,0,0));
+					}
 				}
 			}
 		}
 	}
 }
+
+void UPerkWidget::UpdateSelectInfo(int Index)
+{
+	SelectInfo ^= ((int64)1 << Index);
+}
+
+
+void UPerkWidget::PerkSaveBtnClicked()
+{
+	
+}
+
+void UPerkWidget::PerkCancelBtnClicked()
+{
+	
+}
+

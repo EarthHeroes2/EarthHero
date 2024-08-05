@@ -5,9 +5,12 @@
 #include "UObject/ConstructorHelpers.h"
 //#include "Options.h"
 #include "MoviePlayer.h"
+#include "OnlineSubsystem.h"
 #include "Blueprint/UserWidget.h"
 #include "GameFramework/GameUserSettings.h"
+#include "Interfaces/OnlineIdentityInterface.h"
 #include "Kismet/GameplayStatics.h"
+#include "Socket/SocketClient.h"
 #include "Stat/Effect/EffectBase.h"
 #include "Stat/Structure/EffectStructure.h"
 
@@ -306,4 +309,45 @@ void UEHGameInstance::ShowLoadingScreen()
         GetMoviePlayer()->SetupLoadingScreen(LoadingScreen);
         GetMoviePlayer()->PlayMovie();
     }
+}
+
+//임시 함수임
+//에러 시 -1 리턴
+int UEHGameInstance::GetPlayerLevel()
+{
+    IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
+    if (Subsystem)
+    {
+        IOnlineIdentityPtr Identity = Subsystem->GetIdentityInterface();
+        if (Identity.IsValid())
+        {
+            TSharedPtr<const FUniqueNetId> UserId = Identity->GetUniquePlayerId(0);
+            if (UserId.IsValid())
+            {
+                FString SteamId = UserId->ToString();
+                UE_LOG(LogTemp, Log, TEXT("My Steam ID: %s"), *SteamId);
+                
+                FString PlayerDataString;
+                //자신의 정보 요청
+                USocketClient* NewSocket = NewObject<USocketClient>(this);
+                if(NewSocket) PlayerDataString = NewSocket->CreateSocket("GetPlayerData", SteamId); //임시
+
+                if(PlayerDataString == "")
+                {
+                    UE_LOG(LogTemp, Error, TEXT("Failed to GetPlayerData"));
+                }
+                else
+                {
+                    //데이터 잘라서 확인
+                    TArray<FString> PlayerData = NewSocket->StringTokenizer(PlayerDataString);
+                    return FCString::Atoi(*PlayerData[0]);
+                }
+            }
+            else
+            {
+                GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, TEXT("Failed to get Steam ID."));
+            }
+        }
+    }
+    return -1;
 }
