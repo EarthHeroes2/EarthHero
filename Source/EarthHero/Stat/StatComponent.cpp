@@ -192,6 +192,10 @@ void UStatComponent::UpdateExp(float ExpMount)
 	UpdateExpUI(GetExpPercent(), HeroStat.Level, isLevelUp);
 	if (isLevelUp)
 	{
+		if (APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode()))
+		{
+			PlayingGameMode->UpdateGameStateLevels();
+		}
 		UE_LOG(LogTemp, Warning, TEXT("LevelUp.. PushRandomUpgrade Activate"));
 		HeroUpgradeComponent->PushRandomHeroUpgrade();
 	}
@@ -368,6 +372,7 @@ void UStatComponent::OnRep_HeroStat_Server_Implementation()
 	if (APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode()))
 	{
 		PlayingGameMode->UpdateGameStateHealths();
+		PlayingGameMode->UpdateGameStateExps();
 	}
 	else
 	{
