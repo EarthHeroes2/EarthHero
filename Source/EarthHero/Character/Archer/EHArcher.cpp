@@ -3,9 +3,15 @@
 
 #include "EHArcher.h"
 
+#include "ArcherCombatComponent.h"
+#include "EarthHero/Player/EHPlayerState.h"
+#include "GameFramework/CharacterMovementComponent.h"
+
 AEHArcher::AEHArcher()
 {
-	PrimaryActorTick.bCanEverTick = true;
+	CombatComponent = CreateDefaultSubobject<UArcherCombatComponent>(TEXT("Archer Combat Component"));
+	SetMaxPitchAngle(70.f);
+	SetMinPitchAngle(-60.f);
 }
 
 void AEHArcher::Tick(float DeltaTime)
@@ -37,11 +43,28 @@ void AEHArcher::BeginPlay()
 void AEHArcher::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
+
+	GetCharacterMovement()->bOrientRotationToMovement = false;
+	bUseControllerRotationYaw = true;
 }
 
 void AEHArcher::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
+
+	AEHPlayerState* NewPlayerState = Cast<AEHPlayerState>(NewController->PlayerState);
+	if(NewPlayerState)
+	{
+		ArcherStatComponent = NewPlayerState->ArcherStatComponent;
+		if(ArcherStatComponent)
+		{
+			UE_LOG(LogClass, Warning, TEXT("EHArcher: SUCCESS load ArcherStatComponent"));
+		}
+		else
+		{
+			UE_LOG(LogClass, Warning, TEXT("EHWarrior: FAILED load WarriorStatComponent"));
+		}
+	}
 }
 
 
