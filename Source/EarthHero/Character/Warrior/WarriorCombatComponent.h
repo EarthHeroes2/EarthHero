@@ -54,6 +54,8 @@ protected:
 	void NetMulticast_JumpAttackLanded();
 
 	void JumpAttackEnd();
+
+	void ResetJumpAttack();
 	
 	UFUNCTION(Server, Reliable)
 	void Server_SwordHit(FVector CamLocation, FRotator CamRotation);
@@ -76,6 +78,7 @@ private:
 
 	FTimerHandle AttackCooldownTimerHandle;
 	FTimerHandle WhirlwindCooldownTimerHandle;
+	FTimerHandle JumpAttackCooldownTimerHandle;
 	FTimerHandle WhirlwindTimerHandle;
 	FTimerHandle JumpAttackEndTimerHandle;
 
@@ -94,7 +97,8 @@ private:
 	//Jump Attack
 	UPROPERTY()
 	bool bIsSuperJump = false;
-	
+	UPROPERTY()
+	bool bCanSuperJump = true;
 	
 	float TotalWhirlwindDuration = 3.f;
 
@@ -105,10 +109,9 @@ private:
 	
 	
 	float CurrentWhirlwindDuration = 0;
-	
 	float WhirlwindCooldown = 14.f;
-	
 	float WhirlwindTick = 0.25f;
+	float JumpAttackCooldown = 9.f;
 	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true), Category = "Particle")
