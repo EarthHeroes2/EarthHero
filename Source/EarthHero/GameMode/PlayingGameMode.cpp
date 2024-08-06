@@ -282,6 +282,7 @@ void APlayingGameMode::InitSeamlessTravelPlayer(AController* NewController) //�
 	}
 }
 
+//이건 패키징하면 작동안함 (패키징 안하고 테스트 하기 위함)
 void APlayingGameMode::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
