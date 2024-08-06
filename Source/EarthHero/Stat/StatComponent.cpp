@@ -18,9 +18,8 @@
 #include "EarthHero/GameMode/PlayingGameMode.h"
 #include "EarthHero/HUD/InGameHUD.h"
 #include "EarthHero/HUD/TabHUDWidget.h"
-#include "EarthHero/Player/EHPlayerController.h"
-#include "EarthHero/Player/EHPlayerState.h"
-#include "GameFramework/CharacterMovementComponent.h"
+#include "EarthHero/PlayerController/EHPlayerController.h"
+#include "EarthHero/PlayerState/EHPlayerState.h"
 #include "GameFramework/PawnMovementComponent.h"
 
 UStatComponent::UStatComponent()

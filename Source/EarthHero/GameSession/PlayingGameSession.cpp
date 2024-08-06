@@ -6,7 +6,7 @@
 #include "OnlineSessionSettings.h"
 #include "OnlineSubsystem.h"
 #include "EarthHero/GameMode/PlayingGameMode.h"
-#include "EarthHero/Player/EHPlayerController.h"
+#include "EarthHero/PlayerController/EHPlayerController.h"
 #include "Interfaces/OnlineSessionInterface.h"
 
 class APlayingGameMode;

@@ -1,6 +1,5 @@
 #include "EHPlayerController.h"
 
-#include "EHPlayerState.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Blueprint/UserWidget.h"
@@ -12,6 +11,7 @@
 #include "EarthHero/HUD/InGameHUD.h"
 #include "EarthHero/HUD/TabHUDWidget.h"
 #include "EarthHero/HUD/EscMenu.h"
+#include "EarthHero/PlayerState/EHPlayerState.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/Character.h"
 

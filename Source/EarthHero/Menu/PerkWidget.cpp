@@ -7,7 +7,7 @@
 #include "Components/TextBlock.h"
 #include "Components/VerticalBox.h"
 #include "EarthHero/EHGameInstance.h"
-#include "EarthHero/Menu/PerkInfomation.h"
+#include "EarthHero/Info/PerkInfomation.h"
 #include "EarthHero/Menu/IndexButton.h"
 
 

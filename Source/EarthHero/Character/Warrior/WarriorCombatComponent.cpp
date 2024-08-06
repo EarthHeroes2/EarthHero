@@ -6,14 +6,12 @@
 #include "Camera/CameraComponent.h"
 #include "EarthHero/Character/Monster/MonsterBase.h"
 #include "EarthHero/HUD/InGameHUD.h"
-#include "EarthHero/Player/EHPlayerController.h"
+#include "EarthHero/PlayerController/EHPlayerController.h"
 #include "EarthHero/Stat/WarriorStatComponent.h"
 #include "EarthHero/Stat/Effect/Ef_ReduceDamageTaken.h"
 #include "EarthHero/Stat/Effect/Ef_SpeedBoost.h"
-#include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
-#include "Net/UnrealNetwork.h"
 
 UWarriorCombatComponent::UWarriorCombatComponent()
 {

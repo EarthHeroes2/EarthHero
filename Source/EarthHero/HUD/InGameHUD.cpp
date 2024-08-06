@@ -5,13 +5,11 @@
 #include "IngameHUDHeroUpgradeWidget.h"
 #include "InGamePlayerInfo.h"
 #include "Components/EditableTextBox.h"
-#include "Components/Image.h"
 #include "Components/ScrollBox.h"
 #include "Components/VerticalBox.h"
 #include "TimerManager.h"
-#include "Components/TextBlock.h"
 #include "EarthHero/Enum/Enums.h"
-#include "EarthHero/Player/EHPlayerController.h"
+#include "EarthHero/PlayerController/EHPlayerController.h"
 #include "Kismet/GameplayStatics.h"
 
 bool UInGameHUD::Initialize()

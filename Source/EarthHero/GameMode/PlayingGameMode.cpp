@@ -1,5 +1,6 @@
 #include "PlayingGameMode.h"
 
+#include "EarthHero/EHGameInstance.h"
 #include "EarthHero/Character/Archer/EHArcher.h"
 #include "EarthHero/Character/Shooter/EHShooter.h"
 #include "EarthHero/Character/Spectator/CustomSpectatorPawn.h"
@@ -9,8 +10,8 @@
 #include "EarthHero/GameSession/PlayingGameSession.h"
 #include "EarthHero/GameState/PlayingGameState.h"
 #include "EarthHero/HUD/Structure/Status.h"
-#include "EarthHero/Player/EHPlayerController.h"
-#include "EarthHero/Player/EHPlayerState.h"
+#include "EarthHero/PlayerController/EHPlayerController.h"
+#include "EarthHero/PlayerState/EHPlayerState.h"
 #include "EarthHero/Stat/Effect/EffectBase.h"
 #include "Kismet/GameplayStatics.h"
 

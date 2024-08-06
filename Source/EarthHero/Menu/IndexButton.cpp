@@ -5,7 +5,7 @@
 
 #include "PerkWidget.h"
 #include "Components/TextBlock.h"
-#include "EarthHero/Menu/PerkInfomation.h"
+#include "EarthHero/Info/PerkInfomation.h"
 
 void UIndexButton::InitSetting(int ReceivedIndex, UPerkWidget* ParentWidget)
 {
