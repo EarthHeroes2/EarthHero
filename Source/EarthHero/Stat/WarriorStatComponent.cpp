@@ -9,7 +9,6 @@
 #include "EarthHero/Character/Warrior/EHWarrior.h"
 #include "EarthHero/Character/Warrior/WarriorCombatComponent.h"
 #include "EarthHero/GameMode/PlayingGameMode.h"
-#include "GameFramework/CharacterMovementComponent.h"
 #include "Monster/MonsterStatComponent.h"
 
 //워리어 생성자
@@ -30,9 +29,17 @@ void UWarriorStatComponent::BeginPlay()
 
 void UWarriorStatComponent::OnRep_HeroStat()
 {
+	Super::OnRep_HeroStat();
+	
+	if (Warrior && Warrior->CombatComponent)
+	{
+		Warrior->CombatComponent->SetSkillCoolDown(HeroStat.SkillCoolTime);
+		Warrior->CombatComponent->SetDashCoolDown(HeroStat.DashCoolTime);
+	}
 	if (Warrior)
 	{
-		Warrior->GetCharacterMovement()->MaxWalkSpeed = 600 * HeroStat.MovementSpeed;
+		//서버도 설정해주게 바꿔야함
+		Warrior->SetMaxWalkSpeed(600 * HeroStat.MovementSpeed);
 		//UE_LOG(LogClass, Warning, TEXT("walkSpeed : %f"), Warrior->GetCharacterMovement()->MaxWalkSpeed);
 	}
 }
@@ -64,6 +71,7 @@ void UWarriorStatComponent::WarriorDamage_Implementation(AActor* DamagedActor)
 		if (IsDead)
 		{
 			KillCount += 1;
+			IsDead = false;
 			if (APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode()))
 			{
 				PlayingGameMode->UpdateGameStateKillCount();
@@ -108,6 +116,7 @@ void UWarriorStatComponent::WarriorWheelWindDamage_Implementation(AActor* Damage
 		if (IsDead)
 		{
 			KillCount += 1;
+			IsDead = false;
 			if (APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode()))
 			{
 				PlayingGameMode->UpdateGameStateKillCount();
@@ -152,6 +161,7 @@ void UWarriorStatComponent::WarriorDashDamage_Implementation(AActor* DamagedActo
 		if (IsDead)
 		{
 			KillCount += 1;
+			IsDead = false;
 			if (APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode()))
 			{
 				PlayingGameMode->UpdateGameStateKillCount();

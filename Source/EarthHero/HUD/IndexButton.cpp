@@ -4,7 +4,8 @@
 #include "IndexButton.h"
 
 #include "PerkWidget.h"
-#include "Perk/PerkInfomation.h"
+#include "Components/TextBlock.h"
+#include "EarthHero/Info/Perk/PerkInfomation.h"
 
 void UIndexButton::InitSetting(int ReceivedIndex, UPerkWidget* ParentWidget)
 {
@@ -17,6 +18,9 @@ void UIndexButton::InitSetting(int ReceivedIndex, UPerkWidget* ParentWidget)
 		NeedPoint = PerkInfo->NeedPoint[Index];
 		OnClicked.AddDynamic(this, &UIndexButton::IndexBtnClicked);
 	}
+	
+	OnHovered.AddDynamic(this, &UIndexButton::ButtonHovered);
+	OnUnhovered.AddDynamic(this, &UIndexButton::ButtonUnhovered);
 }
 
 
@@ -44,4 +48,15 @@ void UIndexButton::IndexBtnClicked()
 		PerkWidget->Point += NeedPoint;
 		PerkWidget->UpdateSelectInfo(Index);
 	}
+}
+
+
+void UIndexButton::ButtonHovered()
+{
+	if(PerkWidget) PerkWidget->PerkButtonHovered(Index);
+}
+
+void UIndexButton::ButtonUnhovered()
+{
+	if(PerkWidget) PerkWidget->PerkButtonUnhovered(Index);
 }

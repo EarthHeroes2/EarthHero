@@ -3,6 +3,7 @@
 
 #include "GameOverPlayerState.h"
 #include "EarthHero/EHGameInstance.h"
+#include "EarthHero/Enum/Enums.h"
 #include "EarthHero/Socket/SocketClient.h"
 
 //copy propertice가 끝나고 데이터를 서버에 저장해야함
@@ -40,5 +41,5 @@ void AGameOverPlayerState::UpdatePlayerData()
 	}
 	
 	USocketClient* NewSocket = NewObject<USocketClient>(this);
-	if(NewSocket) NewSocket->CreateSocket("UpdatePlayerExp", ExtraInfo);
+	if(NewSocket) NewSocket->CreateSocket(Server_UpdatePlayerExp, ExtraInfo);
 }

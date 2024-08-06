@@ -10,7 +10,7 @@
 #include "OnlineSubsystem.h"
 #include "EarthHero/EHGameInstance.h"
 #include "EarthHero/Character/EHCharacter.h"
-#include "EarthHero/HUD/Perk/PerkInfomation.h"
+#include "EarthHero/Info/Perk/PerkInfomation.h"
 #include "EarthHero/PlayerState/LobbyPlayerState.h"
 #include "Interfaces/VoiceInterface.h"
 

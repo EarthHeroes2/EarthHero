@@ -24,6 +24,13 @@ string lobbyPassword[MAX_NUM_SERVERS];
 MYSQL* conn;
 string user_table = "user_table";
 
+enum E_Request
+{
+    Client_CreateLobby, Client_ComparePassword, Client_GetPlayerData, Client_GetPlayerLevel, Client_Request_Max,
+    Server_DestroyServer, Server_UpdatePlayerExp, Server_UpdatePassword, Server_GetPlayerLevel, Server_Request_Max
+};
+
+
 
 vector<string> StringTokenizer(char* str)
 {
@@ -78,7 +85,7 @@ void CreateNewLobbyInstance(const wchar_t* Command, int LobbyNumber)
 
 string CreateNewLobby(const string* lobbyName, const string* isPrivate, const string* password)
 {
-    string serverBulidPath = ""; //서버 빌드 exe 위치
+    string serverBulidPath = "EarthHeroServer.exe 경로";
     string portNumber = "";
 
     for (int lobbyNumber = 0; lobbyNumber < MAX_NUM_SERVERS; lobbyNumber++)
@@ -264,7 +271,7 @@ int main()
 
     const char* host = "localhost";
     const char* user = "root";
-    const char* passwd = "sql비밀번호";
+    const char* passwd = "db비번";
     const char* db = "main";
     
     if(mysql_init(&connection) == NULL)
@@ -343,7 +350,7 @@ int main()
             return 1;
         }
 
-        char buffer[MAX_BUFFER_LENGTH] = { 0 };
+        char buffer[MAX_BUFFER_LENGTH] = {0};
         iResult = recv(ClientSocket, buffer, MAX_BUFFER_LENGTH, 0);
 
         if (iResult > 0)
@@ -351,85 +358,111 @@ int main()
             vector<string> tokens = StringTokenizer(buffer); //요청을 토큰으로 자르고
             size_t numTokens = tokens.size();
 
-            string request = tokens[0];
+            enum E_Request request = static_cast<E_Request>(stoi(tokens[0]));
 
-            if (request == "CreateLobby" && numTokens == 4)
+            switch (request)
             {
-                //새로운 서버 열고 해당 포트 번호 리턴
-                string newServerPortString = CreateNewLobby(&tokens[1], &tokens[2], &tokens[3]);
-                const char* newServerPort = newServerPortString.c_str();
+            case Client_CreateLobby:
+                if (numTokens == 4)
+                {
+                    //새로운 서버 열고 해당 포트 번호 리턴
+                    string newServerPortString = CreateNewLobby(&tokens[1], &tokens[2], &tokens[3]);
+                    const char* newServerPort = newServerPortString.c_str();
 
-                //플레이어에게 접속할 포트 번호 알려줌
-                printf("Send new server port : %s\n", newServerPort);
-                send(ClientSocket, newServerPort, strlen(newServerPort) + 1, 0);
+                    //플레이어에게 접속할 포트 번호 알려줌
+                    printf("Send new server port : %s\n", newServerPort);
+                    send(ClientSocket, newServerPort, strlen(newServerPort) + 1, 0);
+                }
+                break;
+
+            case Client_ComparePassword:
+                if (numTokens == 3)
+                {
+                    int selectedLobbyNumber = stoi(tokens[1]) - 7778;
+                    string password = tokens[2];
+
+                    //비밀번호 비교
+                    string compareResultString;
+                    if (password == lobbyPassword[selectedLobbyNumber]) compareResultString = "true";
+                    else compareResultString = "false";
+
+                    printf("Password Check : %s\n", compareResultString.c_str());
+
+                    //플레이어에게 옳은 지 그른 지 알려줌
+                    const char* compareResult = compareResultString.c_str();
+                    send(ClientSocket, compareResult, strlen(compareResult) + 1, 0);
+                }
+                break;
+
+            case Client_GetPlayerData:
+                if (numTokens == 2)
+                {
+                    string id = tokens[1];
+
+                    //새로운 플레이어면 정보 추가, 아니라면 해당 플레이어의 정보를 찾음
+                    string PlayerDataString = QueryPlayerData(id);
+
+                    //플레이어에게 자신의 정보를 알려줌
+                    const char* PlayerData = PlayerDataString.c_str();
+                    send(ClientSocket, PlayerData, strlen(PlayerData) + 1, 0);
+                }
+                break;
+
+            case Client_GetPlayerLevel:
+            case Server_GetPlayerLevel:
+                if (numTokens == 2)
+                {
+                    string id = tokens[1];
+
+                    //새로운 플레이어면 정보 추가, 아니라면 해당 플레이어의 정보를 찾음
+                    string PlayerLevelString = QueryPlayerData(id);
+
+                    //플레이어에게 자신의 정보를 알려줌
+                    const char* PlayerLevel = PlayerLevelString.c_str();
+                    send(ClientSocket, PlayerLevel, strlen(PlayerLevel) + 1, 0);
+                }
+                break;
+
+            case Server_DestroyServer:
+                if (numTokens == 2)
+                {
+                    string destroyServerPort = tokens[1];
+
+                    printf("Destroy server port : %s\n", destroyServerPort.c_str());
+
+                    //해당 서버 정보를 정리함
+                    int lobbyNumber = stoi(destroyServerPort) - 7778;
+                    bLobbyExist[lobbyNumber] = false;
+                }
+                break;
+
+            case Server_UpdatePlayerExp:
+                if (numTokens == 3)
+                {
+                    string id = tokens[1];
+                    int addExp = stoi(tokens[2]);
+
+                    if (UpdateExp(id, addExp)) printf("Update Exp(%d) Successs (%s)\n", addExp, id.c_str());
+                    else fprintf(stderr, "Update Exp(%d) Failed (%s)\n", addExp, id.c_str());
+                }
+                break;
+
+            case Server_UpdatePassword:
+                if (numTokens == 3)
+                {
+                    int lobbyNumber = stoi(tokens[1]) - 7778;
+                    string password = tokens[2];
+
+                    printf("Update Password  %s  ->  %s\n", lobbyPassword[lobbyNumber].c_str(), password.c_str());
+
+                    //패스워드 업데이트
+                    lobbyPassword[lobbyNumber] = password;
+                }
+                break;
+
+            default:
+                printf("Invalid request : %d    numTokens : %zu\n", request, numTokens);
             }
-            else if (request == "DestroyServer" && numTokens == 2)
-            {
-                string destroyServerPort = tokens[1];
-
-                printf("Destroy server port : %s\n", destroyServerPort.c_str());
-
-                //해당 서버 정보를 정리함
-                int lobbyNumber = stoi(destroyServerPort) - 7778;
-                bLobbyExist[lobbyNumber] = false;
-            }
-            else if (request == "ComparePassword" && numTokens == 3)
-            {
-                int selectedLobbyNumber = stoi(tokens[1]) - 7778;
-                string password = tokens[2];
-
-                //비밀번호 비교
-                string compareResultString;
-                if (password == lobbyPassword[selectedLobbyNumber]) compareResultString = "true";
-                else compareResultString = "false";
-
-                printf("Password Check : %s\n", compareResultString.c_str());
-
-                //플레이어에게 옳은 지 그른 지 알려줌
-                const char* compareResult = compareResultString.c_str();
-                send(ClientSocket, compareResult, strlen(compareResult) + 1, 0);
-            }
-            else if (request == "GetPlayerData" && numTokens == 2)
-            {
-                string id = tokens[1];
-
-                //새로운 플레이어면 정보 추가, 아니라면 해당 플레이어의 정보를 찾음
-                string PlayerDataString = QueryPlayerData(id);
-
-                //플레이어에게 자신의 정보를 알려줌
-                const char* PlayerData = PlayerDataString.c_str();
-                send(ClientSocket, PlayerData, strlen(PlayerData) + 1, 0);
-            }
-            else if (request == "GetPlayerLevel" && numTokens == 2)
-            {
-                string id = tokens[1];
-
-                //새로운 플레이어면 정보 추가, 아니라면 해당 플레이어의 정보를 찾음
-                string PlayerLevelString = QueryPlayerData(id);
-
-                //플레이어에게 자신의 정보를 알려줌
-                const char* PlayerLevel = PlayerLevelString.c_str();
-                send(ClientSocket, PlayerLevel, strlen(PlayerLevel) + 1, 0);
-            }
-            else if (request == "UpdatePlayerExp" && numTokens == 3)
-            {
-                string id = tokens[1];
-                int addExp = stoi(tokens[2]);
-
-                if (UpdateExp(id, addExp)) printf("Update Exp(%d) Successs (%s)\n", addExp, id.c_str());
-                else fprintf(stderr, "Update Exp(%d) Failed (%s)\n", addExp, id.c_str());
-            }
-            else if (request == "UpdatePassword" && numTokens == 3)
-            {
-                int lobbyNumber = stoi(tokens[1]) - 7778;
-                string password = tokens[2];
-
-                printf("Update Password  %s  ->  %s\n", lobbyPassword[lobbyNumber].c_str(), password.c_str());
-
-                //패스워드 업데이트
-                lobbyPassword[lobbyNumber] = password;
-            }
-            else printf("Invalid request : %s     numTokens : %zu\n", request.c_str(), numTokens);
         }
         else printf("Receive failed: %d\n", WSAGetLastError());
 

@@ -56,7 +56,7 @@ int ALobbyGameMode::GetPlayerLevel(FUniqueNetIdRepl UniqueNetId)
 	FString PlayerLevelString;
 	
 	USocketClient* NewSocket = NewObject<USocketClient>(this);
-	if(NewSocket) PlayerLevelString = NewSocket->CreateSocket("GetPlayerLevel", SteamId);
+	if(NewSocket) PlayerLevelString = NewSocket->CreateSocket(Server_GetPlayerLevel, SteamId);
 
 	if(PlayerLevelString == "")
 	{

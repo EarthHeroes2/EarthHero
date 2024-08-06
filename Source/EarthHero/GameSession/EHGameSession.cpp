@@ -7,6 +7,7 @@
 #include "Interfaces/OnlineSessionInterface.h"
 #include "OnlineSessionSettings.h"
 #include "EarthHero/EHGameInstance.h"
+#include "EarthHero/Enum/Enums.h"
 #include "EarthHero/Socket/SocketClient.h"
 
 
@@ -164,7 +165,7 @@ void AEHGameSession::HandleDestroySessionCompleted(FName EOSSessionName, bool bW
     
     //프로세스 종료
     USocketClient* NewSocket = NewObject<USocketClient>(this);
-    if(NewSocket) NewSocket->CreateSocket("DestroyServer", PortNumber);
+    if(NewSocket) NewSocket->CreateSocket(Server_DestroyServer, PortNumber);
     FGenericPlatformMisc::RequestExit(false);
 }
 

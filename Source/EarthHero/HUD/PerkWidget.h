@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "PerkWidget.generated.h"
 
+class UImage;
 class PerkInfomation;
 class UEHGameInstance;
 class UTextBlock;
@@ -53,8 +54,21 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* Point_Tb;
 
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* PerkName_Tb;
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* PerkCost_Tb;
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* PerkDescription_Tb;
+	UPROPERTY(meta = (BindWidget))
+	UImage* PerkImage_Img;
+
 	int64 SelectInfo;
+
+	UTextBlock* Description_Tb;
 
 public:
 	void UpdateSelectInfo(int Index);
+	void PerkButtonHovered(int Index);
+	void PerkButtonUnhovered(int Index);
 };

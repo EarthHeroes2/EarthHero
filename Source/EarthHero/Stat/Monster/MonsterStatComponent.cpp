@@ -71,14 +71,7 @@ float UMonsterStatComponent::DamageTaken(float InDamage, TSubclassOf<UDamageType
 	if (MonsterStat.Health <= 0.f)
 	{
 		IsDead = true;
-		FString DeadMessage = FString::Printf(TEXT("Monster Dead"));
-		APlayingGameMode *GameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode());
-		if (GameMode)
-		{
-			// 몬스터 죽인 수 증가
-			//GameMode->AddPlayerDead();
-		}
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, DeadMessage);
+		die();
 	}
 
 	return resultDamage;
@@ -168,4 +161,11 @@ void UMonsterStatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 	DOREPLIFETIME(UMonsterStatComponent, BaseMonsterStat);
 	DOREPLIFETIME(UMonsterStatComponent, MonsterStat);
 }
+
+void UMonsterStatComponent::die_Implementation()
+{
+	//GetOwner()->Deta
+	GetOwner()->Destroy();
+}
+
 

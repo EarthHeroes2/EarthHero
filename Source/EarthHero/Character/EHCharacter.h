@@ -49,6 +49,9 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true), Category = "Spectator")
     UChildActorComponent* SpectatorTarget;
 
+    UFUNCTION(NetMulticast, Reliable)
+    void SetMaxWalkSpeed(float WalkSpeed);
+
 protected:
     virtual void BeginPlay() override;
 

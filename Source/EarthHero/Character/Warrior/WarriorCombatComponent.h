@@ -101,18 +101,13 @@ private:
 	bool bCanSuperJump = true;
 	
 	float TotalWhirlwindDuration = 3.f;
-
-	UFUNCTION(Client, Reliable)
-	void Client_TotalWhirlwindDuration(float ServerDuration);
-	UFUNCTION(Client, Reliable)
-	void Client_WhirlwindTick(float ServerTick);
-	
-	
 	float CurrentWhirlwindDuration = 0;
 	float WhirlwindCooldown = 14.f;
 	float WhirlwindTick = 0.25f;
 	float JumpAttackCooldown = 9.f;
-	
+
+	float SkillCoolDown = 1.f;
+	float DashCoolDown = 1.f;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true), Category = "Particle")
 	UParticleSystem* SwordHitParticle;
@@ -132,8 +127,12 @@ public:
 	FORCEINLINE bool GetIsSuperJump() { return bIsSuperJump; }
 	FORCEINLINE void SetIsSuperJump(bool bSuperJump) { bIsSuperJump = bSuperJump; }
 	
-	UFUNCTION(Server, Reliable)
+	UFUNCTION(NetMulticast, Reliable)
 	void SetWheelWindTick(float WR_WheelWindTick);
-	UFUNCTION(Server, Reliable)
+	UFUNCTION(NetMulticast, Reliable)
 	void SetWheelWindDuration(float WR_WheelWindDuration);
+	UFUNCTION(NetMulticast, Reliable)
+	void SetSkillCoolDown(float NewSkillCoolDown);
+	UFUNCTION(NetMulticast, Reliable)
+	void SetDashCoolDown(float NewDashCoolDown);
 };

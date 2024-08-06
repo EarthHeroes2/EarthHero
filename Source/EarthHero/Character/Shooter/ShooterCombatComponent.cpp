@@ -120,7 +120,6 @@ void UShooterCombatComponent::ResetFire()
 	bCanFire = true;
 }
 
-
 void UShooterCombatComponent::GrenadeFire()
 {
 	if(Shooter)
@@ -165,4 +164,12 @@ void UShooterCombatComponent::NetMulticast_GrenadeFire_Implementation()
 void UShooterCombatComponent::SetFireRate_Implementation(float NewFireRate)
 {
 	 FireRate = NewFireRate;
+}
+void UShooterCombatComponent::SetDashCoolDown_Implementation(float NewDashCoolDown)
+{
+	DashCoolDown = NewDashCoolDown;
+}
+void UShooterCombatComponent::SetSkillCoolDown_Implementation(float NewSkillCoolDown)
+{
+	SkillCoolDown = NewSkillCoolDown;
 }

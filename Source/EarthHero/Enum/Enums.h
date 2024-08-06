@@ -60,7 +60,6 @@ enum EffectType
 	Ef_SpeedBoost,
 };
 
-
 enum EBossName
 {
 	MainBoss,
@@ -72,4 +71,10 @@ enum EBossName
 	MidBoss6,
 	Max_Boss,
 	NotBoss,
+};
+
+enum ERequest
+{
+	Client_CreateLobby, Client_ComparePassword, Client_GetPlayerData, Client_GetPlayerLevel, Client_Request_Max,
+	Server_DestroyServer, Server_UpdatePlayerExp, Server_UpdatePassword, Server_GetPlayerLevel, Server_Request_Max
 };

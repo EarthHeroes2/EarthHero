@@ -7,6 +7,7 @@
 #include "MoviePlayer.h"
 #include "OnlineSubsystem.h"
 #include "Blueprint/UserWidget.h"
+#include "Enum/Enums.h"
 #include "GameFramework/GameUserSettings.h"
 #include "Interfaces/OnlineIdentityInterface.h"
 #include "Kismet/GameplayStatics.h"
@@ -102,7 +103,7 @@ FHeroSkillImage* UEHGameInstance::GetSkillImageStructure(FName HeroName) const
         UE_LOG(LogTemp, Warning, TEXT("No Such DataTable"));
         return nullptr;
     }
-    return SkillImageTable->FindRow<FHeroSkillImage>(HeroName, TEXT(""));
+    return SkillImageTable->FindRow<FHeroSkillImage>(HeroName, TEXT("")); 
 }
 
 void UEHGameInstance::SetEffectArray()
@@ -354,7 +355,7 @@ int UEHGameInstance::GetPlayerLevel()
                 FString PlayerDataString;
                 //자신의 정보 요청
                 USocketClient* NewSocket = NewObject<USocketClient>(this);
-                if(NewSocket) PlayerDataString = NewSocket->CreateSocket("GetPlayerData", SteamId); //임시
+                if(NewSocket) PlayerDataString = NewSocket->CreateSocket(Client_GetPlayerLevel, SteamId); //임시
 
                 if(PlayerDataString == "")
                 {
