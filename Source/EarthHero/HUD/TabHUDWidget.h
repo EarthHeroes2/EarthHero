@@ -4,10 +4,11 @@
 #include "Blueprint/UserWidget.h"
 #include "TeamMemberWidget.h"
 #include "BasicStatsWidget.h"
-#include "StatusWidget.h"
 #include "HeroUpgradeWidget.h"
 #include "WorldMapWidget.h"
 #include "TabHUDWidget.generated.h"
+
+class UStatusWidget;
 
 UCLASS()
 class EARTHHERO_API UTabHUDWidget : public UUserWidget

@@ -5,7 +5,7 @@
 
 #include "Blueprint/UserWidget.h"
 #include "EarthHero/GameMode/GameOverGameMode.h"
-#include "EarthHero/HUD/GameOverWidget.h"
+#include "EarthHero/Widget/GameOverWidget.h"
 #include "GameFramework/PlayerState.h"
 
 AGameOverPlayerController::AGameOverPlayerController()

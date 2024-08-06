@@ -1,12 +1,11 @@
 #include "TabHUDWidget.h"
 #include "TeamMemberWidget.h"
 #include "BasicStatsWidget.h"
-#include "StatusWidget.h"
 #include "HeroUpgradeWidget.h"
+#include "StatusWidget.h"
 #include "Components/EditableTextBox.h"
 
 #include "Engine/Texture2D.h"
-#include "Kismet/GameplayStatics.h"
 
 bool UTabHUDWidget::Initialize()
 {

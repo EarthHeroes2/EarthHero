@@ -3,7 +3,6 @@
 
 #include "PerkWidget.h"
 
-#include "IndexButton.h"
 #include "Components/Button.h"
 #include "Components/HorizontalBox.h"
 #include "Components/SizeBox.h"
@@ -12,6 +11,7 @@
 #include "Components/VerticalBox.h"
 #include "EarthHero/EHGameInstance.h"
 #include "EarthHero/Info/Perk/PerkInfomation.h"
+#include "EarthHero/Widget/IndexButton.h"
 
 
 UPerkWidget::UPerkWidget(const FObjectInitializer &ObjectInitializer)
