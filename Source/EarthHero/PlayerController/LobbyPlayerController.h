@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "Blueprint/UserWidget.h"
-#include "EarthHero/Widget/LobbyWidget.h"
+#include "EarthHero/Menu/LobbyWidget.h"
 #include "LobbyPlayerController.generated.h"
 
 

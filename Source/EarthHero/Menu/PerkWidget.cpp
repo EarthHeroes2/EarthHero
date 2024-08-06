@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "PerkWidget.h"
 
 #include "Components/Button.h"
@@ -10,8 +7,8 @@
 #include "Components/TextBlock.h"
 #include "Components/VerticalBox.h"
 #include "EarthHero/EHGameInstance.h"
-#include "EarthHero/Info/Perk/PerkInfomation.h"
-#include "EarthHero/Widget/IndexButton.h"
+#include "EarthHero/Menu/PerkInfomation.h"
+#include "EarthHero/Menu/IndexButton.h"
 
 
 UPerkWidget::UPerkWidget(const FObjectInitializer &ObjectInitializer)
