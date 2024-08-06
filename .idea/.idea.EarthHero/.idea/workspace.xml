@@ -78,7 +78,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4591bad7-fd9f-4860-903f-8700cd913377" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/BPW_Perk.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_Minimap.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_Minimap.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/Assets/BattleRoyaleStarterKit/Maps/BattleRoyale_Map_a/BattleRoyale_Map_a_WP/4D/F4/6IRO1G0BS0OFZPU8K7TQR.uasset" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -134,9 +136,9 @@
   },
   "keyToStringList": {
     "rider.external.source.directories": [
-      "C:\\Users\\Nasutcho\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\DecompilerCache",
-      "C:\\Users\\Nasutcho\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\SourcesCache",
-      "C:\\Users\\Nasutcho\\AppData\\Local\\Symbols\\src"
+      "C:\\Users\\paran\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\DecompilerCache",
+      "C:\\Users\\paran\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\SourcesCache",
+      "C:\\Users\\paran\\AppData\\Local\\Symbols\\src"
     ]
   }
 }]]></component>
@@ -346,6 +348,7 @@
       <workItem from="1722329401216" duration="6223000" />
       <workItem from="1722671715973" duration="1133000" />
       <workItem from="1722744563591" duration="32715000" />
+      <workItem from="1722948329348" duration="510000" />
     </task>
     <servers />
   </component>
