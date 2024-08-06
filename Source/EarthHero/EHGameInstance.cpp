@@ -7,6 +7,7 @@
 #include "MoviePlayer.h"
 #include "OnlineSubsystem.h"
 #include "Blueprint/UserWidget.h"
+#include "Enum/Enums.h"
 #include "GameFramework/GameUserSettings.h"
 #include "Interfaces/OnlineIdentityInterface.h"
 #include "Kismet/GameplayStatics.h"
@@ -354,7 +355,7 @@ int UEHGameInstance::GetPlayerLevel()
                 FString PlayerDataString;
                 //자신의 정보 요청
                 USocketClient* NewSocket = NewObject<USocketClient>(this);
-                if(NewSocket) PlayerDataString = NewSocket->CreateSocket("GetPlayerData", SteamId); //임시
+                if(NewSocket) PlayerDataString = NewSocket->CreateSocket(Client_GetPlayerLevel, SteamId); //임시
 
                 if(PlayerDataString == "")
                 {

@@ -3,6 +3,7 @@
 
 #include "SocketClient.h"
 
+#include "EarthHero/Enum/Enums.h"
 #include "Networking/Public/Networking.h"
 #include "Sockets/Public/Sockets.h"
 #include "Sockets/Public/SocketSubsystem.h"
@@ -10,21 +11,15 @@
 
 //필요한 리턴값이 있다면 리턴함
 //없다면 FString()리턴ㄴ
-FString USocketClient::CreateSocket(const FString& RequestMessage, const FString& ExtraInfo)
+FString USocketClient::CreateSocket(const ERequest RequestMessage, const FString& ExtraInfo)
 {
 	FSocket* Socket;
 	Socket = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateSocket(NAME_Stream, "TCPSocket", false);
 	
 	FIPv4Address IP;
-	//
-	if(RequestMessage.Equals("CreateLobby") ||
-		RequestMessage.Equals("ComparePassword") ||
-		RequestMessage.Equals("GetPlayerData")) FIPv4Address::Parse("116.121.57.64", IP); //뭘로 감출까
-	else if(RequestMessage.Equals("DestroyServer") ||
-			RequestMessage.Equals("UpdatePlayerExp") ||
-			RequestMessage.Equals("UpdatePassword") ||
-			RequestMessage.Equals("GetPlayerLevel")) FIPv4Address::Parse("127.0.0.1", IP);
 
+	if(RequestMessage < Client_Request_Max) FIPv4Address::Parse("116.121.57.64", IP); //뭘로 감출까
+	else FIPv4Address::Parse("127.0.0.1", IP);
 	
 	TSharedRef<FInternetAddr> Address = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateInternetAddr();
 	Address->SetIp(IP.Value);
@@ -36,8 +31,8 @@ FString USocketClient::CreateSocket(const FString& RequestMessage, const FString
 		int32 BytesSent = 0;
 		FString SendMessage;
 		
-		if(!ExtraInfo.IsEmpty()) SendMessage = RequestMessage + "|" + ExtraInfo;
-		else SendMessage = RequestMessage;
+		if(!ExtraInfo.IsEmpty()) SendMessage = FString::FromInt(RequestMessage) + "|" + ExtraInfo;
+		else SendMessage = FString::FromInt(RequestMessage);
 		
 		UE_LOG(LogTemp, Log, TEXT("Send Message: %s"), *SendMessage);
 
@@ -55,10 +50,10 @@ FString USocketClient::CreateSocket(const FString& RequestMessage, const FString
 			UE_LOG(LogTemp, Log, TEXT("Receive Message: %s"), *ReceiveMessage);
 
 			//접속할 서버의 포트번호, 비번 비교 결과 등을 리턴함
-			if(RequestMessage.Equals("CreateLobby") || 
-				RequestMessage.Equals("ComparePassword") ||
-				RequestMessage.Equals("GetPlayerData") ||
-				RequestMessage.Equals("GetPlayerLevel")) return ReceiveMessage; 
+			if(RequestMessage == Client_CreateLobby || 
+				RequestMessage == Client_ComparePassword ||
+				RequestMessage == Client_GetPlayerData ||
+				RequestMessage == Server_GetPlayerLevel) return ReceiveMessage; 
 		}
 	}
 	else UE_LOG(LogTemp, Error, TEXT("Failed to connect to server"));

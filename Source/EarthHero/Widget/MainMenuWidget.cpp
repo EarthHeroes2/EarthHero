@@ -15,6 +15,7 @@
 #include "Components/ScrollBox.h"
 #include "../Socket/SocketClient.h"
 #include "Components/TextBlock.h"
+#include "EarthHero/Enum/Enums.h"
 #include "EarthHero/HUD/PerkWidget.h"
 
 
@@ -66,7 +67,7 @@ bool UMainMenuWidget::Initialize()
 				FString PlayerDataString;
 				//자신의 정보 요청
 				USocketClient* NewSocket = NewObject<USocketClient>(this);
-				if(NewSocket) PlayerDataString = NewSocket->CreateSocket("GetPlayerData", SteamId);
+				if(NewSocket) PlayerDataString = NewSocket->CreateSocket(Client_GetPlayerData, SteamId);
 
 				if(PlayerDataString == "")
 				{
@@ -282,7 +283,7 @@ void UMainMenuWidget::CreateLobbyOKBtnClicked()
 	FString ExtraInfo = LobbyName + "|" + IsPrivate + "|" + Password;
 	
 	USocketClient* NewSocket = NewObject<USocketClient>(this);
-	if(NewSocket) ReceivedLobbyPort = NewSocket->CreateSocket("CreateLobby", ExtraInfo);
+	if(NewSocket) ReceivedLobbyPort = NewSocket->CreateSocket(Client_CreateLobby, ExtraInfo);
 	if(!ReceivedLobbyPort.IsEmpty())
 	{
 		FTimerHandle Handle;
@@ -326,7 +327,7 @@ void UMainMenuWidget::PasswordOKBtnClicked()
 	
 	USocketClient* NewSocket = NewObject<USocketClient>(this);
 	if(NewSocket)
-		CompareResult = NewSocket->CreateSocket("ComparePassword", ExtraInfo);
+		CompareResult = NewSocket->CreateSocket(Client_ComparePassword, ExtraInfo);
 	
 	if(CompareResult == "true")
 	{

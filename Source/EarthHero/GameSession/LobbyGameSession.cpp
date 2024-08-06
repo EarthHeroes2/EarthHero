@@ -362,7 +362,7 @@ bool ALobbyGameSession::UpdateLobbyPassword(const FString& Password)
     USocketClient* NewSocket = NewObject<USocketClient>(this);
     if(NewSocket)
     {
-        NewSocket->CreateSocket("UpdatePassword", ExtraInfo);
+        NewSocket->CreateSocket(Server_UpdatePassword, ExtraInfo);
         return true;
     }
     return false;
