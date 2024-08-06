@@ -20,4 +20,10 @@ public:
 						 1, 2, 2, 3, 3,
 						 2, 2, 2, 3, 5,
 						 1, 1, 3, 5, 5};
+
+	int NumOfLevels = 10;
+	int NumOfPerkPerLevel = 5;
+	int NumOfPerks = NumOfLevels * NumOfPerkPerLevel;
+
+	int GetPoints(int Level);
 };

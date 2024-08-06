@@ -11,6 +11,7 @@
 #include "Components/TextBlock.h"
 #include "Components/VerticalBox.h"
 #include "EarthHero/EHGameInstance.h"
+#include "Perk/PerkInfomation.h"
 
 
 UPerkWidget::UPerkWidget(const FObjectInitializer &ObjectInitializer)
@@ -21,27 +22,33 @@ UPerkWidget::UPerkWidget(const FObjectInitializer &ObjectInitializer)
 bool UPerkWidget::Initialize()
 {
 	Super::Initialize();
-
-	// 버튼 생성 및 초기화
-	CreateButtons();
 	
+	PerkInfomations = new PerkInfomation();
 	EHGameInstance = Cast<UEHGameInstance>(GetGameInstance());
-	if(EHGameInstance)
+	if(PerkInfomations && EHGameInstance)
 	{
 		//플레이어 레벨 정보 가져오기
 		Level = EHGameInstance->GetPlayerLevel();
 		if(Level > 0) Point = Level + 2;
-		else Point = -1;
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("UPerkWidget::Initialize(). Level < 0"));
+			return false;
+		}
 		
 		Level_Tb->SetText(FText::FromString(FString("Lv. ") + FString::FromInt(Level)));
 		Point_Tb->SetText(FText::FromString(FString("Point. ") + FString::FromInt(Point)));
+		
+		// 버튼 생성 및 초기화
+		CreateButtons();
 
 		//이전 저장값 불러오기
 		SelectInfo = EHGameInstance->LoadGame();
 
 		//전부 눌러주기
+		int NumOfPerks = PerkInfomations->NumOfPerks;
 		int64 CheckBit = 1;
-		for(int i = 0; i < 50; i++)
+		for(int i = 0; i < NumOfPerks; i++)
 			if(SelectInfo & (CheckBit << i))
 				Buttons[i]->IndexBtnClicked();
 	}
@@ -55,6 +62,9 @@ bool UPerkWidget::Initialize()
 
 void UPerkWidget::CreateButtons()
 {
+	int NumOfLevels = PerkInfomations->NumOfLevels;
+	int NumOfPerkPerLevel = PerkInfomations->NumOfPerkPerLevel;
+	
 	int i, j;
 	for(i = 0; i < NumOfLevels; i++)
 	{
@@ -68,8 +78,8 @@ void UPerkWidget::CreateButtons()
 				USizeBox* SizeBox = NewObject<USizeBox>(this);
 				if (SizeBox)
 				{
-					SizeBox->SetWidthOverride(50);
-					SizeBox->SetHeightOverride(50);
+					SizeBox->SetWidthOverride(75);
+					SizeBox->SetHeightOverride(75);
 					
 					UIndexButton* IndexButton = NewObject<UIndexButton>(this);
 					if(IndexButton)
@@ -88,6 +98,11 @@ void UPerkWidget::CreateButtons()
 			}
 		}
 	}
+
+	//레벨에 맞지 않는 스킬은 못찍도록
+	int NumOfPerks = PerkInfomations->NumOfPerks;
+	for(i = Level * NumOfPerkPerLevel; i < NumOfPerks; i++)
+		Buttons[i]->SetIsEnabled(false);
 }
 
 void UPerkWidget::UpdateSelectInfo(int Index)

@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "PerkWidget.generated.h"
 
+class PerkInfomation;
 class UEHGameInstance;
 class UTextBlock;
 class UButton;
@@ -24,8 +25,7 @@ class EARTHHERO_API UPerkWidget : public UUserWidget
 
 	UEHGameInstance* EHGameInstance;
 
-	int NumOfLevels = 10;
-	int NumOfPerkPerLevel = 5;
+	PerkInfomation* PerkInfomations;
 	
 	int Level;
 public:

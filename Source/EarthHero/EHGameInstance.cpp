@@ -328,6 +328,13 @@ void UEHGameInstance::ShowLoadingScreen()
     }
 }
 
+
+
+
+
+
+
+
 //임시 함수임
 //에러 시 -1 리턴
 int UEHGameInstance::GetPlayerLevel()

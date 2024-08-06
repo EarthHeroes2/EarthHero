@@ -131,6 +131,8 @@ bool ALobbyPlayerController::PerkInfoVerification(int64 PerkInfo)
 		{
 			int Level = LobbyGameMode->GetPlayerLevel(PlayerState->GetUniqueId());
 			int Point = Level + 2;
+			
+			int NumOfPerks = PerkInfomations->NumOfPerks;
 
 			if(Level > 0)
 			{
@@ -143,7 +145,7 @@ bool ALobbyPlayerController::PerkInfoVerification(int64 PerkInfo)
 					if(PerkInfo & (CheckBit << i))
 						Cnt += PerkInfomations->NeedPoint[i];
 			
-				for( ; i < 50; i++)
+				for( ; i < NumOfPerks; i++)
 					if(PerkInfo & (CheckBit << i))
 						Cnt += 100000;
 
