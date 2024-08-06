@@ -3,7 +3,6 @@
 
 #include "PerkWidget.h"
 
-#include "IndexButton.h"
 #include "Components/Button.h"
 #include "Components/HorizontalBox.h"
 #include "Components/SizeBox.h"
@@ -12,6 +11,7 @@
 #include "Components/VerticalBox.h"
 #include "EarthHero/EHGameInstance.h"
 #include "EarthHero/Info/Perk/PerkInfomation.h"
+#include "EarthHero/Widget/IndexButton.h"
 
 
 UPerkWidget::UPerkWidget(const FObjectInitializer &ObjectInitializer)
@@ -114,9 +114,13 @@ void UPerkWidget::UpdateSelectInfo(int Index)
 
 void UPerkWidget::PerkButtonHovered(int Index)
 {
-	PerkName_Tb->SetText(FText::FromString("123"));
-	PerkCost_Tb->SetText(FText::FromString("123"));
-	PerkDescription_Tb->SetText(FText::FromString("123"));
+	if(PerkInfomations && PerkInfomations->PerkDescriptions.Num() > Index)
+	{
+		FPerkDescription HoveredPerkInfomation = PerkInfomations->PerkDescriptions[Index];
+		PerkName_Tb->SetText(HoveredPerkInfomation.Name);
+		PerkCost_Tb->SetText(HoveredPerkInfomation.Cost);
+		PerkDescription_Tb->SetText(HoveredPerkInfomation.Description);
+	}
 }
 
 void UPerkWidget::PerkButtonUnhovered(int Index)

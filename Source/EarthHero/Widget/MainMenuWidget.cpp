@@ -11,12 +11,12 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "OnlineSubsystemUtils.h"
+#include "PerkWidget.h"
 #include "Components/EditableTextBox.h"
 #include "Components/ScrollBox.h"
 #include "../Socket/SocketClient.h"
 #include "Components/TextBlock.h"
 #include "EarthHero/Enum/Enums.h"
-#include "EarthHero/HUD/PerkWidget.h"
 
 
 UMainMenuWidget::UMainMenuWidget(const FObjectInitializer &ObjectInitializer)
