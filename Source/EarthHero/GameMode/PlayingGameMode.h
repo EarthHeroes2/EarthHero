@@ -75,6 +75,7 @@ public:
 	void UpdateGameStateDamage();
 	void UpdateGameStateReceiveDamage();
 	void UpdateGameStateHeal();
+	void UpdateGameStatePlayerNumbers();
 	void UpdatePlayerClassImage();
 	void UpdatePlayerStateImage(AActor *TargetActor, TSubclassOf<AEffectBase> EffectType);
 	int32 FindControllerForTargetActor(AActor* TargetActor);
