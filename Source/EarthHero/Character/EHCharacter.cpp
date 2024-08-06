@@ -88,6 +88,11 @@ void AEHCharacter::Tick(float DeltaSeconds)
     }
 }
 
+void AEHCharacter::SetMaxWalkSpeed_Implementation(float WalkSpeed)
+{
+    GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+}
+
 void AEHCharacter::BeginPlay()
 {
     Super::BeginPlay();

@@ -5,6 +5,8 @@
 #include "EHWarrior.h"
 #include "Camera/CameraComponent.h"
 #include "EarthHero/Character/Monster/MonsterBase.h"
+#include "EarthHero/HUD/InGameHUD.h"
+#include "EarthHero/Player/EHPlayerController.h"
 #include "EarthHero/Stat/WarriorStatComponent.h"
 #include "EarthHero/Stat/Effect/Ef_ReduceDamageTaken.h"
 #include "EarthHero/Stat/Effect/Ef_SpeedBoost.h"
@@ -121,7 +123,11 @@ void UWarriorCombatComponent::JumpAttack()
 	LaunchRotation.Pitch = ControlPitch;
 	FVector LaunchDirection = LaunchRotation.Vector();
 
-	Warrior->GetWorldTimerManager().SetTimer(JumpAttackCooldownTimerHandle, this, &ThisClass::ResetJumpAttack, JumpAttackCooldown);
+	Warrior->GetWorldTimerManager().SetTimer(JumpAttackCooldownTimerHandle, this, &ThisClass::ResetJumpAttack, JumpAttackCooldown * DashCoolDown);
+	if (AEHPlayerController *PlayerController = Cast<AEHPlayerController>(Warrior->GetController()))
+	{
+		PlayerController->HUD->SkillCoolDown_2->UpdateCoolDown(JumpAttackCooldown * DashCoolDown);
+	}
 	
 	Server_JumpAttack(LaunchDirection);
 }
@@ -279,7 +285,11 @@ void UWarriorCombatComponent::ToggleWhirlwind()
 		bCanWhirlwind = false;
 		CurrentWhirlwindDuration = 0;
 		CheckWhirlWindLevel();
-		Warrior->GetWorldTimerManager().SetTimer(WhirlwindCooldownTimerHandle, this, &ThisClass::ResetWhirlWind, WhirlwindCooldown);
+		Warrior->GetWorldTimerManager().SetTimer(WhirlwindCooldownTimerHandle, this, &ThisClass::ResetWhirlWind, WhirlwindCooldown * SkillCoolDown);
+		if (AEHPlayerController *PlayerController = Cast<AEHPlayerController>(Warrior->GetController()))
+		{
+			PlayerController->HUD->SkillCoolDown_1->UpdateCoolDown(WhirlwindCooldown * SkillCoolDown);
+		}
 		Warrior->GetWorldTimerManager().SetTimer(WhirlwindTimerHandle, this, &ThisClass::Whirlwind, WhirlwindTick, true);
 	}
 	else
@@ -404,18 +414,17 @@ void UWarriorCombatComponent::ResetWhirlWind()
 void UWarriorCombatComponent::SetWheelWindDuration_Implementation(float WR_WheelWindDuration)
 {
 	TotalWhirlwindDuration = WR_WheelWindDuration;
-	Client_TotalWhirlwindDuration(TotalWhirlwindDuration);
 }
-void UWarriorCombatComponent::Client_TotalWhirlwindDuration_Implementation(float ServerDuration)
-{
-	TotalWhirlwindDuration = ServerDuration;
-}
+
 void UWarriorCombatComponent::SetWheelWindTick_Implementation(float WR_WheelWindTick)
 {
 	WhirlwindTick = WR_WheelWindTick;
-	Client_WhirlwindTick(WhirlwindTick);
 }
-void UWarriorCombatComponent::Client_WhirlwindTick_Implementation(float ServerTick)
+void UWarriorCombatComponent::SetDashCoolDown_Implementation(float NewDashCoolDown)
 {
-	WhirlwindTick = ServerTick;
+	DashCoolDown = NewDashCoolDown;
+}
+void UWarriorCombatComponent::SetSkillCoolDown_Implementation(float NewSkillCoolDown)
+{
+	SkillCoolDown = NewSkillCoolDown;
 }

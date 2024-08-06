@@ -62,10 +62,18 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true), Category = "AnimMontage")
 	UAnimMontage* FPS_FireMontage;
 	
-	
+	UPROPERTY()
+	float SkillCoolDown = 1.f;
+	UPROPERTY()
+	float DashCoolDown = 1.f;
 public:
 	FORCEINLINE void SetShooter(AEHShooter* NewShooter) { Shooter = NewShooter; }
 
 	UFUNCTION(Client, Reliable)
 	void SetFireRate(float NewFireRate);
+
+	UFUNCTION(NetMulticast, Reliable)
+	void SetSkillCoolDown(float NewSkillCoolDown);
+	UFUNCTION(NetMulticast, Reliable)
+	void SetDashCoolDown(float NewDashCoolDown);
 };
