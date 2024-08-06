@@ -35,13 +35,16 @@ void UShooterStatComponent::BeginPlay()
 void UShooterStatComponent::OnRep_HeroStat()
 {
 	Super::OnRep_HeroStat();
-	if (GetNetMode() != NM_Client && Shooter && Shooter->CombatComponent)
+	if (Shooter && Shooter->CombatComponent)
 	{
 		Shooter->CombatComponent->SetFireRate(CalFireRate());
+		Shooter->CombatComponent->SetSkillCoolDown(HeroStat.SkillCoolTime);
+		Shooter->CombatComponent->SetDashCoolDown(HeroStat.DashCoolTime);
 	}
 	if (Shooter)
 	{
-		Shooter->GetCharacterMovement()->MaxWalkSpeed = 600 * HeroStat.MovementSpeed;
+		//서버도 설정하게 바꿔야 함
+		Shooter->SetMaxWalkSpeed(600 * HeroStat.MovementSpeed);
 		//UE_LOG(LogClass, Warning, TEXT("walkSpeed : %f"), Shooter->GetCharacterMovement()->MaxWalkSpeed);
 	}
 }

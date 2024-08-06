@@ -30,9 +30,17 @@ void UWarriorStatComponent::BeginPlay()
 
 void UWarriorStatComponent::OnRep_HeroStat()
 {
+	Super::OnRep_HeroStat();
+	
+	if (Warrior && Warrior->CombatComponent)
+	{
+		Warrior->CombatComponent->SetSkillCoolDown(HeroStat.SkillCoolTime);
+		Warrior->CombatComponent->SetDashCoolDown(HeroStat.DashCoolTime);
+	}
 	if (Warrior)
 	{
-		Warrior->GetCharacterMovement()->MaxWalkSpeed = 600 * HeroStat.MovementSpeed;
+		//서버도 설정해주게 바꿔야함
+		Warrior->SetMaxWalkSpeed(600 * HeroStat.MovementSpeed);
 		//UE_LOG(LogClass, Warning, TEXT("walkSpeed : %f"), Warrior->GetCharacterMovement()->MaxWalkSpeed);
 	}
 }

@@ -103,7 +103,7 @@ FHeroSkillImage* UEHGameInstance::GetSkillImageStructure(FName HeroName) const
         UE_LOG(LogTemp, Warning, TEXT("No Such DataTable"));
         return nullptr;
     }
-    return SkillImageTable->FindRow<FHeroSkillImage>(HeroName, TEXT(""));
+    return SkillImageTable->FindRow<FHeroSkillImage>(HeroName, TEXT("")); 
 }
 
 void UEHGameInstance::SetEffectArray()
