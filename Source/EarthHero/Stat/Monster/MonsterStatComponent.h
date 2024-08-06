@@ -61,7 +61,7 @@ private:
 	void InitializeStatData();
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-	
 
-		
+	UFUNCTION(NetMulticast, Reliable)
+	void die();
 };

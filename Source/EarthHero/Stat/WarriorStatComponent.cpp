@@ -9,7 +9,6 @@
 #include "EarthHero/Character/Warrior/EHWarrior.h"
 #include "EarthHero/Character/Warrior/WarriorCombatComponent.h"
 #include "EarthHero/GameMode/PlayingGameMode.h"
-#include "GameFramework/CharacterMovementComponent.h"
 #include "Monster/MonsterStatComponent.h"
 
 //워리어 생성자
@@ -72,6 +71,7 @@ void UWarriorStatComponent::WarriorDamage_Implementation(AActor* DamagedActor)
 		if (IsDead)
 		{
 			KillCount += 1;
+			IsDead = false;
 			if (APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode()))
 			{
 				PlayingGameMode->UpdateGameStateKillCount();
@@ -116,6 +116,7 @@ void UWarriorStatComponent::WarriorWheelWindDamage_Implementation(AActor* Damage
 		if (IsDead)
 		{
 			KillCount += 1;
+			IsDead = false;
 			if (APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode()))
 			{
 				PlayingGameMode->UpdateGameStateKillCount();
@@ -160,6 +161,7 @@ void UWarriorStatComponent::WarriorDashDamage_Implementation(AActor* DamagedActo
 		if (IsDead)
 		{
 			KillCount += 1;
+			IsDead = false;
 			if (APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode()))
 			{
 				PlayingGameMode->UpdateGameStateKillCount();

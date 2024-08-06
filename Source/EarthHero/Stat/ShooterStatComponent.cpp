@@ -70,6 +70,7 @@ void UShooterStatComponent::ShooterDamage_Implementation(AActor* DamagedActor, c
 			if (IsDead)
 			{
 				KillCount += 1;
+				IsDead = false;
 				if (APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode()))
 				{
 					PlayingGameMode->UpdateGameStateKillCount();
@@ -105,6 +106,7 @@ void UShooterStatComponent::ShooterGrenadeDamage_Implementation(AActor* DamagedA
 		if (IsDead)
 		{
 			KillCount += 1;
+			IsDead = false;
 			if (APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode()))
 			{
 				PlayingGameMode->UpdateGameStateKillCount();
