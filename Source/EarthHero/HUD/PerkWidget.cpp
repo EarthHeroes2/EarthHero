@@ -11,8 +11,7 @@
 #include "Components/TextBlock.h"
 #include "Components/VerticalBox.h"
 #include "EarthHero/EHGameInstance.h"
-#include "Framework/MultiBox/ToolMenuBase.h"
-#include "Perk/PerkInfomation.h"
+#include "EarthHero/Info/Perk/PerkInfomation.h"
 
 
 UPerkWidget::UPerkWidget(const FObjectInitializer &ObjectInitializer)
