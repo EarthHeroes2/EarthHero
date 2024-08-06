@@ -2,11 +2,3 @@
 
 
 #include "PerkDescription.h"
-
-PerkDescription::PerkDescription()
-{
-}
-
-PerkDescription::~PerkDescription()
-{
-}

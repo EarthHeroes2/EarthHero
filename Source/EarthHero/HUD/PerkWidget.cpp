@@ -114,9 +114,13 @@ void UPerkWidget::UpdateSelectInfo(int Index)
 
 void UPerkWidget::PerkButtonHovered(int Index)
 {
-	PerkName_Tb->SetText(FText::FromString("123"));
-	PerkCost_Tb->SetText(FText::FromString("123"));
-	PerkDescription_Tb->SetText(FText::FromString("123"));
+	if(PerkInfomations && PerkInfomations->PerkDescriptions.Num() > Index)
+	{
+		FPerkDescription HoveredPerkInfomation = PerkInfomations->PerkDescriptions[Index];
+		PerkName_Tb->SetText(HoveredPerkInfomation.Name);
+		PerkCost_Tb->SetText(HoveredPerkInfomation.Cost);
+		PerkDescription_Tb->SetText(HoveredPerkInfomation.Description);
+	}
 }
 
 void UPerkWidget::PerkButtonUnhovered(int Index)

@@ -7,9 +7,10 @@
 /**
  * 
  */
+
 class EARTHHERO_API PerkDescription
 {
+
 public:
-	PerkDescription();
-	~PerkDescription();
+	
 };

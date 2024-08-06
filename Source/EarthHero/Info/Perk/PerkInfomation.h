@@ -7,9 +7,18 @@
 /**
  * 
  */
+struct FPerkDescription
+{
+	FText Name;
+	FText Cost;
+	FText Description;
+};
+
 class EARTHHERO_API PerkInfomation
 {
 public:
+	PerkInfomation();
+	
 	int NeedPoint[50] = {1, 1, 1, 2, 2,
 						 1, 1, 2, 2, 3,
 						 1, 2, 3, 3, 4,
@@ -25,5 +34,8 @@ public:
 	int NumOfPerkPerLevel = 5;
 	int NumOfPerks = NumOfLevels * NumOfPerkPerLevel;
 
+	TArray<FPerkDescription> PerkDescriptions;
+
 	int GetPoints(int Level);
+	
 };
