@@ -11,6 +11,7 @@
 #include "Components/TextBlock.h"
 #include "Components/VerticalBox.h"
 #include "EarthHero/EHGameInstance.h"
+#include "Framework/MultiBox/ToolMenuBase.h"
 #include "Perk/PerkInfomation.h"
 
 
@@ -33,7 +34,8 @@ bool UPerkWidget::Initialize()
 		else
 		{
 			UE_LOG(LogTemp, Error, TEXT("UPerkWidget::Initialize(). Level < 0"));
-			return false;
+			Level = Point = 10;
+			//return false;
 		}
 		
 		Level_Tb->SetText(FText::FromString(FString("Lv. ") + FString::FromInt(Level)));
@@ -111,6 +113,20 @@ void UPerkWidget::UpdateSelectInfo(int Index)
 	SelectInfo ^= ((int64)1 << Index);
 }
 
+void UPerkWidget::PerkButtonHovered(int Index)
+{
+	PerkName_Tb->SetText(FText::FromString("123"));
+	PerkCost_Tb->SetText(FText::FromString("123"));
+	PerkDescription_Tb->SetText(FText::FromString("123"));
+}
+
+void UPerkWidget::PerkButtonUnhovered(int Index)
+{
+	PerkName_Tb->SetText(FText::FromString(""));
+	PerkCost_Tb->SetText(FText::FromString(""));
+	PerkDescription_Tb->SetText(FText::FromString(""));
+}
+
 void UPerkWidget::PerkSaveBtnClicked()
 {
 	if(EHGameInstance)
@@ -124,4 +140,3 @@ void UPerkWidget::PerkCancelBtnClicked()
 {
 	SetVisibility(ESlateVisibility::Collapsed);
 }
-

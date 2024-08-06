@@ -6,6 +6,7 @@
 #include "Components/Button.h"
 #include "IndexButton.generated.h"
 
+class UTextBlock;
 class UEHGameInstance;
 class UPerkWidget;
 /**
@@ -24,8 +25,12 @@ class EARTHHERO_API UIndexButton : public UButton
 public:
 	int Index;
 	UPerkWidget* PerkWidget;
-
+	
 	void InitSetting(int ReceivedIndex, UPerkWidget* ParentWidget);
 	UFUNCTION()
 	void IndexBtnClicked();
+	UFUNCTION()
+	void ButtonHovered();
+	UFUNCTION()
+	void ButtonUnhovered();
 };
