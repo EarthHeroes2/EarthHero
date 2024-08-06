@@ -7,6 +7,7 @@
 
 ACustomSpectatorPawn::ACustomSpectatorPawn()
 {
+    SetActorEnableCollision(false);
     SetReplicates(true);
 }
 

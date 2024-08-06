@@ -100,16 +100,19 @@ void AEHPlayerController::OnUnPossess()
 //클라이언트에게 캐릭터에 빙의됨을 알려줌
 void AEHPlayerController::Client_Possess_Implementation(bool bInit)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Client_Possess_Implementation(bool bInit)"));
+
+	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
+	{
+		if(!bInit) Subsystem->RemoveMappingContext(SpectatorContext);
+		Subsystem->AddMappingContext(HeroContext, 0);
+	}
+	
 	if(bInit) //겜 시작 때 로직
 	{
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
-		{
-			if(!bInit) Subsystem->RemoveMappingContext(SpectatorContext);
-			Subsystem->AddMappingContext(HeroContext, 0);
-		}
-		
 		GetWorldTimerManager().SetTimer(PlayerStateCheckTimerHandle, this, &AEHPlayerController::InitializeHUD, 0.1f, true);
 	}
+
 	UE_LOG(LogTemp, Warning, TEXT("EnableInput"));
 	EnableInput(this);
 }

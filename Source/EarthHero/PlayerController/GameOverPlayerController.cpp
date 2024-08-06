@@ -4,6 +4,7 @@
 #include "GameOverPlayerController.h"
 
 #include "Blueprint/UserWidget.h"
+#include "EarthHero/EHGameInstance.h"
 #include "EarthHero/GameMode/GameOverGameMode.h"
 #include "EarthHero/Menu/GameOverWidget.h"
 #include "GameFramework/PlayerState.h"
@@ -39,6 +40,10 @@ void AGameOverPlayerController::BeginPlay()
 				SetInputMode(InputMode);
 			}
 		}
+
+		//로딩화면 제거
+		UEHGameInstance* EHGameinstance = Cast<UEHGameInstance>(GetGameInstance());
+		if(EHGameinstance) EHGameinstance->RemoveSeamlessLoadingScreen();
 	}
 }
 
