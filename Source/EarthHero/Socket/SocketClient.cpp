@@ -53,6 +53,7 @@ FString USocketClient::CreateSocket(const ERequest RequestMessage, const FString
 			if(RequestMessage == Client_CreateLobby || 
 				RequestMessage == Client_ComparePassword ||
 				RequestMessage == Client_GetPlayerData ||
+				RequestMessage == Client_GetPlayerLevel ||
 				RequestMessage == Server_GetPlayerLevel) return ReceiveMessage; 
 		}
 	}
