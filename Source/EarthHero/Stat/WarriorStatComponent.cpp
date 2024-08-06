@@ -151,7 +151,7 @@ void UWarriorStatComponent::WarriorWheelWindDamage_Implementation(AActor* Damage
 //워리어 대쉬
 void UWarriorStatComponent::WarriorDashDamage_Implementation(AActor* DamagedActor)
 {
-	float resultDamage = UStatCalculationLibrary::CalWarriorDashDamage(HeroStat,WR_NormalDamage, WR_WheelWindDamage);
+	float resultDamage = UStatCalculationLibrary::CalWarriorDashDamage(HeroStat, WR_JumpDamageMulti, WR_NormalDamage);
 	float actualDamage = 0;
 	
 	if(AMonsterBase* HitMonster = Cast<AMonsterBase>(DamagedActor))

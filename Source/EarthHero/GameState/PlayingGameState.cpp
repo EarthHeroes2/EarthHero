@@ -25,7 +25,7 @@ void APlayingGameState::UpdateHUDGameTimer(const int GameTimer)
 	GameTimerSec = GameTimer;
 }
 
-void APlayingGameState::UpdatePlayerNumbers()
+void APlayingGameState::UpdatePlayerNumbers_Implementation()
 {
 	if(EHPlayerController && EHPlayerController->TabHUD)
 	{
