@@ -67,4 +67,6 @@ public:
 	void UpdateSelectInfo(int Index);
 	void PerkButtonHovered(int Index);
 	void PerkButtonUnhovered(int Index);
+
+	bool bHCodeSelected = false;
 };

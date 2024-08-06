@@ -130,14 +130,15 @@ bool ALobbyPlayerController::PerkInfoVerification(int64 PerkInfo)
 		if(PerkInfomations != nullptr)
 		{
 			int Level = LobbyGameMode->GetPlayerLevel(PlayerState->GetUniqueId());
-			int Point = Level + 2;
+			int Point = PerkInfomations->GetPoints(Level);
 			
 			int NumOfPerks = PerkInfomations->NumOfPerks;
+			int NumOfPerkPerLevel = PerkInfomations->NumOfPerkPerLevel;
 
 			if(Level > 0)
 			{
 				int64 CheckBit = 1;
-				int SelectableRange = Level * 5; //임시
+				int SelectableRange = Level * NumOfPerkPerLevel;
 				int Cnt = 0;
 				int i;
 			
@@ -147,7 +148,15 @@ bool ALobbyPlayerController::PerkInfoVerification(int64 PerkInfo)
 			
 				for( ; i < NumOfPerks; i++)
 					if(PerkInfo & (CheckBit << i))
-						Cnt += 100000;
+						return false;
+
+				int FirstHCodeIndex = NumOfPerks - PerkInfomations->NumOfPerkPerLevel;
+				int HCodeCnt = 0;
+				for(i = FirstHCodeIndex ; i < NumOfPerks; i++)
+					if(PerkInfo & (CheckBit << i))
+						HCodeCnt++;
+
+				if(HCodeCnt > 1) return false;
 
 				if(Point >= Cnt) return true;
 			}

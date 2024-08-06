@@ -26,12 +26,12 @@ bool UPerkWidget::Initialize()
 	{
 		//플레이어 레벨 정보 가져오기
 		Level = EHGameInstance->GetPlayerLevel();
-		if(Level > 0) Point = Level + 2;
+		if(Level > 0) Point = PerkInfomations->GetPoints(Level);
 		else
 		{
 			UE_LOG(LogTemp, Error, TEXT("UPerkWidget::Initialize(). Level < 0"));
-			Level = Point = 10;
-			//return false;
+			Level = Point = 10; //디버그용
+			//return false; //실제 있어야하는 줄
 		}
 		
 		Level_Tb->SetText(FText::FromString(FString("Lv. ") + FString::FromInt(Level)));
