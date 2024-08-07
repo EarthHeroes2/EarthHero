@@ -78,13 +78,16 @@ float UMonsterStatComponent::DamageTaken(float InDamage, TSubclassOf<UDamageType
 			AMonsterBase* MonsterBase = Cast<AMonsterBase>(Owner);
 			if(MonsterBase)
 			{
-				if(MonsterBase->MonsterType == Boss && MonsterBase->BossNumber == MidBoss1)
+				if(MonsterBase->MonsterType == Boss &&
+					(MonsterBase->BossNumber == MidBoss1 ||
+					MonsterBase->BossNumber == MidBoss3 ||
+					MonsterBase->BossNumber == MidBoss5
+					)
+				)
 				{
 					APlayingGameMode* PlayingGameMode = Cast<APlayingGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 					if (PlayingGameMode)
-					{
 						PlayingGameMode->PlayerRebirthAfterBossDead();
-					}
 				}
 			}
 		}

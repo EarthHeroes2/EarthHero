@@ -221,7 +221,24 @@ bool APlayingGameMode::GetPlayerLocation(int PlayerNumber, FVector& PlayerLocati
 void APlayingGameMode::PlayerRebirthAfterBossDead()
 {
 	//가장 오래 죽어있던 플레이어 부활
+
+	float OldestDeadTime = 1 << 31;
+	int TargetPlayerIndex = INDEX_NONE;
 	
+	for(int i = 0; i < bPlayerAlives.Num(); i++)
+	{
+		if(!bPlayerAlives[i])
+		{
+			if(OldestDeadTime > PlayerDeadTimes[i])
+			{
+				OldestDeadTime = PlayerDeadTimes[i];
+				TargetPlayerIndex = i;
+			}
+		}
+	}
+
+	if(TargetPlayerIndex != INDEX_NONE)
+		Rebirth(EHPlayerControllers[TargetPlayerIndex]);
 }
 
 void APlayingGameMode::SpawnForceFieldAtLocation(FVector2D Location, float ExpansionDuration)
@@ -278,6 +295,7 @@ void APlayingGameMode::InitSeamlessTravelPlayer(AController* NewController) //�
 			{
 				EHPlayerControllers.Add(NewEHPlayerController);
 				bPlayerAlives.Add(true);
+				PlayerDeadTimes.Add(0.f);
 				//세션 속 모든 플레이어가 레벨에 들어왔다면 레벨 초기 작업 시작
 				if(EHPlayerControllers.Num() == PlayingGameSession->GetNumPlayersInSession())
 				{
@@ -305,6 +323,7 @@ void APlayingGameMode::PostLogin(APlayerController* NewPlayer)
 			{
 				EHPlayerControllers.Add(NewEHPlayerController);
 				bPlayerAlives.Add(true);
+				PlayerDeadTimes.Add(0.f);
 				//세션 속 모든 플레이어가 레벨에 들어왔다면 레벨 초기 작업 시작
 				if(EHPlayerControllers.Num() == PlayingGameSession->GetNumPlayersInSession())
 				{
@@ -384,6 +403,7 @@ void APlayingGameMode::PlayerLogOut(const AEHPlayerController* ConstExitingEHPla
 			
 			EHPlayerControllers.RemoveAt(PlayerIndex);
 			bPlayerAlives.RemoveAt(PlayerIndex);
+			PlayerDeadTimes.RemoveAt(PlayerIndex);
 		}
 
 		//이러면 나간 자리는 초기화 해줘야겠네
@@ -416,6 +436,7 @@ void APlayingGameMode::AddPlayerDead(AEHPlayerController* DeadEHPlayerController
 	if (PlayerIndex != INDEX_NONE)
 	{
 		bPlayerAlives[PlayerIndex] = false;
+		PlayerDeadTimes[PlayerIndex] = GetWorld()->GetTimeSeconds();
 		NumDeadPlayers++;
 		CheckAllPlayerDead();
 	}
