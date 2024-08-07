@@ -79,26 +79,9 @@
   <component name="ChangeListManager">
     <list default="true" id="4591bad7-fd9f-4860-903f-8700cd913377" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/FirstPersonArchery/Blueprint/ArcheryFunctions.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/FirstPersonArchery/Blueprint/ArcheryFunctions.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Menu/WBP_MainMenu.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Menu/WBP_MainMenu.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EarthHero.uproject" beforeDir="false" afterPath="$PROJECT_DIR$/EarthHero.uproject" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Info/Perk/PerkInfomation.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Menu/PerkInfomation.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Info/Perk/PerkInfomation.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Menu/PerkInfomation.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/PlayerController/GameOverPlayerController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/PlayerController/GameOverPlayerController.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/PlayerController/LobbyPlayerController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/PlayerController/LobbyPlayerController.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/PlayerController/LobbyPlayerController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/PlayerController/LobbyPlayerController.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Widget/FriendRowWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Menu/FriendRowWidget.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Widget/FriendRowWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Menu/FriendRowWidget.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Widget/GameOverWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Menu/GameOverWidget.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Widget/GameOverWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Menu/GameOverWidget.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Widget/IndexButton.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Menu/IndexButton.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Widget/IndexButton.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Menu/IndexButton.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Widget/LobbyRowWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Menu/LobbyRowWidget.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Widget/LobbyRowWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Menu/LobbyRowWidget.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Widget/LobbyWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Menu/LobbyWidget.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Widget/LobbyWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Menu/LobbyWidget.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Widget/MainMenuWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Menu/MainMenuWidget.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Widget/MainMenuWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Menu/MainMenuWidget.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Widget/PerkWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Menu/PerkWidget.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Widget/PerkWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Menu/PerkWidget.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -369,6 +352,8 @@
       <workItem from="1722948329348" duration="1839000" />
       <workItem from="1722958136738" duration="1417000" />
       <workItem from="1722964522990" duration="570000" />
+      <workItem from="1722987976396" duration="986000" />
+      <workItem from="1723031328031" duration="3939000" />
     </task>
     <servers />
   </component>
