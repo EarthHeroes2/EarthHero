@@ -13,6 +13,7 @@
 #include "EarthHero/Enum/Enums.h"
 #include "LobbyWidget.generated.h"
 
+class UButton;
 class UImage;
 class UFriendRowWidget;
 
@@ -37,11 +38,12 @@ private:
 	EClassType SelectClass = Warrior;
 	int SelectDifficulty = 1;
 
+public:
 	UPROPERTY(meta = (BindWidget))
-	class UButton* Ready_Btn;
-
+	UButton* Ready_Btn;
+private:
 	UPROPERTY(meta = (BindWidget))
-	class UButton* Options_Btn;
+	UButton* Options_Btn;
 
 	UUserWidget* OptionsWidget;
 	TSubclassOf<UUserWidget> OptionsWidgetClass;

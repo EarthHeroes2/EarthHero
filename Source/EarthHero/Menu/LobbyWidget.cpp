@@ -240,6 +240,7 @@ void ULobbyWidget::ReadyClicked()
 
 	//방장이 아니면 레디 버튼으로 작동. 클래스 버튼 작동 on/off
 	if(!bHost) Class_Vb->SetIsEnabled(!(Class_Vb->GetIsEnabled()));
+	else Ready_Btn->SetIsEnabled(false);
 
 	APlayerController* PlayerController = GetOwningPlayer();
 	if (PlayerController)

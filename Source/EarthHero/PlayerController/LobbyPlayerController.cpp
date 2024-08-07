@@ -8,6 +8,7 @@
 #include <EarthHero/GameMode/LobbyGameMode.h>
 
 #include "OnlineSubsystem.h"
+#include "Components/Button.h"
 #include "EarthHero/EHGameInstance.h"
 #include "EarthHero/Character/EHCharacter.h"
 #include "EarthHero/Info/PerkInfomation.h"
@@ -260,8 +261,7 @@ void ALobbyPlayerController::Server_ClientReadyButtonClicked_Implementation()
 	{
 		if (bHost)
 		{
-			if (LobbyGameMode->PressGameStartButton()) Client_SendToDebugMessage("Game Start!");
-			else Client_SendToDebugMessage("All players should be ready!");
+			Client_GameStartResult(LobbyGameMode->PressGameStartButton());
 		}
 		else LobbyGameMode->TogglePlayerReady(this);
 	}
@@ -412,10 +412,20 @@ void ALobbyPlayerController::Client_FadeOut_Implementation()
 	}
 }
 
-void ALobbyPlayerController::Client_SendToDebugMessage_Implementation(const FString& Message)
+void ALobbyPlayerController::Client_GameStartResult_Implementation(const bool bSuccess)
 {
-	if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Yellow, Message);
+	if(bSuccess)
+	{
+		if (GEngine)
+			GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Yellow, "Game Start Success!");
+	}
+	else
+	{
+		if(LobbyWidget && LobbyWidget->Ready_Btn) LobbyWidget->Ready_Btn->SetIsEnabled(true);
+
+		if (GEngine)
+			GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Red, "Game Start Failed!");
+	}
 }
 
 void ALobbyPlayerController::EndPlay(const EEndPlayReason::Type EndPlayReason)

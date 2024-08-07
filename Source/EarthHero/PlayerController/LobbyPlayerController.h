@@ -59,7 +59,7 @@ public:
 	void Client_UpdateReadyState(const TArray<bool>& PlayerReadyStateArray);
 
 	UFUNCTION(Client, Reliable)
-	void Client_SendToDebugMessage(const FString& Message);
+	void Client_GameStartResult(const bool bSuccess);
 
 	UFUNCTION(Server, Reliable)
 	void Server_SendChatMessage(const FText& Text);
