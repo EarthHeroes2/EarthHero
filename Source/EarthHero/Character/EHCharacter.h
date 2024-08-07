@@ -51,6 +51,10 @@ public:
 
     UFUNCTION(NetMulticast, Reliable)
     void SetMaxWalkSpeed(float WalkSpeed);
+    UFUNCTION(NetMulticast, Reliable)
+    void SetMaxFlySpeed(float FlySpeed);
+    UFUNCTION(NetMulticast, Reliable)
+    void SetVelocity(FVector Velocity);
 
 protected:
     virtual void BeginPlay() override;

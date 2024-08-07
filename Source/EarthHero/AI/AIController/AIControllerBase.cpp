@@ -41,6 +41,14 @@ void AAIControllerBase::SetTargetPlayer(AEHCharacter* TargetPlayer)
 {
 	GetBlackBoardComponent()->SetValueAsBool(BlackboardKeys::CanSeePlayer, true);
 	GetBlackBoardComponent()->SetValueAsObject(BlackboardKeys::TargetPlayer, TargetPlayer);
+	GetBlackBoardComponent()->SetValueAsBool(BlackboardKeys::CanMove, true);
+}
+
+void AAIControllerBase::SetIsCanMove(bool SetIsCanMove) const
+{
+	GetBlackBoardComponent()->SetValueAsBool(BlackboardKeys::CanMove, SetIsCanMove);
+	UE_LOG(LogClass, Warning, TEXT("AIControllerBase = %s"), SetIsCanMove ? TEXT("true") : TEXT("false"));
+
 }
 
 void AAIControllerBase::OnPossess(APawn* InPawn)

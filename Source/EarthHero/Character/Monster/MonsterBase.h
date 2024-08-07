@@ -39,6 +39,16 @@ public:
 	int MonsterType;
 	
 	void AddEffect(UTexture2D* EffectImage, int ServerEffectType, float Duration);
+
+	UFUNCTION(NetMulticast, Reliable)
+	void SetMaxWalkSpeed(float NewWalkSpeed);
+	UFUNCTION(NetMulticast, Reliable)
+	void SetMaxFlySpeed(float NewFlySpeed);
+	UFUNCTION(NetMulticast, Reliable)
+	void SetVelocity(FVector Velocity);
+	UFUNCTION(Server, Reliable)
+	void SetIsCanMove(bool SetCanMove);
+	bool IsCanMove = true;
 	
 	//자식에서 상속받아서 값 바꾸어주세요 - 박정익
 	//원거리 몬스터인 경우 사거리가 시야보다 더 넓게 해주세요

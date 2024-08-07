@@ -17,10 +17,7 @@ public:
 
 	UPROPERTY()
 	float Strength;
-
-	UPROPERTY()
-	float Radius;
-
+	
 	UPROPERTY()
 	APawn *Attacker;
 
@@ -34,13 +31,13 @@ public:
 	float Time = 0.f;
 
 	float Delay = 0.02f;
+
+	void StartPointImpulse();
 	
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	USceneComponent* RootSceneComponent;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true), Category = "Components")
-	class URadialForceComponent* RadialForceComponent;
 	
 	void PointImpulse();
 	
@@ -48,8 +45,6 @@ private:
 	TSet<class AMonsterBase*> MonsterArray;
 	
 	FTimerHandle ImpulseHandle;
-	FTimerHandle DelayHandle;
-	FTimerHandle SetFalseSimulatePhysicsHandle;
 
 	void SetFalseSimulatePhysics();
 	void Impulse() const;
