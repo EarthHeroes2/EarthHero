@@ -218,6 +218,12 @@ bool APlayingGameMode::GetPlayerLocation(int PlayerNumber, FVector& PlayerLocati
 	return false;
 }
 
+void APlayingGameMode::PlayerRebirthAfterBossDead()
+{
+	//가장 오래 죽어있던 플레이어 부활
+	
+}
+
 void APlayingGameMode::SpawnForceFieldAtLocation(FVector2D Location, float ExpansionDuration)
 {
 	if (ForceFieldActor == nullptr)

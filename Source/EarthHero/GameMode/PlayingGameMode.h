@@ -93,6 +93,8 @@ public:
 	void GenerateRandomDurations(int Count, float Min, float Max, TArray<float>& OutDurations);
 
 	bool GetPlayerLocation(int PlayerNumber, FVector& PlayerLocation);
+
+	void PlayerRebirthAfterBossDead();
 	
 private:
 	TArray<float> ExpansionDurations;
