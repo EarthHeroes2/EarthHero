@@ -24,7 +24,7 @@ void AEf_PointImpulse::BeginPlay()
 
 void AEf_PointImpulse::StartPointImpulse()
 {
-	if (GetNetMode() == NM_ListenServer)
+	if (IsRunningDedicatedServer())
 	{
 		//UE_LOG(LogClass, Warning, TEXT("ListenServer activatied"));
 		for (auto HitActor : HitActors)
