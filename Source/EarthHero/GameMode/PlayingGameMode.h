@@ -29,6 +29,7 @@ class EARTHHERO_API APlayingGameMode : public AGameModeBase
 
 	TArray<AEHPlayerController*> EHPlayerControllers;
 	TArray<bool> bPlayerAlives;
+	TArray<float> PlayerDeadTimes;
 
 	int NumPlayerControllerReady = 0;
 	int NumDeadPlayers = 0;
@@ -93,6 +94,8 @@ public:
 	void GenerateRandomDurations(int Count, float Min, float Max, TArray<float>& OutDurations);
 
 	bool GetPlayerLocation(int PlayerNumber, FVector& PlayerLocation);
+
+	void PlayerRebirthAfterBossDead();
 	
 private:
 	TArray<float> ExpansionDurations;

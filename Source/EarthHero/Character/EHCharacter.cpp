@@ -93,6 +93,16 @@ void AEHCharacter::SetMaxWalkSpeed_Implementation(float WalkSpeed)
     GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 }
 
+void AEHCharacter::SetMaxFlySpeed_Implementation(float FlySpeed)
+{
+    GetCharacterMovement()->MaxFlySpeed = FlySpeed;
+}
+
+void AEHCharacter::SetVelocity_Implementation(FVector Velocity)
+{
+    GetCharacterMovement()->Velocity = Velocity;
+}
+
 void AEHCharacter::BeginPlay()
 {
     Super::BeginPlay();

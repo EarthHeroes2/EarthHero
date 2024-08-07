@@ -61,4 +61,5 @@ protected:
 public:
 	void AttackedPlayer(AActor* AttackedPlayer);
 	void SetTargetPlayer(AEHCharacter* TargetPlayer);
+	void SetIsCanMove(bool SetIsCanMove) const;
 };

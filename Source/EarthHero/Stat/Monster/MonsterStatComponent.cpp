@@ -71,6 +71,27 @@ float UMonsterStatComponent::DamageTaken(float InDamage, TSubclassOf<UDamageType
 	if (MonsterStat.Health <= 0.f)
 	{
 		IsDead = true;
+
+		AActor* Owner = GetOwner();
+		if (Owner)
+		{
+			AMonsterBase* MonsterBase = Cast<AMonsterBase>(Owner);
+			if(MonsterBase)
+			{
+				if(MonsterBase->MonsterType == Boss &&
+					(MonsterBase->BossNumber == MidBoss1 ||
+					MonsterBase->BossNumber == MidBoss3 ||
+					MonsterBase->BossNumber == MidBoss5
+					)
+				)
+				{
+					APlayingGameMode* PlayingGameMode = Cast<APlayingGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+					if (PlayingGameMode)
+						PlayingGameMode->PlayerRebirthAfterBossDead();
+				}
+			}
+		}
+		
 		die();
 	}
 
@@ -165,6 +186,7 @@ void UMonsterStatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 void UMonsterStatComponent::die_Implementation()
 {
 	//GetOwner()->Deta
+	if(IsRunningDedicatedServer()) UE_LOG(LogTemp, Log, TEXT("Server?"));
 	GetOwner()->Destroy();
 }
 

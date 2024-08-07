@@ -30,8 +30,8 @@ bool UPerkWidget::Initialize()
 		else
 		{
 			UE_LOG(LogTemp, Error, TEXT("UPerkWidget::Initialize(). Level < 0"));
-			Level = Point = 10; //디버그용
-			//return false; //실제 있어야하는 줄
+			//Level = Point = 10; //디버그용
+			return false; //실제 있어야하는 줄
 		}
 		
 		Level_Tb->SetText(FText::FromString(FString("Lv. ") + FString::FromInt(Level)));

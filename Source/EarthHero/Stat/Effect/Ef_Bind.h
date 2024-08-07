@@ -21,5 +21,7 @@ protected:
 	virtual void ResetEffect() override;
 private:
 	float OriginalMaxWalkSpeed;
+	float OriginalMaxFlySpeed;
+	FVector OriginalMaxVelocity;
 	
 };

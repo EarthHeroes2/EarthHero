@@ -21,9 +21,13 @@ void AEf_Bind::ApplyEffect(AActor* InTargetActor, float InEffectValue, float InD
 		{
 			// 기존 이동 속도를 저장
 			OriginalMaxWalkSpeed = Character->GetCharacterMovement()->MaxWalkSpeed;
+			OriginalMaxFlySpeed = Character->GetCharacterMovement()->MaxFlySpeed;
+			//OriginalMaxVelocity = Character->GetCharacterMovement()->Velocity;
 
-			// 이동 속도를 0으로 설정
-			Character->GetCharacterMovement()->MaxWalkSpeed = 0.0f;
+			// 이동 속도를 0으로 설정 
+			Character->SetMaxWalkSpeed(0);
+			Character->SetMaxFlySpeed(0);
+			//Character->SetVelocity(FVector(0, 0, 0));
 
 			// 이 액터를 대상 액터에 부착
 			AttachToActor(TargetActor, FAttachmentTransformRules::KeepRelativeTransform);
@@ -35,9 +39,14 @@ void AEf_Bind::ApplyEffect(AActor* InTargetActor, float InEffectValue, float InD
 		{
 			// 기존 이동 속도를 저장
 			OriginalMaxWalkSpeed = Monster->GetCharacterMovement()->MaxWalkSpeed;
+			OriginalMaxFlySpeed = Monster->GetCharacterMovement()->MaxFlySpeed;
+			OriginalMaxVelocity = Monster->GetCharacterMovement()->Velocity;
 
 			// 이동 속도를 0으로 설정
-			Monster->GetCharacterMovement()->MaxWalkSpeed = 0.0f;
+			Monster->SetMaxWalkSpeed(0);
+			Monster->SetMaxFlySpeed(0);
+			Monster->SetIsCanMove(false);
+			Monster->SetVelocity(FVector(0, 0, 0));
 
 			// 이 액터를 대상 액터에 부착
 			AttachToActor(TargetActor, FAttachmentTransformRules::KeepRelativeTransform);
@@ -63,14 +72,19 @@ void AEf_Bind::ResetEffect()
 	{
 		if (Character->GetCharacterMovement())
 		{
-			Character->GetCharacterMovement()->MaxWalkSpeed = OriginalMaxWalkSpeed;
+			Character->SetMaxWalkSpeed(OriginalMaxWalkSpeed);
+			Character->SetMaxFlySpeed(OriginalMaxFlySpeed);
+			//Character->SetVelocity(OriginalMaxVelocity);
 		}
 	}
 	else if (AMonsterBase* Monster = Cast<AMonsterBase>(TargetActor))
 	{
 		if (Monster->GetCharacterMovement())
 		{
-			Monster->GetCharacterMovement()->MaxWalkSpeed = OriginalMaxWalkSpeed;
+			Monster->SetMaxWalkSpeed(OriginalMaxWalkSpeed);
+			Monster->SetMaxFlySpeed(OriginalMaxFlySpeed);
+			Monster->SetIsCanMove(true);
+			Monster->SetVelocity(OriginalMaxVelocity);
 		}
 	}
 	

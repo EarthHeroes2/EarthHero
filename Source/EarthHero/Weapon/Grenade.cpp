@@ -5,13 +5,10 @@
 
 #include "Components/SphereComponent.h"
 #include "EarthHero/Character/Monster/MonsterBase.h"
-#include "EarthHero/Enum/Enums.h"
 #include "EarthHero/Stat/ShooterStatComponent.h"
-#include "EarthHero/Stat/DamageType/NormalDamageType.h"
 #include "EarthHero/Stat/Effect/Ef_PointImpulse.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
-#include "PhysicsEngine/RadialForceComponent.h"
 
 AGrenade::AGrenade()
 {
@@ -85,10 +82,10 @@ void AGrenade::Server_GrenadeHit_Implementation(FVector HitLocation)
 				AEf_PointImpulse* PointImpulse =Cast<AEf_PointImpulse>(World->SpawnActor<AActor>(AEf_PointImpulse::StaticClass(), HitLocation, FRotator(0, 0, 0)));
 				if (PointImpulse)
 				{
-					PointImpulse->Strength = -1500;
-					PointImpulse->Radius = GrenadeRange;
+					PointImpulse->Strength = 1500;
 					PointImpulse->Attacker = GetInstigator();
 					PointImpulse->HitActors = UniqueActors;
+					PointImpulse->StartPointImpulse();
 				}
 			}
 		}

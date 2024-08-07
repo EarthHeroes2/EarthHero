@@ -17,7 +17,7 @@ public:
 	//수류탄 범위
 	float SH_GrenadeRange = 200.f;
 	//수류탄 데미지
-	float SH_GrenadeDamage = 40.f;
+	float SH_GrenadeDamage = 1.f;
 	//수류탄 적중 시 추가데미지
 	float SH_AdditionalDamage = 0.15f;
 

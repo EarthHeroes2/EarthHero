@@ -4,8 +4,9 @@
 #include "MonsterBase.h"
 
 #include "Components/WidgetComponent.h"
-#include "EarthHero/HUD/MonsterStatHUD.h"
+#include "EarthHero/AI/AIController/AIControllerBase.h"
 #include "EarthHero/Stat/Monster/MonsterStatComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 AMonsterBase::AMonsterBase()
@@ -52,6 +53,31 @@ void AMonsterBase::AddEffect(UTexture2D* EffectImage, int ServerEffectType, floa
 	if (MonsterStatComponent)
 	{
 		MonsterStatComponent->UpdateEffectImage(EffectImage, ServerEffectType, Duration);
+	}
+}
+
+void AMonsterBase::SetMaxFlySpeed_Implementation(float NewFlySpeed)
+{
+	GetCharacterMovement()->MaxFlySpeed = NewFlySpeed;
+}
+
+void AMonsterBase::SetMaxWalkSpeed_Implementation(float NewWalkSpeed)
+{
+	GetCharacterMovement()->MaxWalkSpeed = NewWalkSpeed;
+}
+
+void AMonsterBase::SetVelocity_Implementation(FVector Velocity)
+{
+	GetCharacterMovement()->Velocity = Velocity;
+}
+
+void AMonsterBase::SetIsCanMove_Implementation(bool SetCanMove)
+{
+	IsCanMove = SetCanMove;
+	AAIControllerBase *AIController = Cast<AAIControllerBase>(GetController());
+	if (AIController)
+	{
+		AIController->SetIsCanMove(SetCanMove);
 	}
 }
 
