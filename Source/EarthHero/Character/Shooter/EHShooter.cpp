@@ -4,7 +4,7 @@
 #include "EHShooter.h"
 
 #include "ShooterCombatComponent.h"
-#include "EarthHero/Player/EHPlayerState.h"
+#include "EarthHero/PlayerState/EHPlayerState.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 AEHShooter::AEHShooter()

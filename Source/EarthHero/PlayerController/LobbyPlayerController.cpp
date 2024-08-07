@@ -10,7 +10,7 @@
 #include "OnlineSubsystem.h"
 #include "EarthHero/EHGameInstance.h"
 #include "EarthHero/Character/EHCharacter.h"
-#include "EarthHero/Info/Perk/PerkInfomation.h"
+#include "EarthHero/Info/PerkInfomation.h"
 #include "EarthHero/PlayerState/LobbyPlayerState.h"
 #include "Interfaces/VoiceInterface.h"
 
@@ -130,14 +130,15 @@ bool ALobbyPlayerController::PerkInfoVerification(int64 PerkInfo)
 		if(PerkInfomations != nullptr)
 		{
 			int Level = LobbyGameMode->GetPlayerLevel(PlayerState->GetUniqueId());
-			int Point = Level + 2;
+			int Point = PerkInfomations->GetPoints(Level);
 			
 			int NumOfPerks = PerkInfomations->NumOfPerks;
+			int NumOfPerkPerLevel = PerkInfomations->NumOfPerkPerLevel;
 
 			if(Level > 0)
 			{
 				int64 CheckBit = 1;
-				int SelectableRange = Level * 5; //임시
+				int SelectableRange = Level * NumOfPerkPerLevel;
 				int Cnt = 0;
 				int i;
 			
@@ -147,7 +148,15 @@ bool ALobbyPlayerController::PerkInfoVerification(int64 PerkInfo)
 			
 				for( ; i < NumOfPerks; i++)
 					if(PerkInfo & (CheckBit << i))
-						Cnt += 100000;
+						return false;
+
+				int FirstHCodeIndex = NumOfPerks - PerkInfomations->NumOfPerkPerLevel;
+				int HCodeCnt = 0;
+				for(i = FirstHCodeIndex ; i < NumOfPerks; i++)
+					if(PerkInfo & (CheckBit << i))
+						HCodeCnt++;
+
+				if(HCodeCnt > 1) return false;
 
 				if(Point >= Cnt) return true;
 			}
@@ -243,6 +252,7 @@ void ALobbyPlayerController::Client_SelectDefaultCharacter_Implementation()
 	else UE_LOG(LogTemp, Log, TEXT("invalid LobbyWidget"));
 }
 
+//방장유무에 따라 레디 혹은 게임 시작버튼으로 작동
 void ALobbyPlayerController::Server_ClientReadyButtonClicked_Implementation()
 {
 	ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
@@ -251,7 +261,7 @@ void ALobbyPlayerController::Server_ClientReadyButtonClicked_Implementation()
 		if (bHost)
 		{
 			if (LobbyGameMode->PressGameStartButton()) Client_SendToDebugMessage("Game Start!");
-			else  Client_SendToDebugMessage("All players should be ready!");
+			else Client_SendToDebugMessage("All players should be ready!");
 		}
 		else LobbyGameMode->TogglePlayerReady(this);
 	}

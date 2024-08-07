@@ -3,11 +3,11 @@
 
 #include "CustomSpectatorPawn.h"
 
-#include "Camera/CameraComponent.h"
-#include "EarthHero/Player/EHPlayerController.h"
+#include "EarthHero/PlayerController/EHPlayerController.h"
 
 ACustomSpectatorPawn::ACustomSpectatorPawn()
 {
+    SetActorEnableCollision(false);
     SetReplicates(true);
 }
 

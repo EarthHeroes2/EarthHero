@@ -17,7 +17,14 @@ class EARTHHERO_API AGameOverPlayerController : public APlayerController
 
 	virtual void BeginPlay() override;
 
+	UFUNCTION(Server, Reliable)
+	void Server_ClientReady();
+	UFUNCTION(Client, Reliable)
+	void Client_InitSetting(bool bClear);
+
 	AGameOverPlayerController();
+
+	bool bGameClear;
 
 	TSubclassOf<class UUserWidget> GameOverWidgetClass;
 	UGameOverWidget* GameOverWidget;

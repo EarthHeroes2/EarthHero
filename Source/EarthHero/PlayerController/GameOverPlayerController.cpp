@@ -4,8 +4,10 @@
 #include "GameOverPlayerController.h"
 
 #include "Blueprint/UserWidget.h"
+#include "Components/TextBlock.h"
+#include "EarthHero/EHGameInstance.h"
 #include "EarthHero/GameMode/GameOverGameMode.h"
-#include "EarthHero/Widget/GameOverWidget.h"
+#include "EarthHero/Menu/GameOverWidget.h"
 #include "GameFramework/PlayerState.h"
 
 AGameOverPlayerController::AGameOverPlayerController()
@@ -39,6 +41,18 @@ void AGameOverPlayerController::BeginPlay()
 				SetInputMode(InputMode);
 			}
 		}
+
+		Server_ClientReady();
+
+		//로딩화면 제거
+		UEHGameInstance* EHGameinstance = Cast<UEHGameInstance>(GetGameInstance());
+		if(EHGameinstance) EHGameinstance->RemoveSeamlessLoadingScreen();
+	}
+	else
+	{
+		UEHGameInstance* EHGameInstance = Cast<UEHGameInstance>(GetGameInstance());
+		if(EHGameInstance)
+			bGameClear = EHGameInstance->bGameClear;
 	}
 }
 
@@ -62,5 +76,20 @@ void AGameOverPlayerController::Client_SendChatMessage_Implementation(const FTex
 	if (GameOverWidget)
 	{
 		GameOverWidget->AddChatMessage(Text);
+	}
+}
+
+void AGameOverPlayerController::Server_ClientReady_Implementation()
+{
+	//게임 결과와 여러 통계를 보여줌?
+	Client_InitSetting(bGameClear);
+}
+
+void AGameOverPlayerController::Client_InitSetting_Implementation(bool bClear)
+{
+	if (GameOverWidget && GameOverWidget->GameResult_Tb)
+	{
+		if(bGameClear) GameOverWidget->GameResult_Tb->SetText(FText::FromString(FString("Clear")));
+		else GameOverWidget->GameResult_Tb->SetText(FText::FromString(FString("Lose")));
 	}
 }

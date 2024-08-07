@@ -1,11 +1,10 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Components/Button.h"
 #include "IndexButton.generated.h"
 
+class PerkInfomation;
 class UTextBlock;
 class UEHGameInstance;
 class UPerkWidget;
@@ -18,10 +17,14 @@ class EARTHHERO_API UIndexButton : public UButton
 	GENERATED_BODY()
 
 	UEHGameInstance* EHGameInstance;
+
+	PerkInfomation* PerkInfo;
+	
 	int NeedPoint = -1;
 	
 	bool bSelected = false;
-
+	bool bHCode = false;
+	
 public:
 	int Index;
 	UPerkWidget* PerkWidget;

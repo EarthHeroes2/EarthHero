@@ -4,7 +4,7 @@
 #include "EHArcher.h"
 
 #include "ArcherCombatComponent.h"
-#include "EarthHero/Player/EHPlayerState.h"
+#include "EarthHero/PlayerState/EHPlayerState.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 AEHArcher::AEHArcher()

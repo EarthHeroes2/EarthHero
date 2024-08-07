@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #include "MainMenuWidget.h"
 #include "Components/Button.h"
 #include "Components/CheckBox.h"
@@ -575,6 +573,16 @@ void UMainMenuWidget::HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRe
 
                 bool bIsFind = false;
 
+
+            	FString SelectedPortNumber;
+            	FString SelectedLobbyName;
+            	bool bSelectedKeyValueFound1, bSelectedKeyValueFound2;
+            	if(FindSessionReason == "JoinSelectedLobby") //최신 정보와 비교하기 위함
+            	{
+            		bSelectedKeyValueFound1 = SessionToJoin->Session.SessionSettings.Get("PortNumber", SelectedPortNumber);
+            		bSelectedKeyValueFound2 = SessionToJoin->Session.SessionSettings.Get("LobbyName", SelectedLobbyName);
+            	}
+
                 for (FOnlineSessionSearchResult SessionInSearchResult : Search->SearchResults)
                 {
                     FString GameName;
@@ -592,13 +600,17 @@ void UMainMenuWidget::HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRe
                 	FString LobbyName;
                 	bool bKeyValueFound5 = SessionInSearchResult.Session.SessionSettings.Get("LobbyName", LobbyName);
 
-                    if (bKeyValueFound1 && bKeyValueFound2 && bKeyValueFound3 && bKeyValueFound4 && bKeyValueFound5)
+                	bool bStarted;
+                	bool bKeyValueFound6 = SessionInSearchResult.Session.SessionSettings.Get("Started", bStarted);
+
+                    if (bKeyValueFound1 && bKeyValueFound2 && bKeyValueFound3 && bKeyValueFound4 && bKeyValueFound5 && bKeyValueFound6)
                     {
-                    	if (GameName == "EH2" &&
+                    	if (GameName == "EH2" && !bStarted &&
 								(
 									(FindSessionReason == "JoinLobby" && NumberOfJoinedPlayers > 0 && bAdvertise) ||
 									(FindSessionReason == "CreateLobby" && PortNumber == ReceivedLobbyPort) ||
-									(FindSessionReason == "FindLobby" && NumberOfJoinedPlayers > 0)
+									(FindSessionReason == "FindLobby" && NumberOfJoinedPlayers > 0) ||
+									(FindSessionReason == "JoinSelectedLobby" && NumberOfJoinedPlayers > 0 && bSelectedKeyValueFound1 && bSelectedKeyValueFound2 && SelectedPortNumber == PortNumber && SelectedLobbyName == LobbyName)
 								)
 							)
                     	{
@@ -638,6 +650,10 @@ void UMainMenuWidget::HandleFindSessionsCompleted(bool bWasSuccessful, TSharedRe
             		else if(FindSessionReason == "FindLobby")
             		{
             			GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Yellow, FString::Printf(TEXT("No lobby")));
+            		}
+            		else if(FindSessionReason == "JoinSelectedLobby")
+            		{
+            			GEngine->AddOnScreenDebugMessage(-1, 600.f, FColor::Yellow, FString::Printf(TEXT("Selected Lobby is Not Valid")));
             		}
             		SetButtonsEnabled(true);
             	}
@@ -757,22 +773,14 @@ void UMainMenuWidget::DestroySessionComplete(FName SessionName, bool bWasSuccess
 		IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
 		if (Session.IsValid())
 		{
-			if(LeaveSessionReason == "JoinSelectedLobby")
+			if(LeaveSessionReason == "JoinSelectedLobby" || LeaveSessionReason == "CreateLobby" || LeaveSessionReason == "JoinLobby")
 			{
-				JoinSession();
-			}
-			else if(LeaveSessionReason == "CreateLobby" || LeaveSessionReason == "JoinLobby")
-			{
-				//일단 성공이든 실패든 세션 찾고 들어감
-				if (bWasSuccessful)
-				{
-					FindLobbys(LeaveSessionReason);
-				}
-				else
+				if (!bWasSuccessful) //실패하더라도 시도는 함
 				{
 					UE_LOG(LogTemp, Warning, TEXT("Failed to destroy session"));
-					FindLobbys(LeaveSessionReason);
 				}
+				
+				FindLobbys(LeaveSessionReason);
 			}
 			else UE_LOG(LogTemp, Warning, TEXT("Unknown leave reason"));
 

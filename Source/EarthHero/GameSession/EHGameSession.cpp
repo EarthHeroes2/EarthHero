@@ -161,11 +161,7 @@ void AEHGameSession::HandleDestroySessionCompleted(FName EOSSessionName, bool bW
         }
     }
 
-    FString PortNumber = GetServerPort();
-    
     //프로세스 종료
-    USocketClient* NewSocket = NewObject<USocketClient>(this);
-    if(NewSocket) NewSocket->CreateSocket(Server_DestroyServer, PortNumber);
     FGenericPlatformMisc::RequestExit(false);
 }
 

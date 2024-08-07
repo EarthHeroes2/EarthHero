@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -16,6 +14,9 @@ class EARTHHERO_API UGameOverWidget : public UUserWidget
 
 public:
 	void AddChatMessage(const FText& Text);
+	
+	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* GameResult_Tb;
 
 private:
 	virtual bool Initialize() override;
@@ -30,9 +31,6 @@ private:
 	class UScrollBox* Chat_Scr;
 	UPROPERTY(meta = (BindWidget))
 	class UEditableTextBox* Chat_Etb;
-
-	UPROPERTY(meta = (BindWidget))
-	class UTextBlock* GameResult_Tb;
 	
 	UPROPERTY(meta = (BindWidget))
 	class UButton* Exit_Btn;

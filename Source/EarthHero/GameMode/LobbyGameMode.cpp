@@ -238,6 +238,7 @@ bool ALobbyGameMode::PressGameStartButton()
 		if(ReadyCount == LobbyGameSession->GetNumPlayersInSession() - 1) //임시로...
 		{
 			UE_LOG(LogTemp, Log, TEXT("Lobby Start!"));
+			
 			LobbyGameSession->StartSession();
 			return true;
 		}

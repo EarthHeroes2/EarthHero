@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "LobbyRowWidget.h"
 #include "MainMenuWidget.h"
 #include "OnlineSessionSettings.h"
@@ -24,6 +21,7 @@ void ULobbyRowWidget::UpdateLobbyInfo(FOnlineSessionSearchResult Lobby)
 	
 	bool bKeyValueFound = LobbyInfo.Session.SessionSettings.Get("Advertise", bAdvertise);
 
+	//임시로 노랑색
 	if(bKeyValueFound && !bAdvertise) SetColorAndOpacity(FLinearColor::Yellow);
 	
 	FString LobbyName;

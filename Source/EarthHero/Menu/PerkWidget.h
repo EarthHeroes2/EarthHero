@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -13,9 +11,7 @@ class UTextBlock;
 class UButton;
 class UIndexButton;
 class UHorizontalBox;
-/**
- * 
- */
+
 UCLASS()
 class EARTHHERO_API UPerkWidget : public UUserWidget
 {
@@ -71,4 +67,6 @@ public:
 	void UpdateSelectInfo(int Index);
 	void PerkButtonHovered(int Index);
 	void PerkButtonUnhovered(int Index);
+
+	bool bHCodeSelected = false;
 };

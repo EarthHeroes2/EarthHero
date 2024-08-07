@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "PerkWidget.h"
 
 #include "Components/Button.h"
@@ -10,8 +7,8 @@
 #include "Components/TextBlock.h"
 #include "Components/VerticalBox.h"
 #include "EarthHero/EHGameInstance.h"
-#include "EarthHero/Info/Perk/PerkInfomation.h"
-#include "EarthHero/Widget/IndexButton.h"
+#include "EarthHero/Info/PerkInfomation.h"
+#include "EarthHero/Menu/IndexButton.h"
 
 
 UPerkWidget::UPerkWidget(const FObjectInitializer &ObjectInitializer)
@@ -29,12 +26,12 @@ bool UPerkWidget::Initialize()
 	{
 		//플레이어 레벨 정보 가져오기
 		Level = EHGameInstance->GetPlayerLevel();
-		if(Level > 0) Point = Level + 2;
+		if(Level > 0) Point = PerkInfomations->GetPoints(Level);
 		else
 		{
 			UE_LOG(LogTemp, Error, TEXT("UPerkWidget::Initialize(). Level < 0"));
-			Level = Point = 10;
-			//return false;
+			Level = Point = 10; //디버그용
+			//return false; //실제 있어야하는 줄
 		}
 		
 		Level_Tb->SetText(FText::FromString(FString("Lv. ") + FString::FromInt(Level)));

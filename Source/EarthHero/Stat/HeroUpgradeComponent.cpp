@@ -2,8 +2,11 @@
 
 #include "HeroUpgradeComponent.h"
 
+#include "ArcherStatComponent.h"
 #include "HeroUpgradeLibrary.h"
-#include "EarthHero/Player/EHPlayerState.h"
+#include "MechanicStatComponent.h"
+#include "ShooterStatComponent.h"
+#include "WarriorStatComponent.h"
 #include "EarthHero/HUD/InGameHUD.h"
 #include "EarthHero/HUD/TabHUDWidget.h"
 #include "Net/UnrealNetwork.h"

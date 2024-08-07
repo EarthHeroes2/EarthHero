@@ -7,9 +7,9 @@
 #include "UObject/ConstructorHelpers.h"
 #include "Kismet/GameplayStatics.h"
 #include "../ForceField/BossZone.h"
-#include "EarthHero/Player/EHPlayerState.h"
 #include "EarthHero/ForceField/DifficultyZone.h"
 #include "DrawDebugHelpers.h"
+#include "EarthHero/PlayerState/EHPlayerState.h"
 
 AEHCharacter::AEHCharacter()
 {

@@ -2,10 +2,9 @@
 
 #include "PlayingGameState.h"
 
-#include "EarthHero/Character/EHCharacter.h"
 #include "EarthHero/HUD/InGameHUD.h"
 #include "EarthHero/HUD/TabHUDWidget.h"
-#include "EarthHero/Player/EHPlayerController.h"
+#include "EarthHero/PlayerController/EHPlayerController.h"
 #include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
 
