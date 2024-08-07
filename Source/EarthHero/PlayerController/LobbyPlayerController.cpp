@@ -252,6 +252,7 @@ void ALobbyPlayerController::Client_SelectDefaultCharacter_Implementation()
 	else UE_LOG(LogTemp, Log, TEXT("invalid LobbyWidget"));
 }
 
+//방장유무에 따라 레디 혹은 게임 시작버튼으로 작동
 void ALobbyPlayerController::Server_ClientReadyButtonClicked_Implementation()
 {
 	ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
@@ -260,7 +261,7 @@ void ALobbyPlayerController::Server_ClientReadyButtonClicked_Implementation()
 		if (bHost)
 		{
 			if (LobbyGameMode->PressGameStartButton()) Client_SendToDebugMessage("Game Start!");
-			else  Client_SendToDebugMessage("All players should be ready!");
+			else Client_SendToDebugMessage("All players should be ready!");
 		}
 		else LobbyGameMode->TogglePlayerReady(this);
 	}

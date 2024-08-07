@@ -32,6 +32,8 @@ public:
 	
 	void SaveGame(int64 SavePerkInfo);
 	int64 LoadGame();
+	
+	virtual void Shutdown() override;
 
 	TSubclassOf<class UUserWidget> SeamlessLoadingWidgetClass;
 	UUserWidget* SeamlessLoadingWidget;

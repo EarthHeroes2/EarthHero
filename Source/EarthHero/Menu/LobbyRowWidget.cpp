@@ -21,6 +21,7 @@ void ULobbyRowWidget::UpdateLobbyInfo(FOnlineSessionSearchResult Lobby)
 	
 	bool bKeyValueFound = LobbyInfo.Session.SessionSettings.Get("Advertise", bAdvertise);
 
+	//임시로 노랑색
 	if(bKeyValueFound && !bAdvertise) SetColorAndOpacity(FLinearColor::Yellow);
 	
 	FString LobbyName;

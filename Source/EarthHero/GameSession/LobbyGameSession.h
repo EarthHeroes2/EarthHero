@@ -43,7 +43,8 @@ public:
 	void StartSession();
 protected:
 	void HandleStartSessionCompleted(FName SessionName, bool bWasSuccessful);
-	
+	void TravelToInGameMap();
+
 	FDelegateHandle UnregisterPlayerDelegateHandle;
 	FDelegateHandle CreateSessionDelegateHandle;
 	FDelegateHandle RegisterPlayerDelegateHandle;

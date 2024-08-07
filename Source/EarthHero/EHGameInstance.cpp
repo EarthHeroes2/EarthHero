@@ -398,3 +398,17 @@ int64 UEHGameInstance::LoadGame()
     
     return 0;
 }
+
+
+
+void UEHGameInstance::Shutdown()
+{
+    Super::Shutdown();
+
+    if(IsRunningDedicatedServer())
+    {
+        //프로세스 종료
+        USocketClient* NewSocket = NewObject<USocketClient>(this);
+        if(NewSocket) NewSocket->CreateSocket(Server_DestroyServer, ServerPortNumber);
+    }
+}

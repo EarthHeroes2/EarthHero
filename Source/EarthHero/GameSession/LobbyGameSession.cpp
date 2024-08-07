@@ -61,7 +61,7 @@ void ALobbyGameSession::CreateSession(FString PortNumber)
             SessionSettings->bUsesPresence = false; // 무조건 false여야 함
             SessionSettings->bUseLobbiesIfAvailable = false; // 무조건 false여야 함
             SessionSettings->bAllowInvites = true;
-            SessionSettings->bAllowJoinInProgress = false;
+            SessionSettings->bAllowJoinInProgress = false; //작동 안하는 것 같은데
             SessionSettings->bShouldAdvertise = true; // 무조건 public (작동을 안함)
             
             //SessionSettings->bUsesStats = false; // 업적관련?
@@ -79,6 +79,7 @@ void ALobbyGameSession::CreateSession(FString PortNumber)
             SessionSettings->Set("LobbyName", LobbyName, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
             if(Private == "true") SessionSettings->Set("Advertise", false, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
             else SessionSettings->Set("Advertise", true, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+            SessionSettings->Set("Started", false, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
             
             UE_LOG(LogTemp, Log, TEXT("Creating lobby..."));
             
@@ -202,6 +203,7 @@ void ALobbyGameSession::StartSession()
     }
 }
 
+
 void ALobbyGameSession::HandleStartSessionCompleted(FName EOSSessionName, bool bWasSuccessful)
 {
     IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
@@ -210,6 +212,32 @@ void ALobbyGameSession::HandleStartSessionCompleted(FName EOSSessionName, bool b
         IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
         if (Session.IsValid())
         {
+            //기존 세션 정보 받아오고
+            FOnlineSessionSettings* SessionSettings = Session->GetSessionSettings(SessionName);
+            if (SessionSettings)
+            {
+                //광고 여부 재설정
+                SessionSettings->Set("Started", true, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+
+                UE_LOG(LogTemp, Log, TEXT("Change Session Setting : Started!"));
+
+                UpdateSessionDelegateHandle =
+                    Session->AddOnUpdateSessionCompleteDelegate_Handle(FOnUpdateSessionCompleteDelegate::CreateUObject(
+                        this,
+                        &ThisClass::HandleUpdateSessionCompleted));
+
+                // 세션 정보 업데이트
+                if (!Session->UpdateSession(SessionName, *SessionSettings, true))
+                {
+                    UE_LOG(LogTemp, Warning, TEXT("Failed to update Lobby"));
+                    Session->ClearOnUpdateSessionCompleteDelegate_Handle(UpdateSessionDelegateHandle);
+                    UpdateSessionDelegateHandle.Reset();
+                }
+            }
+            else UE_LOG(LogTemp, Warning, TEXT("No session settings found for session: %s"), *SessionName.ToString());
+
+
+            //세션 시작
             if (bWasSuccessful)
             {
                 UE_LOG(LogTemp, Log, TEXT("Lobby Started!"));
@@ -220,6 +248,10 @@ void ALobbyGameSession::HandleStartSessionCompleted(FName EOSSessionName, bool b
                 {
                     LobbyGameMode->ShowFadeOut();
                 }
+
+                //약간의 딜레이 주는 편이 좋을듯
+                FTimerHandle TimerHandle;
+                GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ALobbyGameSession::TravelToInGameMap, 1.5f, false);
                 
                 GetWorld()->ServerTravel(InGameMap, true);
             }
@@ -229,6 +261,10 @@ void ALobbyGameSession::HandleStartSessionCompleted(FName EOSSessionName, bool b
             StartSessionDelegateHandle.Reset();
         }
     }
+}
+void ALobbyGameSession::TravelToInGameMap()
+{
+    GetWorld()->ServerTravel(InGameMap, true);
 }
 
 //NotifyLogout에서 불림
@@ -355,8 +391,7 @@ void ALobbyGameSession::ChangeAdvertiseState(bool bAdvertise)
 
 bool ALobbyGameSession::UpdateLobbyPassword(const FString& Password)
 {
-    //소켓 서버에게 비번변경을 요청해야함
-    
+    //소켓 서버에게 비번변경을 요청
     FString ExtraInfo = GetServerPort() + "|" + Password;
     
     USocketClient* NewSocket = NewObject<USocketClient>(this);
