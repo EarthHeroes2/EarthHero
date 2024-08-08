@@ -16,13 +16,15 @@ AGroundMeleeMonster::AGroundMeleeMonster() : Super()
 
 void AGroundMeleeMonster::Attack()
 {
-
+	UE_LOG(LogTemp, Warning, TEXT("AGroundMeleeMonster::Attack()"));
 	USkeletalMeshComponent* SkeletalMesh = GetMesh();
 	if(SkeletalMesh)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("if(SkeletalMesh)"));
 		UAnimInstance* AnimInstance = SkeletalMesh->GetAnimInstance();
 		if (AnimInstance)
 		{
+			UE_LOG(LogTemp, Warning, TEXT("if (AnimInstance)"));
 			AnimInstance->Montage_Play(MyAnimMontage);
 		}
 	}
