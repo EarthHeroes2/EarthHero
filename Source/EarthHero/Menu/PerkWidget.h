@@ -5,7 +5,7 @@
 #include "PerkWidget.generated.h"
 
 class UImage;
-class PerkInfomation;
+class PerkInformation;
 class UEHGameInstance;
 class UTextBlock;
 class UButton;
@@ -22,7 +22,7 @@ class EARTHHERO_API UPerkWidget : public UUserWidget
 
 	UEHGameInstance* EHGameInstance;
 
-	PerkInfomation* PerkInfomations;
+	PerkInformation* PerkInformations;
 	
 	int Level;
 public:

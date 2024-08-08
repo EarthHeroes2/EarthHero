@@ -11,7 +11,7 @@
 #include "Components/Button.h"
 #include "EarthHero/EHGameInstance.h"
 #include "EarthHero/Character/EHCharacter.h"
-#include "EarthHero/Info/PerkInfomation.h"
+#include "EarthHero/Info/PerkInformation.h"
 #include "EarthHero/PlayerState/LobbyPlayerState.h"
 #include "Interfaces/VoiceInterface.h"
 
@@ -127,7 +127,7 @@ bool ALobbyPlayerController::PerkInfoVerification(int64 PerkInfo)
 	ALobbyGameMode* LobbyGameMode = Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode());
 	if (LobbyGameMode)
 	{
-		PerkInfomation* PerkInfomations = new PerkInfomation(); //이름 정하기 어려워서...
+		PerkInformation* PerkInfomations = new PerkInformation(); //이름 정하기 어려워서...
 		if(PerkInfomations != nullptr)
 		{
 			int Level = LobbyGameMode->GetPlayerLevel(PlayerState->GetUniqueId());

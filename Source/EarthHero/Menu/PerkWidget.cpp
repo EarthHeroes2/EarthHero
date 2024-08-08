@@ -9,7 +9,7 @@
 #include "Components/VerticalBox.h"
 #include "Components/VerticalBoxSlot.h"
 #include "EarthHero/EHGameInstance.h"
-#include "EarthHero/Info/PerkInfomation.h"
+#include "EarthHero/Info/PerkInformation.h"
 #include "EarthHero/Menu/IndexButton.h"
 
 UPerkWidget::UPerkWidget(const FObjectInitializer &ObjectInitializer)
@@ -21,13 +21,13 @@ bool UPerkWidget::Initialize()
 {
 	Super::Initialize();
 	
-	PerkInfomations = new PerkInfomation();
+	PerkInformations = new PerkInformation();
 	EHGameInstance = Cast<UEHGameInstance>(GetGameInstance());
-	if(PerkInfomations && EHGameInstance)
+	if(PerkInformations && EHGameInstance)
 	{
 		//플레이어 레벨 정보 가져오기
 		Level = EHGameInstance->GetPlayerLevel();
-		if(Level > 0) Point = PerkInfomations->GetPoints(Level);
+		if(Level > 0) Point = PerkInformations->GetPoints(Level);
 		else
 		{
 			UE_LOG(LogTemp, Error, TEXT("UPerkWidget::Initialize(). Level < 0"));
@@ -45,7 +45,7 @@ bool UPerkWidget::Initialize()
 		SelectInfo = EHGameInstance->LoadGame();
 
 		//전부 눌러주기
-		int NumOfPerks = PerkInfomations->NumOfPerks;
+		int NumOfPerks = PerkInformations->NumOfPerks;
 		int64 CheckBit = 1;
 		for(int i = 0; i < NumOfPerks; i++)
 			if(SelectInfo & (CheckBit << i))
@@ -60,8 +60,8 @@ bool UPerkWidget::Initialize()
 
 void UPerkWidget::CreateButtons()
 {
-	int NumOfLevels = PerkInfomations->NumOfLevels;
-	int NumOfPerkPerLevel = PerkInfomations->NumOfPerkPerLevel;
+	int NumOfLevels = PerkInformations->NumOfLevels;
+	int NumOfPerkPerLevel = PerkInformations->NumOfPerkPerLevel;
 	
 	int i, j;
 	for(i = 0; i < NumOfLevels; i++)
@@ -111,7 +111,7 @@ void UPerkWidget::CreateButtons()
 	}
 
 	// Disable buttons that are not applicable for the current level
-	int NumOfPerks = PerkInfomations->NumOfPerks;
+	int NumOfPerks = PerkInformations->NumOfPerks;
 	for(i = Level * NumOfPerkPerLevel; i < NumOfPerks; i++)
 	{
 		Buttons[i]->SetIsEnabled(false);
@@ -125,13 +125,13 @@ void UPerkWidget::UpdateSelectInfo(int Index)
 
 void UPerkWidget::PerkButtonHovered(int Index)
 {
-	if(PerkInfomations && PerkInfomations->PerkDescriptions.Num() > Index)
+	if(PerkInformations && PerkInformations->PerkDescriptions.Num() > Index)
 	{
-		FPerkDescription HoveredPerkInfomation = PerkInfomations->PerkDescriptions[Index];
-		PerkName_Tb->SetText(HoveredPerkInfomation.Name);
-		FString CostText = FString("Cost : ") + HoveredPerkInfomation.Cost.ToString();
+		FPerkDescription HoveredPerkInformation = PerkInformations->PerkDescriptions[Index];
+		PerkName_Tb->SetText(HoveredPerkInformation.Name);
+		FString CostText = FString("Cost : ") + HoveredPerkInformation.Cost.ToString();
 		PerkCost_Tb->SetText(FText::FromString(CostText));
-		PerkDescription_Tb->SetText(HoveredPerkInfomation.Description);
+		PerkDescription_Tb->SetText(HoveredPerkInformation.Description);
 	}
 }
 
@@ -155,7 +155,7 @@ void UPerkWidget::PerkSaveBtnClicked()
 
 void UPerkWidget::PerkCancelBtnClicked()
 {
-	int NumOfPerks = PerkInfomations->NumOfPerks;
+	int NumOfPerks = PerkInformations->NumOfPerks;
 	int64 CheckBit = 1;
 
 	for(int i = 0; i < NumOfPerks; i++)
@@ -168,6 +168,6 @@ void UPerkWidget::PerkCancelBtnClicked()
 
 	SelectInfo = 0;
 
-	Point = PerkInfomations->GetPoints(Level);
+	Point = PerkInformations->GetPoints(Level);
 	Point_Tb->SetText(FText::FromString(FString("Point. ") + FString::FromInt(Point)));
 }

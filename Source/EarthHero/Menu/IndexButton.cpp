@@ -1,18 +1,15 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "IndexButton.h"
 
 #include "PerkWidget.h"
 #include "Components/TextBlock.h"
-#include "EarthHero/Info/PerkInfomation.h"
+#include "EarthHero/Info/PerkInformation.h"
 
 void UIndexButton::InitSetting(int ReceivedIndex, UPerkWidget* ParentWidget)
 {
 	Index = ReceivedIndex;
 	PerkWidget = ParentWidget;
 	
-	PerkInfo = new PerkInfomation();
+	PerkInfo = new PerkInformation();
 	if(PerkInfo)
 	{
 		NeedPoint = PerkInfo->NeedPoint[Index];

@@ -1,21 +1,20 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/Image.h"
 
-/**
- * 
- */
 struct FPerkDescription
 {
 	FText Name;
 	FText Cost;
 	FText Description;
+	UImage* Image;
 };
 
-class EARTHHERO_API PerkInfomation
+class EARTHHERO_API PerkInformation
 {
 public:
-	PerkInfomation();
+	PerkInformation();
 	
 	int NeedPoint[50] = {1, 1, 1, 2, 2,
 						 1, 1, 2, 2, 3,
