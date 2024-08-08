@@ -34,6 +34,4 @@ public:
 	TArray<FPerkDescription> PerkDescriptions;
 
 	int GetPoints(int Level);
-
-	void SetImages();
 };

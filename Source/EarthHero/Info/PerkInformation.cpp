@@ -63,7 +63,12 @@ PerkInformation::PerkInformation()
 	PerkDescriptions[47].Name = FText::FromString(TEXT("H 코드 : 캡틴"));
 	PerkDescriptions[48].Name = FText::FromString(TEXT("H 코드 : 스트라이커"));
 	PerkDescriptions[49].Name = FText::FromString(TEXT("H 코드 : 버스터"));
-	
+
+	UImage* ImagePath = Cast<UImage>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/Textures/Void_Heart.Void_Heart'")));
+	for(int i=0; i < NumOfPerks; i++)
+	{
+		PerkDescriptions[i].Image = ImagePath;
+	}
 	
 	for(int i = 0; i < NumOfPerks; i++)
 		PerkDescriptions[i].Cost = FText::FromString(FString::FromInt(NeedPoint[i]));
@@ -130,14 +135,6 @@ PerkInformation::PerkInformation()
 	PerkDescriptions[49].Description = FText::FromString(TEXT("※ H 코드는 중복해서 장착할 수 없고, 1개만 장착 가능. (F)를 눌러, 다음 1.5초간의 일반 공격 강화.  (쿨타임 9초) 강화된 일반 공격은 적이 잃은 체력에 비례해 최대 ×5 피해. ( 잃은 체력 :  25% → ×2 / 50% → ×3 / 75% → ×4 )"));
 }
 
-void PerkInformation::SetImages()
-{
-	UTexture2D* ImagePath = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/Textures/Void_Heart.Void_Heart'")));
-	for(int i=0; i < 50; i++)
-	{
-		PerkDescriptions[i].Image->SetBrushFromTexture(ImagePath);
-	}
-}
 
 //이거 현재 안씀 (level + 2로 그냥 코딩되어있음)
 int PerkInformation::GetPoints(int Level)
