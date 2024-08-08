@@ -10,6 +10,8 @@
 #include "EarthHero/GameMode/PlayingGameMode.h"
 #include "EarthHero/HUD/MonsterStatHUD.h"
 #include "EarthHero/Stat/StatCalculationLibrary.h"
+#include "EarthHero/Stat/StatComponent.h"
+#include "EarthHero/Stat/DamageType/NormalDamageType.h"
 #include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
 
@@ -35,8 +37,6 @@ FStatStructure& UMonsterStatComponent::GetMonsterStat()
 void UMonsterStatComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	InitializeStatData();
 }
 
 
@@ -52,8 +52,8 @@ float UMonsterStatComponent::DamageTaken(float InDamage, TSubclassOf<UDamageType
 	//데미지 계산
 	float resultDamage = UStatCalculationLibrary::CalNormalDamage(MonsterStat, InDamage * MonsterStat.MoreDamageTaken);
 	
-	FString Message = FString::Printf(TEXT("Health : %f"), MonsterStat.Health);
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, Message);
+	//FString Message = FString::Printf(TEXT("Health : %f"), MonsterStat.Health);
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, Message);
 	
 	if(Monster)
 	{
@@ -98,6 +98,18 @@ float UMonsterStatComponent::DamageTaken(float InDamage, TSubclassOf<UDamageType
 	return resultDamage;
 }
 
+float UMonsterStatComponent::GiveNormalDamage(AActor* DamagedActor, float Damage)
+{
+	float actualDamage = 0;
+	if(AEHCharacter* HitCharacter = Cast<AEHCharacter>(DamagedActor))
+	{
+		static FHitResult DummyHitResult;
+		UE_LOG(LogClass, Warning, TEXT("GivenNormalDamge"));
+		actualDamage = HitCharacter->StatComponent->DamageTaken(Damage, UNormalDamageType::StaticClass(), DummyHitResult, nullptr, nullptr);
+	}
+	return actualDamage;
+}
+
 void UMonsterStatComponent::OnRep_BaseMonsterStat()
 {
 	//BaseHeroStat이 변경 -> 영구 업그레이드(퍽즈, 히어로 업그레이드)이므로,
@@ -125,12 +137,12 @@ void UMonsterStatComponent::OnRep_MonsterStat()
 		SetMonsterHUDVisTrue();
 		if (UMonsterStatHUD *MonsterStatHUD = Cast<UMonsterStatHUD>(Monster->MonsterStatHUDComponent->GetWidget()))
 		{
-			UE_LOG(LogClass, Warning, TEXT("MonsterStatComponent : UpdateHealth"));
+			//UE_LOG(LogClass, Warning, TEXT("MonsterStatComponent : UpdateHealth"));
 			MonsterStatHUD->UpdateHealth(MonsterStat.Health / MonsterStat.MaxHealth);
 		}
 		else
 		{
-			UE_LOG(LogClass, Error, TEXT("MonsterStatComponent : UpdateHealth failed"));
+			//UE_LOG(LogClass, Error, TEXT("MonsterStatComponent : UpdateHealth failed"));
 		}
 	}
 }
@@ -147,20 +159,60 @@ void UMonsterStatComponent::InitializeStatData_Implementation()
 		GEngine->AddOnScreenDebugMessage(-1, 1233223.f, FColor::Green, TEXT("No GameInstacnce"));
 		return ;
 	}
-
+	
 	// 테이블이 존재한다면, 해당 값으로 스텟을 초기화
-	if (FStatStructure *TempStat = ABGameInstance->GetStatStructure("NormalMonster"))
+	FStatStructure *TempStat = nullptr;
+	switch (Monster->MonsterType)
 	{
-		BaseMonsterStat = *TempStat;
-		BaseMonsterStat.Health = BaseMonsterStat.MaxHealth;
-		MonsterStat = BaseMonsterStat;
+		case Boss :
+			switch (Monster->BossNumber)
+			{
+				case MainBoss :
+					TempStat =  ABGameInstance->GetStatStructure("MainBoss");
+					UE_LOG(LogClass, Error, TEXT("MonsterStatComponent : MainBoss"));
+					break;
+				case MidBoss1 :
+					TempStat =  ABGameInstance->GetStatStructure("MidBoss1");
+				UE_LOG(LogClass, Error, TEXT("MonsterStatComponent : MidBoss1"));
+					break;
+				case MidBoss2 :
+					TempStat =  ABGameInstance->GetStatStructure("MidBoss2");
+				UE_LOG(LogClass, Error, TEXT("MonsterStatComponent : MidBoss2"));
+					break;
+				case MidBoss3 :
+					TempStat =  ABGameInstance->GetStatStructure("MidBoss3");
+				UE_LOG(LogClass, Error, TEXT("MonsterStatComponent : MidBoss3"));
+					break;
+				case MidBoss4 :
+					TempStat =  ABGameInstance->GetStatStructure("MidBoss4");
+				UE_LOG(LogClass, Error, TEXT("MonsterStatComponent : MidBoss4"));
+					break;
+				case MidBoss5 :
+					TempStat =  ABGameInstance->GetStatStructure("MidBoss5");
+				UE_LOG(LogClass, Error, TEXT("MonsterStatComponent : MidBoss5"));
+					break;
+				case MidBoss6 :
+					TempStat =  ABGameInstance->GetStatStructure("MidBoss6");
+				UE_LOG(LogClass, Error, TEXT("MonsterStatComponent : MidBoss6"));
+					break;
+				case NotBoss :
+					TempStat =  ABGameInstance->GetStatStructure("NormalMonster");
+				UE_LOG(LogClass, Error, TEXT("MonsterStatComponent : NotBoss"));
+					break;
+				default:
+					UE_LOG(LogClass, Error, TEXT("MonsterStatComponent : failed"));
+			}
+			break;
+		case Normal :
+			TempStat =  ABGameInstance->GetStatStructure("NormalMonster");
+			UE_LOG(LogClass, Error, TEXT("MonsterStatComponent : NormalMonster"));
+			break;
 	}
-	else
-	{
-		// 데이터 테이블에 없는 행일 때
-		//GEngine->AddOnScreenDebugMessage(-1, 1233223.f, FColor::Green, TEXT("Row %s data doesn't exist"), *HeroName.ToString());
-		UE_LOG(LogClass, Warning, TEXT("Row 'Hero' data doesn't exist."));
-	}
+	
+	BaseMonsterStat = *TempStat;
+	BaseMonsterStat.Health = BaseMonsterStat.MaxHealth;
+	MonsterStat = BaseMonsterStat;
+	
 }
 
 void UMonsterStatComponent::UpdateEffectImage_Implementation(UTexture2D* EffectImage, int ServerEffectType, float Duration)

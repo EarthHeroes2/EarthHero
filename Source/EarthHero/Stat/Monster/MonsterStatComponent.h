@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "EarthHero/Enum/Enums.h"
 #include "EarthHero/Stat/Structure/StatStructure.h"
 #include "MonsterStatComponent.generated.h"
 
@@ -16,7 +17,7 @@ class EARTHHERO_API UMonsterStatComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UMonsterStatComponent();
-
+	
 	FStatStructure &GetBaseMonsterStat();
 
 	FStatStructure &GetMonsterStat();
@@ -27,18 +28,24 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	UPROPERTY(ReplicatedUsing = "OnRep_BaseMonsterStat")
+	UPROPERTY(BlueprintReadWrite, Category="MonsterStat", ReplicatedUsing = "OnRep_BaseMonsterStat")
 	FStatStructure BaseMonsterStat;
 
-	UPROPERTY(ReplicatedUsing = "OnRep_MonsterStat")
+	UPROPERTY(BlueprintReadWrite, Category="MonsterStat", ReplicatedUsing = "OnRep_MonsterStat")
 	FStatStructure MonsterStat;
 
-public:	
+public:
+	
+	//초기화 작업을 위한 DataTable과 함수
+	UFUNCTION(Server, Reliable)
+	void InitializeStatData();
+	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	//데미지 처리 함수
 	float DamageTaken(float InDamage, TSubclassOf<UDamageType> DamageTypeClass, const FHitResult & HitInfo, AController *Instigator, class AEHCharacter *DamageCausor, bool &IsDead);
+	float GiveNormalDamage(AActor* DamagedActor, float Damage);
 
 	UFUNCTION()
 	void OnRep_BaseMonsterStat();
@@ -56,9 +63,6 @@ public:
 
 	
 private:
-	//초기화 작업을 위한 DataTable과 함수
-	UFUNCTION(Server, Reliable)
-	void InitializeStatData();
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 

@@ -5,6 +5,7 @@
 
 #include "Components/WidgetComponent.h"
 #include "EarthHero/AI/AIController/AIControllerBase.h"
+#include "EarthHero/GameMode/PlayingGameMode.h"
 #include "EarthHero/Stat/Monster/MonsterStatComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
@@ -31,7 +32,7 @@ void AMonsterBase::BeginPlay()
 
 	MonsterStatHUDComponent->SetVisibility(false, true);
 	MonsterStatComponent->Monster = this;
-	
+	MonsterStatComponent->InitializeStatData();
 }
 
 // Called every frame

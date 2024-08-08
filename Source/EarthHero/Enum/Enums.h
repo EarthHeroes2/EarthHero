@@ -60,6 +60,7 @@ enum EffectType
 	Ef_SpeedBoost,
 };
 
+UENUM(BlueprintType)
 enum EBossName
 {
 	MainBoss,

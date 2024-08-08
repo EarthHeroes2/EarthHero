@@ -76,7 +76,7 @@ void AEHPlayerState::BeginPlay()
 	{
 		if (PlayingGameMode->IsDebugMode)
 		{
-			PlayerClass = Shooter;
+			PlayerClass = Warrior;
 			IsCopyPropertiesEnd = true;
 		}
 	}

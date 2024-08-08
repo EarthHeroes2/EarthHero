@@ -177,6 +177,8 @@ void UWarriorCombatComponent::Server_JumpAttackLanded_Implementation()
 				{
 					// Damage Monster
 					Warrior->WarriorStatComponent->WarriorDashDamage(HitMonster);
+
+					if (HitMonster->MonsterType == Boss) continue;
 					// Launch Monster
 					FVector Direction = HitMonster->GetActorLocation() - Warrior->GetActorLocation();
 					Direction.Z = 0.f;

@@ -86,6 +86,10 @@ void AEHCharacter::Tick(float DeltaSeconds)
         NewRotator.Pitch = NewPitch;
         Controller->SetControlRotation(NewRotator);
     }
+
+    FRotator Rotator = GetActorRotation();
+    GetCharacterMovement()->MoveUpdatedComponent(FVector(1, 1, 0), Rotator, true);
+    GetCharacterMovement()->MoveUpdatedComponent(FVector(-1, -1, 0), Rotator, true);
 }
 
 void AEHCharacter::SetMaxWalkSpeed_Implementation(float WalkSpeed)
