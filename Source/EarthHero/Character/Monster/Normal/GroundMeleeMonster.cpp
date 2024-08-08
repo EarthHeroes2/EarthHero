@@ -52,7 +52,6 @@ void AGroundMeleeMonster::Tick(float DeltaTime)
 		ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_GameTraceChannel3)); //Monster_MeleeAttack
 
 		TArray<AActor*> IgnoredActors;
-		IgnoredActors.Add(this);
 		
 		TArray<FHitResult> HitResults;
 		
@@ -82,10 +81,16 @@ void AGroundMeleeMonster::Tick(float DeltaTime)
 					AEHCharacter* EHCharacter = Cast<AEHCharacter>(Actor);
 					if(EHCharacter)
 					{
-						UStatComponent* StatComponent = EHCharacter->StatComponent;
-						if(StatComponent)
+						int Index = CheckedEHCharacters.Find(EHCharacter);
+
+						if (Index == INDEX_NONE)
 						{
-							StatComponent->DamageTaken(30.f, UNormalDamageType::StaticClass(), Hit, GetController(), nullptr);
+							CheckedEHCharacters.Add(EHCharacter);
+							UStatComponent* StatComponent = EHCharacter->StatComponent;
+							if(StatComponent)
+							{
+								StatComponent->DamageTaken(30.f, UNormalDamageType::StaticClass(), Hit, GetController(), nullptr);
+							}
 						}
 					}
 				}
@@ -93,4 +98,9 @@ void AGroundMeleeMonster::Tick(float DeltaTime)
 		}
 	}
 	
+}
+
+void AGroundMeleeMonster::ClearCheckedEHCharacters()
+{
+	CheckedEHCharacters.Empty();
 }

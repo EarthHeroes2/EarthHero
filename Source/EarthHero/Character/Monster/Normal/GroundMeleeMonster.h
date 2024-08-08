@@ -24,7 +24,12 @@ class EARTHHERO_API AGroundMeleeMonster : public AGroundMonster
 
 	UAnimMontage* MyAnimMontage;
 
+	TArray<AEHCharacter*> CheckedEHCharacters;
+
 public:
 	UPROPERTY(BlueprintReadWrite)
 	bool bCanAttack = false;
+
+	UFUNCTION(BlueprintCallable)
+	void ClearCheckedEHCharacters();
 };
