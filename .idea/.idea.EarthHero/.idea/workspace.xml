@@ -79,9 +79,12 @@
   <component name="ChangeListManager">
     <list default="true" id="4591bad7-fd9f-4860-903f-8700cd913377" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Assets/FirstPersonArchery/Blueprint/ArcheryFunctions.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/FirstPersonArchery/Blueprint/ArcheryFunctions.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_InGameHUD.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_InGameHUD.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_SkillCoolDown.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_SkillCoolDown.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_TabUserInfo.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/BP_TabUserInfo.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Blueprints/Menu/WBP_MainMenu.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Menu/WBP_MainMenu.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EarthHero.uproject" beforeDir="false" afterPath="$PROJECT_DIR$/EarthHero.uproject" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Menu/MainMenuWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Menu/MainMenuWidget.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Menu/PerkWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Menu/PerkWidget.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -354,6 +357,8 @@
       <workItem from="1722964522990" duration="570000" />
       <workItem from="1722987976396" duration="986000" />
       <workItem from="1723031328031" duration="3939000" />
+      <workItem from="1723046633426" duration="35000" />
+      <workItem from="1723103428676" duration="6730000" />
     </task>
     <servers />
   </component>

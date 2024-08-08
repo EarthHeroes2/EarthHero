@@ -238,7 +238,6 @@ void UMonsterStatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 void UMonsterStatComponent::die_Implementation()
 {
 	//GetOwner()->Deta
-	if(IsRunningDedicatedServer()) UE_LOG(LogTemp, Log, TEXT("Server?"));
 	GetOwner()->Destroy();
 }
 

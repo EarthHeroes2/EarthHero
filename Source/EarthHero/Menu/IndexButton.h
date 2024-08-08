@@ -4,7 +4,7 @@
 #include "Components/Button.h"
 #include "IndexButton.generated.h"
 
-class PerkInfomation;
+class PerkInformation;
 class UTextBlock;
 class UEHGameInstance;
 class UPerkWidget;
@@ -18,7 +18,7 @@ class EARTHHERO_API UIndexButton : public UButton
 
 	UEHGameInstance* EHGameInstance;
 
-	PerkInfomation* PerkInfo;
+	PerkInformation* PerkInfo;
 	
 	int NeedPoint = -1;
 	
