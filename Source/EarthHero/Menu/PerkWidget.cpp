@@ -50,6 +50,9 @@ bool UPerkWidget::Initialize()
 		for(int i = 0; i < NumOfPerks; i++)
 			if(SelectInfo & (CheckBit << i))
 				Buttons[i]->IndexBtnClicked();
+
+		// 이미지 바꿔주기
+		PerkInformations->SetImages();
 	}
 
 	PerkSave_Btn->OnClicked.AddDynamic(this, &UPerkWidget::PerkSaveBtnClicked);
