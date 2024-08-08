@@ -64,8 +64,9 @@ PerkInformation::PerkInformation()
 	PerkDescriptions[48].Name = FText::FromString(TEXT("H 코드 : 스트라이커"));
 	PerkDescriptions[49].Name = FText::FromString(TEXT("H 코드 : 버스터"));
 
-	UImage* ImagePath = Cast<UImage>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/Textures/Void_Heart.Void_Heart'")));
-	for(int i=0; i < NumOfPerks; i++)
+	UTexture2D* ImagePath = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/Textures/Void_Heart.Void_Heart'")));
+    
+	for (int i = 0; i < NumOfPerks; i++)
 	{
 		PerkDescriptions[i].Image = ImagePath;
 	}

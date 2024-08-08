@@ -63,13 +63,11 @@ void UPerkWidget::CreateButtons()
 	int NumOfLevels = PerkInformations->NumOfLevels;
 	int NumOfPerkPerLevel = PerkInformations->NumOfPerkPerLevel;
 	
-	int i, j;
-	for(i = 0; i < NumOfLevels; i++)
+	for (int i = 0; i < NumOfLevels; i++)
 	{
 		UVerticalBox* NewVerticalBox = NewObject<UVerticalBox>(this);
-		if(NewVerticalBox)
+		if (NewVerticalBox)
 		{
-			// Add the new vertical box to the horizontal box with fill settings
 			UHorizontalBoxSlot* HorizontalBoxSlot = Cast<UHorizontalBoxSlot>(Perk_Hb->AddChild(NewVerticalBox));
 			if (HorizontalBoxSlot)
 			{
@@ -78,7 +76,7 @@ void UPerkWidget::CreateButtons()
 				HorizontalBoxSlot->SetSize(FSlateChildSize(ESlateSizeRule::Fill));
 			}
 			
-			for(j = 0; j < NumOfPerkPerLevel; j++)
+			for (int j = 0; j < NumOfPerkPerLevel; j++)
 			{
 				USizeBox* SizeBox = NewObject<USizeBox>(this);
 				if (SizeBox)
@@ -87,18 +85,29 @@ void UPerkWidget::CreateButtons()
 					SizeBox->SetHeightOverride(114);
 					
 					UIndexButton* IndexButton = NewObject<UIndexButton>(this);
-					if(IndexButton)
+					if (IndexButton)
 					{
 						IndexButton->InitSetting((NumOfPerkPerLevel * i) + j, this);
 						
 						Buttons.Add(IndexButton);
-						
+
+						UTexture2D* ButtonImage = PerkInformations->PerkDescriptions[(NumOfPerkPerLevel * i) + j].Image;
+						if (ButtonImage)
+						{
+							FSlateBrush Brush;
+							Brush.SetResourceObject(ButtonImage);
+							Brush.ImageSize = FVector2D(75.0f, 114.0f);
+
+							IndexButton->WidgetStyle.Normal.SetResourceObject(ButtonImage);
+							IndexButton->WidgetStyle.Hovered.SetResourceObject(ButtonImage);
+							IndexButton->WidgetStyle.Pressed.SetResourceObject(ButtonImage);
+						}
+
 						UPanelSlot* PanelSlot = SizeBox->AddChild(IndexButton);
 						NewVerticalBox->AddChild(SizeBox);
 
-						// Set SizeBoxSlot padding and fill settings
 						UVerticalBoxSlot* SizeBoxSlot = Cast<UVerticalBoxSlot>(NewVerticalBox->AddChild(SizeBox));
-						if(SizeBoxSlot)
+						if (SizeBoxSlot)
 						{
 							SizeBoxSlot->SetPadding(FMargin(10, 10, 0, 0));
 							SizeBoxSlot->SetHorizontalAlignment(EHorizontalAlignment::HAlign_Fill);
@@ -110,13 +119,56 @@ void UPerkWidget::CreateButtons()
 		}
 	}
 
-	// Disable buttons that are not applicable for the current level
+	// 현재 레벨에 맞지 않으면 꺼둠
 	int NumOfPerks = PerkInformations->NumOfPerks;
-	for(i = Level * NumOfPerkPerLevel; i < NumOfPerks; i++)
+	for (int i = Level * NumOfPerkPerLevel; i < NumOfPerks; i++)
 	{
 		Buttons[i]->SetIsEnabled(false);
 	}
 }
+
+void UPerkWidget::RemoveEquippedPerkImage(UTexture2D* PerkTexture)
+{
+	if (EquippedPerks_Hb)
+	{
+		for (int32 i = 0; i < EquippedPerks_Hb->GetChildrenCount(); i++)
+		{
+			UWidget* ChildWidget = EquippedPerks_Hb->GetChildAt(i);
+			UImage* ImageWidget = Cast<UImage>(ChildWidget);
+
+			if (ImageWidget && ImageWidget->Brush.GetResourceObject() == PerkTexture)
+			{
+				EquippedPerks_Hb->RemoveChildAt(i);
+				break;
+			}
+		}
+	}
+}
+
+void UPerkWidget::AddEquippedPerkImage(UTexture2D* PerkTexture)
+{
+	if (PerkTexture)
+	{
+		UImage* NewImage = NewObject<UImage>(this);
+
+		FSlateBrush Brush;
+		Brush.SetResourceObject(PerkTexture);
+		Brush.ImageSize = FVector2D(120.0f, 120.0f);
+		NewImage->SetBrush(Brush);
+
+		if (EquippedPerks_Hb)
+		{
+			UHorizontalBoxSlot* HorizontalBoxSlot = Cast<UHorizontalBoxSlot>(EquippedPerks_Hb->AddChild(NewImage));
+			if (HorizontalBoxSlot)
+			{
+				HorizontalBoxSlot->SetPadding(FMargin(0.0f, 0.0f, 10.0f, 0.0f));
+				HorizontalBoxSlot->SetHorizontalAlignment(EHorizontalAlignment::HAlign_Center);
+				HorizontalBoxSlot->SetVerticalAlignment(EVerticalAlignment::VAlign_Center);
+			}
+		}
+	}
+}
+
 void UPerkWidget::UpdateSelectInfo(int Index)
 {
 	Point_Tb->SetText(FText::FromString(FString("Point. ") + FString::FromInt(Point)));
@@ -125,14 +177,19 @@ void UPerkWidget::UpdateSelectInfo(int Index)
 
 void UPerkWidget::PerkButtonHovered(int Index)
 {
-	if(PerkInformations && PerkInformations->PerkDescriptions.Num() > Index)
+	if (PerkInformations && PerkInformations->PerkDescriptions.Num() > Index)
 	{
+		PerkImage_Img->SetVisibility(ESlateVisibility::Visible);
 		FPerkDescription HoveredPerkInformation = PerkInformations->PerkDescriptions[Index];
 		PerkName_Tb->SetText(HoveredPerkInformation.Name);
 		FString CostText = FString("Cost : ") + HoveredPerkInformation.Cost.ToString();
 		PerkCost_Tb->SetText(FText::FromString(CostText));
 		PerkDescription_Tb->SetText(HoveredPerkInformation.Description);
-		PerkImage_Img = HoveredPerkInformation.Image;
+
+		if (HoveredPerkInformation.Image)
+		{
+			PerkImage_Img->SetBrushFromTexture(HoveredPerkInformation.Image);
+		}
 	}
 }
 
@@ -141,7 +198,7 @@ void UPerkWidget::PerkButtonUnhovered(int Index)
 	PerkName_Tb->SetText(FText::FromString(""));
 	PerkCost_Tb->SetText(FText::FromString(""));
 	PerkDescription_Tb->SetText(FText::FromString(""));
-	PerkImage_Img->SetBrush(FSlateBrush());
+	PerkImage_Img->SetVisibility(ESlateVisibility::Hidden);
 }
 
 void UPerkWidget::PerkSaveBtnClicked()

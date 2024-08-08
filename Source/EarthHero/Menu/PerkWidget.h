@@ -27,6 +27,9 @@ class EARTHHERO_API UPerkWidget : public UUserWidget
 	int Level;
 public:
 	int Point;
+	int SelectedPerksCount = 0;
+	const int MaxSelectedPerks = 6;
+	
 private:
 	TArray<UIndexButton*> Buttons;
 
@@ -39,6 +42,9 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	UHorizontalBox* Perk_Hb;
+	
+	UPROPERTY(meta = (BindWidget))
+	UHorizontalBox* EquippedPerks_Hb;
 
 	UPROPERTY(meta = (BindWidget))
 	UButton* PerkSave_Btn;
@@ -67,6 +73,8 @@ public:
 	void UpdateSelectInfo(int Index);
 	void PerkButtonHovered(int Index);
 	void PerkButtonUnhovered(int Index);
+	void AddEquippedPerkImage(UTexture2D* PerkTexture);
+	void RemoveEquippedPerkImage(UTexture2D* PerkTexture);
 
 	bool bHCodeSelected = false;
 };

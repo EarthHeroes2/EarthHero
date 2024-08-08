@@ -8,7 +8,7 @@ struct FPerkDescription
 	FText Name;
 	FText Cost;
 	FText Description;
-	UImage* Image;
+	UTexture2D* Image;
 };
 
 class EARTHHERO_API PerkInformation
