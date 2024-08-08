@@ -3,7 +3,12 @@
 PerkInformation::PerkInformation()
 {
 	PerkDescriptions.SetNum(NumOfPerks);
-	const FString MaterialPath = TEXT("/Game/Assets/UIMaterialLab/Materials/6_Patterns/4_Halftone/MI_UI_Halftone_3.MI_UI_Halftone_3");
+
+	UTexture2D* ImagePath = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/Textures/Void_Heart.Void_Heart'")));
+	for(int i=0; i < 50; i++)
+	{
+		PerkDescriptions[i].Image->SetBrushFromTexture(ImagePath);
+	}
 	
 	PerkDescriptions[0].Name = FText::FromString(TEXT("묵직한 일격 : 알파"));
 	PerkDescriptions[1].Name = FText::FromString(TEXT("궤멸적 타격 : 알파"));

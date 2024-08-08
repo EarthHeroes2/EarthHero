@@ -79,7 +79,8 @@
   <component name="ChangeListManager">
     <list default="true" id="4591bad7-fd9f-4860-903f-8700cd913377" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.EarthHero/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/HUD/BPW_Perk.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/HUD/BPW_Perk.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Info/PerkInformation.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Info/PerkInformation.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/EarthHero/Menu/IndexButton.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Menu/IndexButton.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/EarthHero/Menu/PerkWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/EarthHero/Menu/PerkWidget.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

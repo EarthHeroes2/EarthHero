@@ -132,6 +132,7 @@ void UPerkWidget::PerkButtonHovered(int Index)
 		FString CostText = FString("Cost : ") + HoveredPerkInformation.Cost.ToString();
 		PerkCost_Tb->SetText(FText::FromString(CostText));
 		PerkDescription_Tb->SetText(HoveredPerkInformation.Description);
+		PerkImage_Img = HoveredPerkInformation.Image;
 	}
 }
 
@@ -140,6 +141,7 @@ void UPerkWidget::PerkButtonUnhovered(int Index)
 	PerkName_Tb->SetText(FText::FromString(""));
 	PerkCost_Tb->SetText(FText::FromString(""));
 	PerkDescription_Tb->SetText(FText::FromString(""));
+	PerkImage_Img->SetBrush(FSlateBrush());
 }
 
 void UPerkWidget::PerkSaveBtnClicked()

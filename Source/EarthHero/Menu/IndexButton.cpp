@@ -86,7 +86,6 @@ void UIndexButton::IndexBtnClicked()
 	}
 }
 
-
 void UIndexButton::ButtonHovered()
 {
 	if(PerkWidget) PerkWidget->PerkButtonHovered(Index);
