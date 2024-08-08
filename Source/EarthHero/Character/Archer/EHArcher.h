@@ -22,10 +22,20 @@ public:
 	virtual void Dash() override;
 
 protected:
+	virtual void Initialize() override;
 	virtual void BeginPlay() override;
 	virtual void PostInitializeComponents() override;
 	virtual void PossessedBy(AController* NewController) override;
 
+	UFUNCTION(Client, Reliable)
+	void Client_CameraShake();
+
+	void CameraShake();
+	
+private:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true), Category = "CameraShake")
+	TSubclassOf<UCameraShakeBase> Shake;
+	
 	UPROPERTY(VisibleAnywhere, Category = "Combat")
 	UArcherCombatComponent* CombatComponent;
 
@@ -37,5 +47,8 @@ protected:
 
 public:
 	FORCEINLINE UArcherCombatComponent* GetCombatComponent() { return CombatComponent; }
+
+private:
+	FTimerHandle CameraShakeTimerHandle;
 
 };

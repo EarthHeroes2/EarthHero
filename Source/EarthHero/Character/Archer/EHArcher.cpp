@@ -34,6 +34,16 @@ void AEHArcher::Dash()
 	Super::Dash();
 }
 
+void AEHArcher::Initialize()
+{
+	Super::Initialize();
+	
+	if (IsLocallyControlled())
+	{
+		WeaponMesh->AttachToComponent(FirstPersonHand, FAttachmentTransformRules::KeepRelativeTransform, FName("FPS_LeftHand"));
+	}
+}
+
 
 void AEHArcher::BeginPlay()
 {
@@ -62,9 +72,42 @@ void AEHArcher::PossessedBy(AController* NewController)
 		}
 		else
 		{
-			UE_LOG(LogClass, Warning, TEXT("EHWarrior: FAILED load WarriorStatComponent"));
+			UE_LOG(LogClass, Warning, TEXT("EHArcher: FAILED load ArcherStatComponent"));
 		}
 	}
+	
+	CombatComponent->SetArcher(this);
+
+	Client_CameraShake();
+}
+
+void AEHArcher::Client_CameraShake_Implementation()
+{
+	CameraShake();
+}
+
+void AEHArcher::CameraShake()
+{
+	if(GetVelocity().Length() > 0.f)
+	{
+		float Scale = GetVelocity().Length() / 750.f;
+
+		UWorld* World = GetWorld();
+		if(World)
+		{
+			APlayerController* LocalPlayerController = Cast<APlayerController>(World->GetFirstPlayerController());
+			if(LocalPlayerController)
+			{
+				LocalPlayerController->PlayerCameraManager->StartCameraShake(Shake, Scale);
+			}
+			else
+			{
+				UE_LOG(LogClass, Warning, TEXT("EHArcher: No PC"));
+			}
+		}
+	}
+
+	GetWorldTimerManager().SetTimer(CameraShakeTimerHandle, this, &ThisClass::CameraShake, 0.3f);
 }
 
 

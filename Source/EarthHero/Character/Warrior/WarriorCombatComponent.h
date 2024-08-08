@@ -72,6 +72,7 @@ protected:
 	void NetMulticast_Whirlwind(FHitResult HitResult);
 
 	void ResetWhirlWind();
+	
 private:
 	UPROPERTY()
 	AEHWarrior* Warrior;

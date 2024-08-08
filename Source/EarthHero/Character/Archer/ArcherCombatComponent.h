@@ -7,22 +7,24 @@
 #include "ArcherCombatComponent.generated.h"
 
 
+class AEHArcher;
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class EARTHHERO_API UArcherCombatComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
-	// Sets default values for this component's properties
 	UArcherCombatComponent();
-
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+protected:
+	virtual void BeginPlay() override;
+	
+private:
+	UPROPERTY()
+	AEHArcher* Archer;
+
+public:
+	void SetArcher(AEHArcher* NewArcher) { Archer = NewArcher; }
 };

@@ -154,14 +154,7 @@ void AEHCharacter::SetStatComponent()
 
 void AEHCharacter::Initialize()
 {
-    if (IsLocallyControlled())
-    {
-        WeaponMesh->AttachToComponent(FirstPersonHand, FAttachmentTransformRules::KeepRelativeTransform, FName("FPS_RightHand"));
-    }
-    else
-    {
-        WeaponMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, FName("TPS_RightHand"));
-    }
+    
 }
 
 void AEHCharacter::EnableForceFieldEffect()

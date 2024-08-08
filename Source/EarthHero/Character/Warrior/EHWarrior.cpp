@@ -45,6 +45,20 @@ void AEHWarrior::Dash()
 	}
 }
 
+void AEHWarrior::Initialize()
+{
+	Super::Initialize();
+	
+	if (IsLocallyControlled())
+	{
+		WeaponMesh->AttachToComponent(FirstPersonHand, FAttachmentTransformRules::KeepRelativeTransform, FName("FPS_RightHand"));
+	}
+	else
+	{
+		WeaponMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, FName("TPS_RightHand"));
+	}
+}
+
 void AEHWarrior::BeginPlay()
 {
 	Super::BeginPlay();

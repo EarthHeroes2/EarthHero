@@ -61,9 +61,8 @@ protected:
 
     virtual void PossessedBy(AController* NewController) override;
 
-    void Initialize();
+    virtual void Initialize();
 
-private:
     FTimerHandle SetStatComponentTimerHandle;
 
     void SetStatComponent();
