@@ -5,6 +5,7 @@
 #include "Interfaces/OnlineSessionInterface.h"
 #include "OnlineSessionSettings.h"
 #include "Components/CanvasPanel.h"
+#include "Components/ProgressBar.h"
 #include "MainMenuWidget.generated.h"
 
 
@@ -103,6 +104,9 @@ class EARTHHERO_API UMainMenuWidget : public UUserWidget
 	UTextBlock* Lev_Tb;
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* Exp_Tb;
+
+	UPROPERTY(meta = (BindWidget))
+	UProgressBar* Exp_Pb;
 
 	UPROPERTY(meta = (BindWidget))
 	UButton* Perk_Btn;

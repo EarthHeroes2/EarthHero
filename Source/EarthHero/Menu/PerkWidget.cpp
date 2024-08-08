@@ -81,8 +81,8 @@ void UPerkWidget::CreateButtons()
 				USizeBox* SizeBox = NewObject<USizeBox>(this);
 				if (SizeBox)
 				{
-					SizeBox->SetWidthOverride(75);
-					SizeBox->SetHeightOverride(114);
+					SizeBox->SetWidthOverride(80);
+					SizeBox->SetHeightOverride(100);
 					
 					UIndexButton* IndexButton = NewObject<UIndexButton>(this);
 					if (IndexButton)
@@ -96,7 +96,7 @@ void UPerkWidget::CreateButtons()
 						{
 							FSlateBrush Brush;
 							Brush.SetResourceObject(ButtonImage);
-							Brush.ImageSize = FVector2D(75.0f, 114.0f);
+							Brush.ImageSize = FVector2D(80.0f, 80.0f);
 
 							IndexButton->WidgetStyle.Normal.SetResourceObject(ButtonImage);
 							IndexButton->WidgetStyle.Hovered.SetResourceObject(ButtonImage);
