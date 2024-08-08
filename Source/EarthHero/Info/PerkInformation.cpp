@@ -3,12 +3,6 @@
 PerkInformation::PerkInformation()
 {
 	PerkDescriptions.SetNum(NumOfPerks);
-
-	UTexture2D* ImagePath = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/Textures/Void_Heart.Void_Heart'")));
-	for(int i=0; i < 50; i++)
-	{
-		PerkDescriptions[i].Image->SetBrushFromTexture(ImagePath);
-	}
 	
 	PerkDescriptions[0].Name = FText::FromString(TEXT("묵직한 일격 : 알파"));
 	PerkDescriptions[1].Name = FText::FromString(TEXT("궤멸적 타격 : 알파"));
@@ -134,6 +128,15 @@ PerkInformation::PerkInformation()
 	PerkDescriptions[47].Description = FText::FromString(TEXT("※ H 코드는 중복해서 장착할 수 없고, 1개만 장착 가능. (F)를 눌러, 6초간 자신의 일반 공격 속도 +40%, 이동 속도 +40% (쿨타임 15초), 일정 범위 내 모든 아군은 절반의 효과 받음."));
 	PerkDescriptions[48].Description = FText::FromString(TEXT("※ H 코드는 중복해서 장착할 수 없고, 1개만 장착 가능. (F)를 눌러, 공격 스킬 쿨 리셋, 다음 공격 스킬 강화. (쿨타임 8초) 강화된 공격 스킬은 적이 보유한 체력에 비례해 최대 ×3 피해. ( 보유 체력 : 25% → ×1.5 / 50% → ×2 / 75% → ×2.5 )"));
 	PerkDescriptions[49].Description = FText::FromString(TEXT("※ H 코드는 중복해서 장착할 수 없고, 1개만 장착 가능. (F)를 눌러, 다음 1.5초간의 일반 공격 강화.  (쿨타임 9초) 강화된 일반 공격은 적이 잃은 체력에 비례해 최대 ×5 피해. ( 잃은 체력 :  25% → ×2 / 50% → ×3 / 75% → ×4 )"));
+}
+
+void PerkInformation::SetImages()
+{
+	UTexture2D* ImagePath = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/Textures/Void_Heart.Void_Heart'")));
+	for(int i=0; i < 50; i++)
+	{
+		PerkDescriptions[i].Image->SetBrushFromTexture(ImagePath);
+	}
 }
 
 //이거 현재 안씀 (level + 2로 그냥 코딩되어있음)
