@@ -2,14 +2,15 @@
 
 #include "Components/Button.h"
 #include "Components/HorizontalBox.h"
+#include "Components/HorizontalBoxSlot.h"
 #include "Components/SizeBox.h"
 #include "Components/SizeBoxSlot.h"
 #include "Components/TextBlock.h"
 #include "Components/VerticalBox.h"
+#include "Components/VerticalBoxSlot.h"
 #include "EarthHero/EHGameInstance.h"
 #include "EarthHero/Info/PerkInfomation.h"
 #include "EarthHero/Menu/IndexButton.h"
-
 
 UPerkWidget::UPerkWidget(const FObjectInitializer &ObjectInitializer)
 	: Super(ObjectInitializer)
@@ -30,8 +31,8 @@ bool UPerkWidget::Initialize()
 		else
 		{
 			UE_LOG(LogTemp, Error, TEXT("UPerkWidget::Initialize(). Level < 0"));
-			//Level = Point = 10; //디버그용
-			return false; //실제 있어야하는 줄
+			Level = Point = 10; //디버그용
+			//return false; //실제 있어야하는 줄
 		}
 		
 		Level_Tb->SetText(FText::FromString(FString("Lv. ") + FString::FromInt(Level)));
@@ -57,7 +58,6 @@ bool UPerkWidget::Initialize()
 	return true;
 }
 
-
 void UPerkWidget::CreateButtons()
 {
 	int NumOfLevels = PerkInfomations->NumOfLevels;
@@ -67,17 +67,24 @@ void UPerkWidget::CreateButtons()
 	for(i = 0; i < NumOfLevels; i++)
 	{
 		UVerticalBox* NewVerticalBox = NewObject<UVerticalBox>(this);
-		Perk_Hb->AddChild(NewVerticalBox);
-		
 		if(NewVerticalBox)
 		{
+			// Add the new vertical box to the horizontal box with fill settings
+			UHorizontalBoxSlot* HorizontalBoxSlot = Cast<UHorizontalBoxSlot>(Perk_Hb->AddChild(NewVerticalBox));
+			if (HorizontalBoxSlot)
+			{
+				HorizontalBoxSlot->SetHorizontalAlignment(EHorizontalAlignment::HAlign_Fill);
+				HorizontalBoxSlot->SetVerticalAlignment(EVerticalAlignment::VAlign_Fill);
+				HorizontalBoxSlot->SetSize(FSlateChildSize(ESlateSizeRule::Fill));
+			}
+			
 			for(j = 0; j < NumOfPerkPerLevel; j++)
 			{
 				USizeBox* SizeBox = NewObject<USizeBox>(this);
 				if (SizeBox)
 				{
 					SizeBox->SetWidthOverride(75);
-					SizeBox->SetHeightOverride(75);
+					SizeBox->SetHeightOverride(114);
 					
 					UIndexButton* IndexButton = NewObject<UIndexButton>(this);
 					if(IndexButton)
@@ -88,21 +95,28 @@ void UPerkWidget::CreateButtons()
 						
 						UPanelSlot* PanelSlot = SizeBox->AddChild(IndexButton);
 						NewVerticalBox->AddChild(SizeBox);
-						
-						USizeBoxSlot* SizeBoxSlot = Cast<USizeBoxSlot>(PanelSlot);
-						if(SizeBoxSlot) SizeBoxSlot->SetPadding(FMargin(10,10,0,0));
+
+						// Set SizeBoxSlot padding and fill settings
+						UVerticalBoxSlot* SizeBoxSlot = Cast<UVerticalBoxSlot>(NewVerticalBox->AddChild(SizeBox));
+						if(SizeBoxSlot)
+						{
+							SizeBoxSlot->SetPadding(FMargin(10, 10, 0, 0));
+							SizeBoxSlot->SetHorizontalAlignment(EHorizontalAlignment::HAlign_Fill);
+							SizeBoxSlot->SetVerticalAlignment(EVerticalAlignment::VAlign_Fill);
+						}
 					}
 				}
 			}
 		}
 	}
 
-	//레벨에 맞지 않는 스킬은 못찍도록
+	// Disable buttons that are not applicable for the current level
 	int NumOfPerks = PerkInfomations->NumOfPerks;
 	for(i = Level * NumOfPerkPerLevel; i < NumOfPerks; i++)
+	{
 		Buttons[i]->SetIsEnabled(false);
+	}
 }
-
 void UPerkWidget::UpdateSelectInfo(int Index)
 {
 	Point_Tb->SetText(FText::FromString(FString("Point. ") + FString::FromInt(Point)));
@@ -115,7 +129,8 @@ void UPerkWidget::PerkButtonHovered(int Index)
 	{
 		FPerkDescription HoveredPerkInfomation = PerkInfomations->PerkDescriptions[Index];
 		PerkName_Tb->SetText(HoveredPerkInfomation.Name);
-		PerkCost_Tb->SetText(HoveredPerkInfomation.Cost);
+		FString CostText = FString("Cost : ") + HoveredPerkInfomation.Cost.ToString();
+		PerkCost_Tb->SetText(FText::FromString(CostText));
 		PerkDescription_Tb->SetText(HoveredPerkInfomation.Description);
 	}
 }
@@ -134,9 +149,25 @@ void UPerkWidget::PerkSaveBtnClicked()
 		EHGameInstance->PerkInfo = SelectInfo;
 		EHGameInstance->SaveGame(SelectInfo);
 	}
+
+	this->SetVisibility(ESlateVisibility::Collapsed);
 }
 
 void UPerkWidget::PerkCancelBtnClicked()
 {
-	SetVisibility(ESlateVisibility::Collapsed);
+	int NumOfPerks = PerkInfomations->NumOfPerks;
+	int64 CheckBit = 1;
+
+	for(int i = 0; i < NumOfPerks; i++)
+	{
+		if(SelectInfo & (CheckBit << i))
+		{
+			Buttons[i]->IndexBtnClicked();
+		}
+	}
+
+	SelectInfo = 0;
+
+	Point = PerkInfomations->GetPoints(Level);
+	Point_Tb->SetText(FText::FromString(FString("Point. ") + FString::FromInt(Point)));
 }
