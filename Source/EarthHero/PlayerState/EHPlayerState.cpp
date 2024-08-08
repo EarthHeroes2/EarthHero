@@ -6,6 +6,7 @@
 #include "EarthHero/Stat/ShooterStatComponent.h"
 #include "EarthHero/Stat/StatComponent.h"
 #include "EarthHero/Enum/Enums.h"
+#include "EarthHero/GameMode/PlayingGameMode.h"
 #include "EarthHero/PlayerState/GameOverPlayerState.h"
 #include "EarthHero/Stat/Structure/HeroUpgrageStructure.h"
 #include "Net/UnrealNetwork.h"
@@ -70,9 +71,15 @@ void AEHPlayerState::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	//패키징 시 주석 처리해야 함
-	//PlayerClass = Shooter; ////
-	//IsCopyPropertiesEnd = true; ////
+	APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode());
+	if (PlayingGameMode)
+	{
+		if (PlayingGameMode->IsDebugMode)
+		{
+			PlayerClass = Shooter;
+			IsCopyPropertiesEnd = true;
+		}
+	}
 		
 	GetWorldTimerManager().SetTimer(SetStatComponentTimerHandle, this, &AEHPlayerState::SetStatComponent, 0.5f,true);
 }

@@ -506,7 +506,7 @@ void APlayingGameMode::GameTimerCount()
 void APlayingGameMode::UpdateGameStatePlayerNumbers()
 {
 	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
-	PlayingGameState->UpdatePlayerNumbers();
+	PlayingGameState->UpdatePlayerNumbers(Players.Num());
 }
 
 void APlayingGameMode::UpdateGameStateHealths()

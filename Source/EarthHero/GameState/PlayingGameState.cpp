@@ -24,11 +24,11 @@ void APlayingGameState::UpdateHUDGameTimer(const int GameTimer)
 	GameTimerSec = GameTimer;
 }
 
-void APlayingGameState::UpdatePlayerNumbers_Implementation()
+void APlayingGameState::UpdatePlayerNumbers_Implementation(int PlayersNum)
 {
 	if(EHPlayerController && EHPlayerController->TabHUD)
 	{
-		EHPlayerController->TabHUD->UpdatePlayerNumbers(AllPlayerNumbers);
+		EHPlayerController->TabHUD->UpdatePlayerNumbers(PlayersNum);
 	}
 }
 

@@ -38,7 +38,7 @@ public:
 	void UpdatePlayerEffectState(const FEffectStatus EffectStatus, const int32 index);
 
 	UFUNCTION(Client, Reliable)
-	void UpdatePlayerNumbers();
+	void UpdatePlayerNumbers(int PlayersNum);
 
 	UPROPERTY(ReplicatedUsing = OnRep_GameTimerSec)
 	int GameTimerSec;
