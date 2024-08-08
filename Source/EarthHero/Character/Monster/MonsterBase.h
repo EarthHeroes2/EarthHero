@@ -87,7 +87,7 @@ public:
 
 	//근접 공격 적용범위인가?
 	UPROPERTY(BlueprintReadWrite)
-	bool bMeleeAttackRange;
+	bool bMeleeAttackRange = false;
 	//중복 공격을 막기 위함
 	UFUNCTION(BlueprintCallable)
 	void ClearCheckedEHCharacters();
@@ -99,5 +99,6 @@ protected: //전부 자식에서 값 할당
 	float Radius = 5.f;
 	float InDamage = 5.f;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Type")
 	UAnimMontage* AttackAnimMontage;
 };

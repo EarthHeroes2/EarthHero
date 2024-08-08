@@ -23,7 +23,6 @@ void UShooterCombatComponent::BeginPlay()
 	while (!Shooter)
 	{
 		Shooter = Cast<AEHShooter>(GetOwner());
-		UE_LOG(LogClass, Warning, TEXT("No Shooters22"));
 	}
 }
 

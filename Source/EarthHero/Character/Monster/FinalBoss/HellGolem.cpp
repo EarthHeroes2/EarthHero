@@ -47,7 +47,7 @@ void AHellGolem::Skill2()
 
 void AHellGolem::Tick(float DeltaSeconds)
 {
-	Super::Tick(DeltaSeconds);
+	//Super::Tick(DeltaSeconds);
 	APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode());
 	if (PlayingGameMode)
 	{
@@ -126,8 +126,7 @@ void AHellGolem::CheckAttackedEnemy(FHitResult HitResult)
 	if (HitActor && !AttackedEnemy.Contains(HitActor))
 	{
 		AttackedEnemy.Add(HitActor);
-        
-		// 인터페이스를 구현하는지 체크
+		
 		if (HitActor)
 		{
 			// 데미지 적용
