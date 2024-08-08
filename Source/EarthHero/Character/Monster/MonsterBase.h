@@ -20,7 +20,12 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	
+
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_Attack();
+
+private:
+	TArray<AEHCharacter*> CheckedEHCharacters;
 
 public:	
 	// Called every frame
@@ -78,4 +83,21 @@ public:
 	virtual void Skill2(AEHCharacter* TargetCharacter);
 	virtual void Skill3(AEHCharacter* TargetCharacter);
 	virtual void Skill4(AEHCharacter* TargetCharacter);
+
+
+	//근접 공격 적용범위인가?
+	UPROPERTY(BlueprintReadWrite)
+	bool bMeleeAttackRange;
+	//중복 공격을 막기 위함
+	UFUNCTION(BlueprintCallable)
+	void ClearCheckedEHCharacters();
+
+protected: //전부 자식에서 값 할당
+	//휘두르는 무기의 범위
+	FVector StartLocation;
+	FVector EndLocation;
+	float Radius = 5.f;
+	float InDamage = 5.f;
+
+	UAnimMontage* AttackAnimMontage;
 };

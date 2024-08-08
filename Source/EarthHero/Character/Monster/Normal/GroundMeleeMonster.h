@@ -17,19 +17,4 @@ class EARTHHERO_API AGroundMeleeMonster : public AGroundMonster
 	AGroundMeleeMonster();
 
 	virtual void Attack() override;
-	virtual void Tick(float DeltaTime) override;
-
-	UFUNCTION(NetMulticast, Reliable)
-	void Multicast_Attack();
-
-	UAnimMontage* MyAnimMontage;
-
-	TArray<AEHCharacter*> CheckedEHCharacters;
-
-public:
-	UPROPERTY(BlueprintReadWrite)
-	bool bCanAttack = false;
-
-	UFUNCTION(BlueprintCallable)
-	void ClearCheckedEHCharacters();
 };

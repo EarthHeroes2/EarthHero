@@ -5,14 +5,16 @@
 
 #include "Components/WidgetComponent.h"
 #include "EarthHero/AI/AIController/AIControllerBase.h"
+#include "EarthHero/Stat/StatComponent.h"
+#include "EarthHero/Stat/DamageType/NormalDamageType.h"
 #include "EarthHero/Stat/Monster/MonsterStatComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values
 AMonsterBase::AMonsterBase()
 {
-	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	if(GetNetMode() == NM_Client) PrimaryActorTick.bCanEverTick = false;
 
 	MonsterStatHUDComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("MonsterStatHUD"));
 	MonsterStatHUDComponent->SetupAttachment(RootComponent);
@@ -32,13 +34,6 @@ void AMonsterBase::BeginPlay()
 	MonsterStatHUDComponent->SetVisibility(false, true);
 	MonsterStatComponent->Monster = this;
 	
-}
-
-// Called every frame
-void AMonsterBase::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
@@ -131,4 +126,83 @@ void AMonsterBase::Skill4(AEHCharacter* TargetCharacter)
 {
 }
 
+
+
+void AMonsterBase::Multicast_Attack_Implementation()
+{
+	USkeletalMeshComponent* SkeletalMesh = GetMesh();
+	if(SkeletalMesh)
+	{
+		UAnimInstance* AnimInstance = SkeletalMesh->GetAnimInstance();
+		if (AnimInstance)
+		{
+			AnimInstance->Montage_Play(AttackAnimMontage);
+		}
+	}
+}
+
+
+void AMonsterBase::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if(bMeleeAttackRange)
+	{
+		TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
+		ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_GameTraceChannel3)); //Monster_MeleeAttack
+
+		TArray<AActor*> IgnoredActors;
+		
+		TArray<FHitResult> HitResults;
+		
+		bool bHit = UKismetSystemLibrary::SphereTraceMultiForObjects(
+			GetWorld(),
+			StartLocation,
+			EndLocation,
+			Radius,
+			ObjectTypes,
+			false,
+			IgnoredActors,
+			EDrawDebugTrace::ForDuration,
+			HitResults,
+			true,
+			FLinearColor::Red,
+			FLinearColor::Green,
+			3.f
+		);
+		
+		if (bHit)
+		{
+			for (const FHitResult& Hit : HitResults)
+			{
+				AActor* Actor = Hit.GetActor();
+				if (Actor)
+				{
+					AEHCharacter* EHCharacter = Cast<AEHCharacter>(Actor);
+					if(EHCharacter)
+					{
+						int Index = CheckedEHCharacters.Find(EHCharacter);
+
+						if (Index == INDEX_NONE)
+						{
+							CheckedEHCharacters.Add(EHCharacter);
+							UStatComponent* StatComponent = EHCharacter->StatComponent;
+							if(StatComponent)
+							{
+								StatComponent->DamageTaken(InDamage, UNormalDamageType::StaticClass(), Hit, GetController(), nullptr);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+}
+
+
+void AMonsterBase::ClearCheckedEHCharacters()
+{
+	CheckedEHCharacters.Empty();
+}
 
