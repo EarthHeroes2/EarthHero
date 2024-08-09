@@ -14,6 +14,7 @@ void UCoolDown::SetImage(UTexture2D* Image)
 {
 	FSlateBrush Brush;
 	Brush.SetResourceObject(Image);
+	Brush.ImageSize = FVector2D(100.f, 100.f);
 	EffectImage->SetBrush(Brush);
 	EffectImage->SetOpacity(1.f);
 }
@@ -21,7 +22,8 @@ void UCoolDown::SetImage(UTexture2D* Image)
 void UCoolDown::ClearImage()
 {
 	FSlateBrush Brush;
-	Brush.TintColor = FSlateColor(FLinearColor(0, 0, 0, 0)); // 투명한 색상으로 설정
+	Brush.ImageSize = FVector2D(100.f, 100.f);
+	Brush.TintColor = FSlateColor(FLinearColor(0, 0, 0, 0));
 	EffectImage->SetBrush(Brush);
 }
 
