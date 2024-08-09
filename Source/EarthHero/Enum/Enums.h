@@ -58,6 +58,7 @@ enum EffectType
 	Ef_PointImpulse,
 	Ef_ReduceDamageTaken,
 	Ef_SpeedBoost,
+	Ef_VisibleBlocking
 };
 
 UENUM(BlueprintType)

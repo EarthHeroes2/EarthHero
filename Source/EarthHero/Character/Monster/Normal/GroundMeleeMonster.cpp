@@ -23,5 +23,5 @@ void AGroundMeleeMonster::Attack()
 
 	Radius = 10.f;
 	
-	InDamage = 35.f;
+	InDamage = 1.f;
 }
