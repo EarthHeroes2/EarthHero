@@ -21,7 +21,7 @@ ABulletBase::ABulletBase()
 	StaticMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComp"));
 	StaticMeshComp->SetupAttachment(CapsuleComp);
 	StaticMeshComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-
+	
 	// Create Projectile Movement Component
 	ProjectileMovementComp = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovement"));
 	ProjectileMovementComp->UpdatedComponent = CapsuleComp;
