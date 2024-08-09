@@ -21,6 +21,8 @@ void AGroundRangeMonster::Attack(FVector SpawnNormalVector)
 {
 	//임시
 	BulletLocationSocket = "Muzzle_Front_XForward";
+
+	InDamage = 35.f;
 	
 	Super::Attack(SpawnNormalVector);
 }

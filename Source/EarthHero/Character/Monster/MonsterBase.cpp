@@ -3,6 +3,7 @@
 
 #include "MonsterBase.h"
 
+#include "Actor/BulletBase.h"
 #include "Components/WidgetComponent.h"
 #include "EarthHero/AI/AIController/AIControllerBase.h"
 #include "EarthHero/GameMode/PlayingGameMode.h"
@@ -97,7 +98,8 @@ void AMonsterBase::Attack(FVector SpawnNormalVector)
 		USkeletalMeshComponent* SkeletalMesh = GetMesh();
 		FVector const SpawnLocation = SkeletalMesh->GetSocketLocation(BulletLocationSocket) + SpawnNormalVector * 50;
 
-		World->SpawnActor<AActor>(BulletClass, SpawnLocation, SpawnNormalVector.Rotation(), SpawnParams);
+		ABulletBase* Bullet = World->SpawnActor<ABulletBase>(BulletClass, SpawnLocation, SpawnNormalVector.Rotation(), SpawnParams);
+		if(Bullet) Bullet->BulletDamage = InDamage;
 	}
 }
 
