@@ -137,7 +137,7 @@ PerkInformation::PerkInformation()
 	PerkDescriptions[9].Description = FText::FromString(TEXT("최대 체력 25% 보호막 획득. 보호막 소진되면 8초 후 재생성."));
 
 	PerkDescriptions[10].Description = FText::FromString(TEXT("세션 시작하고 3분간, 이동 속도 +30%, 체력 재생 (초) +100%"));
-	PerkDescriptions[11].Description = FText::FromString(TEXT("이동 속도 상승치 20%만큼 일반 공격 & 공격 스킬 대미지 상승. ( 예 : 합/곱연산 후 이동 속도 상승치가 150%면, 30%씩 상승. )"));
+	PerkDescriptions[11].Description = FText::FromString(TEXT("이동 속도 상승치 20%만큼 일반 공격 & 공격 스킬 대미지 상승. ( ex: 합/곱연산 후 이동 속도 상승치가 150%면, 30%씩 상승 )"));
 	PerkDescriptions[12].Description = FText::FromString(TEXT("세션 시작하고 8분 후 부터, 일반 공격 대미지 +60%, 공격 스킬 대미지 +120%"));
 	PerkDescriptions[13].Description = FText::FromString(TEXT("일반 공격 유지하면 (LB 계속 누르고 있으면) 일반 공격 속도 1초마다 +40% 증가하여, 3초 후 최대 +120% (LB 떼면은 취소)"));
 	PerkDescriptions[14].Description = FText::FromString(TEXT("체력이 33% 이하로 남은 적에게 ×4의 모든 종류의 피해."));
@@ -146,7 +146,7 @@ PerkInformation::PerkInformation()
 	PerkDescriptions[16].Description = FText::FromString(TEXT("히어로 업그레이드 [클래스 전용] 등장 확률 2배 증가."));
 	PerkDescriptions[17].Description = FText::FromString(TEXT("히어로 업그레이드 3개가 아닌 4개 중 선택. (키패드 4로 선택)"));
 	PerkDescriptions[18].Description = FText::FromString(TEXT("히어로 업그레이드 Lv. 경험치 획득량 +25%"));
-	PerkDescriptions[19].Description = FText::FromString(TEXT("최대 Lv.+2 (12까지 업할 수 있고, 11/12 EXP 요구치는 10과 동일.)"));
+	PerkDescriptions[19].Description = FText::FromString(TEXT("최대 Lv.+2 (12까지 업할 수 있고, 11/12 EXP 요구치는 10과 동일)"));
 
 	PerkDescriptions[20].Description = FText::FromString(TEXT("체력이 100%인 적에게 ×1.25의 모든 종류의 피해."));
 	PerkDescriptions[21].Description = FText::FromString(TEXT("자기장으로 인해 입는 피해 -60%, 자기장 범위 내에서 이동 속도 +50%"));
