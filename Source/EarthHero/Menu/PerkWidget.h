@@ -2,11 +2,12 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "EarthHero/EHGameInstance.h"
+#include "EarthHero/Stat/Structure/PerkStructure.h"
+#include "Engine/DataTable.h" 
 #include "PerkWidget.generated.h"
 
 class UImage;
-class PerkInformation;
-class UEHGameInstance;
 class UTextBlock;
 class UButton;
 class UIndexButton;
@@ -20,15 +21,11 @@ class EARTHHERO_API UPerkWidget : public UUserWidget
 	UPerkWidget(const FObjectInitializer &ObjectInitializer);
 	virtual bool Initialize() override;
 
-	UEHGameInstance* EHGameInstance;
-
-	PerkInformation* PerkInformations;
-	
-	int Level;
 public:
 	int Point;
 	int SelectedPerksCount = 0;
 	const int MaxSelectedPerks = 6;
+	int Level;
 	
 private:
 	TArray<UIndexButton*> Buttons;
@@ -67,9 +64,10 @@ private:
 
 	int64 SelectInfo;
 
-	UTextBlock* Description_Tb;
-
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Perks")
+	UDataTable* PerkDataTable;
+	UEHGameInstance* EHGameInstance;
 	void UpdateSelectInfo(int Index);
 	void PerkButtonHovered(int Index);
 	void PerkButtonUnhovered(int Index);

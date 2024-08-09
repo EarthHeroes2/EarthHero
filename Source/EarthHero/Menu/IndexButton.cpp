@@ -1,30 +1,39 @@
 #include "IndexButton.h"
-
 #include "PerkWidget.h"
+#include "EarthHero/Stat/Structure/PerkStructure.h"
 #include "Components/TextBlock.h"
-#include "EarthHero/Info/PerkInformation.h"
+#include "Engine/DataTable.h"
 
-void UIndexButton::InitSetting(int ReceivedIndex, UPerkWidget* ParentWidget)
+void UIndexButton::InitSetting(int ReceivedIndex, UPerkWidget* ParentWidget, UDataTable* DataTable)
 {
 	Index = ReceivedIndex;
 	PerkWidget = ParentWidget;
+	PerkDataTable = DataTable;
 	
-	PerkInfo = new PerkInformation();
-	if(PerkInfo)
+	if (PerkDataTable)
 	{
-		NeedPoint = PerkInfo->NeedPoint[Index];
-		OnClicked.AddDynamic(this, &UIndexButton::IndexBtnClicked);
+		TArray<FName> RowNames = PerkDataTable->GetRowNames();
+		if (RowNames.IsValidIndex(Index))
+		{
+			FPerkStructure* PerkData = PerkDataTable->FindRow<FPerkStructure>(RowNames[Index], TEXT("IndexButton Init"));
+			if (PerkData)
+			{
+				NeedPoint = PerkData->Cost;
+				OnClicked.AddDynamic(this, &UIndexButton::IndexBtnClicked);
+
+				// H 레벨
+				bHCode = ((ParentWidget->Level == 9) && (Index >= 45 && Index < 50));
+			}
+		}
 	}
 	
 	OnHovered.AddDynamic(this, &UIndexButton::ButtonHovered);
 	OnUnhovered.AddDynamic(this, &UIndexButton::ButtonUnhovered);
-
-	if((PerkInfo->NumOfLevels - 1) == (Index / PerkInfo->NumOfPerkPerLevel)) bHCode = true;
 }
 
 void UIndexButton::IndexBtnClicked()
 {
-    if (NeedPoint < 0 || PerkInfo == nullptr || PerkWidget == nullptr) return;
+    if (NeedPoint < 0 || PerkDataTable == nullptr || PerkWidget == nullptr) return;
 
     bool bCanSelect = bSelected || PerkWidget->SelectedPerksCount < PerkWidget->MaxSelectedPerks;
     
@@ -35,6 +44,11 @@ void UIndexButton::IndexBtnClicked()
 
     bSelected = !bSelected;
 
+    TArray<FName> RowNames = PerkDataTable->GetRowNames();
+    if (!RowNames.IsValidIndex(Index)) return;
+
+    FPerkStructure* PerkData = PerkDataTable->FindRow<FPerkStructure>(RowNames[Index], TEXT("IndexButton Click"));
+
     if (bSelected)
     {
         if (PerkWidget->Point >= NeedPoint)
@@ -43,10 +57,13 @@ void UIndexButton::IndexBtnClicked()
             PerkWidget->Point -= NeedPoint;
             PerkWidget->UpdateSelectInfo(Index);
 
-            // 장착한 퍽 Hb에 추가
-            PerkWidget->AddEquippedPerkImage(PerkInfo->PerkDescriptions[Index].Image);
+            // Add equipped perk image
+            if (PerkData && PerkData->Image)
+            {
+                PerkWidget->AddEquippedPerkImage(PerkData->Image);
+            }
 
-            // 선택된 퍽 개수 증가
+            // Increment selected perks count
             PerkWidget->SelectedPerksCount++;
         }
         else
@@ -60,10 +77,13 @@ void UIndexButton::IndexBtnClicked()
         PerkWidget->Point += NeedPoint;
         PerkWidget->UpdateSelectInfo(Index);
 
-    	// 선택된 퍽 개수 감소
+        // Decrement selected perks count
         PerkWidget->SelectedPerksCount--;
 
-        PerkWidget->RemoveEquippedPerkImage(PerkInfo->PerkDescriptions[Index].Image);
+        if (PerkData && PerkData->Image)
+        {
+            PerkWidget->RemoveEquippedPerkImage(PerkData->Image);
+        }
     }
 }
 
