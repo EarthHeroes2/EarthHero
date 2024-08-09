@@ -26,7 +26,7 @@ protected:
 
 private:
 	void DoMeleeTrace();
-	void CheckAttackedEnemy(FHitResult HitResult);
+	void CheckAttackedEnemy(const FHitResult& HitResult);
 
 	UPROPERTY()
 	TArray<AActor*> AttackedEnemy;
@@ -89,10 +89,16 @@ public:
 	virtual void Skill4(AEHCharacter* TargetCharacter);
 
 
+
+
+	//애니메잇녀 블루프린트에서 적용해주기
+	UFUNCTION(BlueprintCallable)
+	void AttackedEnemyClear();
+	
 	//근접 공격 적용범위인가?
 	UPROPERTY(BlueprintReadWrite)
 	bool bMeleeAttackRange = false;
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MonsterMelee")
 	float Radius = 5.f;
 
@@ -103,7 +109,6 @@ public:
 	UAnimMontage* AttackAnimMontage;
 	
 protected:
-	FVector StartLocation;
-	
-	FVector EndLocation;
+	FName StartLocationSocket;
+	FName EndLocationSocket;
 };

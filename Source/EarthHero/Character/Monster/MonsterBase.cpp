@@ -13,9 +13,9 @@
 // Sets default values
 AMonsterBase::AMonsterBase()
 {
-	// if(GetNetMode() != NM_ListenServer) PrimaryActorTick.bCanEverTick = false;
-	// else PrimaryActorTick.bCanEverTick = true
-	PrimaryActorTick.bCanEverTick = true;
+	if(GetNetMode() != NM_Client) PrimaryActorTick.bCanEverTick = true;
+	else PrimaryActorTick.bCanEverTick = false;
+	//PrimaryActorTick.bCanEverTick = true;
 	
 	MonsterStatHUDComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("MonsterStatHUD"));
 	MonsterStatHUDComponent->SetupAttachment(RootComponent);
@@ -146,30 +146,17 @@ void AMonsterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
-	APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode());
-	if (PlayingGameMode)
-	{
-		if (PlayingGameMode->IsDebugMode)
-		{
-			if (GetNetMode() == NM_ListenServer)
-			{
-				DoMeleeTrace();
-			}
-		}
-		else
-		{
-			if (IsRunningDedicatedServer())
-			{
-				DoMeleeTrace();
-			}
-		}
-	}
+	DoMeleeTrace();
 }
 
 void AMonsterBase::DoMeleeTrace()
 {
 	if(bMeleeAttackRange)
 	{
+		USkeletalMeshComponent* SkeletalMesh = GetMesh();
+		FVector const StartLocation = SkeletalMesh->GetSocketLocation(StartLocationSocket);
+		FVector const EndLocation = SkeletalMesh->GetSocketLocation(EndLocationSocket);
+		
 		TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
 		ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_GameTraceChannel3)); //Monster_MeleeAttack
 
@@ -195,20 +182,17 @@ void AMonsterBase::DoMeleeTrace()
 		);
 		
 		if (bHit)
-		{
-			for (auto Hit : HitResults)
-			{
+			for(FHitResult Hit : HitResults)
 				CheckAttackedEnemy(Hit);
-			}
-		}
-	}
-	else
-	{
-		AttackedEnemy.Empty();
 	}
 }
 
-void AMonsterBase::CheckAttackedEnemy(FHitResult HitResult)
+void AMonsterBase::AttackedEnemyClear()
+{
+	AttackedEnemy.Empty();
+}
+
+void AMonsterBase::CheckAttackedEnemy(const FHitResult& HitResult)
 {
 	AActor* HitActor = HitResult.GetActor();
 	if (HitActor && !AttackedEnemy.Contains(HitActor))

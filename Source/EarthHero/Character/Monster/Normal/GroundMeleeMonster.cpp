@@ -17,9 +17,8 @@ void AGroundMeleeMonster::Attack()
 {
 	Multicast_Attack();
 	
-	USkeletalMeshComponent* SkeletalMesh = GetMesh();
-	StartLocation = SkeletalMesh->GetSocketLocation(FName("weapon_sword_r"));
-	EndLocation = SkeletalMesh->GetSocketLocation(FName("FX_Trail_01_R"));
+	StartLocationSocket = FName("weapon_sword_r");
+	EndLocationSocket = FName("FX_Trail_01_R");
 
 	Radius = 10.f;
 	

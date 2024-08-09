@@ -17,7 +17,11 @@ AHellGolem::AHellGolem()
 //평타 구현
 void AHellGolem::Attack()
 {
+	StartLocationSocket = FName("RightMeleeStart");
+	EndLocationSocket = FName("RigthMeleeEnd");
+	
 	Super::Attack();
+	
 	MC_PlayAttackMontage();
 }
 
@@ -47,8 +51,5 @@ void AHellGolem::Skill2()
 
 void AHellGolem::Tick(float DeltaSeconds)
 {
-	USkeletalMeshComponent* SkeletalMesh = GetMesh();
-	StartLocation = SkeletalMesh->GetSocketLocation(FName("RightMeleeStart"));
-	EndLocation = SkeletalMesh->GetSocketLocation(FName("RigthMeleeEnd"));
 	Super::Tick(DeltaSeconds);
 }
