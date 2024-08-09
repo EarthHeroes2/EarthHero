@@ -109,10 +109,11 @@ public:
 	UAnimMontage* AttackAnimMontage;
 	
 protected:
+	//근거리 공격
 	FName StartLocationSocket;
 	FName EndLocationSocket;
-
-
+	
 	//원거리 공격 탄환
 	TSubclassOf<AActor> BulletClass;
+	FName BulletLocationSocket;
 };

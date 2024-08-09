@@ -17,6 +17,4 @@ class EARTHHERO_API AGroundRangeMonster : public AGroundMonster
 	AGroundRangeMonster();
 
 	virtual void Attack(FVector SpawnNormalVector) override;
-
-	TSubclassOf<AActor> BulletClass;
 };

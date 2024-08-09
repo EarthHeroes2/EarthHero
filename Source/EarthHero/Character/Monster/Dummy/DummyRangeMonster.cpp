@@ -13,6 +13,7 @@ ADummyRangeMonster::ADummyRangeMonster() : Super()
 
 void ADummyRangeMonster::Attack(FVector SpawnNormalVector)
 {
+	/*
 	UWorld* World = GetWorld();
 	if (World != nullptr && TestBulletClass)
 	{
@@ -23,5 +24,5 @@ void ADummyRangeMonster::Attack(FVector SpawnNormalVector)
 		FVector SpawnLocation = GetActorLocation() + SpawnNormalVector * 50;
 		
 		World->SpawnActor<AActor>(TestBulletClass, SpawnLocation, SpawnNormalVector.Rotation(), SpawnParams);
-	}
+	}*/
 }

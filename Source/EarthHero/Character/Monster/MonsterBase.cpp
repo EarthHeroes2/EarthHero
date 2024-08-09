@@ -86,16 +86,17 @@ void AMonsterBase::Attack()
 void AMonsterBase::Attack(FVector SpawnNormalVector)
 {
 	Multicast_Attack();
-	
 	UWorld* World = GetWorld();
+
 	if (World != nullptr && BulletClass)
 	{
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.Owner = this;
 		SpawnParams.Instigator = GetInstigator();
-		
-		FVector SpawnLocation = GetActorLocation() + SpawnNormalVector * 50;
-		
+
+		USkeletalMeshComponent* SkeletalMesh = GetMesh();
+		FVector const SpawnLocation = SkeletalMesh->GetSocketLocation(BulletLocationSocket) + SpawnNormalVector * 50;
+
 		World->SpawnActor<AActor>(BulletClass, SpawnLocation, SpawnNormalVector.Rotation(), SpawnParams);
 	}
 }

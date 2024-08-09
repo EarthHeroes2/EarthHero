@@ -16,7 +16,8 @@ AGroundMeleeMonster::AGroundMeleeMonster() : Super()
 void AGroundMeleeMonster::Attack()
 {
 	Multicast_Attack();
-	
+
+	//임시로 여기에 둠
 	StartLocationSocket = FName("weapon_sword_r");
 	EndLocationSocket = FName("FX_Trail_01_R");
 
