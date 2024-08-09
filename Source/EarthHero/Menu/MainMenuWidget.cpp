@@ -60,7 +60,7 @@ bool UMainMenuWidget::Initialize()
 			{
 				FString SteamId = UserId->ToString();
 				UE_LOG(LogTemp, Log, TEXT("My Steam ID: %s"), *SteamId);
-
+				SteamIDTb->SetText(FText::FromString(SteamId));
 
 				FString PlayerDataString;
 				//자신의 정보 요청
