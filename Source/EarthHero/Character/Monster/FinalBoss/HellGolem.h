@@ -26,21 +26,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Materials settings")
 	UMaterialParameterCollection* MyMaterialParameterCollection;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Montage")
-	UAnimMontage *MeleeAttackMontage;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Montage")
-	bool CanMeleeAttack;
-
 protected:
 	virtual void Tick(float DeltaSeconds) override;
 private:
-	void DoMeleeTrace();
-	void CheckAttackedEnemy(FHitResult HitResult);
-
-	UPROPERTY()
-	TArray<AActor*> AttackedEnemy;
-
-	float MeleeDamage = 80.f;
+	
 	
 };

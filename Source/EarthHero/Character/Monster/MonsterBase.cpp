@@ -6,8 +6,6 @@
 #include "Components/WidgetComponent.h"
 #include "EarthHero/AI/AIController/AIControllerBase.h"
 #include "EarthHero/GameMode/PlayingGameMode.h"
-#include "EarthHero/Stat/StatComponent.h"
-#include "EarthHero/Stat/DamageType/NormalDamageType.h"
 #include "EarthHero/Stat/Monster/MonsterStatComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -15,8 +13,10 @@
 // Sets default values
 AMonsterBase::AMonsterBase()
 {
-	if(GetNetMode() == NM_Client) PrimaryActorTick.bCanEverTick = false;
-
+	// if(GetNetMode() != NM_ListenServer) PrimaryActorTick.bCanEverTick = false;
+	// else PrimaryActorTick.bCanEverTick = true
+	PrimaryActorTick.bCanEverTick = true;
+	
 	MonsterStatHUDComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("MonsterStatHUD"));
 	MonsterStatHUDComponent->SetupAttachment(RootComponent);
 	
@@ -142,17 +142,39 @@ void AMonsterBase::Multicast_Attack_Implementation()
 	}
 }
 
-
 void AMonsterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	
+	APlayingGameMode *PlayingGameMode = Cast<APlayingGameMode>(GetWorld()->GetAuthGameMode());
+	if (PlayingGameMode)
+	{
+		if (PlayingGameMode->IsDebugMode)
+		{
+			if (GetNetMode() == NM_ListenServer)
+			{
+				DoMeleeTrace();
+			}
+		}
+		else
+		{
+			if (IsRunningDedicatedServer())
+			{
+				DoMeleeTrace();
+			}
+		}
+	}
+}
 
+void AMonsterBase::DoMeleeTrace()
+{
 	if(bMeleeAttackRange)
 	{
 		TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
 		ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_GameTraceChannel3)); //Monster_MeleeAttack
 
 		TArray<AActor*> IgnoredActors;
+		IgnoredActors.Add(this);
 		
 		TArray<FHitResult> HitResults;
 		
@@ -174,36 +196,30 @@ void AMonsterBase::Tick(float DeltaTime)
 		
 		if (bHit)
 		{
-			for (const FHitResult& Hit : HitResults)
+			for (auto Hit : HitResults)
 			{
-				AActor* Actor = Hit.GetActor();
-				if (Actor)
-				{
-					AEHCharacter* EHCharacter = Cast<AEHCharacter>(Actor);
-					if(EHCharacter)
-					{
-						int Index = CheckedEHCharacters.Find(EHCharacter);
-
-						if (Index == INDEX_NONE)
-						{
-							CheckedEHCharacters.Add(EHCharacter);
-							UStatComponent* StatComponent = EHCharacter->StatComponent;
-							if(StatComponent)
-							{
-								StatComponent->DamageTaken(InDamage, UNormalDamageType::StaticClass(), Hit, GetController(), nullptr);
-							}
-						}
-					}
-				}
+				CheckAttackedEnemy(Hit);
 			}
 		}
 	}
-	
+	else
+	{
+		AttackedEnemy.Empty();
+	}
 }
 
-
-void AMonsterBase::ClearCheckedEHCharacters()
+void AMonsterBase::CheckAttackedEnemy(FHitResult HitResult)
 {
-	CheckedEHCharacters.Empty();
+	AActor* HitActor = HitResult.GetActor();
+	if (HitActor && !AttackedEnemy.Contains(HitActor))
+	{
+		AttackedEnemy.Add(HitActor);
+		
+		if (HitActor)
+		{
+			// 데미지 적용
+			MonsterStatComponent->GiveNormalDamage(HitActor, InDamage);
+		}
+	}
 }
 

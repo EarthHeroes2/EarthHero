@@ -25,7 +25,11 @@ protected:
 	void Multicast_Attack();
 
 private:
-	TArray<AEHCharacter*> CheckedEHCharacters;
+	void DoMeleeTrace();
+	void CheckAttackedEnemy(FHitResult HitResult);
+
+	UPROPERTY()
+	TArray<AActor*> AttackedEnemy;
 
 public:	
 	// Called every frame
@@ -88,17 +92,18 @@ public:
 	//근접 공격 적용범위인가?
 	UPROPERTY(BlueprintReadWrite)
 	bool bMeleeAttackRange = false;
-	//중복 공격을 막기 위함
-	UFUNCTION(BlueprintCallable)
-	void ClearCheckedEHCharacters();
 
-protected: //전부 자식에서 값 할당
-	//휘두르는 무기의 범위
-	FVector StartLocation;
-	FVector EndLocation;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MonsterMelee")
 	float Radius = 5.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MonsterMelee")
 	float InDamage = 5.f;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Type")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MonsterMelee")
 	UAnimMontage* AttackAnimMontage;
+	
+protected:
+	FVector StartLocation;
+	
+	FVector EndLocation;
 };

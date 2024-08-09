@@ -52,8 +52,8 @@ float UMonsterStatComponent::DamageTaken(float InDamage, TSubclassOf<UDamageType
 	//데미지 계산
 	float resultDamage = UStatCalculationLibrary::CalNormalDamage(MonsterStat, InDamage * MonsterStat.MoreDamageTaken);
 	
-	//FString Message = FString::Printf(TEXT("Health : %f"), MonsterStat.Health);
-	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, Message);
+	FString Message = FString::Printf(TEXT("Health : %f"), MonsterStat.Health);
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, Message);
 	
 	if(Monster)
 	{
