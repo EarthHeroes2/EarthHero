@@ -2,7 +2,6 @@
 
 
 #include "EarthHero/Stat/Effect/Ef_SpeedBoost.h"
-
 #include "EarthHero/Character/EHCharacter.h"
 #include "EarthHero/Character/Monster/MonsterBase.h"
 #include "EarthHero/Enum/Enums.h"

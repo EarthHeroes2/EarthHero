@@ -29,6 +29,6 @@ public:
 protected:
 	virtual void Tick(float DeltaSeconds) override;
 private:
-	
-	
+	UFUNCTION(NetMulticast, Reliable)
+	void SpawnEffects(AActor *Actor);
 };
