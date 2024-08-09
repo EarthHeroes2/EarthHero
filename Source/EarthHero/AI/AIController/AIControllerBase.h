@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
-#include "EarthHero/Enum/Enums.h"
 #include "Perception/AIPerceptionTypes.h"
 #include "AIControllerBase.generated.h"
 
@@ -62,4 +61,9 @@ public:
 	void AttackedPlayer(AActor* AttackedPlayer);
 	void SetTargetPlayer(AEHCharacter* TargetPlayer);
 	void SetIsCanMove(bool SetIsCanMove) const;
+	virtual void Skill1();
+	virtual void Skill2();
+	virtual void Skill3();
+	virtual void Skill4();
+
 };

@@ -36,6 +36,8 @@ void AHellGolem::MC_PlayAttackMontage_Implementation()
 void AHellGolem::Skill1()
 {
 	Super::Skill1();
+	//[스킬 1] 일정 범위 내 모든 캐릭터들이 3초동안 자신의 주변 좁은 범위만 볼 수 있게 함.
+	//(쿨타임 : 19초)
 }
 
 void AHellGolem::Skill2()

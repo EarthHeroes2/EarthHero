@@ -125,3 +125,16 @@ void AAIControllerBase::UpdatePerceptionSystem()
 		GetPerceptionComponent()->ConfigureSense(*SightConfig);
 	}
 }
+
+void AAIControllerBase::Skill1()
+{
+}
+void AAIControllerBase::Skill2()
+{
+}
+void AAIControllerBase::Skill3()
+{
+}
+void AAIControllerBase::Skill4()
+{
+}

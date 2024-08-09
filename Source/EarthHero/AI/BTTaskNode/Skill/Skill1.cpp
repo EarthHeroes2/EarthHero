@@ -18,17 +18,18 @@ EBTNodeResult::Type USkill1::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint
 	
 	AAIControllerBase* const AIController = Cast<AAIControllerBase>(OwnerComp.GetAIOwner());
 	if(AIController == nullptr) return EBTNodeResult::Failed;
-
 	APawn* const ControllingPawn = AIController->GetPawn();
 	if (ControllingPawn == nullptr) return EBTNodeResult::Failed;
-
 	AMonsterBase* const ControllingMonster = Cast<AMonsterBase>(ControllingPawn);
 	if(ControllingMonster == nullptr) return EBTNodeResult::Failed;
-
+	AAIControllerBase* const Controller = Cast<AAIControllerBase>(ControllingMonster->GetController());
+	if(Controller == nullptr) return EBTNodeResult::Failed;
 	
 	switch (ControllingMonster->BossNumber)
 	{
 		case MainBoss:
+			Controller->Skill1();
+			ControllingMonster->Skill1();
 			break;
 		case MidBoss1:
 			ControllingMonster->Skill1();

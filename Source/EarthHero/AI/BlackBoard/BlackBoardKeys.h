@@ -18,4 +18,5 @@ namespace BlackboardKeys
 	TCHAR const * const IsSkill1Ready = TEXT("IsSkill1Ready");
 	TCHAR const * const IsSkill2Ready = TEXT("IsSkill2Ready");
 	TCHAR const * const IsSkill3Ready = TEXT("IsSkill3Ready");
+	TCHAR const * const IsSkill4Ready = TEXT("IsSkill4Ready");
 }
