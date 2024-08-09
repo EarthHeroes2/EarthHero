@@ -16,9 +16,23 @@ class EARTHHERO_API AHellGolemAIController : public AAIControllerBase
 
 	AHellGolemAIController(FObjectInitializer const& ObjectInitializer);
 
-	void Skill1();
-	void Skill2();
+	virtual void Skill1() override;
+	virtual void Skill2() override;
+	virtual void Skill3() override;
+	virtual void Skill4() override;
+	
+	FTimerHandle TimerHandle1, TimerHandle2, TimerHandle3, TimerHandle4;
 
-
-	FTimerHandle TimerHandle1, TimerHandle2;
+	void SetSkill1CoolTime();
+	void SetSkill2CoolTime();
+	void SetSkill3CoolTime();
+	void SetSkill4CoolTime();
+	
+	float Skill1CoolTime = 19.f;
+	float Skill2CoolTime;
+	float Skill3CoolTime;
+	float Skill4CoolTime;
+	
+protected:
+	virtual void BeginPlay() override;
 };

@@ -13,5 +13,6 @@ UCLASS()
 class EARTHHERO_API USkill3 : public USkillBase
 {
 	GENERATED_BODY()
-	
+	USkill3(FObjectInitializer const& ObjectInitializer);
+	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 };
