@@ -58,11 +58,3 @@ void ABulletBase::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Ot
 		Destroy();
 	}
 }
-
-// Called every frame
-void ABulletBase::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
