@@ -111,4 +111,8 @@ public:
 protected:
 	FName StartLocationSocket;
 	FName EndLocationSocket;
+
+
+	//원거리 공격 탄환
+	TSubclassOf<AActor> BulletClass;
 };

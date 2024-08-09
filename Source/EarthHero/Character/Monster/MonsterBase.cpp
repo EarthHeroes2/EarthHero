@@ -81,10 +81,23 @@ void AMonsterBase::SetIsCanMove_Implementation(bool SetCanMove)
 void AMonsterBase::Attack()
 {
 }
-//자식에서 구현 (원거리용)
+//자식에서 구현 안해도 됌 (원거리용)
 //SpawnNormalVector는 타겟 플레이어를 향하는 단위벡터
 void AMonsterBase::Attack(FVector SpawnNormalVector)
 {
+	Multicast_Attack();
+	
+	UWorld* World = GetWorld();
+	if (World != nullptr && BulletClass)
+	{
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = this;
+		SpawnParams.Instigator = GetInstigator();
+		
+		FVector SpawnLocation = GetActorLocation() + SpawnNormalVector * 50;
+		
+		World->SpawnActor<AActor>(BulletClass, SpawnLocation, SpawnNormalVector.Rotation(), SpawnParams);
+	}
 }
 
 //스킬들 (자식에서 필요하다면 구현)
