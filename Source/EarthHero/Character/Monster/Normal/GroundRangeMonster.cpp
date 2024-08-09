@@ -6,8 +6,8 @@
 AGroundRangeMonster::AGroundRangeMonster() : Super()
 {
 	AttackRange = 700.f;
-	
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> MontageFinder(TEXT("AnimMontage'/Game/Assets/ParagonMinions/Characters/Minions/Down_Minions/Animations/Ranged/Fire_A_2_Montage.Fire_A_2_Montage'"));
+
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> MontageFinder(TEXT("AnimMontage'/Game/ParagonMinions/Characters/Minions/Down_Minions/Animations/Ranged/Fire_A_2_Montage.Fire_A_2_Montage'"));
 	if (MontageFinder.Succeeded())
 		AttackAnimMontage = MontageFinder.Object;
 	
