@@ -64,17 +64,66 @@ PerkInformation::PerkInformation()
 	PerkDescriptions[48].Name = FText::FromString(TEXT("H 코드 : 스트라이커"));
 	PerkDescriptions[49].Name = FText::FromString(TEXT("H 코드 : 버스터"));
 
-	UTexture2D* ImagePath = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/Textures/Void_Heart.Void_Heart'")));
-    
-	for (int i = 0; i < NumOfPerks; i++)
-	{
-		PerkDescriptions[i].Image = ImagePath;
-	}
-	
-	for(int i = 0; i < NumOfPerks; i++)
-		PerkDescriptions[i].Cost = FText::FromString(FString::FromInt(NeedPoint[i]));
+	PerkDescriptions[0].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Green/GreenSpell__68_Tex.GreenSpell__68_Tex'")));
+	PerkDescriptions[1].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Yellow/YellowSpell__21_Tex.YellowSpell__21_Tex'")));
+	PerkDescriptions[2].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Red/RedSpell__87_Tex.RedSpell__87_Tex'")));
+	PerkDescriptions[3].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Red/RedSpell__45_Tex.RedSpell__45_Tex'")));
+	PerkDescriptions[4].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Green/GreenSpell__41_Tex.GreenSpell__41_Tex'")));
 
+	PerkDescriptions[5].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Green/GreenSpell__27_Tex.GreenSpell__27_Tex'")));
+	PerkDescriptions[6].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Green/GreenSpell__23_Tex.GreenSpell__23_Tex'")));
+	PerkDescriptions[7].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Red/RedSpell__75_Tex.RedSpell__75_Tex'")));
+	PerkDescriptions[8].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Blue/BlueSpell__99_Tex.BlueSpell__99_Tex'")));
+	PerkDescriptions[9].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Red/RedSpell__41_Tex.RedSpell__41_Tex'")));
+
+	PerkDescriptions[10].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Yellow/YellowSpell__38_Tex.YellowSpell__38_Tex'")));
+	PerkDescriptions[11].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Blue/BlueSpell__117_Tex.BlueSpell__117_Tex'")));
+	PerkDescriptions[12].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Yellow/YellowSpell__13_Tex.YellowSpell__13_Tex'")));
+	PerkDescriptions[13].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Red/RedSpell__34_Tex.RedSpell__34_Tex'")));
+	PerkDescriptions[14].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Yellow/YellowSpell__17_Tex.YellowSpell__17_Tex'")));
+
+	PerkDescriptions[15].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Green/GreenSpell__80_Tex.GreenSpell__80_Tex'")));
+	PerkDescriptions[16].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Red/RedSpell__82_Tex.RedSpell__82_Tex'")));
+	PerkDescriptions[17].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Green/GreenSpell__26_Tex.GreenSpell__26_Tex'")));
+	PerkDescriptions[18].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Blue/BlueSpell__54_Tex.BlueSpell__54_Tex'")));
+	PerkDescriptions[19].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Blue/BlueSpell__61_Tex.BlueSpell__61_Tex'")));
+
+	PerkDescriptions[20].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Red/RedSpell__9_Tex.RedSpell__9_Tex'")));
+	PerkDescriptions[21].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Red/RedSpell__57_Tex.RedSpell__57_Tex'")));
+	PerkDescriptions[22].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Green/GreenSpell__116_Tex.GreenSpell__116_Tex'")));
+	PerkDescriptions[23].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Blue/BlueSpell__147_Tex.BlueSpell__147_Tex'")));
+	PerkDescriptions[24].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Yellow/YellowSpell__35_Tex.YellowSpell__35_Tex'")));
 	
+	PerkDescriptions[25].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Yellow/YellowSpell__104_Tex.YellowSpell__104_Tex'")));
+	PerkDescriptions[26].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Red/RedSpell__1_Tex.RedSpell__1_Tex'")));
+	PerkDescriptions[27].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Red/RedSpell__71_Tex.RedSpell__71_Tex'")));
+	PerkDescriptions[28].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Blue/BlueSpell__96_Tex.BlueSpell__96_Tex'")));
+	PerkDescriptions[29].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Blue/BlueSpell__41_Tex.BlueSpell__41_Tex'")));
+
+	PerkDescriptions[30].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Blue/BlueSpell__92_Tex.BlueSpell__92_Tex'")));
+	PerkDescriptions[31].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Green/GreenSpell__85_Tex.GreenSpell__85_Tex'")));
+	PerkDescriptions[32].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Yellow/YellowSpell__101_Tex.YellowSpell__101_Tex'")));
+	PerkDescriptions[33].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Blue/BlueSpell__18_Tex.BlueSpell__18_Tex'")));
+	PerkDescriptions[34].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Blue/BlueSpell__25_Tex.BlueSpell__25_Tex'")));
+
+	PerkDescriptions[35].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Blue/BlueSpell__38_Tex.BlueSpell__38_Tex'")));
+	PerkDescriptions[36].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Green/GreenSpell__94_Tex.GreenSpell__94_Tex'")));
+	PerkDescriptions[37].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Red/RedSpell__67_Tex.RedSpell__67_Tex'")));
+	PerkDescriptions[38].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Blue/BlueSpell__112_Tex.BlueSpell__112_Tex'")));
+	PerkDescriptions[39].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Green/GreenSpell__67_Tex.GreenSpell__67_Tex'")));
+	
+	PerkDescriptions[40].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Yellow/YellowSpell__111_Tex.YellowSpell__111_Tex'")));
+	PerkDescriptions[41].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Yellow/YellowSpell__88_Tex.YellowSpell__88_Tex'")));
+	PerkDescriptions[42].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Yellow/YellowSpell__29_Tex.YellowSpell__29_Tex'")));
+	PerkDescriptions[43].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Blue/BlueSpell__108_Tex.BlueSpell__108_Tex'")));
+	PerkDescriptions[44].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Yellow/YellowSpell__87_Tex.YellowSpell__87_Tex'")));
+	
+	PerkDescriptions[45].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Red/RedSpell__5_Tex.RedSpell__5_Tex'")));
+	PerkDescriptions[46].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Green/GreenSpell__120_Tex.GreenSpell__120_Tex'")));
+	PerkDescriptions[47].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Yellow/YellowSpell__55_Tex.YellowSpell__55_Tex'")));
+	PerkDescriptions[48].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Blue/BlueSpell__51_Tex.BlueSpell__51_Tex'")));
+	PerkDescriptions[49].Image = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Assets/PerkIcons/Textures/Green/GreenSpell__40_Tex.GreenSpell__40_Tex'")));
+
 	PerkDescriptions[0].Description = FText::FromString(TEXT("일반 공격 대미지 +48%"));
 	PerkDescriptions[1].Description = FText::FromString(TEXT("공격 스킬 대미지 +90%"));
 	PerkDescriptions[2].Description = FText::FromString(TEXT("체력 재생(초) +120%"));
@@ -118,7 +167,7 @@ PerkInformation::PerkInformation()
 	PerkDescriptions[34].Description = FText::FromString(TEXT("히어로 업그레이드 고정적으로 1개만 등장. (본래 3개든, 4개든.) Reroll은 할 수 있음. 즉 선택할 수 없고, 나온대로 1번 눌러 업. 대신 1Lv. UP당 2회 업그레이드 할 수 있음."));
 
 	PerkDescriptions[35].Description = FText::FromString(TEXT("점프 중 이동 속도 +45%."));
-	PerkDescriptions[36].Description = FText::FromString(TEXT("현재 체력이 최대 체력의 10% 이하가 되는 피해를 입기 직전, 2초간 무적 상태 및 이동 속도 +100%. (쿨타임 60초)"));
+	PerkDescriptions[36].Description = FText::FromString(TEXT("현재 체력이 최대 체력의 10% 이하가 되는 피해를 입게 되면, 2초간 무적 상태 및 이동 속도 +100%. (쿨타임 60초)"));
 	PerkDescriptions[37].Description = FText::FromString(TEXT("일정 범위 내에서 적이 사망할 때마다, 내 최대 체력 비례 회복. 가까운 범위 내 : 내  최대 체력의 0.6% 회복. 넓은 범위 내 : 내 최대 체력의 0.2% 회복"));
 	PerkDescriptions[38].Description = FText::FromString(TEXT("보스 상대로 모든 종류의 대미지 ×(1.4 +처치 기여 보스 수 ×0.2). 보스가 사망하기 전에, 1대라도 대미지 입혔으면 기여 판정."));
 	PerkDescriptions[39].Description = FText::FromString(TEXT("보호막 보유 중인 상태일 때, 일반 공격 대미지 +80%. 일반 공격 속도 +60%"));
