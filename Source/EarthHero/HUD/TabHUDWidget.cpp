@@ -261,9 +261,11 @@ void UTabHUDWidget::UpdatePlayerImagesInWorldMap(const TArray<FVector2D>& Player
 
 void UTabHUDWidget::UpdatePlayerNumbers(int PlayerNumber)
 {
+	UE_LOG(LogClass, Warning, TEXT("PlayerNumber = %d"), PlayerNumber);
 	for(int i = 0; i < PlayerNumber; i++)
 	{
 		FText PlayerNumberText = FText::AsNumber(i+1);
+		UE_LOG(LogClass, Warning, TEXT("PlayerNumberText = %s"), *PlayerNumberText.ToString());
 		TabUserInfoArray[i]->SetPlayerNumber(PlayerNumberText);
 	}
 }
