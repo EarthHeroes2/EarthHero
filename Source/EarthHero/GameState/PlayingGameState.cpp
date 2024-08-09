@@ -24,11 +24,18 @@ void APlayingGameState::UpdateHUDGameTimer(const int GameTimer)
 	GameTimerSec = GameTimer;
 }
 
-void APlayingGameState::UpdatePlayerNumbers_Implementation(int PlayersNum)
+void APlayingGameState::UpdatePlayerNumbers(int PlayersNum)
 {
+	AllPlayerNum = PlayersNum;
+}
+
+void APlayingGameState::OnRep_PlayerNum()
+{
+	UE_LOG(LogClass, Warning, TEXT("UpdatePlayerNumber1"));
 	if(EHPlayerController && EHPlayerController->TabHUD)
 	{
-		EHPlayerController->TabHUD->UpdatePlayerNumbers(PlayersNum);
+		UE_LOG(LogClass, Warning, TEXT("UpdatePlayerNumber2"));
+		EHPlayerController->TabHUD->UpdatePlayerNumbers(AllPlayerNum);
 	}
 }
 
@@ -264,6 +271,7 @@ void APlayingGameState::OnRep_GameStatePlayerClassImages() const
 	}
 }
 
+
 void APlayingGameState::UpdatePlayerEffectState(const FEffectStatus EffectStatus, const int32 index)
 {
 	GameStateEffectStatus(EffectStatus, index);
@@ -298,4 +306,5 @@ void APlayingGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME(APlayingGameState, AllExpansionDurations);
 	DOREPLIFETIME(APlayingGameState, AllForceFieldLocations);
 	DOREPLIFETIME(APlayingGameState, AllPlayerClassImages)
+	DOREPLIFETIME(APlayingGameState, AllPlayerNum)
 }

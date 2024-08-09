@@ -98,16 +98,14 @@ float UMonsterStatComponent::DamageTaken(float InDamage, TSubclassOf<UDamageType
 	return resultDamage;
 }
 
-float UMonsterStatComponent::GiveNormalDamage(AActor* DamagedActor, float Damage)
+void UMonsterStatComponent::GiveNormalDamage_Implementation(AActor* DamagedActor, float Damage)
 {
-	float actualDamage = 0;
 	if(AEHCharacter* HitCharacter = Cast<AEHCharacter>(DamagedActor))
 	{
 		static FHitResult DummyHitResult;
 		UE_LOG(LogClass, Warning, TEXT("GivenNormalDamge"));
-		actualDamage = HitCharacter->StatComponent->DamageTaken(Damage, UNormalDamageType::StaticClass(), DummyHitResult, nullptr, nullptr);
+		HitCharacter->StatComponent->DamageTaken(Damage, UNormalDamageType::StaticClass(), DummyHitResult, nullptr, nullptr);
 	}
-	return actualDamage;
 }
 
 void UMonsterStatComponent::OnRep_BaseMonsterStat()

@@ -76,11 +76,9 @@ void AHellGolem::Tick(float DeltaSeconds)
 }
 
 void AHellGolem::SpawnEffects_Implementation(AActor *Actor)
-{
-	UE_LOG(LogClass, Error, TEXT("SpawmEffects1"));
+{;
 	if (AEf_VisibleBlocking* Ef_VisibleBlocking = GetWorld()->SpawnActor<AEf_VisibleBlocking>())
 	{
-		UE_LOG(LogClass, Error, TEXT("SpawmEffects2"));
 		Ef_VisibleBlocking->ApplyEffect(Actor, 0, 3, false, false, true); // 중첩 불가능, 영구 아님, 지속 시간 갱신 가능
 	}
 }

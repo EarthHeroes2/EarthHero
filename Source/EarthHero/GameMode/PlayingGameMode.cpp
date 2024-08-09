@@ -505,6 +505,7 @@ void APlayingGameMode::GameTimerCount()
 
 void APlayingGameMode::UpdateGameStatePlayerNumbers()
 {
+	UE_LOG(LogClass, Warning, TEXT("UpdatePlayerNumber0"));
 	APlayingGameState* PlayingGameState = Cast<APlayingGameState>(GameState);
 	PlayingGameState->UpdatePlayerNumbers(EHPlayerControllers.Num());
 }

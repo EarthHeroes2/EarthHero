@@ -16,7 +16,6 @@ AEf_VisibleBlocking::AEf_VisibleBlocking()
 
 void AEf_VisibleBlocking::ApplyEffect(AActor* InTargetActor, float InEffectValue, float InDuration, bool InbIsStackable, bool InbIsPermanent, bool InbShouldRefreshDuration)
 {
-	UE_LOG(LogClass, Error, TEXT("SpawmEffects2.5"));
 	
 	// if (GetNetMode() != NM_ListenServer)
 	// {
@@ -38,19 +37,16 @@ void AEf_VisibleBlocking::ApplyEffect(AActor* InTargetActor, float InEffectValue
 	// }
 	if (!IsRunningDedicatedServer())
 	{
-		UE_LOG(LogClass, Error, TEXT("SpawmEffects3"));
 		SetFogSetting();
 		AttachToActor(InTargetActor, FAttachmentTransformRules::KeepRelativeTransform);
 		GetWorld()->GetTimerManager().SetTimer(VisibleBlockingHandle, this, &AEf_VisibleBlocking::ResetVisibleBlockingClient, InDuration, false);
 	}
 	else
 	{
-		UE_LOG(LogClass, Error, TEXT("SpawmEffects4"));
 		EffectType = Ef_VisibleBlocking;
 		Super::ApplyEffect(InTargetActor, InEffectValue, InDuration, InbIsStackable, InbIsPermanent, InbShouldRefreshDuration);
 		if (AEHCharacter* Character = Cast<AEHCharacter>(TargetActor))
 		{
-			UE_LOG(LogClass, Error, TEXT("SpawmEffects5"));
 			AttachToActor(TargetActor, FAttachmentTransformRules::KeepRelativeTransform);
 		}
 	}

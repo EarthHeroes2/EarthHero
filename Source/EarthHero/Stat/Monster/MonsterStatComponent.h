@@ -45,7 +45,9 @@ public:
 
 	//데미지 처리 함수
 	float DamageTaken(float InDamage, TSubclassOf<UDamageType> DamageTypeClass, const FHitResult & HitInfo, AController *Instigator, class AEHCharacter *DamageCausor, bool &IsDead);
-	float GiveNormalDamage(AActor* DamagedActor, float Damage);
+
+	UFUNCTION(Server, Reliable)
+	void GiveNormalDamage(AActor* DamagedActor, float Damage);
 
 	UFUNCTION()
 	void OnRep_BaseMonsterStat();

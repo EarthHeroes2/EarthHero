@@ -36,8 +36,7 @@ public:
 	void SetGameStateForceField(const TArray<float> ExpansionDurations, const TArray<FVector2D> ForceFieldLocations);
 	void UpdatePlayerClassImage(const TArray<UTexture2D*> PlayerClassImages);
 	void UpdatePlayerEffectState(const FEffectStatus EffectStatus, const int32 index);
-
-	UFUNCTION(Client, Reliable)
+	
 	void UpdatePlayerNumbers(int PlayersNum);
 
 	UPROPERTY(ReplicatedUsing = OnRep_GameTimerSec)
@@ -74,6 +73,8 @@ public:
 	TArray<FVector2D> AllForceFieldLocations;
 	UPROPERTY(ReplicatedUsing = OnRep_GameStatePlayerClassImages)
 	TArray<UTexture2D*> AllPlayerClassImages;
+	UPROPERTY(ReplicatedUsing = OnRep_PlayerNum)
+	int AllPlayerNum;
 
 	UFUNCTION()
 	void OnRep_GameTimerSec() const;
@@ -105,6 +106,8 @@ public:
 	void OnRep_GameStateForceFieldLocations() const;
 	UFUNCTION()
 	void  OnRep_GameStatePlayerClassImages() const;
+	UFUNCTION()
+	void OnRep_PlayerNum();
 	UFUNCTION(NetMulticast, Unreliable)
 	void GameStateEffectStatus(const FEffectStatus EffectStatus, const int32 index) const;
 };
