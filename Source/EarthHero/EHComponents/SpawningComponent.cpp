@@ -7,8 +7,9 @@
 
 const TCHAR* const USpawningComponent::Difficulty2Path1 = TEXT("Actor'/Game/Blueprints/Character/Monster/Normal/BP_GroundRangeMonster.BP_GroundRangeMonster_C'");
 const TCHAR* const USpawningComponent::Difficulty2Path2 = TEXT("Actor'/Game/Blueprints/Character/Monster/Normal/BP_GroundMeleeMonster.BP_GroundMeleeMonster_C'");
-const TCHAR* const USpawningComponent::Difficulty2Path3 = TEXT("Actor'/Game/Blueprints/Character/Dummy/BP_DummyFlyingRangeMonster.BP_DummyFlyingRangeMonster_C'");
-const TCHAR* const USpawningComponent::Difficulty2Path4 = TEXT("Actor'/Game/Blueprints/Character/Dummy/BP_DummyFlyingMeleeMonster.BP_DummyFlyingMeleeMonster_C'");
+
+const TCHAR* const USpawningComponent::Difficulty2Path3 = TEXT("Actor'/Game/Blueprints/Character/Monster/Normal/BP_FlyingMeleeMonster.BP_FlyingMeleeMonster_C'");
+const TCHAR* const USpawningComponent::Difficulty2Path4 = TEXT("Actor'/Game/Blueprints/Character/Monster/Normal/BP_FlyingMeleeMonster.BP_FlyingMeleeMonster_C'");
 //const TCHAR* const USpawningComponent::Difficulty3Path = TEXT("Actor'/Game/Blueprints/Character/MidBoss/BP_MidBoss1Monster.BP_MidBoss1Monster_C'");
 // 이거 미완성이라 꺼내면 안돼, fatal error 남. - 박정익
 
@@ -189,7 +190,7 @@ void USpawningComponent::SpawnActorsForDifficulty()
 
         if (bHit)
         {
-            SpawnLocation.Z = HitResult.Location.Z + 150.f;
+            SpawnLocation.Z = HitResult.Location.Z + 50.f;
 
             UWorld* World = GetWorld();
             if(World == nullptr) return;
@@ -203,6 +204,8 @@ void USpawningComponent::SpawnActorsForDifficulty()
                 AActor* SpawnedActor = World->SpawnActor<AActor>(ActorClassToSpawn, SpawnLocation, OwnerCharacter->GetActorLocation().Rotation(), SpawnParams);
                 if (SpawnedActor)
                 {
+                    UE_LOG(LogTemp, Warning, TEXT("Spanw = %s"), *SpawnedActor->GetName());
+                    
                     if (AMonsterBase* SpawnedMonsterBase = Cast<AMonsterBase>(SpawnedActor))
                     {
                         TSubclassOf<AController> AIControllerClass = SpawnedMonsterBase->AIControllerClass;
