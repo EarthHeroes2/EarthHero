@@ -190,7 +190,7 @@ void USpawningComponent::SpawnActorsForDifficulty()
 
         if (bHit)
         {
-            SpawnLocation.Z = HitResult.Location.Z + 50.f;
+            SpawnLocation.Z = HitResult.Location.Z + 150.f;
 
             UWorld* World = GetWorld();
             if(World == nullptr) return;
